@@ -1,58 +1,74 @@
 // astro.config.mjs
 import { defineConfig } from 'astro/config';
-import react     from '@astrojs/react';
+import react      from '@astrojs/react';
 import tailwindcss from '@tailwindcss/vite';
-import cloudflare from '@astrojs/cloudflare';
-import sitemap   from '@astrojs/sitemap';
+import cloudflare  from '@astrojs/cloudflare';
+import sitemap     from '@astrojs/sitemap';
 
 export default defineConfig({
   // ── Site URL ───────────────────────────────────────────────────────────────
   site: 'https://syntaxsnap.com',
 
-  // ── Output mode ────────────────────────────────────────────────────────────
-  // REMOVED: output: 'hybrid' is no longer needed in Astro 5.0+
-  // Use 'static' (default) or 'server' (if everything is dynamic).
-  output: 'static', 
+  // ── Output mode ───────────────────────────────────────────────────────────
+  output: 'static',
 
-  // ── Integrations ───────────────────────────────────────────────────────────
+  // ── Build Format (CRITICAL FIX) ───────────────────────────────────────────
+  // This MUST be at the root level, not inside vite.
+  // 'file' = dist/tools/json-to-zod.html (Cloudflare serves without slash)
+  // 'directory' = dist/tools/json-to-zod/index.html (Cloudflare forces slash)
+  build: {
+    format: 'file',
+  },
+
+  // ── Trailing slash ────────────────────────────────────────────────________
+  // Works together with build.format: 'file' to ensure no slashes ever appear.
+  trailingSlash: 'never',
+
+  // ── Integrations ──────────────────────────────────────────────────────────
   integrations: [
     react({
+      // Scope React transforms to component files only.
       include: ['**/components/**', '**/src/components/**'],
     }),
+
     sitemap({
+      // Exclude non-content pages
       filter: (page) =>
-        !page.includes('/404') &&
-        !page.includes('/api/') &&
+        !page.includes('/404')    &&
+        !page.includes('/api/')   &&
         !page.includes('/draft/'),
-      chunks: {
-        'tools': (item) => {
-          if (item.url.includes('/tools/')) {
-            item.changefreq = 'daily';
-            item.priority = 0.9;
-            return item;
-          }
-        },
+
+      // CORRECTED: Use 'serialize' to customize priorities.
+      // Claude was right: 'chunks' is not the standard way to do this logic.
+      serialize(item) {
+        // High priority for tools
+        if (item.url.includes('/tools/')) {
+          item.changefreq = 'daily';
+          item.priority   = 0.9;
+          return item;
+        }
+        // Standard priority for everything else
+        item.changefreq = 'weekly';
+        item.priority   = 0.7;
+        return item;
       },
-      namespaces: {
-        news: false,
-        video: false,
-      },
-      changefreq: 'weekly',
-      priority: 0.7,
+
       lastmod: new Date(),
     }),
   ],
 
-  // ── Cloudflare adapter ─────────────────────────────────────────────────────
+  // ── Cloudflare adapter ────────────────────────────────────────────────────
   adapter: cloudflare({
     platformProxy: { enabled: true },
-    imageService: 'passthrough',
+    imageService:  'passthrough',
   }),
 
-  trailingSlash: 'never',
-
+  // ── Vite ──────────────────────────────────────────────────────────────────
   vite: {
     plugins: [tailwindcss()],
-    build: { target: 'es2022' },
+    build: {
+      // Target Cloudflare Workers' V8 engine directly.
+      target: 'es2022',
+    },
   },
 });
