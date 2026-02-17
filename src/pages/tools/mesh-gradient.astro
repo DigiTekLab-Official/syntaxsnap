@@ -1,0 +1,22 @@
+---
+import Layout from '../../layouts/Layout.astro';
+// 1. We alias the import to "MeshTool" to avoid the TypeScript naming conflict
+import MeshTool from '../../components/tools/MeshGradient';
+
+const title = "CSS Mesh Gradient Generator (Aurora Backgrounds) | SyntaxSnap";
+const description = "Create trendy, multi-color mesh gradients for your website backgrounds. Export pure CSS radial gradients instantly.";
+---
+
+<Layout title={title} description={description}>
+  <div class="max-w-6xl mx-auto">
+    <div class="mb-10 text-center">
+      <h1 class="text-4xl font-extrabold text-white mb-4">Mesh Gradient Studio</h1>
+      <p class="text-slate-400 text-lg">
+        Design modern "Aurora" style backgrounds using blended radial gradients.
+      </p>
+    </div>
+
+    <MeshTool client:load />
+    
+  </div>
+</Layout>
