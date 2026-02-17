@@ -1,8 +1,8 @@
 'use client';
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   ShieldCheck, ShieldAlert, Clock, Key, Lock, 
-  Copy, Check, AlertTriangle, Download, FileJson, ClipboardList 
+  Copy, Check, AlertTriangle, Download, ClipboardList 
 } from 'lucide-react';
 
 // ─── TYPES & HELPERS ─────────────────────────────────────────────────────────
@@ -45,10 +45,12 @@ function getTokenStatus(payload: JwtPayload) {
 
 // ─── SUB-COMPONENTS ──────────────────────────────────────────────────────────
 
-const ActionButton = ({ onClick, icon: Icon, label, success, primary }: any) => (
+// FIX: Added ariaLabel prop to handle "empty button" errors
+const ActionButton = ({ onClick, icon: Icon, label, success, primary, ariaLabel }: any) => (
   <button
     onClick={onClick}
-    className={`flex items-center gap-1.5 text-[10px] font-medium transition-all px-2 py-1 rounded-md ${
+    aria-label={ariaLabel || label}
+    className={`flex items-center gap-1.5 text-[sm] font-medium transition-all px-2 py-1 rounded-md ${
       primary 
         ? 'bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg shadow-indigo-500/20' 
         : success 
@@ -56,7 +58,7 @@ const ActionButton = ({ onClick, icon: Icon, label, success, primary }: any) => 
           : 'text-slate-500 hover:text-white hover:bg-slate-800'
     }`}
   >
-    <Icon className="w-3 h-3" /> {label}
+    <Icon className="w-3 h-3" aria-hidden="true" /> {label}
   </button>
 );
 
@@ -96,7 +98,6 @@ export default function JwtDebugger() {
 
   const status = decoded.payload ? getTokenStatus(decoded.payload) : null;
 
-  // New Report Generation Logic
   const handleReport = () => {
     if (!decoded.payload || !status) return;
     
@@ -116,13 +117,22 @@ ${Object.entries(decoded.payload).slice(0, 5).map(([k, v]) => `- ${k}: ${v}`).jo
 
   return (
     <div className="space-y-6">
-      {/* Input */}
+      {/* Input - FIX: Replaced div with label and added htmlFor/id connection */}
       <div className="bg-slate-900/50 p-6 rounded-3xl border border-slate-800">
         <div className="flex justify-between items-center mb-4">
-          <div className="flex items-center gap-2 text-indigo-400"><Lock className="w-4 h-4" /><span className="text-xs font-bold uppercase">Encoded Token</span></div>
+          <label htmlFor="jwt-input" className="flex items-center gap-2 text-indigo-400 cursor-pointer">
+            <Lock className="w-4 h-4" />
+            <span className="text-xs font-bold uppercase">Encoded Token</span>
+          </label>
           <ActionButton onClick={() => handleCopy(token, 'token')} icon={copyState['token'] ? Check : Copy} label={copyState['token'] ? "Copied" : "Copy JWT"} success={copyState['token']} />
         </div>
-        <textarea value={token} onChange={(e) => setToken(e.target.value)} placeholder="header.payload.signature" className="w-full h-32 bg-slate-950 border border-slate-800 rounded-2xl p-4 font-mono text-sm text-indigo-300 focus:outline-none resize-none break-all" />
+        <textarea 
+          id="jwt-input"
+          value={token} 
+          onChange={(e) => setToken(e.target.value)} 
+          placeholder="header.payload.signature" 
+          className="w-full h-32 bg-slate-950 border border-slate-800 rounded-2xl p-4 font-mono text-sm text-indigo-300 focus:outline-none resize-none break-all" 
+        />
       </div>
 
       {/* Decoded Boxes */}
@@ -130,7 +140,10 @@ ${Object.entries(decoded.payload).slice(0, 5).map(([k, v]) => `- ${k}: ${v}`).jo
         {['header', 'payload'].map((key) => (
           <div key={key} className="flex flex-col">
             <div className="flex justify-between items-center mb-2 px-1">
-              <label className={`text-[10px] font-bold uppercase tracking-widest ${key === 'header' ? 'text-pink-500' : 'text-indigo-400'}`}>{key}</label>
+              {/* FIX: Replaced <label> with <h3> to avoid orphaned label error */}
+              <h2 className={`text-[sm] font-bold uppercase tracking-widest ${key === 'header' ? 'text-pink-500' : 'text-indigo-400'}`}>
+                {key}
+              </h2>
               {decoded[key] && (
                 <div className="flex gap-2">
                    <ActionButton onClick={() => handleDownload(decoded[key], `jwt-${key}.json`)} icon={Download} label="JSON" />
@@ -149,7 +162,7 @@ ${Object.entries(decoded.payload).slice(0, 5).map(([k, v]) => `- ${k}: ${v}`).jo
       {decoded.payload && status && (
         <div className="bg-slate-900/30 border border-slate-800 rounded-2xl p-6 space-y-4">
           <div className="flex items-center justify-between">
-            <h3 className="text-sm font-bold text-white flex items-center gap-2"><ShieldCheck className="w-4 h-4 text-emerald-400" /> Security Analysis</h3>
+            <h2 className="text-sm font-bold text-white flex items-center gap-2"><ShieldCheck className="w-4 h-4 text-emerald-400" /> Security Analysis</h2>
             <ActionButton onClick={handleReport} icon={copyState['report'] ? Check : ClipboardList} label={copyState['report'] ? "Report Copied" : "Copy Report"} success={copyState['report']} primary />
           </div>
 
@@ -161,19 +174,20 @@ ${Object.entries(decoded.payload).slice(0, 5).map(([k, v]) => `- ${k}: ${v}`).jo
           )}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className={`p-4 rounded-xl border ${status.status === 'active' ? 'bg-emerald-500/5 border-emerald-500/20 text-emerald-400' : 'bg-red-500/5 border-red-500/20 text-red-400'}`}>
-              <span className="text-[10px] font-bold opacity-70 flex items-center gap-1 mb-1"><Clock className="w-3 h-3" /> Status</span>
-              <p className="text-sm font-bold">{status.label}</p><p className="text-[10px] opacity-60">{status.detail}</p>
+              <span className="text-[sm] font-bold opacity-70 flex items-center gap-1 mb-1"><Clock className="w-3 h-3" /> Status</span>
+              <p className="text-sm font-bold">{status.label}</p><p className="text-[sm] opacity-60">{status.detail}</p>
             </div>
             <div className="p-4 rounded-xl bg-slate-800/50 border border-slate-700">
-               <span className="text-[10px] font-bold text-slate-400 flex items-center gap-1 mb-1"><Key className="w-3 h-3" /> Algorithm</span>
+               <span className="text-[sm] font-bold text-slate-400 flex items-center gap-1 mb-1"><Key className="w-3 h-3" /> Algorithm</span>
                <p className="text-sm font-mono text-white">{decoded.header?.alg || 'None'}</p>
             </div>
             <div className="p-4 rounded-xl bg-slate-800/50 border border-slate-700">
                <div className="flex justify-between items-start mb-1">
-                 <span className="text-[10px] font-bold text-slate-400 flex items-center gap-1"><Lock className="w-3 h-3" /> Signature</span>
-                 <ActionButton onClick={() => handleCopy(decoded.signature, 'sig')} icon={copyState['sig'] ? Check : Copy} label="" success={copyState['sig']} />
+                 <span className="text-[sm] font-bold text-slate-400 flex items-center gap-1"><Lock className="w-3 h-3" /> Signature</span>
+                 {/* FIX: Added ariaLabel="Copy Signature" to handle empty label text */}
+                 <ActionButton onClick={() => handleCopy(decoded.signature, 'sig')} icon={copyState['sig'] ? Check : Copy} label="" ariaLabel="Copy Signature" success={copyState['sig']} />
                </div>
-               <p className="text-[10px] text-slate-500 font-mono break-all line-clamp-2">{decoded.signature}</p>
+               <p className="text-[sm] text-slate-500 font-mono break-all line-clamp-2">{decoded.signature}</p>
             </div>
           </div>
         </div>

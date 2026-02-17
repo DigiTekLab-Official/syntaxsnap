@@ -14,9 +14,7 @@ const {
   description = "A privacy-first suite of developer tools that run entirely in your browser. No servers. No tracking." 
 } = Astro.props;
 
-// Standardizing the URL for SEO
 const canonicalURL = new URL(Astro.url.pathname, "https://syntaxsnap.com").toString();
-const isHome = Astro.url.pathname === "/";
 ---
 
 <!doctype html>
@@ -158,7 +156,7 @@ const isHome = Astro.url.pathname === "/";
                 <p>&copy; {new Date().getFullYear()} SyntaxSnap. All rights reserved.</p>
               </div>
               <p class="flex items-center gap-1.5">
-                Built with ❤️ in <span class="text-slate-300 font-medium underline decoration-indigo-500/30 underline-offset-4">Cuddalore</span> for the global community.
+                Built with ❤️ in <span class="text-slate-300 font-medium">Cuddalore</span> for the global community.
               </p>
           </div>
       </div>
