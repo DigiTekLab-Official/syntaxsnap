@@ -11,6 +11,8 @@ const {
   title, 
   description = "Developer tools for the modern web. Built for speed and privacy." 
 } = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, "https://syntaxsnap.com");
 ---
 
 <!doctype html>
@@ -20,8 +22,22 @@ const {
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
+    
     <title>{title}</title>
     <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={Astro.url} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content="https://syntaxsnap.com/og-preview.jpg" />
+
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content={Astro.url} />
+    <meta property="twitter:title" content={title} />
+    <meta property="twitter:description" content={description} />
+    <meta property="twitter:image" content="https://syntaxsnap.com/og-preview.jpg" />
   </head>
   <body class="bg-slate-950 text-slate-200 min-h-screen font-sans antialiased flex flex-col">
     
@@ -30,9 +46,10 @@ const {
         <a href="/" class="text-xl font-bold tracking-tight text-white">
           Syntax<span class="text-indigo-500">Snap</span>
         </a>
-        <div class="flex gap-4 text-sm font-medium text-slate-400">
-          <a href="/tools/glass-generator" class="hover:text-white transition-colors">Tools</a>
+        <div class="flex gap-6 text-sm font-medium text-slate-400">
+          <a href="/#tools" class="hover:text-white transition-colors">Tools</a>
           <a href="/about" class="hover:text-white transition-colors">About</a>
+          <a href="/contact" class="hover:text-white transition-colors">Contact</a>
         </div>
       </div>
     </header>
@@ -47,31 +64,36 @@ const {
               
               <div>
                   <span class="text-lg font-bold text-white">Syntax<span class="text-indigo-500">Snap</span></span>
-                  <p class="mt-4 text-sm text-slate-400 max-w-xs">
-                      The modern developer's workbench. Local-first tools for faster, safer coding.
+                  <p class="mt-4 text-sm text-slate-400 max-w-xs leading-relaxed">
+                      The modern developer's workbench. Local-first tools built for speed, privacy, and the global developer community.
                   </p>
               </div>
   
               <div>
                   <h3 class="font-semibold text-white mb-4">Popular Tools</h3>
-                  <ul class="space-y-2 text-sm text-slate-400">
-                      <li><a href="/tools/glass-generator" class="hover:text-indigo-400 transition-colors">CSS Glass Generator</a></li>
-                      <li><a href="/tools/json-to-zod" class="hover:text-indigo-400 transition-colors">JSON Converter</a></li>
-                      <li><span class="opacity-50 cursor-not-allowed">Regex Visualizer (Coming Soon)</span></li>
+                  <ul class="space-y-2 text-sm text-slate-400 font-mono">
+                      <li><a href="/tools/glass-generator" class="hover:text-indigo-400 transition-colors">Glass Generator</a></li>
+                      <li><a href="/tools/json-to-zod" class="hover:text-indigo-400 transition-colors">JSON to Zod</a></li>
+                      <li><a href="/tools/mesh-gradient" class="hover:text-indigo-400 transition-colors">Mesh Gradient</a></li>
+                      <li><a href="/tools/regex-tester" class="hover:text-indigo-400 transition-colors">Regex Tester</a></li>
                   </ul>
               </div>
   
               <div>
-                  <h3 class="font-semibold text-white mb-4">Company</h3>
+                  <h3 class="font-semibold text-white mb-4">Connect</h3>
                   <ul class="space-y-2 text-sm text-slate-400">
-                      <li><a href="/about" class="hover:text-indigo-400 transition-colors">About Us</a></li>
-                      <li><a href="https://github.com" target="_blank" rel="noopener noreferrer" class="hover:text-indigo-400 transition-colors">GitHub</a></li>
+                      <li><a href="/about" class="hover:text-indigo-400 transition-colors">Our Story</a></li>
+                      <li><a href="/contact" class="hover:text-indigo-400 transition-colors">Contact Support</a></li>
+                      <li><a href="https://github.com/DigiTekLab-Official" target="_blank" rel="noopener noreferrer" class="hover:text-indigo-400 transition-colors">GitHub Repository</a></li>
                   </ul>
               </div>
           </div>
           
-          <div class="border-t border-slate-800 pt-8 text-center text-xs text-slate-500">
+          <div class="border-t border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-slate-500">
               <p>&copy; {new Date().getFullYear()} SyntaxSnap. Built with Astro & React.</p>
+              <p class="flex items-center gap-1">
+                Proudly built in <span class="text-slate-300 font-medium">Cuddalore, India</span> 🇮🇳
+              </p>
           </div>
       </div>
     </footer>
