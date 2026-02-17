@@ -1,71 +1,80 @@
 ---
 import Layout from '../layouts/Layout.astro';
 
-const title = "About SyntaxSnap | The Local-First Developer Workbench";
-const description = "SyntaxSnap is a privacy-first suite of developer tools built for speed and security. No servers, no tracking, just instant utilities.";
+const title = "Privacy Policy | SyntaxSnap – Privacy-First Developer Tools";
+const description = "Our Local-First Privacy Policy. We do not track your code, your tokens, or your API keys. Your data stays in your browser.";
 ---
 
 <Layout title={title} description={description}>
   <div class="max-w-3xl mx-auto py-12 px-4">
-    
-    <div class="mb-12">
-      <h1 class="text-4xl font-extrabold text-white mb-4">The "Local-First" Promise</h1>
-      <p class="text-xl text-slate-400 leading-relaxed">
-        Building a professional suite of tools that respect developer privacy.
-      </p>
+    <div class="mb-10">
+      <h1 class="text-4xl font-extrabold text-white mb-4">Privacy Policy</h1>
+      <p class="text-indigo-400 font-medium italic">Your code. Your tokens. Your privacy.</p>
     </div>
     
-    <div class="prose prose-invert prose-lg text-slate-300 space-y-8">
-      <p>
-        Most online developer tools are privacy nightmares. You paste sensitive JSON, private SVGs, or internal Regex patterns into a website, only to have that data sent to a server you don't control.
-      </p>
-      
-      <p class="border-l-4 border-indigo-500 pl-6 py-2">
-        <strong class="text-white text-2xl font-bold block mb-1">SyntaxSnap is different.</strong>
-        <span class="text-indigo-400 font-medium italic">Code fast. Stay private.</span>
-      </p>
-      
-      <p>
-        We believe that modern web development should be <strong>Local-First</strong>. By leveraging the power of <strong>Astro 5.0</strong> and <strong>React 19</strong>, we've built a workbench where the logic runs entirely on your device. Your data never leaves your browser.
-      </p>
+    <div class="prose prose-invert prose-slate max-w-none text-slate-300 space-y-8">
+      <p class="text-sm text-slate-500 italic border-b border-slate-800 pb-4">Last Updated: February 17, 2026</p>
 
-      <div class="bg-slate-900/50 border border-slate-800 p-8 rounded-2xl my-10">
-        <h2 class="text-xl font-bold text-white mb-6 mt-0">Why developers choose SyntaxSnap:</h2>
-        <ul class="list-none p-0 space-y-4">
-          <li class="flex items-start gap-3">
-            <span class="text-indigo-500 font-bold text-xl">⚡</span>
-            <div>
-              <strong class="text-slate-200">Zero Latency:</strong> No server round-trips mean instant results, no matter your connection speed.
-            </div>
-          </li>
-          <li class="flex items-start gap-3">
-            <span class="text-indigo-500 font-bold text-xl">🔒</span>
-            <div>
-              <strong class="text-slate-200">100% Privacy:</strong> Your code, API structures, and data stay on your machine. Period.
-            </div>
-          </li>
-          <li class="flex items-start gap-3">
-            <span class="text-indigo-500 font-bold text-xl">🛡️</span>
-            <div>
-              <strong class="text-slate-200">No Fluff:</strong> No pop-up ads, no forced newsletters, and no intrusive tracking.
-            </div>
-          </li>
+      <section>
+        <h2 class="text-2xl font-semibold text-white mb-4">1. The "Local-First" Architecture</h2>
+        <p>
+          SyntaxSnap operates on a <strong>Local-First</strong> basis. Unlike traditional web tools that upload your files to a remote server for processing, our tools (including JSON Converters, Mesh Gradients, and JWT Debuggers) run <strong>client-side</strong> using JavaScript.
+        </p>
+        <p class="bg-indigo-500/10 border border-indigo-500/20 p-4 rounded-xl text-indigo-200">
+          <strong>Put simply:</strong> When you paste code or tokens into SyntaxSnap, that data never leaves your web browser. It is processed in your device's RAM and is discarded the moment you close the tab.
+        </p>
+      </section>
+
+      <section>
+        <h2 class="text-2xl font-semibold text-white mb-4">2. Specific Tool Data Handling</h2>
+        
+        <h3 class="text-lg font-bold text-white mt-6 mb-2">A. JWT Debugger & Security Tools</h3>
+        <p>
+          We understand that JSON Web Tokens (JWTs) often contain sensitive PII (Personally Identifiable Information). 
+        </p>
+        <ul class="list-disc pl-5 space-y-2">
+           <li><strong>No Transmission:</strong> SyntaxSnap does not have a backend database. We cannot see, log, or store your tokens even if we wanted to.</li>
+           <li><strong>Local Decoding:</strong> Decoding is performed using the browser's native <code>atob()</code> and `TextDecoder` APIs.</li>
+           <li><strong>No Third-Party Access:</strong> Your tokens are not shared with any third-party analytics providers.</li>
         </ul>
+
+        <h3 class="text-lg font-bold text-white mt-6 mb-2">B. Code & JSON Converters</h3>
+        <p>
+          Input data for the JSON-to-Zod converter, SVG-to-JSX tool, and Regex Tester is processed exclusively within your browser session.
+        </p>
+      </section>
+
+      <section>
+        <h2 class="text-2xl font-semibold text-white mb-4">3. Analytics & Performance</h2>
+        <p>
+          We use <strong>Microsoft Clarity</strong> to understand how users navigate our site (e.g., "Which button gets clicked the most?"). 
+        </p>
+        <p>
+          <strong>Strict Masking:</strong> We have configured Clarity to strictly mask all input fields. This means if you paste a password or token into a box, our analytics tools only see asterisks (<code>******</code>). We never capture keystrokes in tool input areas.
+        </p>
+      </section>
+
+      <section>
+        <h2 class="text-2xl font-semibold text-white mb-4">4. Hosting & Infrastructure</h2>
+        <p>
+          This website is hosted on <strong>Cloudflare Pages</strong>. While Cloudflare processes the network requests to deliver the website files to you, they do not have access to the data you enter into the tools, as that processing happens on your device after the page has loaded.
+        </p>
+      </section>
+
+      <section>
+        <h2 class="text-2xl font-semibold text-white mb-4">5. Contact Us</h2>
+        <p>
+          If you have specific security concerns or questions about our architecture, please contact the lead developer:
+        </p>
+        <ul class="list-none pl-0">
+          <li><strong>Email:</strong> <a href="mailto:contact@syntaxsnap.com" class="text-indigo-400 hover:underline">contact@syntaxsnap.com</a></li>
+          <li><strong>Location:</strong> Cuddalore, Tamil Nadu, India</li>
+        </ul>
+      </section>
+
+      <div class="pt-8 border-t border-slate-800 text-sm text-slate-500 italic text-center">
+        Built with ❤️ in Cuddalore.
       </div>
-
-      <h3 class="text-2xl font-semibold text-white mt-12 mb-4">The Cuddalore Connection</h3>
-      <p>
-        SyntaxSnap is an indie project maintained by <strong>Ameer</strong> and the <strong>DigiTekLab</strong> team. We are proud to build world-class, professional software from <strong>Cuddalore, Tamil Nadu</strong>.
-      </p>
-      
-      <p>
-        By focusing on extreme efficiency and the latest web standards, we aim to prove that top-tier developer utilities can be built with transparency and local pride for the global community.
-      </p>
-
-      <p class="text-sm text-slate-500 italic pt-8 border-t border-slate-800">
-        Built with ❤️ in Cuddalore for the global dev community.
-      </p>
     </div>
-
   </div>
 </Layout>

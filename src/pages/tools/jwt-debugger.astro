@@ -1,0 +1,87 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import JwtTool from '../../components/tools/JwtDebugger';
+import RelatedTools from '../../components/RelatedTools.astro';
+
+const title = "Local JWT Debugger & Decoder (Private) | SyntaxSnap";
+const description = "Decode and debug JSON Web Tokens (JWT) locally in your browser. Inspect expiration, claims, and detect alg:none vulnerabilities instantly.";
+
+const schema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "Local JWT Debugger",
+      "operatingSystem": "Web",
+      "applicationCategory": "DeveloperApplication",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "description": description,
+      "featureList": [
+        "100% Client-side decoding",
+        "UTF-8 and Base64Url padding support",
+        "Alg:none attack detection",
+        "Expiration and NBF claim analysis"
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Is my data safe?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. SyntaxSnap uses the browser's native atob() API. No data is sent to a server, making it safer than tools like jwt.io for production tokens."
+          }
+        }
+      ]
+    }
+  ]
+};
+---
+
+<Layout title={title} description={description}>
+  <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+
+  <div class="max-w-6xl mx-auto px-4">
+    <div class="mb-10">
+      <h1 class="text-4xl font-extrabold text-white mb-4 tracking-tight">JWT Debugger</h1>
+      <p class="text-slate-400 text-lg leading-relaxed">
+        Securely inspect tokens. Decodes <span class="text-indigo-400 font-semibold">entirely in your browser</span> memory.
+      </p>
+    </div>
+
+    <JwtTool client:load />
+
+    <div class="mt-20 border-t border-slate-800 pt-16">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+        <div class="bg-slate-900/40 p-8 rounded-3xl border border-slate-800 shadow-xl">
+          <h2 class="text-xl font-bold text-white mb-4">Privacy is not a feature, it's the core.</h2>
+          <p class="text-slate-400 leading-relaxed text-sm">
+            Standard online decoders log your tokens for "analytics." SyntaxSnap runs locally. We don't want your data, we just want to help you debug.
+          </p>
+        </div>
+
+        <div class="space-y-6">
+          <h2 class="text-xl font-bold text-white">Common Claims</h2>
+          <dl class="space-y-4 text-sm">
+            <div class="flex flex-col">
+              <dt class="text-indigo-400 font-mono font-bold uppercase tracking-tighter">iat (Issued At)</dt>
+              <dd class="text-slate-400 mt-1">When the token was generated.</dd>
+            </div>
+            <div class="flex flex-col">
+              <dt class="text-indigo-400 font-mono font-bold uppercase tracking-tighter">exp (Expiration)</dt>
+              <dd class="text-slate-400 mt-1">When the token becomes invalid.</dd>
+            </div>
+            <div class="flex flex-col">
+              <dt class="text-indigo-400 font-mono font-bold uppercase tracking-tighter">sub (Subject)</dt>
+              <dd class="text-slate-400 mt-1">The user ID or unique identifier.</dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+    </div>
+
+    <RelatedTools currentTool="jwt-debugger" />
+  </div>
+</Layout>
