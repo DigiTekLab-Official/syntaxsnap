@@ -1,0 +1,22 @@
+---
+import Layout from '../../layouts/Layout.astro';
+// 1. Alias import to "RegexTool"
+import RegexTool from '../../components/tools/RegexTester';
+
+const title = "Regex Tester & Debugger (Javascript) | SyntaxSnap";
+const description = "Test and debug JavaScript regular expressions in real-time. Highlight matches and validate patterns instantly.";
+---
+
+<Layout title={title} description={description}>
+  <div class="max-w-6xl mx-auto">
+    <div class="mb-10 text-center">
+      <h1 class="text-4xl font-extrabold text-white mb-4">Regex Tester & Debugger</h1>
+      <p class="text-slate-400 text-lg">
+        Validate your Regular Expressions against test strings in real-time.
+      </p>
+    </div>
+
+    <RegexTool client:load />
+    
+  </div>
+</Layout>
