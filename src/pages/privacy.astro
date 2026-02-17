@@ -1,43 +1,71 @@
 ---
 import Layout from '../layouts/Layout.astro';
 
-const title = "Privacy Policy | SyntaxSnap";
+const title = "About SyntaxSnap | The Local-First Developer Workbench";
+const description = "SyntaxSnap is a privacy-first suite of developer tools built for speed and security. No servers, no tracking, just instant utilities.";
 ---
 
-<Layout title={title}>
+<Layout title={title} description={description}>
   <div class="max-w-3xl mx-auto py-12 px-4">
-    <h1 class="text-4xl font-bold text-white mb-8">Privacy Policy</h1>
     
-    <div class="prose prose-invert prose-slate max-w-none text-slate-300 space-y-6">
-      <p class="text-sm text-slate-500 italic">Last Updated: February 17, 2026</p>
-
-      <section>
-        <h2 class="text-2xl font-semibold text-white">1. Local-First Processing</h2>
-        <p>
-          At SyntaxSnap, we prioritize your privacy. Most of our tools are <strong>local-first</strong>. This means that when you use the JSON to Zod converter, SVG to JSX transformer, or Regex Tester, your data is processed entirely within your web browser. <strong>We do not upload, store, or see the data you paste into these tools.</strong>
-        </p>
-      </section>
-
-      <section>
-        <h2 class="text-2xl font-semibold text-white">2. Information We Collect</h2>
-        <p>
-          We do not require user accounts or logins. We may collect minimal, non-identifying analytical data (such as page views) to help us improve the site. This data does not include any information you input into our developer tools.
-        </p>
-      </section>
-
-      <section>
-        <h2 class="text-2xl font-semibold text-white">3. Third-Party Services</h2>
-        <p>
-          We use Cloudflare for hosting and security. Cloudflare may collect standard web logs as part of its network operations. If we display advertisements in the future, those partners may use cookies to serve relevant ads based on your visit to this and other sites.
-        </p>
-      </section>
-
-      <section>
-        <h2 class="text-2xl font-semibold text-white">4. Contact Us</h2>
-        <p>
-          If you have any questions about this Privacy Policy, please contact us at <a href="mailto:contact@syntaxsnap.com" class="text-indigo-400">contact@syntaxsnap.com</a>.
-        </p>
-      </section>
+    <div class="mb-12">
+      <h1 class="text-4xl font-extrabold text-white mb-4">The "Local-First" Promise</h1>
+      <p class="text-xl text-slate-400 leading-relaxed">
+        Building a professional suite of tools that respect developer privacy.
+      </p>
     </div>
+    
+    <div class="prose prose-invert prose-lg text-slate-300 space-y-8">
+      <p>
+        Most online developer tools are privacy nightmares. You paste sensitive JSON, private SVGs, or internal Regex patterns into a website, only to have that data sent to a server you don't control.
+      </p>
+      
+      <p class="border-l-4 border-indigo-500 pl-6 py-2">
+        <strong class="text-white text-2xl font-bold block mb-1">SyntaxSnap is different.</strong>
+        <span class="text-indigo-400 font-medium italic">Code fast. Stay private.</span>
+      </p>
+      
+      <p>
+        We believe that modern web development should be <strong>Local-First</strong>. By leveraging the power of <strong>Astro 5.0</strong> and <strong>React 19</strong>, we've built a workbench where the logic runs entirely on your device. Your data never leaves your browser.
+      </p>
+
+      <div class="bg-slate-900/50 border border-slate-800 p-8 rounded-2xl my-10">
+        <h3 class="text-xl font-bold text-white mb-6 mt-0">Why developers choose SyntaxSnap:</h3>
+        <ul class="list-none p-0 space-y-4">
+          <li class="flex items-start gap-3">
+            <span class="text-indigo-500 font-bold text-xl">⚡</span>
+            <div>
+              <strong class="text-slate-200">Zero Latency:</strong> No server round-trips mean instant results, no matter your connection speed.
+            </div>
+          </li>
+          <li class="flex items-start gap-3">
+            <span class="text-indigo-500 font-bold text-xl">🔒</span>
+            <div>
+              <strong class="text-slate-200">100% Privacy:</strong> Your code, API structures, and data stay on your machine. Period.
+            </div>
+          </li>
+          <li class="flex items-start gap-3">
+            <span class="text-indigo-500 font-bold text-xl">🛡️</span>
+            <div>
+              <strong class="text-slate-200">No Fluff:</strong> No pop-up ads, no forced newsletters, and no intrusive tracking.
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <h3 class="text-2xl font-semibold text-white mt-12 mb-4">The Cuddalore Connection</h3>
+      <p>
+        SyntaxSnap is an indie project maintained by <strong>Ameer</strong> and the <strong>DigiTekLab</strong> team. We are proud to build world-class, professional software from <strong>Cuddalore, Tamil Nadu</strong>.
+      </p>
+      
+      <p>
+        By focusing on extreme efficiency and the latest web standards, we aim to prove that top-tier developer utilities can be built with transparency and local pride for the global community.
+      </p>
+
+      <p class="text-sm text-slate-500 italic pt-8 border-t border-slate-800">
+        Built with ❤️ in Cuddalore for the global dev community.
+      </p>
+    </div>
+
   </div>
 </Layout>

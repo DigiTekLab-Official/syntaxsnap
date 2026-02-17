@@ -1,4 +1,215 @@
+# ============================================================
+#  robots.txt — SyntaxSnap (https://syntaxsnap.com)
+#  Place this file at: public/robots.txt
+#  Astro copies public/ verbatim to the build output root.
+# ============================================================
+#
+#  NOTE ON MICROSOFT CLARITY:
+#  Clarity is a client-side JavaScript analytics tag that runs
+#  in the visitor's browser. It has no crawler bot and needs
+#  no robots.txt entry. It is unaffected by this file.
+# ============================================================
+
+
+# ── Google ────────────────────────────────────────────────────────────────────
+
+User-agent: Googlebot
+Allow: /
+
+User-agent: Googlebot-Image
+Allow: /
+
+User-agent: Googlebot-Video
+Allow: /
+
+User-agent: Googlebot-News
+Allow: /
+
+User-agent: AdsBot-Google
+Allow: /
+
+User-agent: Google-InspectionTool
+Allow: /
+
+# Google-Other covers Gemini, Google SGE, and future Google agents
+User-agent: GoogleOther
+Allow: /
+
+
+# ── Bing / Microsoft ──────────────────────────────────────────────────────────
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: msnbot
+Allow: /
+
+User-agent: msnbot-media
+Allow: /
+
+User-agent: BingPreview
+Allow: /
+
+User-agent: AdIdxBot
+Allow: /
+
+
+# ── Yandex ───────────────────────────────────────────────────────────────────
+
+User-agent: YandexBot
+Allow: /
+
+User-agent: YandexImages
+Allow: /
+
+User-agent: YandexVideo
+Allow: /
+
+User-agent: YandexAccessibilityBot
+Allow: /
+
+
+# ── Apple (Siri / Spotlight / Safari Reader) ──────────────────────────────────
+
+User-agent: Applebot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+
+# ── DuckDuckGo ────────────────────────────────────────────────────────────────
+
+User-agent: DuckDuckBot
+Allow: /
+
+
+# ── Social & messaging link-preview bots ─────────────────────────────────────
+#  These render og: and twitter: meta tags for unfurl cards.
+#  Critical for a developer tools site shared on Slack, Discord, and X/Twitter.
+
+User-agent: Twitterbot
+Allow: /
+
+User-agent: facebookexternalhit
+Allow: /
+
+User-agent: LinkedInBot
+Allow: /
+
+User-agent: Slackbot
+Allow: /
+
+User-agent: Slackbot-LinkExpanding
+Allow: /
+
+User-agent: Discordbot
+Allow: /
+
+User-agent: TelegramBot
+Allow: /
+
+User-agent: WhatsApp
+Allow: /
+
+
+# ── AI / LLM crawlers (respect robots.txt) ───────────────────────────────────
+#  These are explicitly documented to honour robots.txt directives.
+#  Allowing them improves discoverability via AI-powered search (Perplexity,
+#  ChatGPT Browse, Claude) — a high-value channel for a dev-tools audience.
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: cohere-ai
+Allow: /
+
+
+# ── Wayback Machine / Internet Archive ───────────────────────────────────────
+
+User-agent: ia_archiver
+Allow: /
+
+
+# ── Blocked bots — aggressive scrapers and data harvesters ───────────────────
+#  These bots either crawl at damaging rates, harvest content for resale
+#  without consent, or are operated by entities with poor compliance records.
+#  Note: bots that already ignore robots.txt are not listed here — there is no
+#  benefit in listing them since they disregard the file entirely.
+
+# TikTok / ByteDance — extremely high crawl rate, reported scraping abuse
+User-agent: Bytespider
+Disallow: /
+
+# Common Crawl — raw data dumps used by third parties for AI training
+User-agent: CCBot
+Disallow: /
+
+# Commercial SEO data resellers
+User-agent: DataForSeoBot
+Disallow: /
+
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: BLEXBot
+Disallow: /
+
+# Huawei Petal Search — reported for aggressive and non-standard crawl behaviour
+User-agent: PetalBot
+Disallow: /
+
+
+# ── Default rule (catch-all) ──────────────────────────────────────────────────
+#  Any bot not explicitly named above is allowed to index public content
+#  but is directed away from internal build assets and infrastructure paths.
+
 User-agent: *
 Allow: /
 
+# Astro build output — JS/CSS chunks, not human-readable pages
+Disallow: /_astro/
+
+# Cloudflare internal routes — present on every CF Pages deployment
+Disallow: /cdn-cgi/
+
+# API / server routes — not indexable content
+Disallow: /api/
+
+# Error page — no indexing value
+Disallow: /404
+
+
+# ── Sitemap ───────────────────────────────────────────────────────────────────
+#  @astrojs/sitemap generates sitemap-index.xml as the entry point,
+#  which references the paginated sitemap-0.xml, sitemap-1.xml, etc.
+
 Sitemap: https://syntaxsnap.com/sitemap-index.xml
+
+
+# ── Preferred domain (Yandex) ─────────────────────────────────────────────────
+#  Ignored by Google and Bing (use Search Console for that), but
+#  recognised by Yandex as a canonical domain signal.
+
+Host: syntaxsnap.com
