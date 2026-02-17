@@ -1,13 +1,12 @@
 ---
-// src/pages/index.astro
 import Layout from '../layouts/Layout.astro';
-
 import { 
   GlassWater, 
   Database, 
   Palette, 
   Search, 
-  FileJson 
+  FileCode2, 
+  ArrowRight 
 } from 'lucide-react';
 
 const tools = [
@@ -15,93 +14,95 @@ const tools = [
     title: "Glassmorphism Generator",
     desc: "Generate frosted glass CSS effects instantly.",
     href: "/tools/glass-generator",
-    icon: GlassWater, 
+    icon: GlassWater,
     status: "Live"
   },
   {
     title: "JSON to Zod Converter",
     desc: "Infer Zod schemas from raw JSON objects.",
     href: "/tools/json-to-zod",
-    icon: Database, 
+    icon: Database,
     status: "Live"
   },
   {
     title: "Mesh Gradient Studio",
     desc: "Create beautiful, aurora-style mesh gradients.",
     href: "/tools/mesh-gradient",
-    icon: Palette, 
+    icon: Palette,
     status: "Live"
   },
   {
     title: "Regex Tester",
     desc: "Test and debug JavaScript regex patterns.",
     href: "/tools/regex-tester",
-    icon: Search, 
+    icon: Search,
     status: "Live"
   },
   {
     title: "SVG to JSX",
     desc: "Transform SVG code into React components.",
     href: "/tools/svg-to-jsx",
-    icon: FileJson, 
+    icon: FileCode2,
     status: "Live"
-  },
-
-  {
-    title: "Markdown Table Generator",
-    desc: "Create perfectly formatted Markdown tables from CSV or tabular data.",
-    href: "#",
-    icon: "📊",
-    status: "Coming Soon"
-  },
+  }
 ];
 ---
 
-<Layout title="SyntaxSnap | The Developer's Utility Workbench">
-  <div class="flex flex-col items-center justify-center py-20 px-4">
+<Layout title="SyntaxSnap – Privacy-First Developer Tools">
+  <div class="flex flex-col items-center justify-center py-20 text-center">
     
-    <div class="text-center max-w-3xl mx-auto mb-20">
-      <div class="inline-flex items-center rounded-full border border-indigo-500/30 bg-indigo-500/10 px-3 py-1 text-sm font-medium text-indigo-400 mb-6">
-        <span>🚀 v1.1: New Tools Added</span>
-      </div>
-
-      <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight text-white mb-6">
-        Ship code <br />
-        <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-400">faster & safer.</span>
-      </h1>
-
-      <p class="text-lg text-slate-400 mb-10">
-        A private, local-first workbench for modern developers. <br class="hidden md:block"/>
-        No server uploads. No ads. Just instant utilities.
-      </p>
+    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-900/30 border border-indigo-500/30 text-indigo-300 text-xs font-medium mb-8 animate-fade-in">
+      <span class="relative flex h-2 w-2">
+        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
+        <span class="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
+      </span>
+      v1.0 is Live
     </div>
 
-    <div id="tools" class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-5xl">
-      {tools.map((tool) => (
-        <a 
-          href={tool.href}
-          class={`group relative overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/50 p-8 transition-all hover:border-indigo-500/50 hover:bg-slate-900 ${tool.status === 'Coming Soon' ? 'opacity-60 cursor-not-allowed pointer-events-none' : ''}`}
-        >
-          <div class="flex items-start justify-between mb-4">
-            {typeof tool.icon === 'string' ? (
-              <span class="text-4xl">{tool.icon}</span>
-            ) : (
-              <tool.icon className="w-10 h-10 text-indigo-500 group-hover:text-cyan-400 transition-colors" />
-            )}
-            <span class={`text-xs font-semibold px-2 py-1 rounded-full ${tool.status === 'Live' ? 'bg-green-500/10 text-green-400' : 'bg-slate-700 text-slate-400'}`}>
-              {tool.status}
-            </span>
-          </div>
-          
-          <h3 class="text-xl font-bold text-white mb-2 group-hover:text-indigo-400 transition-colors">
-            {tool.title}
-          </h3>
-          <p class="text-slate-400 text-sm leading-relaxed">
-            {tool.desc}
-          </p>
-        </a>
-      ))}
+    <h1 class="text-5xl md:text-7xl font-extrabold text-white tracking-tight mb-6 max-w-4xl">
+      Code fast. <br class="hidden md:block" />
+      <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-400">
+        Stay private.
+      </span>
+    </h1>
+
+    <p class="text-lg md:text-xl text-slate-400 max-w-2xl mb-10 leading-relaxed">
+      A privacy-first suite of developer tools that run entirely in your browser. <br class="hidden md:block" />
+      No servers. No tracking. Just speed.
+    </p>
+
+    <div class="flex gap-4">
+      <a href="#tools" class="bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-3 rounded-lg font-medium transition-all hover:scale-105 flex items-center gap-2">
+        Explore Tools <ArrowRight className="w-4 h-4" />
+      </a>
+      <a href="https://github.com/DigiTekLab-Official" target="_blank" class="bg-slate-800 hover:bg-slate-700 text-white px-6 py-3 rounded-lg font-medium transition-all">
+        View on GitHub
+      </a>
     </div>
 
+  </div>
+
+  <div id="tools" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 py-12">
+    {tools.map((tool) => (
+      <a href={tool.href} class="group relative bg-slate-900/50 border border-slate-800 hover:border-indigo-500/50 rounded-2xl p-6 transition-all hover:shadow-2xl hover:shadow-indigo-500/10 hover:-translate-y-1">
+        <div class="absolute top-6 right-6">
+           <span class="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+             {tool.status}
+           </span>
+        </div>
+        
+        <div class="mb-4 p-3 bg-slate-800 rounded-xl w-fit group-hover:bg-indigo-500/20 group-hover:text-indigo-400 transition-colors">
+          <tool.icon className="w-6 h-6" />
+        </div>
+        
+        <h3 class="text-xl font-bold text-white mb-2 group-hover:text-indigo-400 transition-colors">
+          {tool.title}
+        </h3>
+        
+        <p class="text-slate-400 text-sm leading-relaxed">
+          {tool.desc}
+        </p>
+      </a>
+    ))}
   </div>
 </Layout>

@@ -9,8 +9,9 @@ interface Props {
 }
 
 const { 
-  title, 
-  description = "Developer tools for the modern web. Built for speed and privacy." 
+  // 1. UPDATED: Stronger SEO default title
+  title = "SyntaxSnap - Privacy-First Developer Tools",
+  description = "A privacy-first suite of developer tools that run entirely in your browser. No servers. No tracking." 
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, "https://syntaxsnap.com");
@@ -72,7 +73,7 @@ const canonicalURL = new URL(Astro.url.pathname, "https://syntaxsnap.com");
           "@id": "https://syntaxsnap.com/#website",
           "url": "https://syntaxsnap.com",
           "name": "SyntaxSnap",
-          "description": "Local-first developer tools for the modern web.",
+          "description": "Privacy-first suite of developer tools.",
           "publisher": { "@id": "https://syntaxsnap.com/#organization" }
         },
         {
@@ -121,7 +122,7 @@ const canonicalURL = new URL(Astro.url.pathname, "https://syntaxsnap.com");
               <div>
                   <span class="text-lg font-bold text-white">Syntax<span class="text-indigo-500">Snap</span></span>
                   <p class="mt-4 text-sm text-slate-400 max-w-xs leading-relaxed">
-                      The modern developer's workbench. Local-first tools built for speed, privacy, and the global developer community.
+                      Code fast. Stay private. A suite of local-first tools for the global developer community.
                   </p>
               </div>
   
@@ -150,7 +151,7 @@ const canonicalURL = new URL(Astro.url.pathname, "https://syntaxsnap.com");
           <div class="border-t border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-slate-500">
               <p>&copy; {new Date().getFullYear()} SyntaxSnap. Built with Astro & React.</p>
               <p class="flex items-center gap-1">
-                Proudly built in <span class="text-slate-300 font-medium">Cuddalore, India</span> 🇮🇳
+                Built with ❤️ in <span class="text-slate-300 font-medium">Cuddalore</span> for the global dev community.
               </p>
           </div>
       </div>
