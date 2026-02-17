@@ -1,33 +1,80 @@
 ---
 // src/pages/index.astro
 import Layout from '../layouts/Layout.astro';
+
+const tools = [
+  {
+    title: "Glassmorphism Generator",
+    desc: "Generate frosted glass CSS effects instantly. Adjust blur, opacity, and saturation.",
+    href: "/tools/glass-generator",
+    icon: "✨",
+    status: "Live"
+  },
+  {
+    title: "JSON to Zod Converter",
+    desc: "Infer Zod schemas from raw JSON objects. Perfect for TypeScript backend validation.",
+    href: "/tools/json-to-zod",
+    icon: "🛡️",
+    status: "Live"
+  },
+  {
+    title: "Mesh Gradient Studio",
+    desc: "Create beautiful, aurora-style mesh gradients for modern UI backgrounds.",
+    href: "#",
+    icon: "🎨",
+    status: "Coming Soon"
+  },
+  {
+    title: "Regex Visualizer",
+    desc: "Visualize Regular Expressions as railway diagrams to debug complex patterns.",
+    href: "#",
+    icon: "🚂",
+    status: "Coming Soon"
+  }
+];
 ---
 
 <Layout title="SyntaxSnap | The Developer's Utility Workbench">
-	<div class="flex flex-col items-center justify-center py-20 text-center">
-		
-		<div class="inline-flex items-center rounded-full border border-indigo-500/30 bg-indigo-500/10 px-3 py-1 text-sm font-medium text-indigo-400 mb-6">
-			<span>🚀 v1.0.0 is Live</span>
-		</div>
+  <div class="flex flex-col items-center justify-center py-20 px-4">
+    
+    <div class="text-center max-w-3xl mx-auto mb-20">
+      <div class="inline-flex items-center rounded-full border border-indigo-500/30 bg-indigo-500/10 px-3 py-1 text-sm font-medium text-indigo-400 mb-6">
+        <span>🚀 v1.1: New Tools Added</span>
+      </div>
 
-		<h1 class="text-5xl md:text-7xl font-extrabold tracking-tight text-white mb-6">
-			Dev tools that <br />
-			<span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-400">actually work.</span>
-		</h1>
+      <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight text-white mb-6">
+        Ship code <br />
+        <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-400">faster & safer.</span>
+      </h1>
 
-		<p class="text-lg text-slate-400 max-w-2xl mb-10">
-			No ads. No bloat. Just pure local-first utilities for developers.
-			Compress images, generate CSS, and debug Regex without leaving your browser.
-		</p>
+      <p class="text-lg text-slate-400 mb-10">
+        A private, local-first workbench for modern developers. <br class="hidden md:block"/>
+        No server uploads. No ads. Just instant utilities.
+      </p>
+    </div>
 
-		<div class="flex gap-4">
-			<a href="/tools/glass-generator" class="rounded-lg bg-indigo-600 px-6 py-3 text-sm font-semibold text-white shadow-lg hover:bg-indigo-500 transition-all">
-				Try Glass Generator
-			</a>
-			<a href="#tools" class="rounded-lg border border-slate-700 bg-slate-800/50 px-6 py-3 text-sm font-semibold text-slate-300 hover:bg-slate-800 transition-all">
-				Explore All Tools
-			</a>
-		</div>
+    <div id="tools" class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-5xl">
+      {tools.map((tool) => (
+        <a 
+          href={tool.href}
+          class={`group relative overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/50 p-8 transition-all hover:border-indigo-500/50 hover:bg-slate-900 ${tool.status === 'Coming Soon' ? 'opacity-60 cursor-not-allowed pointer-events-none' : ''}`}
+        >
+          <div class="flex items-start justify-between mb-4">
+            <span class="text-4xl">{tool.icon}</span>
+            <span class={`text-xs font-semibold px-2 py-1 rounded-full ${tool.status === 'Live' ? 'bg-green-500/10 text-green-400' : 'bg-slate-700 text-slate-400'}`}>
+              {tool.status}
+            </span>
+          </div>
+          
+          <h3 class="text-xl font-bold text-white mb-2 group-hover:text-indigo-400 transition-colors">
+            {tool.title}
+          </h3>
+          <p class="text-slate-400 text-sm leading-relaxed">
+            {tool.desc}
+          </p>
+        </a>
+      ))}
+    </div>
 
-	</div>
+  </div>
 </Layout>
