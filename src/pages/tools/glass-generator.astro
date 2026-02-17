@@ -1,12 +1,10 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-// 1. Rename the import here to avoid the name conflict
 import GlassTool from '../../components/tools/GlassGenerator';
 
 const title = "CSS Glassmorphism Generator | SyntaxSnap";
-const description = "Create beautiful frosted glass effects for your UI. Instant CSS export.";
+const description = "Create beautiful frosted glass effects for your UI with real-time backdrop-filter preview. Adjust blur, transparency, saturation and border radius — then export clean, cross-browser CSS instantly.";
 
-// Schema Data
 const schema = {
   "@context": "https://schema.org",
   "@graph": [
@@ -22,10 +20,10 @@ const schema = {
       },
       "description": description,
       "featureList": [
-        "Real-time backdrop-filter preview",
-        "Adjustable blur and transparency",
-        "Instant CSS code export",
-        "Cross-browser compatibility checks"
+        "Real-time backdrop-filter + saturate preview",
+        "Adjustable blur, transparency, saturation, shadow and border radius",
+        "Instant CSS code export with one-click copy",
+        "Cross-browser -webkit-backdrop-filter output"
       ]
     },
     {
@@ -36,7 +34,7 @@ const schema = {
           "name": "What is Glassmorphism?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Glassmorphism is a UI trend that uses transparency and background blur (backdrop-filter) to create a frosted glass effect, making elements look like they are floating in space."
+            "text": "Glassmorphism is a UI design style that uses backdrop-filter: blur() and semi-transparent backgrounds to create a frosted-glass effect. It became mainstream with iOS 13 and Windows 11 Fluent Design."
           }
         },
         {
@@ -44,7 +42,15 @@ const schema = {
           "name": "Does this work on all browsers?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Yes, the generated CSS uses the standard `backdrop-filter` property which is supported by all modern browsers including Chrome, Safari, and Edge."
+            "text": "The generated CSS includes both the standard backdrop-filter and the -webkit-backdrop-filter prefix required by Safari. It works in Chrome 76+, Safari 9+, Firefox 103+, and Edge 17+, covering over 97% of global users."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What does the saturation slider do?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The backdrop-filter property accepts multiple functions. Adding saturate() alongside blur() makes the colours behind the glass element more vivid — this is the technique used by macOS and iOS to give their UI panels a distinctive look."
           }
         },
         {
@@ -52,7 +58,7 @@ const schema = {
           "name": "Is this tool free?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Yes, SyntaxSnap Glass Generator is 100% free for personal and commercial projects."
+            "text": "Yes. SyntaxSnap Glassmorphism Generator is 100% free for personal and commercial projects, with no attribution required."
           }
         }
       ]
@@ -64,45 +70,73 @@ const schema = {
 <Layout title={title} description={description}>
   <script type="application/ld+json" set:html={JSON.stringify(schema)} />
 
-  <div class="max-w-4xl mx-auto">
+  <div class="max-w-6xl mx-auto">
     <div class="mb-10 text-center">
       <h1 class="text-4xl font-extrabold text-white mb-4">Glassmorphism Generator</h1>
-      <p class="text-slate-400 text-lg">
-        Adjust the sliders to create the perfect "frosted glass" effect for your next project.
+      <p class="text-slate-400 text-lg max-w-xl mx-auto">
+        Adjust sliders to craft the perfect <code class="text-indigo-400 text-base">backdrop-filter</code> card,
+        then copy production-ready CSS in one click.
       </p>
     </div>
 
     <GlassTool client:load />
 
-    <div class="mt-16 grid grid-cols-1 gap-12 border-t border-slate-800 pt-12">
+    <div class="mt-16 grid grid-cols-1 md:grid-cols-2 gap-12 border-t border-slate-800 pt-12">
+
+      <div class="bg-slate-900/30 border border-slate-800 rounded-2xl p-8 h-fit">
+        <h2 class="text-xl font-bold text-white mb-4">The Glassmorphism Trend</h2>
+        <p class="text-slate-400 mb-4 leading-relaxed">
+          Popularised by Apple's macOS Big Sur in 2020, the frosted-glass aesthetic
+          has become a staple of modern SaaS and mobile design. The key property is
+          <code class="text-indigo-400">backdrop-filter: blur()</code> — which applies
+          a blur to whatever renders <em>behind</em> the element, not the element itself.
+        </p>
+        <p class="text-slate-400 leading-relaxed">
+          Pair it with <code class="text-indigo-400">saturate()</code> to boost the colours
+          peeking through the glass, and a <code class="text-indigo-400">rgba()</code>
+          background with low alpha for the tint.
+        </p>
+      </div>
+
       <div>
         <h2 class="text-xl font-bold text-white mb-6">Frequently Asked Questions</h2>
         <div class="space-y-6">
-          
+
           <div>
             <h3 class="font-medium text-slate-200 mb-2">What is Glassmorphism?</h3>
             <p class="text-sm text-slate-400 leading-relaxed">
-              Glassmorphism is a UI trend that uses transparency and background blur (backdrop-filter) to create a frosted glass effect, making elements look like they are floating in space.
+              A UI design style using <code class="text-indigo-400">backdrop-filter: blur()</code>
+              and semi-transparent backgrounds to simulate frosted glass. Mainstream since iOS 13 and Windows 11.
             </p>
           </div>
 
           <div>
             <h3 class="font-medium text-slate-200 mb-2">Does this work on all browsers?</h3>
             <p class="text-sm text-slate-400 leading-relaxed">
-              Yes, the generated CSS uses the standard <code class="text-indigo-400">backdrop-filter</code> property which is supported by all modern browsers including Chrome, Safari, and Edge.
+              The generated CSS includes both <code class="text-indigo-400">backdrop-filter</code>
+              and <code class="text-indigo-400">-webkit-backdrop-filter</code> for Safari.
+              Supported by Chrome 76+, Safari 9+, Firefox 103+, and Edge 17+ — covering 97 %+ of users.
+            </p>
+          </div>
+
+          <div>
+            <h3 class="font-medium text-slate-200 mb-2">What does the saturation slider do?</h3>
+            <p class="text-sm text-slate-400 leading-relaxed">
+              It adds a <code class="text-indigo-400">saturate()</code> function to
+              <code class="text-indigo-400">backdrop-filter</code>, amplifying the colours
+              visible behind the glass — the same trick Apple uses in macOS and iOS panels.
             </p>
           </div>
 
           <div>
             <h3 class="font-medium text-slate-200 mb-2">Is this tool free?</h3>
             <p class="text-sm text-slate-400 leading-relaxed">
-              Yes, SyntaxSnap Glass Generator is 100% free for personal and commercial projects.
+              Yes. 100% free for personal and commercial projects, no attribution required.
             </p>
           </div>
 
         </div>
       </div>
     </div>
-    
   </div>
 </Layout>
