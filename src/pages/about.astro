@@ -8,33 +8,45 @@ const description = "SyntaxSnap provides local-first developer tools. No server 
 <Layout title={title} description={description}>
   <div class="max-w-3xl mx-auto py-12 px-4">
     
-    <h1 class="text-4xl font-bold text-white mb-6">The "Local-First" Promise</h1>
+    <h1 class="text-4xl font-extrabold text-white mb-6">The "Local-First" Promise</h1>
     
-    <div class="prose prose-invert prose-lg text-slate-300">
+    <div class="prose prose-invert prose-lg text-slate-300 space-y-6">
       <p>
         Most developer tools are broken. You paste your sensitive JSON or private images into a random website, 
         wait for it to upload to a server you don't trust, and then download the result.
       </p>
+      
       <p>
-        <strong class="text-indigo-400">SyntaxSnap is different.</strong>
+        <strong class="text-indigo-400 text-xl font-bold italic block my-4">SyntaxSnap is different.</strong>
+      </p>
+      
+      <p>
+        We believe in <strong>Local-First Development</strong>. When you use our tools, 
+        your data <em>never leaves your browser</em>. The logic runs entirely on your device. 
+        This isn't just a feature; it's our core architecture.
+      </p>
+
+      <h3 class="text-2xl font-semibold text-white mt-10 mb-4">The Cuddalore Connection</h3>
+      <p>
+        SyntaxSnap is an indie project maintained by the <strong>DigiTekLab</strong> team. 
+        We are proud to build world-class software from <strong>Cuddalore, Tamil Nadu</strong>. 
       </p>
       <p>
-        We believe in <strong>Local-First Development</strong>. When you use our Image Compressor or JSON Validator, 
-        your data <em>never leaves your browser</em>. The logic runs entirely on your device using WebAssembly and modern JavaScript.
+        By focusing on efficiency and the latest web standards like <strong>Astro 5.0</strong> and <strong>React 19</strong>, 
+        we prove that top-tier developer utilities can be built with transparency and local pride, far away from the traditional tech hubs.
       </p>
 
-      <h3 class="text-2xl font-semibold text-white mt-10 mb-4">Why use SyntaxSnap?</h3>
-      <ul class="list-disc pl-6 space-y-2 marker:text-indigo-500">
-        <li><strong>Zero Latency:</strong> No server round-trips. Instant results.</li>
-        <li><strong>100% Privacy:</strong> Your API keys and client data stay on your machine.</li>
-        <li><strong>No Fluff:</strong> We don't show pop-up ads or force you to sign up.</li>
-      </ul>
+      <div class="bg-slate-900/50 border border-slate-800 p-6 rounded-2xl my-8">
+        <h3 class="text-xl font-bold text-white mb-4 mt-0">Why use SyntaxSnap?</h3>
+        <ul class="list-disc pl-6 space-y-2 marker:text-indigo-500">
+          <li><strong>Zero Latency:</strong> No server round-trips. Instant results.</li>
+          <li><strong>100% Privacy:</strong> Your API keys and client data stay on your machine.</li>
+          <li><strong>No Fluff:</strong> No pop-up ads, no newsletter walls, no trackers.</li>
+        </ul>
+      </div>
 
-      <hr class="border-slate-800 my-10" />
-
-      <p class="text-sm text-slate-500">
-        Maintained by the <strong>SyntaxSnap Team</strong>. 
-        Hosting on Cloudflare Edge. Built with Astro & React.
+      <p class="text-sm text-slate-500 italic">
+        Hosting on Cloudflare Edge. Built with ❤️ for the global dev community.
       </p>
     </div>
 

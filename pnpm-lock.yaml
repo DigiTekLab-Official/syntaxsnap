@@ -29,6 +29,9 @@ importers:
       astro:
         specifier: ^5.17.1
         version: 5.17.2(jiti@2.6.1)(lightningcss@1.30.2)(rollup@4.57.1)(typescript@5.9.3)
+      lucide-react:
+        specifier: ^0.566.0
+        version: 0.566.0(react@19.2.4)
       react:
         specifier: ^19.2.4
         version: 19.2.4
@@ -1796,6 +1799,11 @@ packages:
 
   lru-cache@5.1.1:
     resolution: {integrity: sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==}
+
+  lucide-react@0.566.0:
+    resolution: {integrity: sha512-b18qC/JAh1X9rVKlF5EtSIyumdIYuh78b0JShynZnHbcaWR4AW4oZyi8Ms/aQYVSnLPlAnMhug2hSr19BgVZAw==}
+    peerDependencies:
+      react: ^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0
 
   magic-string@0.30.21:
     resolution: {integrity: sha512-vd2F4YUyEXKGcLHoq+TEyCjxueSeHnFxyyjNp80yg0XV4vUhnDer/lvvlqM/arB5bXQN5K2/3oinyCRyx8T2CQ==}
@@ -4114,6 +4122,10 @@ snapshots:
   lru-cache@5.1.1:
     dependencies:
       yallist: 3.1.1
+
+  lucide-react@0.566.0(react@19.2.4):
+    dependencies:
+      react: 19.2.4
 
   magic-string@0.30.21:
     dependencies:

@@ -1,0 +1,27 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import SvgTool from '../../components/tools/SvgToJsx';
+
+const title = "SVG to JSX Converter | SyntaxSnap";
+const description = "Instantly convert SVG code into clean React JSX. Automatically handles camelCase attributes and className updates.";
+---
+
+<Layout title={title} description={description}>
+  <div class="max-w-6xl mx-auto">
+    <div class="mb-10">
+      <h1 class="text-4xl font-extrabold text-white mb-4">SVG to JSX Transformer</h1>
+      <p class="text-slate-400 text-lg">
+        Paste your SVG code to get a React-compatible version with corrected attributes.
+      </p>
+    </div>
+
+    <SvgTool client:load />
+    
+    <div class="mt-12 p-6 bg-slate-900/30 border border-slate-800 rounded-2xl">
+      <h3 class="text-white font-semibold mb-2">Why use this?</h3>
+      <p class="text-slate-400 text-sm">
+        React uses camelCase for attributes. For example, <code class="text-indigo-400">stroke-width</code> must become <code class="text-indigo-400">strokeWidth</code>. This tool automates the tedious conversion so you can get back to building.
+      </p>
+    </div>
+  </div>
+</Layout>

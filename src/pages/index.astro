@@ -2,35 +2,58 @@
 // src/pages/index.astro
 import Layout from '../layouts/Layout.astro';
 
+import { 
+  GlassWater, 
+  Database, 
+  Palette, 
+  Search, 
+  FileJson 
+} from 'lucide-react';
+
 const tools = [
   {
     title: "Glassmorphism Generator",
-    desc: "Generate frosted glass CSS effects instantly. Adjust blur, opacity, and saturation.",
+    desc: "Generate frosted glass CSS effects instantly.",
     href: "/tools/glass-generator",
-    icon: "✨",
+    icon: GlassWater, // Swapped from ✨
     status: "Live"
   },
   {
     title: "JSON to Zod Converter",
-    desc: "Infer Zod schemas from raw JSON objects. Perfect for TypeScript backend validation.",
+    desc: "Infer Zod schemas from raw JSON objects.",
     href: "/tools/json-to-zod",
-    icon: "🛡️",
+    icon: Database, // Swapped from 🛡️
     status: "Live"
   },
   {
     title: "Mesh Gradient Studio",
-    desc: "Create beautiful, aurora-style mesh gradients for modern UI backgrounds.",
+    desc: "Create beautiful, aurora-style mesh gradients.",
     href: "/tools/mesh-gradient",
-    icon: "🎨",
+    icon: Palette, // Swapped from 🎨
     status: "Live"
   },
   {
     title: "Regex Tester",
-    desc: "Test and debug JavaScript regex patterns with real-time highlighting.",
+    desc: "Test and debug JavaScript regex patterns.",
     href: "/tools/regex-tester",
-    icon: "🔍",
+    icon: Search, // Swapped from 🔍
     status: "Live"
-  }
+  },
+  {
+    title: "SVG to JSX",
+    desc: "Transform SVG code into React components.",
+    href: "/tools/svg-to-jsx",
+    icon: FileJson, // Swapped from ⚛️
+    status: "Live"
+  },
+
+  {
+    title: "Markdown Table Generator",
+    desc: "Create perfectly formatted Markdown tables from CSV or tabular data.",
+    href: "#",
+    icon: "📊",
+    status: "Coming Soon"
+  },
 ];
 ---
 
@@ -60,7 +83,11 @@ const tools = [
           class={`group relative overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/50 p-8 transition-all hover:border-indigo-500/50 hover:bg-slate-900 ${tool.status === 'Coming Soon' ? 'opacity-60 cursor-not-allowed pointer-events-none' : ''}`}
         >
           <div class="flex items-start justify-between mb-4">
-            <span class="text-4xl">{tool.icon}</span>
+            {typeof tool.icon === 'string' ? (
+              <span class="text-4xl">{tool.icon}</span>
+            ) : (
+              <tool.icon className="w-10 h-10 text-indigo-500 group-hover:text-cyan-400 transition-colors" />
+            )}
             <span class={`text-xs font-semibold px-2 py-1 rounded-full ${tool.status === 'Live' ? 'bg-green-500/10 text-green-400' : 'bg-slate-700 text-slate-400'}`}>
               {tool.status}
             </span>

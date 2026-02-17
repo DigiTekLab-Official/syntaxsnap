@@ -1,1 +1,7 @@
 @import "tailwindcss";
+
+@theme {
+  /* This defines '125' as 500px (125 * 4px) */
+  /* This makes h-125 work everywhere in your project */
+  --spacing-125: 31.25rem; 
+}
