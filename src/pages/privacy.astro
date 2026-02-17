@@ -1,0 +1,43 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const title = "Privacy Policy | SyntaxSnap";
+---
+
+<Layout title={title}>
+  <div class="max-w-3xl mx-auto py-12 px-4">
+    <h1 class="text-4xl font-bold text-white mb-8">Privacy Policy</h1>
+    
+    <div class="prose prose-invert prose-slate max-w-none text-slate-300 space-y-6">
+      <p class="text-sm text-slate-500 italic">Last Updated: February 17, 2026</p>
+
+      <section>
+        <h2 class="text-2xl font-semibold text-white">1. Local-First Processing</h2>
+        <p>
+          At SyntaxSnap, we prioritize your privacy. Most of our tools are <strong>local-first</strong>. This means that when you use the JSON to Zod converter, SVG to JSX transformer, or Regex Tester, your data is processed entirely within your web browser. <strong>We do not upload, store, or see the data you paste into these tools.</strong>
+        </p>
+      </section>
+
+      <section>
+        <h2 class="text-2xl font-semibold text-white">2. Information We Collect</h2>
+        <p>
+          We do not require user accounts or logins. We may collect minimal, non-identifying analytical data (such as page views) to help us improve the site. This data does not include any information you input into our developer tools.
+        </p>
+      </section>
+
+      <section>
+        <h2 class="text-2xl font-semibold text-white">3. Third-Party Services</h2>
+        <p>
+          We use Cloudflare for hosting and security. Cloudflare may collect standard web logs as part of its network operations. If we display advertisements in the future, those partners may use cookies to serve relevant ads based on your visit to this and other sites.
+        </p>
+      </section>
+
+      <section>
+        <h2 class="text-2xl font-semibold text-white">4. Contact Us</h2>
+        <p>
+          If you have any questions about this Privacy Policy, please contact us at <a href="mailto:contact@syntaxsnap.com" class="text-indigo-400">contact@syntaxsnap.com</a>.
+        </p>
+      </section>
+    </div>
+  </div>
+</Layout>
