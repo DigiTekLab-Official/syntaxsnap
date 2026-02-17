@@ -5,9 +5,65 @@ import JsonConverter from '../../components/tools/JsonToZod';
 
 const title = "JSON to Zod Converter (Instant Schema Generator) | SyntaxSnap";
 const description = "Convert raw JSON objects into Zod schemas instantly. Infers types, arrays, and objects for TypeScript validation.";
+
+// Schema Data
+const schema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "JSON to Zod Converter",
+      "operatingSystem": "Web",
+      "applicationCategory": "DeveloperApplication",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "description": description,
+      "featureList": [
+        "Infers TypeScript types from JSON",
+        "Generates Zod validation schemas",
+        "Handles nested objects and arrays",
+        "Local-first processing (Privacy focused)"
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Is my JSON data sent to a server?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. SyntaxSnap processes all data locally in your browser. Your sensitive JSON never leaves your device."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is Zod?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Zod is a TypeScript-first schema declaration and validation library. It allows you to create schemas that validate data at runtime."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does this support nested arrays?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, the tool recursively analyzes nested objects and arrays to generate a complete schema structure."
+          }
+        }
+      ]
+    }
+  ]
+};
 ---
 
 <Layout title={title} description={description}>
+  <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+
   <div class="max-w-6xl mx-auto">
     <div class="mb-8">
       <h1 class="text-3xl font-extrabold text-white mb-2">JSON to Zod Schema</h1>
@@ -19,6 +75,44 @@ const description = "Convert raw JSON objects into Zod schemas instantly. Infers
     </div>
 
     <JsonConverter client:load />
+
+    <div class="mt-16 grid grid-cols-1 md:grid-cols-2 gap-12 border-t border-slate-800 pt-12">
+      
+      <div class="bg-slate-900/30 border border-slate-800 rounded-2xl p-8 h-fit">
+        <h2 class="text-xl font-bold text-white mb-4">Why use Zod?</h2>
+        <p class="text-slate-400 mb-4 leading-relaxed">
+          TypeScript validates types at compile time, but Zod validates data at <strong>runtime</strong>. This is crucial when working with external APIs where the data shape might be unpredictable.
+        </p>
+      </div>
+
+      <div>
+        <h2 class="text-xl font-bold text-white mb-6">Frequently Asked Questions</h2>
+        <div class="space-y-6">
+          
+          <div>
+            <h3 class="font-medium text-slate-200 mb-2">Is my JSON data sent to a server?</h3>
+            <p class="text-sm text-slate-400 leading-relaxed">
+              No. SyntaxSnap processes all data locally in your browser. Your sensitive JSON never leaves your device.
+            </p>
+          </div>
+
+          <div>
+            <h3 class="font-medium text-slate-200 mb-2">What is Zod?</h3>
+            <p class="text-sm text-slate-400 leading-relaxed">
+              Zod is a TypeScript-first schema declaration and validation library. It allows you to create schemas that validate data at runtime.
+            </p>
+          </div>
+
+          <div>
+            <h3 class="font-medium text-slate-200 mb-2">Does this support nested arrays?</h3>
+            <p class="text-sm text-slate-400 leading-relaxed">
+              Yes, the tool recursively analyzes nested objects and arrays to generate a complete schema structure.
+            </p>
+          </div>
+
+        </div>
+      </div>
+    </div>
     
   </div>
 </Layout>

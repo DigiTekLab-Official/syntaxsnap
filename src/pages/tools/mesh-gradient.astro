@@ -5,9 +5,65 @@ import MeshTool from '../../components/tools/MeshGradient';
 
 const title = "CSS Mesh Gradient Generator (Aurora Backgrounds) | SyntaxSnap";
 const description = "Create trendy, multi-color mesh gradients for your website backgrounds. Export pure CSS radial gradients instantly.";
+
+// Schema Data
+const schema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "CSS Mesh Gradient Generator",
+      "operatingSystem": "Web",
+      "applicationCategory": "DesignApplication",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "description": description,
+      "featureList": [
+        "Create Aurora-style backgrounds",
+        "Pure CSS export (No images required)",
+        "Fully customizable colors and positions",
+        "Lightweight performance"
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Is this better than using an image?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Pure CSS gradients are resolution-independent and much lighter than image files, which improves your website's load speed and SEO score."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I animate these gradients?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Since the output is standard CSS, you can easily add keyframe animations to shift the background positions."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is it free to use commercially?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Absolutely. You can use any gradient generated here in your commercial projects without attribution."
+          }
+        }
+      ]
+    }
+  ]
+};
 ---
 
 <Layout title={title} description={description}>
+  <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+
   <div class="max-w-6xl mx-auto">
     <div class="mb-10 text-center">
       <h1 class="text-4xl font-extrabold text-white mb-4">Mesh Gradient Studio</h1>
@@ -17,6 +73,44 @@ const description = "Create trendy, multi-color mesh gradients for your website 
     </div>
 
     <MeshTool client:load />
+
+    <div class="mt-16 grid grid-cols-1 md:grid-cols-2 gap-12 border-t border-slate-800 pt-12">
+      
+      <div class="bg-slate-900/30 border border-slate-800 rounded-2xl p-8 h-fit">
+        <h2 class="text-xl font-bold text-white mb-4">The "Aurora" Trend</h2>
+        <p class="text-slate-400 mb-4 leading-relaxed">
+          Mesh gradients (often called Aurora backgrounds) are popular in modern SaaS design. They provide depth and vibrancy without the heavy file size of traditional hero images.
+        </p>
+      </div>
+
+      <div>
+        <h2 class="text-xl font-bold text-white mb-6">Frequently Asked Questions</h2>
+        <div class="space-y-6">
+          
+          <div>
+            <h3 class="font-medium text-slate-200 mb-2">Is this better than using an image?</h3>
+            <p class="text-sm text-slate-400 leading-relaxed">
+              Yes. Pure CSS gradients are resolution-independent and much lighter than image files, which improves your website's load speed and SEO score.
+            </p>
+          </div>
+
+          <div>
+            <h3 class="font-medium text-slate-200 mb-2">Can I animate these gradients?</h3>
+            <p class="text-sm text-slate-400 leading-relaxed">
+              Yes. Since the output is standard CSS, you can easily add keyframe animations to shift the background positions.
+            </p>
+          </div>
+
+          <div>
+            <h3 class="font-medium text-slate-200 mb-2">Is it free to use commercially?</h3>
+            <p class="text-sm text-slate-400 leading-relaxed">
+              Absolutely. You can use any gradient generated here in your commercial projects without attribution.
+            </p>
+          </div>
+
+        </div>
+      </div>
+    </div>
     
   </div>
 </Layout>

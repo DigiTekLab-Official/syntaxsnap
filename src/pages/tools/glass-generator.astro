@@ -5,9 +5,65 @@ import GlassTool from '../../components/tools/GlassGenerator';
 
 const title = "CSS Glassmorphism Generator | SyntaxSnap";
 const description = "Create beautiful frosted glass effects for your UI. Instant CSS export.";
+
+// Schema Data
+const schema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "CSS Glassmorphism Generator",
+      "operatingSystem": "Web",
+      "applicationCategory": "DesignApplication",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "description": description,
+      "featureList": [
+        "Real-time backdrop-filter preview",
+        "Adjustable blur and transparency",
+        "Instant CSS code export",
+        "Cross-browser compatibility checks"
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is Glassmorphism?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Glassmorphism is a UI trend that uses transparency and background blur (backdrop-filter) to create a frosted glass effect, making elements look like they are floating in space."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does this work on all browsers?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, the generated CSS uses the standard `backdrop-filter` property which is supported by all modern browsers including Chrome, Safari, and Edge."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is this tool free?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, SyntaxSnap Glass Generator is 100% free for personal and commercial projects."
+          }
+        }
+      ]
+    }
+  ]
+};
 ---
 
 <Layout title={title} description={description}>
+  <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+
   <div class="max-w-4xl mx-auto">
     <div class="mb-10 text-center">
       <h1 class="text-4xl font-extrabold text-white mb-4">Glassmorphism Generator</h1>
@@ -17,6 +73,36 @@ const description = "Create beautiful frosted glass effects for your UI. Instant
     </div>
 
     <GlassTool client:load />
+
+    <div class="mt-16 grid grid-cols-1 gap-12 border-t border-slate-800 pt-12">
+      <div>
+        <h2 class="text-xl font-bold text-white mb-6">Frequently Asked Questions</h2>
+        <div class="space-y-6">
+          
+          <div>
+            <h3 class="font-medium text-slate-200 mb-2">What is Glassmorphism?</h3>
+            <p class="text-sm text-slate-400 leading-relaxed">
+              Glassmorphism is a UI trend that uses transparency and background blur (backdrop-filter) to create a frosted glass effect, making elements look like they are floating in space.
+            </p>
+          </div>
+
+          <div>
+            <h3 class="font-medium text-slate-200 mb-2">Does this work on all browsers?</h3>
+            <p class="text-sm text-slate-400 leading-relaxed">
+              Yes, the generated CSS uses the standard <code class="text-indigo-400">backdrop-filter</code> property which is supported by all modern browsers including Chrome, Safari, and Edge.
+            </p>
+          </div>
+
+          <div>
+            <h3 class="font-medium text-slate-200 mb-2">Is this tool free?</h3>
+            <p class="text-sm text-slate-400 leading-relaxed">
+              Yes, SyntaxSnap Glass Generator is 100% free for personal and commercial projects.
+            </p>
+          </div>
+
+        </div>
+      </div>
+    </div>
     
   </div>
 </Layout>

@@ -5,9 +5,65 @@ import RegexTool from '../../components/tools/RegexTester';
 
 const title = "Regex Tester & Debugger (Javascript) | SyntaxSnap";
 const description = "Test and debug JavaScript regular expressions in real-time. Highlight matches and validate patterns instantly.";
+
+// Schema Data
+const schema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "Regex Tester & Debugger",
+      "operatingSystem": "Web",
+      "applicationCategory": "DeveloperApplication",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "description": description,
+      "featureList": [
+        "Real-time Javascript regex testing",
+        "Instant pattern matching",
+        "Support for flags (g, i, m, s, u, y)",
+        "Privacy-focused (No server processing)"
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Which Regex flavor is supported?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "This tool supports JavaScript (ECMAScript) Regular Expressions. It uses the browser's native RegExp engine for 100% accuracy."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Are my test strings saved?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. SyntaxSnap is a local-first platform. All testing happens in your browser's memory and is cleared when you refresh the page."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I use flags?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "You can add flags like 'g' (global) or 'i' (insensitive) directly in the pattern input to control how the regex engine matches your text."
+          }
+        }
+      ]
+    }
+  ]
+};
 ---
 
 <Layout title={title} description={description}>
+  <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+
   <div class="max-w-6xl mx-auto">
     <div class="mb-10 text-center">
       <h1 class="text-4xl font-extrabold text-white mb-4">Regex Tester & Debugger</h1>
@@ -17,6 +73,44 @@ const description = "Test and debug JavaScript regular expressions in real-time.
     </div>
 
     <RegexTool client:load />
+
+    <div class="mt-16 grid grid-cols-1 md:grid-cols-2 gap-12 border-t border-slate-800 pt-12">
+      
+      <div class="bg-slate-900/30 border border-slate-800 rounded-2xl p-8 h-fit">
+        <h2 class="text-xl font-bold text-white mb-4">Why use this tester?</h2>
+        <p class="text-slate-400 mb-4 leading-relaxed">
+          Regular Expressions can be tricky. This tool provides a safe, sandboxed environment to test your patterns against various strings without needing to run a server or console.
+        </p>
+      </div>
+
+      <div>
+        <h2 class="text-xl font-bold text-white mb-6">Frequently Asked Questions</h2>
+        <div class="space-y-6">
+          
+          <div>
+            <h3 class="font-medium text-slate-200 mb-2">Which Regex flavor is supported?</h3>
+            <p class="text-sm text-slate-400 leading-relaxed">
+              This tool supports JavaScript (ECMAScript) Regular Expressions. It uses the browser's native RegExp engine for 100% accuracy.
+            </p>
+          </div>
+
+          <div>
+            <h3 class="font-medium text-slate-200 mb-2">Are my test strings saved?</h3>
+            <p class="text-sm text-slate-400 leading-relaxed">
+              No. SyntaxSnap is a local-first platform. All testing happens in your browser's memory and is cleared when you refresh the page.
+            </p>
+          </div>
+
+          <div>
+            <h3 class="font-medium text-slate-200 mb-2">How do I use flags?</h3>
+            <p class="text-sm text-slate-400 leading-relaxed">
+              You can add flags like 'g' (global) or 'i' (insensitive) directly in the pattern input to control how the regex engine matches your text.
+            </p>
+          </div>
+
+        </div>
+      </div>
+    </div>
     
   </div>
 </Layout>
