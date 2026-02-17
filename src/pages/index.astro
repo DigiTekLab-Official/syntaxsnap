@@ -1,17 +1,33 @@
 ---
-
+// src/pages/index.astro
+import Layout from '../layouts/Layout.astro';
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<Layout title="SyntaxSnap | The Developer's Utility Workbench">
+	<div class="flex flex-col items-center justify-center py-20 text-center">
+		
+		<div class="inline-flex items-center rounded-full border border-indigo-500/30 bg-indigo-500/10 px-3 py-1 text-sm font-medium text-indigo-400 mb-6">
+			<span>🚀 v1.0.0 is Live</span>
+		</div>
+
+		<h1 class="text-5xl md:text-7xl font-extrabold tracking-tight text-white mb-6">
+			Dev tools that <br />
+			<span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-400">actually work.</span>
+		</h1>
+
+		<p class="text-lg text-slate-400 max-w-2xl mb-10">
+			No ads. No bloat. Just pure local-first utilities for developers.
+			Compress images, generate CSS, and debug Regex without leaving your browser.
+		</p>
+
+		<div class="flex gap-4">
+			<a href="/tools/glass-generator" class="rounded-lg bg-indigo-600 px-6 py-3 text-sm font-semibold text-white shadow-lg hover:bg-indigo-500 transition-all">
+				Try Glass Generator
+			</a>
+			<a href="#tools" class="rounded-lg border border-slate-700 bg-slate-800/50 px-6 py-3 text-sm font-semibold text-slate-300 hover:bg-slate-800 transition-all">
+				Explore All Tools
+			</a>
+		</div>
+
+	</div>
+</Layout>

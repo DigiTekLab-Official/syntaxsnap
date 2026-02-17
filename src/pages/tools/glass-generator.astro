@@ -1,0 +1,22 @@
+---
+import Layout from '../../layouts/Layout.astro';
+// 1. Rename the import here to avoid the name conflict
+import GlassTool from '../../components/tools/GlassGenerator';
+
+const title = "CSS Glassmorphism Generator | SyntaxSnap";
+const description = "Create beautiful frosted glass effects for your UI. Instant CSS export.";
+---
+
+<Layout title={title} description={description}>
+  <div class="max-w-4xl mx-auto">
+    <div class="mb-10 text-center">
+      <h1 class="text-4xl font-extrabold text-white mb-4">Glassmorphism Generator</h1>
+      <p class="text-slate-400 text-lg">
+        Adjust the sliders to create the perfect "frosted glass" effect for your next project.
+      </p>
+    </div>
+
+    <GlassTool client:load />
+    
+  </div>
+</Layout>
