@@ -1,6 +1,7 @@
 ---
 // src/layouts/Layout.astro
 import '../styles/global.css';
+import { Wrench, Info, Mail, ShieldCheck } from 'lucide-react';
 
 interface Props {
   title: string;
@@ -47,9 +48,15 @@ const canonicalURL = new URL(Astro.url.pathname, "https://syntaxsnap.com");
           Syntax<span class="text-indigo-500">Snap</span>
         </a>
         <div class="flex gap-6 text-sm font-medium text-slate-400">
-          <a href="/#tools" class="hover:text-white transition-colors">Tools</a>
-          <a href="/about" class="hover:text-white transition-colors">About</a>
-          <a href="/contact" class="hover:text-white transition-colors">Contact</a>
+          <a href="/#tools" class="hover:text-white transition-colors flex items-center gap-1.5">
+            <Wrench className="w-4 h-4" /> Tools
+          </a>
+          <a href="/about" class="hover:text-white transition-colors flex items-center gap-1.5">
+            <Info className="w-4 h-4" /> About
+          </a>
+          <a href="/contact" class="hover:text-white transition-colors flex items-center gap-1.5">
+            <Mail className="w-4 h-4" /> Contact
+          </a>
         </div>
       </div>
     </header>
@@ -80,11 +87,13 @@ const canonicalURL = new URL(Astro.url.pathname, "https://syntaxsnap.com");
               </div>
   
               <div>
-                <h3 class="font-semibold text-white mb-4">Legal</h3>
+                <h3 class="font-semibold text-white mb-4 flex items-center gap-2">
+                  <ShieldCheck className="w-4 h-4 text-indigo-500" /> Legal
+                </h3>
                 <ul class="space-y-2 text-sm text-slate-400">
                     <li><a href="/privacy" class="hover:text-indigo-400 transition-colors">Privacy Policy</a></li>
                     <li><a href="/terms" class="hover:text-indigo-400 transition-colors">Terms of Service</a></li>
-                    <li><a href="/contact" class="hover:text-indigo-400 transition-colors">Contact</a></li>
+                    <li><a href="/contact" class="hover:text-indigo-400 transition-colors">Contact Support</a></li>
                 </ul>
               </div>
           </div>
