@@ -1,277 +1,203 @@
 'use client';
-import React, { useState, useMemo, useId } from 'react';
+import React, { useState, useMemo } from 'react';
+import { Regex, Flag, Zap, AlertTriangle, CheckCircle2 } from 'lucide-react';
 
-// ─── Types ────────────────────────────────────────────────────────────────────
+// ─── Types ───────────────────────────────────────────────────────────────────
 interface MatchInfo {
   value: string;
   index: number;
   groups: Record<string, string> | undefined;
 }
 
-interface ProcessedResult {
-  /** HTML string with <mark> tags for rendering */
-  html: string;
-  matches: MatchInfo[];
-  error: string | null;
+// ─── Constants & Presets ─────────────────────────────────────────────────────
+const PRESETS = [
+  { name: 'Email', pattern: String.raw`\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b`, flags: 'g' },
+  { name: 'URL', pattern: String.raw`https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)`, flags: 'gi' },
+  { name: 'Date (YYYY-MM-DD)', pattern: String.raw`\d{4}-\d{2}-\d{2}`, flags: 'g' },
+  { name: 'IPv4', pattern: String.raw`\b(?:\d{1,3}\.){3}\d{1,3}\b`, flags: 'g' },
+];
+
+const DEFAULT_TEXT = `Contact us at support@syntaxsnap.com or admin@test.org for help.
+Visit https://syntaxsnap.com for more tools.
+Server IP: 192.168.1.1 connected on 2025-10-25.`;
+
+// ─── Logic ───────────────────────────────────────────────────────────────────
+function escapeHtml(s: string) {
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
-// ─── Regex processing ─────────────────────────────────────────────────────────
-
-/** Escape a string so it's safe to inject into an HTML attribute */
-function escapeHtml(s: string): string {
-  return s
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;');
-}
-
-const ALLOWED_FLAGS = new Set(['g', 'i', 'm', 's', 'u', 'y', 'd']);
-
-function sanitiseFlags(raw: string): string {
-  // Deduplicate and keep only known flags; always add 'd' for indices if browser supports it
-  return [...new Set(raw.split('').filter((f) => ALLOWED_FLAGS.has(f)))].join('');
-}
-
-function processRegex(pattern: string, flagsRaw: string, text: string): ProcessedResult {
+function processRegex(pattern: string, flags: string, text: string) {
   if (!pattern) return { html: escapeHtml(text), matches: [], error: null };
 
-  const flags = sanitiseFlags(flagsRaw);
-  let regex: RegExp;
-
   try {
-    // Use 'd' (hasIndices) flag where available to get richer match data
-    const flagsWithD = flags.includes('d') ? flags : flags + (RegExp.prototype.hasOwnProperty('hasIndices') ? 'd' : '');
-    regex = new RegExp(pattern, flagsWithD);
-  } catch (e) {
-    return {
-      html: escapeHtml(text),
-      matches: [],
-      error: e instanceof Error ? e.message : 'Invalid regular expression',
-    };
-  }
-
-  // For non-global patterns, matchAll needs 'g' — we iterate carefully
-  const effectiveRegex = flags.includes('g')
-    ? regex
-    : new RegExp(pattern, sanitiseFlags(flags + 'g'));
-
-  const matchList: MatchInfo[] = [];
-  let m: RegExpExecArray | null;
-
-  while ((m = effectiveRegex.exec(text)) !== null) {
-    matchList.push({
-      value: m[0],
-      index: m.index,
-      groups: m.groups,
-    });
-    // Safety: prevent infinite loop on zero-length matches
-    if (m[0].length === 0) effectiveRegex.lastIndex++;
-    // Stop after first match if non-global in original pattern
-    if (!flags.includes('g')) break;
-  }
-
-  if (matchList.length === 0) {
-    return { html: escapeHtml(text), matches: [], error: null };
-  }
-
-  // Build highlighted HTML by walking through match positions
-  let html = '';
-  let cursor = 0;
-
-  for (const match of matchList) {
-    if (match.index > cursor) {
-      html += escapeHtml(text.slice(cursor, match.index));
+    const regex = new RegExp(pattern, flags.includes('g') ? flags : flags + 'g'); // Ensure global for highlighting
+    const matches: MatchInfo[] = [];
+    let match;
+    
+    // Execute regex to find all matches
+    while ((match = regex.exec(text)) !== null) {
+      matches.push({ value: match[0], index: match.index, groups: match.groups });
+      if (match[0].length === 0) regex.lastIndex++; // Avoid infinite loops
     }
-    html += `<mark class="bg-indigo-500/40 text-white rounded-sm px-0.5 ring-1 ring-indigo-400/60">${escapeHtml(match.value)}</mark>`;
-    cursor = match.index + match.value.length;
-  }
 
-  if (cursor < text.length) {
-    html += escapeHtml(text.slice(cursor));
-  }
+    // Build Highlighted HTML
+    let html = '';
+    let lastIndex = 0;
+    matches.forEach((m) => {
+      // Append text before match
+      html += escapeHtml(text.slice(lastIndex, m.index));
+      // Append highlighted match
+      html += `<mark class="bg-indigo-500/30 text-indigo-200 rounded px-0.5 border-b-2 border-indigo-500">${escapeHtml(m.value)}</mark>`;
+      lastIndex = m.index + m.value.length;
+    });
+    // Append remaining text
+    html += escapeHtml(text.slice(lastIndex));
 
-  return { html, matches: matchList, error: null };
+    return { html, matches, error: null };
+  } catch (e) {
+    return { html: escapeHtml(text), matches: [], error: (e as Error).message };
+  }
 }
 
-// ─── Sub-components ───────────────────────────────────────────────────────────
-function MatchBadge({ count }: { count: number }) {
-  return (
-    <span
-      className={`inline-flex items-center text-xs font-semibold px-2 py-0.5 rounded-full tabular-nums
-        ${count > 0 ? 'bg-indigo-600/30 text-indigo-300 ring-1 ring-indigo-500/40' : 'bg-slate-800 text-slate-500'}`}
-    >
-      {count} {count === 1 ? 'match' : 'matches'}
-    </span>
-  );
-}
-
-// ─── Main component ───────────────────────────────────────────────────────────
-const DEFAULT_PATTERN = String.raw`\b[A-Za-z0-9._%+\-]+@[A-Za-z0-9.\-]+\.[A-Za-z]{2,}\b`;
-const DEFAULT_FLAGS = 'g';
-const DEFAULT_TEXT =
-  'Contact us at support@syntaxsnap.com or admin@test.org for help.\nInvalid: @missinguser.com or noatsign.net';
-
+// ─── Main Component ──────────────────────────────────────────────────────────
 export default function RegexTester() {
-  const [pattern, setPattern] = useState(DEFAULT_PATTERN);
-  const [flags, setFlags] = useState(DEFAULT_FLAGS);
+  const [pattern, setPattern] = useState(PRESETS[0].pattern);
+  const [flags, setFlags] = useState('g');
   const [text, setText] = useState(DEFAULT_TEXT);
 
-  const patternId = useId();
-  const flagsId   = useId();
-  const inputId   = useId();
-
-  const result = useMemo(
-    () => processRegex(pattern, flags, text),
-    [pattern, flags, text]
-  );
+  const { html, matches, error } = useMemo(() => processRegex(pattern, flags, text), [pattern, flags, text]);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8 min-h-[600px]">
+      
+      {/* ─── Controls ────────────────────────────────────────────────────── */}
+      <div className="bg-slate-900/50 p-6 rounded-2xl border border-slate-800 shadow-sm">
+        
+        {/* Header with Presets */}
+        <div className="flex flex-wrap justify-between items-center mb-4 gap-4">
+          <div className="flex items-center gap-2 text-indigo-400">
+            <Regex className="w-5 h-5" />
+            <h3 className="text-sm font-semibold uppercase tracking-wider">Pattern & Flags</h3>
+          </div>
+          
+          <div className="flex gap-2">
+            {PRESETS.map((p) => (
+              <button
+                key={p.name}
+                onClick={() => { setPattern(p.pattern); setFlags(p.flags); }}
+                className="px-3 py-1.5 text-xs font-medium bg-slate-800 hover:bg-slate-700 hover:text-indigo-400 text-slate-300 rounded-lg border border-slate-700 transition-colors flex items-center gap-1.5"
+              >
+                <Zap className="w-3 h-3" /> {p.name}
+              </button>
+            ))}
+          </div>
+        </div>
 
-      {/* ── Pattern Row ────────────────────────────────────────────────── */}
-      <div className="bg-slate-900/50 p-5 rounded-2xl border border-slate-800">
-        <div className="grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-4 items-end">
-
-          <div>
-            <label
-              htmlFor={patternId}
-              className="block text-xs text-slate-500 uppercase font-semibold mb-2 tracking-wider"
-            >
-              Regex Pattern
-            </label>
-            <div className="flex items-center gap-1.5">
-              <span className="text-slate-500 font-mono text-lg select-none" aria-hidden>/</span>
-              <input
-                id={patternId}
-                type="text"
-                value={pattern}
-                onChange={(e) => setPattern(e.target.value)}
-                spellCheck={false}
-                autoCapitalize="none"
-                autoCorrect="off"
-                aria-label="Regular expression pattern"
-                aria-invalid={!!result.error}
-                aria-describedby={result.error ? 'regex-error' : undefined}
-                className="flex-1 bg-slate-950 border border-slate-700 rounded-lg px-4 py-2.5 font-mono text-sm text-indigo-400 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500/40 transition-colors"
-              />
-              <span className="text-slate-500 font-mono text-lg select-none" aria-hidden>/</span>
-            </div>
+        {/* Inputs Row */}
+        <div className="grid grid-cols-12 gap-4">
+          {/* Pattern Input */}
+          <div className="col-span-12 md:col-span-9 relative">
+            <div className="flex items-center absolute left-3 top-3 text-slate-500 select-none font-mono text-lg">/</div>
+            <input
+              type="text"
+              value={pattern}
+              onChange={(e) => setPattern(e.target.value)}
+              className={`w-full bg-slate-950 border ${error ? 'border-red-500/50 focus:ring-red-500/20' : 'border-slate-700 focus:border-indigo-500 focus:ring-indigo-500/20'} rounded-xl py-3 pl-8 pr-4 font-mono text-sm text-indigo-300 focus:outline-none focus:ring-2 transition-all`}
+              placeholder="Enter regex pattern..."
+            />
+            <div className="flex items-center absolute right-3 top-3 text-slate-500 select-none font-mono text-lg">/</div>
           </div>
 
-          <div>
-            <label
-              htmlFor={flagsId}
-              className="block text-xs text-slate-500 uppercase font-semibold mb-2 tracking-wider"
-            >
-              Flags
-            </label>
+          {/* Flags Input */}
+          <div className="col-span-12 md:col-span-3 relative">
+            <div className="absolute left-3 top-3.5 text-slate-500">
+              <Flag className="w-4 h-4" />
+            </div>
             <input
-              id={flagsId}
               type="text"
               value={flags}
               onChange={(e) => setFlags(e.target.value)}
-              maxLength={8}
-              spellCheck={false}
-              autoCapitalize="none"
-              aria-label="Regular expression flags (e.g. g, i, m)"
-              className="w-24 bg-slate-950 border border-slate-700 rounded-lg px-3 py-2.5 font-mono text-sm text-slate-400 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500/40 transition-colors"
-              placeholder="g"
+              className="w-full bg-slate-950 border border-slate-700 rounded-xl py-3 pl-10 pr-4 font-mono text-sm text-yellow-400 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all"
+              placeholder="flags"
             />
           </div>
         </div>
 
-        {result.error && (
-          <p
-            id="regex-error"
-            role="alert"
-            aria-live="polite"
-            className="mt-3 text-xs text-red-400 bg-red-900/20 border border-red-800/40 rounded-lg px-3 py-2 font-mono"
-          >
-            {result.error}
-          </p>
+        {/* Error Message */}
+        {error && (
+          <div className="mt-3 flex items-center gap-2 text-xs text-red-400 bg-red-900/20 px-4 py-2 rounded-lg border border-red-900/50">
+            <AlertTriangle className="w-4 h-4" />
+            <span className="font-mono">{error}</span>
+          </div>
         )}
       </div>
 
-      {/* ── Test Area ──────────────────────────────────────────────────── */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6" style={{ minHeight: '360px' }}>
-
-        {/* Input */}
-        <div className="flex flex-col">
-          <label
-            htmlFor={inputId}
-            className="text-xs text-slate-500 uppercase font-semibold mb-2 tracking-wider"
-          >
-            Test String
-          </label>
+      {/* ─── Testing Arena ───────────────────────────────────────────────── */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        
+        {/* Test String Input */}
+        <div className="flex flex-col gap-2">
+          <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider ml-1">Test String</label>
           <textarea
-            id={inputId}
             value={text}
             onChange={(e) => setText(e.target.value)}
-            spellCheck={false}
-            aria-label="Text to test the regex against"
-            placeholder="Paste your test text here…"
-            className="flex-1 bg-slate-900/50 border border-slate-800 rounded-xl p-4 font-mono text-sm text-slate-300 focus:outline-none focus:border-indigo-500/60 focus:ring-1 focus:ring-indigo-500/20 resize-none transition-colors leading-relaxed"
+            className="w-full h-80 bg-slate-900/30 border border-slate-800 rounded-2xl p-4 font-mono text-sm text-slate-300 focus:outline-none focus:border-indigo-500/50 focus:ring-1 focus:ring-indigo-500/20 resize-none leading-relaxed"
+            placeholder="Paste text here to test..."
           />
         </div>
 
-        {/* Output */}
-        <div className="flex flex-col">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-xs text-slate-500 uppercase font-semibold tracking-wider">
-              Match Results
+        {/* Results Output */}
+        <div className="flex flex-col gap-2">
+          <div className="flex justify-between items-center ml-1">
+            <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Live Results</label>
+            <span className={`text-xs px-2 py-0.5 rounded-full font-mono ${matches.length > 0 ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-slate-800 text-slate-500'}`}>
+              {matches.length} Matches Found
             </span>
-            <MatchBadge count={result.matches.length} />
           </div>
-
-          <div
-            aria-label="Regex match results"
-            aria-live="polite"
-            role="region"
-            /* biome-ignore lint/security/noDangerouslySetInnerHtml: output is fully escaped; only <mark> tags injected by our sanitiser */
-            dangerouslySetInnerHTML={{ __html: result.html }}
-            className="flex-1 bg-slate-950 border border-slate-800 rounded-xl p-4 font-mono text-sm text-slate-300 overflow-auto whitespace-pre-wrap leading-relaxed"
+          
+          <div 
+            className="w-full h-80 bg-slate-950 border border-slate-800 rounded-2xl p-4 font-mono text-sm text-slate-400 overflow-auto whitespace-pre-wrap leading-relaxed"
+            dangerouslySetInnerHTML={{ __html: html || '<span class="text-slate-600 italic">// No matches found</span>' }}
           />
         </div>
-
       </div>
 
-      {/* ── Match Details Table ────────────────────────────────────────── */}
-      {result.matches.length > 0 && (
-        <div className="bg-slate-900/30 border border-slate-800 rounded-xl overflow-hidden">
-          <div className="px-4 py-3 border-b border-slate-800">
-            <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
-              Captured Groups &amp; Positions
-            </span>
+      {/* ─── Match Details Table ─────────────────────────────────────────── */}
+      {matches.length > 0 && (
+        <div className="bg-slate-900/20 border border-slate-800 rounded-2xl overflow-hidden">
+          <div className="px-6 py-3 border-b border-slate-800 bg-slate-900/40 flex items-center gap-2">
+            <CheckCircle2 className="w-4 h-4 text-indigo-400" />
+            <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Capture Groups</span>
           </div>
           <div className="overflow-x-auto">
-            <table className="w-full text-xs font-mono">
-              <thead>
-                <tr className="border-b border-slate-800 text-slate-500">
-                  <th className="text-left px-4 py-2 font-semibold">#</th>
-                  <th className="text-left px-4 py-2 font-semibold">Match</th>
-                  <th className="text-left px-4 py-2 font-semibold">Index</th>
-                  <th className="text-left px-4 py-2 font-semibold">Named Groups</th>
+            <table className="w-full text-left text-sm text-slate-400">
+              <thead className="text-xs uppercase bg-slate-900/50 text-slate-500 font-medium">
+                <tr>
+                  <th className="px-6 py-3">#</th>
+                  <th className="px-6 py-3">Match</th>
+                  <th className="px-6 py-3">Index</th>
+                  <th className="px-6 py-3">Groups</th>
                 </tr>
               </thead>
-              <tbody>
-                {result.matches.map((m, i) => (
-                  <tr key={i} className="border-b border-slate-800/50 hover:bg-slate-800/30 transition-colors">
-                    <td className="px-4 py-2 text-slate-600">{i + 1}</td>
-                    <td className="px-4 py-2 text-indigo-300">{m.value}</td>
-                    <td className="px-4 py-2 text-slate-400">{m.index}</td>
-                    <td className="px-4 py-2 text-slate-500">
-                      {m.groups
-                        ? Object.entries(m.groups)
-                            .map(([k, v]) => `${k}: "${v}"`)
-                            .join(', ')
-                        : '—'}
+              <tbody className="divide-y divide-slate-800/50">
+                {matches.slice(0, 50).map((m, i) => (
+                  <tr key={i} className="hover:bg-slate-800/30 transition-colors">
+                    <td className="px-6 py-3 font-mono text-slate-600">{i + 1}</td>
+                    <td className="px-6 py-3 font-mono text-indigo-300">{m.value}</td>
+                    <td className="px-6 py-3 font-mono text-slate-500">{m.index}</td>
+                    <td className="px-6 py-3 font-mono text-slate-400">
+                      {m.groups ? JSON.stringify(m.groups) : <span className="text-slate-600">-</span>}
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
+          {matches.length > 50 && (
+            <div className="px-6 py-2 text-xs text-center text-slate-500 bg-slate-900/30 border-t border-slate-800">
+              Showing first 50 matches only
+            </div>
+          )}
         </div>
       )}
 

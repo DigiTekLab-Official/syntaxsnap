@@ -1,0 +1,75 @@
+---
+// src/components/RelatedTools.astro
+import { FileJson, Hash, Box, Code2 } from 'lucide-astro';
+
+const { currentTool } = Astro.props;
+
+// Define your tools data centrally
+const tools = [
+  {
+    id: 'json-to-zod',
+    title: 'JSON to Zod',
+    desc: 'Convert JSON objects to Zod schemas instantly.',
+    href: '/tools/json-to-zod',
+    icon: FileJson,
+    color: 'text-orange-400',
+    bg: 'bg-orange-500/10'
+  },
+  {
+    id: 'glass-generator',
+    title: 'Glass Generator',
+    desc: 'Generate CSS for the glassmorphism effect.',
+    href: '/tools/glass-generator',
+    icon: Box,
+    color: 'text-blue-400',
+    bg: 'bg-blue-500/10'
+  },
+  {
+    id: 'regex-tester',
+    title: 'Regex Tester',
+    desc: 'Test and debug your regular expressions.',
+    href: '/tools/regex-tester',
+    icon: Code2, // Using Code2 as a generic regex icon
+    color: 'text-emerald-400',
+    bg: 'bg-emerald-500/10'
+  },
+  {
+    id: 'mesh-gradient',
+    title: 'Mesh Gradient',
+    desc: 'Create beautiful, flowing mesh gradients.',
+    href: '/tools/mesh-gradient',
+    icon: Hash,
+    color: 'text-purple-400',
+    bg: 'bg-purple-500/10'
+  }
+];
+
+// Filter out the current page so we don't link to ourselves
+const relatedTools = tools.filter(tool => tool.id !== currentTool);
+---
+
+<section class="border-t border-slate-800 mt-20 pt-16 mb-12">
+  <div class="text-center mb-12">
+    <h3 class="text-2xl font-bold text-white mb-3">Explore More Developer Tools</h3>
+    <p class="text-slate-400">Boost your productivity with our other privacy-first utilities.</p>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+    {relatedTools.map((tool) => (
+      <a 
+        href={tool.href}
+        class="group p-6 rounded-2xl bg-slate-900/50 border border-slate-800 hover:border-indigo-500/50 hover:bg-slate-900 transition-all duration-300 flex flex-col items-start"
+      >
+        <div class={`p-3 rounded-xl ${tool.bg} ${tool.color} mb-4 group-hover:scale-110 transition-transform`}>
+          <tool.icon class="w-6 h-6" />
+        </div>
+        <h4 class="text-lg font-bold text-white mb-2 group-hover:text-indigo-400 transition-colors">
+          {tool.title}
+        </h4>
+        <p class="text-sm text-slate-400 leading-relaxed">
+          {tool.desc}
+        </p>
+      </a>
+    ))}
+  </div>
+</section>

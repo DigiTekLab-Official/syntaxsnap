@@ -2,6 +2,7 @@
 // src/pages/tools/svg-to-jsx.astro
 import Layout from '../../layouts/Layout.astro';
 import SvgTool from '../../components/tools/SvgToJsx';
+import RelatedTools from '../../components/RelatedTools.astro';
 
 const title = "SVG to JSX Converter | SyntaxSnap";
 const description = "Instantly convert SVG code into clean React JSX. Automatically handles camelCase attributes, className updates, and style objects.";
@@ -118,7 +119,7 @@ const schema = {
 
         </div>
       </div>
-
+     <RelatedTools currentTool="svg-to-jsx" />  
     </div>
   </div>
 </Layout>

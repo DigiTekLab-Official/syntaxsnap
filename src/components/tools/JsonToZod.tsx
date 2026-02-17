@@ -1,14 +1,10 @@
-'use client';
 import React, { useState, useEffect, useCallback } from 'react';
+import { Copy, Check, Trash2, FileJson, AlertCircle, Braces } from 'lucide-react';
 
-// ─── Type inference ───────────────────────────────────────────────────────────
+// ─── Type Inference Engine ───────────────────────────────────────────────────
 
-/**
- * Recursively infer a Zod schema string from any JSON-deserialized value.
- * The `depth` guard prevents stack-overflows on pathologically deep inputs.
- */
 function inferZodType(value: unknown, depth = 0): string {
-  if (depth > 30) return 'z.any()';
+  if (depth > 20) return 'z.any()'; // Prevent stack overflow
 
   if (value === null) return 'z.null()';
   if (value === undefined) return 'z.undefined()';
@@ -18,33 +14,31 @@ function inferZodType(value: unknown, depth = 0): string {
     case 'number':  return Number.isInteger(value) ? 'z.number().int()' : 'z.number()';
     case 'boolean': return 'z.boolean()';
     case 'bigint':  return 'z.bigint()';
-    default:        break;
   }
 
   if (Array.isArray(value)) {
     if (value.length === 0) return 'z.array(z.unknown())';
 
-    // Collect unique types across all items and union them if they differ
+    // Get unique types from the array
     const itemTypes = [...new Set(value.map((item) => inferZodType(item, depth + 1)))];
-    const inner =
-      itemTypes.length === 1
-        ? itemTypes[0]
-        : `z.union([${itemTypes.join(', ')}])`;
+    
+    // If all items are the same type, return array of that type
+    if (itemTypes.length === 1) return `z.array(${itemTypes[0]})`;
 
-    return `z.array(${inner})`;
+    // If mixed types, create a union
+    return `z.array(z.union([${itemTypes.join(', ')}]))`;
   }
 
   if (typeof value === 'object') {
     const entries = Object.entries(value as Record<string, unknown>);
-
     if (entries.length === 0) return 'z.object({})';
 
     const indent = '  '.repeat(depth + 1);
-    const closing = '  '.repeat(depth);
+    const closing = '  '.repeat(depth); // Maintain indentation
 
     const fields = entries.map(([key, val]) => {
-      // Quote keys that aren't valid JS identifiers
-      const safeKey = /^[a-zA-Z_$][a-zA-Z0-9_$]*$/.test(key) ? key : JSON.stringify(key);
+      // Handle keys that need quotes (e.g., "my-key" or "123")
+      const safeKey = /^[a-zA-Z_$][a-zA-Z0-9_$]*$/.test(key) ? key : `"${key}"`;
       return `${indent}${safeKey}: ${inferZodType(val, depth + 1)}`;
     });
 
@@ -54,126 +48,156 @@ function inferZodType(value: unknown, depth = 0): string {
   return 'z.any()';
 }
 
-function buildSchema(input: string): { schema: string; error: string | null } {
-  if (!input.trim()) return { schema: '', error: null };
+// ─── Main Component ──────────────────────────────────────────────────────────
 
-  let parsed: unknown;
-  try {
-    parsed = JSON.parse(input);
-  } catch {
-    return { schema: '', error: 'Invalid JSON — check for missing quotes or trailing commas.' };
-  }
-
-  const body = inferZodType(parsed);
-  const schema = `import { z } from "zod";\n\nconst Schema = ${body};\n\ntype Schema = z.infer<typeof Schema>;`;
-
-  return { schema, error: null };
-}
-
-// ─── Copy button ──────────────────────────────────────────────────────────────
-function CopyButton({ text, disabled }: { text: string; disabled?: boolean }) {
-  const [state, setState] = useState<'idle' | 'ok' | 'err'>('idle');
-
-  const copy = useCallback(async () => {
-    try {
-      await navigator.clipboard.writeText(text);
-      setState('ok');
-    } catch {
-      setState('err');
-    } finally {
-      setTimeout(() => setState('idle'), 2000);
-    }
-  }, [text]);
-
-  return (
-    <button
-      onClick={copy}
-      disabled={disabled || !text}
-      aria-label="Copy Zod schema to clipboard"
-      className="text-xs flex items-center gap-1.5 bg-indigo-600 hover:bg-indigo-500 disabled:opacity-40 disabled:cursor-not-allowed text-white px-3 py-1.5 rounded-md transition-all active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400"
-    >
-      {state === 'ok' ? '✓ Copied!' : state === 'err' ? '✗ Failed' : 'Copy Code'}
-    </button>
-  );
-}
-
-// ─── Default sample ───────────────────────────────────────────────────────────
 const DEFAULT_INPUT = `{
   "userId": 1,
   "username": "ameer_dev",
   "isAdmin": true,
-  "score": 98.6,
   "roles": ["admin", "editor"],
-  "address": {
-    "street": "123 Main St",
-    "zip": "10001"
-  },
-  "metadata": null
+  "settings": {
+    "theme": "dark",
+    "notifications": true
+  }
 }`;
 
-// ─── Main component ───────────────────────────────────────────────────────────
 export default function JsonToZod() {
   const [input, setInput] = useState(DEFAULT_INPUT);
   const [output, setOutput] = useState('');
   const [error, setError] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
 
+  // Auto-generate schema when input changes
   useEffect(() => {
-    const { schema, error } = buildSchema(input);
-    setOutput(schema);
-    setError(error);
+    if (!input.trim()) {
+      setOutput('');
+      setError(null);
+      return;
+    }
+
+    try {
+      const parsed = JSON.parse(input);
+      const schemaBody = inferZodType(parsed);
+      const fullSchema = `import { z } from "zod";\n\nconst Schema = ${schemaBody};\n\ntype Schema = z.infer<typeof Schema>;`;
+      
+      setOutput(fullSchema);
+      setError(null);
+    } catch (err) {
+      setError('Invalid JSON');
+    }
   }, [input]);
 
-  return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6" style={{ minHeight: '520px' }}>
+  // Copy Handler
+  const handleCopy = async () => {
+    if (!output) return;
+    await navigator.clipboard.writeText(output);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
-      {/* ── JSON Input ───────────────────────────────────────────────────── */}
-      <div className="flex flex-col bg-slate-900/50 rounded-2xl border border-slate-800 overflow-hidden">
-        <div className="bg-slate-900 px-4 py-3 border-b border-slate-800 flex justify-between items-center min-h-[48px]">
-          <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
-            Input — JSON
-          </span>
-          {error && (
-            <span
-              role="alert"
-              aria-live="polite"
-              className="text-xs text-red-400 font-mono bg-red-900/20 border border-red-800/40 px-2 py-1 rounded"
+  // Format Handler
+  const handleFormat = () => {
+    try {
+      const parsed = JSON.parse(input);
+      setInput(JSON.stringify(parsed, null, 2));
+    } catch {
+      // Ignore format errors if JSON is invalid
+    }
+  };
+
+  // Clear Handler
+  const handleClear = () => {
+    setInput('');
+    setOutput('');
+    setError(null);
+  };
+
+  return (
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 min-h-[600px]">
+      
+      {/* ─── LEFT: Input ───────────────────────────────────────────────── */}
+      <div className="flex flex-col bg-slate-900/50 rounded-2xl border border-slate-800 overflow-hidden shadow-sm">
+        <div className="bg-slate-900/80 backdrop-blur px-4 py-3 border-b border-slate-800 flex justify-between items-center">
+          <div className="flex items-center gap-2 text-slate-400">
+            <FileJson className="w-4 h-4" />
+            <span className="text-xs font-semibold uppercase tracking-wider">JSON Input</span>
+          </div>
+          
+          <div className="flex gap-2">
+            <button 
+              onClick={handleFormat}
+              className="p-1.5 text-slate-400 hover:text-indigo-400 hover:bg-slate-800 rounded-md transition-colors"
+              title="Format JSON"
             >
+              <Braces className="w-4 h-4" />
+            </button>
+            <button 
+              onClick={handleClear}
+              className="p-1.5 text-slate-400 hover:text-red-400 hover:bg-slate-800 rounded-md transition-colors"
+              title="Clear"
+            >
+              <Trash2 className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+
+        <div className="relative flex-1 group">
+          <textarea
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            spellCheck={false}
+            placeholder="Paste your JSON here..."
+            className="w-full h-full bg-transparent p-4 font-mono text-sm text-slate-300 focus:outline-none resize-none leading-relaxed"
+          />
+          
+          {error && (
+            <div className="absolute bottom-4 right-4 bg-red-900/90 border border-red-500/50 text-red-200 text-xs px-3 py-2 rounded-lg flex items-center gap-2 backdrop-blur shadow-lg animate-in fade-in slide-in-from-bottom-2">
+              <AlertCircle className="w-4 h-4" />
               {error}
-            </span>
+            </div>
           )}
         </div>
-
-        <textarea
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          spellCheck={false}
-          autoCapitalize="none"
-          autoCorrect="off"
-          aria-label="JSON input"
-          placeholder="Paste your JSON here…"
-          className="flex-1 bg-transparent p-4 font-mono text-sm text-slate-300 focus:outline-none resize-none leading-relaxed min-h-[460px]"
-        />
       </div>
 
-      {/* ── Zod Output ──────────────────────────────────────────────────── */}
-      <div className="flex flex-col bg-slate-950 rounded-2xl border border-slate-800 overflow-hidden">
-        <div className="bg-slate-900 px-4 py-3 border-b border-slate-800 flex justify-between items-center min-h-[48px]">
-          <span className="text-xs font-semibold text-indigo-400 uppercase tracking-wider">
-            Output — Zod Schema
-          </span>
-          <CopyButton text={output} disabled={!!error || !output} />
+      {/* ─── RIGHT: Output ─────────────────────────────────────────────── */}
+      <div className="flex flex-col bg-slate-950 rounded-2xl border border-slate-800 overflow-hidden shadow-lg relative">
+        <div className="bg-slate-900/80 backdrop-blur px-4 py-3 border-b border-slate-800 flex justify-between items-center">
+          <div className="flex items-center gap-2 text-indigo-400">
+            <Braces className="w-4 h-4" />
+            <span className="text-xs font-semibold uppercase tracking-wider">Zod Schema</span>
+          </div>
+
+          <button
+            onClick={handleCopy}
+            disabled={!output}
+            className={`
+              flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-all
+              ${copied 
+                ? 'bg-emerald-500/10 text-emerald-400 ring-1 ring-emerald-500/50' 
+                : 'bg-indigo-600 hover:bg-indigo-500 text-white shadow-indigo-500/20 shadow-lg'}
+              disabled:opacity-50 disabled:cursor-not-allowed
+            `}
+          >
+            {copied ? (
+              <> <Check className="w-3.5 h-3.5" /> Copied </>
+            ) : (
+              <> <Copy className="w-3.5 h-3.5" /> Copy Code </>
+            )}
+          </button>
         </div>
 
-        <pre
-          aria-label="Generated Zod schema"
-          aria-live="polite"
-          className="flex-1 p-4 font-mono text-sm text-blue-300 overflow-auto whitespace-pre leading-relaxed"
-        >
-          {output
-            ? output
-            : <span className="text-slate-600">{`// Paste valid JSON on the left to generate a schema…`}</span>
-          }
-        </pre>
+        <div className="flex-1 relative overflow-auto bg-[#0B1120]">
+          {output ? (
+            <pre className="p-4 font-mono text-sm text-blue-300 leading-relaxed">
+              {output}
+            </pre>
+          ) : (
+            <div className="absolute inset-0 flex flex-col items-center justify-center text-slate-600 gap-3">
+              <FileJson className="w-10 h-10 opacity-20" />
+              <p className="text-sm">Waiting for valid JSON...</p>
+            </div>
+          )}
+        </div>
       </div>
 
     </div>

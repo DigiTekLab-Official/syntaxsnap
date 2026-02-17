@@ -1,6 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import GlassTool from '../../components/tools/GlassGenerator';
+import RelatedTools from '../../components/RelatedTools.astro';
 
 const title = "CSS Glassmorphism Generator | SyntaxSnap";
 const description = "Create beautiful frosted glass effects for your UI with real-time backdrop-filter preview. Adjust blur, transparency, saturation and border radius — then export clean, cross-browser CSS instantly.";
@@ -138,5 +139,6 @@ const schema = {
         </div>
       </div>
     </div>
+    <RelatedTools currentTool="glass-generator" /> 
   </div>
 </Layout>

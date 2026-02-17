@@ -2,6 +2,7 @@
 import Layout from '../../layouts/Layout.astro';
 // 1. RENAME the import to "JsonConverter" to fix the conflict
 import JsonConverter from '../../components/tools/JsonToZod';
+import RelatedTools from '../../components/RelatedTools.astro';
 
 const title = "JSON to Zod Converter (Instant Schema Generator) | SyntaxSnap";
 const description = "Convert raw JSON objects into Zod schemas instantly. Infers types, arrays, and objects for TypeScript validation.";
@@ -113,6 +114,6 @@ const schema = {
         </div>
       </div>
     </div>
-    
+   <RelatedTools currentTool="json-to-zod" /> 
   </div>
 </Layout>

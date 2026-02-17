@@ -1,7 +1,8 @@
 'use client';
 import React, { useState, useCallback } from 'react';
+import { Copy, Check, RotateCcw, Layers, Image as ImageIcon, Sparkles, Box } from 'lucide-react';
 
-// ─── Types ────────────────────────────────────────────────────────────────────
+// ─── Types & Defaults ────────────────────────────────────────────────────────
 interface GlassConfig {
   blur: number;
   transparency: number;
@@ -14,69 +15,70 @@ interface GlassConfig {
   noiseTint: boolean;
 }
 
+const DEFAULTS: GlassConfig = {
+  blur: 16,
+  transparency: 0.25,
+  color: '#ffffff',
+  saturation: 180,
+  borderOpacity: 0.3,
+  shadowIntensity: 20,
+  borderRadius: 24,
+  outline: true,
+  noiseTint: false,
+};
+
+const PRESETS = {
+  frosted: { ...DEFAULTS, blur: 16, transparency: 0.25, saturation: 180 },
+  crystal: { ...DEFAULTS, blur: 4, transparency: 0.1, borderOpacity: 0.6, saturation: 110 },
+  liquid:  { ...DEFAULTS, blur: 40, transparency: 0.6, borderRadius: 32, saturation: 200, borderOpacity: 0.1 },
+};
+
 // ─── Helpers ─────────────────────────────────────────────────────────────────
-function hexToRgb(hex: string): { r: number; g: number; b: number } | null {
+function hexToRgb(hex: string) {
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  return result
-    ? {
-        r: parseInt(result[1], 16),
-        g: parseInt(result[2], 16),
-        b: parseInt(result[3], 16),
-      }
-    : null;
+  return result ? {
+    r: parseInt(result[1], 16),
+    g: parseInt(result[2], 16),
+    b: parseInt(result[3], 16),
+  } : null;
 }
 
-function buildRgba(hex: string, alpha: number): string {
+function buildRgba(hex: string, alpha: number) {
   const rgb = hexToRgb(hex);
-  if (!rgb) return `rgba(255,255,255,${alpha})`;
+  if (!rgb) return `rgba(255, 255, 255, ${alpha})`;
   return `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${alpha})`;
 }
 
-function buildCss(cfg: GlassConfig): string {
-  const lines: string[] = [
+function buildCss(cfg: GlassConfig) {
+  const lines = [
+    `/* Glassmorphism Effect */`,
     `background: ${buildRgba(cfg.color, cfg.transparency)};`,
     `backdrop-filter: blur(${cfg.blur}px) saturate(${cfg.saturation}%);`,
     `-webkit-backdrop-filter: blur(${cfg.blur}px) saturate(${cfg.saturation}%);`,
   ];
 
   if (cfg.outline) {
-    lines.push(
-      `border: 1px solid rgba(255, 255, 255, ${cfg.borderOpacity});`
-    );
+    lines.push(`border: 1px solid rgba(255, 255, 255, ${cfg.borderOpacity});`);
+  } else {
+    lines.push(`border: none;`);
   }
 
   lines.push(`border-radius: ${cfg.borderRadius}px;`);
-  lines.push(
-    `box-shadow: 0 ${Math.round(cfg.shadowIntensity * 0.4)}px ${cfg.shadowIntensity}px rgba(0, 0, 0, ${(cfg.shadowIntensity / 100).toFixed(2)});`
-  );
-
-  if (cfg.noiseTint) {
-    lines.push(
-      `/* Optional: overlay a subtle noise texture */`,
-      `/* background-image: url("data:image/svg+xml,..."); */`
-    );
+  
+  if (cfg.shadowIntensity > 0) {
+    lines.push(`box-shadow: 0 ${Math.round(cfg.shadowIntensity * 0.4)}px ${cfg.shadowIntensity}px rgba(0, 0, 0, ${(cfg.shadowIntensity / 100).toFixed(2)});`);
   }
 
   return lines.join('\n');
 }
 
-// ─── Sub-components ───────────────────────────────────────────────────────────
-interface SliderRowProps {
-  label: string;
-  value: number;
-  min: number;
-  max: number;
-  step?: number;
-  unit?: string;
-  onChange: (v: number) => void;
-}
-
-function SliderRow({ label, value, min, max, step = 1, unit = '', onChange }: SliderRowProps) {
+// ─── Sub-components ──────────────────────────────────────────────────────────
+function SliderRow({ label, value, min, max, unit = '', onChange }: any) {
   return (
-    <div>
+    <div className="group">
       <div className="flex justify-between items-center mb-2">
-        <label className="text-sm font-medium text-slate-300">{label}</label>
-        <span className="text-xs font-mono text-indigo-400 tabular-nums">
+        <label className="text-xs font-medium text-slate-400 group-hover:text-indigo-400 transition-colors uppercase tracking-wider">{label}</label>
+        <span className="text-xs font-mono text-slate-500 tabular-nums bg-slate-800 px-1.5 py-0.5 rounded">
           {value}{unit}
         </span>
       </div>
@@ -84,234 +86,173 @@ function SliderRow({ label, value, min, max, step = 1, unit = '', onChange }: Sl
         type="range"
         min={min}
         max={max}
-        step={step}
         value={value}
         onChange={(e) => onChange(Number(e.target.value))}
-        aria-label={label}
-        className="w-full h-1.5 bg-slate-700 rounded-full appearance-none cursor-pointer accent-indigo-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
+        className="w-full h-1.5 bg-slate-800 rounded-full appearance-none cursor-pointer accent-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50"
       />
     </div>
   );
 }
 
-// ─── Copy Button ──────────────────────────────────────────────────────────────
-function CopyButton({ text }: { text: string }) {
-  const [state, setState] = useState<'idle' | 'copied' | 'error'>('idle');
-
-  const handleCopy = useCallback(async () => {
-    try {
-      await navigator.clipboard.writeText(text);
-      setState('copied');
-      setTimeout(() => setState('idle'), 2000);
-    } catch {
-      setState('error');
-      setTimeout(() => setState('idle'), 2000);
-    }
-  }, [text]);
-
-  return (
-    <button
-      onClick={handleCopy}
-      aria-label="Copy CSS to clipboard"
-      className="text-xs font-medium px-3 py-1.5 rounded-md transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 active:scale-95
-        bg-indigo-600 hover:bg-indigo-500 text-white disabled:opacity-50"
-    >
-      {state === 'copied' ? '✓ Copied!' : state === 'error' ? 'Failed' : 'Copy CSS'}
-    </button>
-  );
-}
-
-// ─── Main Component ───────────────────────────────────────────────────────────
-const DEFAULTS: GlassConfig = {
-  blur: 16,
-  transparency: 0.15,
-  color: '#ffffff',
-  saturation: 180,
-  borderOpacity: 0.3,
-  shadowIntensity: 30,
-  borderRadius: 16,
-  outline: true,
-  noiseTint: false,
-};
-
+// ─── Main Component ──────────────────────────────────────────────────────────
 export default function GlassGenerator() {
   const [cfg, setCfg] = useState<GlassConfig>(DEFAULTS);
+  const [bgIndex, setBgIndex] = useState(0);
+  const [copied, setCopied] = useState(false);
 
-  const set = useCallback(
-    <K extends keyof GlassConfig>(key: K) =>
-      (value: GlassConfig[K]) =>
-        setCfg((prev) => ({ ...prev, [key]: value })),
-    []
-  );
+  // Background options for testing
+  const backgrounds = [
+    'https://images.unsplash.com/photo-1579546929518-9e396f3cc809?q=80&w=1200&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1557683316-973673baf926?q=80&w=1200&auto=format&fit=crop', // Dark Gradient
+    'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1200&auto=format&fit=crop', // Abstract
+  ];
+
+  const update = (key: keyof GlassConfig) => (val: any) => setCfg(p => ({ ...p, [key]: val }));
 
   const cssOutput = buildCss(cfg);
 
-  const previewStyle: React.CSSProperties = {
-    background: buildRgba(cfg.color, cfg.transparency),
-    backdropFilter: `blur(${cfg.blur}px) saturate(${cfg.saturation}%)`,
-    WebkitBackdropFilter: `blur(${cfg.blur}px) saturate(${cfg.saturation}%)`,
-    border: cfg.outline
-      ? `1px solid rgba(255,255,255,${cfg.borderOpacity})`
-      : 'none',
-    borderRadius: `${cfg.borderRadius}px`,
-    boxShadow: `0 ${Math.round(cfg.shadowIntensity * 0.4)}px ${cfg.shadowIntensity}px rgba(0,0,0,${(cfg.shadowIntensity / 100).toFixed(2)})`,
+  const handleCopy = async () => {
+    await navigator.clipboard.writeText(cssOutput);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
   };
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 min-h-[600px]">
 
-      {/* ── Controls Panel ─────────────────────────────────────────────── */}
-      <div className="space-y-6 bg-slate-900/50 p-6 rounded-2xl border border-slate-800">
-        <SliderRow
-          label="Blur"
-          value={cfg.blur}
-          min={0}
-          max={64}
-          unit="px"
-          onChange={set('blur')}
-        />
-
-        <SliderRow
-          label="Transparency"
-          value={Math.round(cfg.transparency * 100)}
-          min={0}
-          max={100}
-          unit="%"
-          onChange={(v) => set('transparency')(v / 100)}
-        />
-
-        <SliderRow
-          label="Saturation"
-          value={cfg.saturation}
-          min={0}
-          max={300}
-          unit="%"
-          onChange={set('saturation')}
-        />
-
-        <SliderRow
-          label="Border Opacity"
-          value={Math.round(cfg.borderOpacity * 100)}
-          min={0}
-          max={100}
-          unit="%"
-          onChange={(v) => set('borderOpacity')(v / 100)}
-        />
-
-        <SliderRow
-          label="Shadow Intensity"
-          value={cfg.shadowIntensity}
-          min={0}
-          max={100}
-          unit="px"
-          onChange={set('shadowIntensity')}
-        />
-
-        <SliderRow
-          label="Border Radius"
-          value={cfg.borderRadius}
-          min={0}
-          max={64}
-          unit="px"
-          onChange={set('borderRadius')}
-        />
-
-        {/* Color Picker */}
+      {/* ─── LEFT PANEL: Controls (5 Cols) ──────────────────────────────── */}
+      <div className="lg:col-span-5 space-y-8 bg-slate-900/50 p-6 rounded-2xl border border-slate-800 h-fit">
+        
+        {/* Header & Presets */}
         <div>
-          <label className="block text-sm font-medium mb-2 text-slate-300">
-            Base Color
-          </label>
-          <div className="flex items-center gap-3">
-            <input
-              type="color"
-              value={cfg.color}
-              onChange={(e) => set('color')(e.target.value)}
-              aria-label="Base color picker"
-              className="h-10 w-14 rounded-lg bg-transparent border border-slate-700 cursor-pointer p-0.5"
-            />
-            <span className="text-slate-400 font-mono text-sm">{cfg.color}</span>
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="text-sm font-semibold text-white flex items-center gap-2">
+              <Sparkles className="w-4 h-4 text-indigo-400" /> Presets
+            </h3>
+            <button 
+              onClick={() => setCfg(DEFAULTS)}
+              className="text-xs text-slate-500 hover:text-white flex items-center gap-1 transition-colors"
+              title="Reset to default"
+            >
+              <RotateCcw className="w-3 h-3" /> Reset
+            </button>
           </div>
-        </div>
-
-        {/* Toggles */}
-        <div className="space-y-3 pt-2">
-          {(
-            [
-              { key: 'outline', label: 'Show border' },
-              { key: 'noiseTint', label: 'Include noise texture comment' },
-            ] as const
-          ).map(({ key, label }) => (
-            <label key={key} className="flex items-center gap-3 cursor-pointer select-none group">
-              <div
-                className={`relative w-9 h-5 rounded-full transition-colors duration-200 ${
-                  cfg[key] ? 'bg-indigo-600' : 'bg-slate-700'
-                } group-focus-within:ring-2 group-focus-within:ring-indigo-500`}
+          <div className="grid grid-cols-3 gap-2">
+            {Object.entries(PRESETS).map(([name, config]) => (
+              <button
+                key={name}
+                onClick={() => setCfg(config)}
+                className="px-3 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-indigo-500/50 text-xs font-medium text-slate-300 capitalize transition-all"
               >
-                <input
-                  type="checkbox"
-                  checked={cfg[key] as boolean}
-                  onChange={(e) => set(key)(e.target.checked as GlassConfig[typeof key])}
-                  className="sr-only"
-                />
-                <span
-                  className={`absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform duration-200 ${
-                    cfg[key] ? 'translate-x-4' : 'translate-x-0'
-                  }`}
-                />
-              </div>
-              <span className="text-sm font-medium text-slate-300">{label}</span>
-            </label>
-          ))}
+                {name}
+              </button>
+            ))}
+          </div>
         </div>
 
-        {/* CSS Output */}
-        <div className="mt-2">
-          <div className="flex justify-between items-center mb-2">
-            <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
-              CSS Output
-            </span>
-            <CopyButton text={cssOutput} />
+        {/* Sliders Group 1: Material */}
+        <div className="space-y-5">
+          <SliderRow label="Blur" value={cfg.blur} min={0} max={64} unit="px" onChange={update('blur')} />
+          <SliderRow label="Transparency" value={Math.round(cfg.transparency * 100)} min={0} max={100} unit="%" onChange={(v: number) => update('transparency')(v / 100)} />
+          <SliderRow label="Saturation" value={cfg.saturation} min={0} max={200} unit="%" onChange={update('saturation')} />
+        </div>
+
+        <div className="border-t border-slate-800 pt-6 space-y-5">
+          <SliderRow label="Border Radius" value={cfg.borderRadius} min={0} max={50} unit="px" onChange={update('borderRadius')} />
+          <SliderRow label="Shadow" value={cfg.shadowIntensity} min={0} max={100} unit="%" onChange={update('shadowIntensity')} />
+          
+          <div className="flex items-center justify-between">
+             <label className="text-xs font-medium text-slate-400 uppercase tracking-wider">Border Outline</label>
+             <input 
+               type="checkbox" 
+               checked={cfg.outline}
+               onChange={(e) => update('outline')(e.target.checked)}
+               className="w-4 h-4 rounded border-slate-700 bg-slate-800 text-indigo-600 focus:ring-indigo-500"
+             />
           </div>
-          <pre className="bg-slate-950 p-4 rounded-xl text-xs text-slate-300 font-mono overflow-x-auto border border-slate-800 whitespace-pre-wrap leading-relaxed">
+        </div>
+
+        {/* CSS Output Block */}
+        <div className="bg-slate-950 rounded-xl border border-slate-800 overflow-hidden">
+          <div className="bg-slate-900/50 px-4 py-2 border-b border-slate-800 flex justify-between items-center">
+            <span className="text-xs font-medium text-indigo-400">CSS Code</span>
+            <button
+              onClick={handleCopy}
+              className={`flex items-center gap-1.5 text-xs font-medium transition-colors ${copied ? 'text-emerald-400' : 'text-slate-400 hover:text-white'}`}
+            >
+              {copied ? <><Check className="w-3 h-3" /> Copied</> : <><Copy className="w-3 h-3" /> Copy</>}
+            </button>
+          </div>
+          <pre className="p-4 text-xs font-mono text-blue-300 whitespace-pre overflow-x-auto">
             {cssOutput}
           </pre>
         </div>
       </div>
 
-      {/* ── Live Preview ────────────────────────────────────────────────── */}
-      <div
-        className="relative flex items-center justify-center min-h-[480px] rounded-2xl overflow-hidden"
-        style={{
-          backgroundImage:
-            'url(https://images.unsplash.com/photo-1579546929518-9e396f3cc809?q=80&w=1200&auto=format&fit=crop)',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-        }}
-        aria-label="Glass effect live preview"
-        role="img"
-      >
-        {/* Darkening overlay so lighter glass is still visible */}
-        <div className="absolute inset-0 bg-black/20" aria-hidden />
-
-        {/* The glass card */}
-        <div
-          className="relative z-10 w-72 p-8 flex flex-col items-center gap-4 text-white"
-          style={previewStyle}
+      {/* ─── RIGHT PANEL: Preview (7 Cols) ──────────────────────────────── */}
+      <div className="lg:col-span-7 flex flex-col gap-4">
+        
+        {/* Preview Container */}
+        <div 
+          className="relative flex-1 min-h-[500px] rounded-3xl overflow-hidden shadow-2xl border border-slate-800 flex items-center justify-center transition-all duration-500"
+          style={{
+            backgroundImage: `url(${backgrounds[bgIndex]})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+          }}
         >
-          <div className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center text-2xl" aria-hidden>
-            ✦
+          {/* Dark overlay for contrast */}
+          <div className="absolute inset-0 bg-black/10" />
+
+          {/* The Glass Element */}
+          <div 
+            className="relative z-10 p-8 w-80 text-white flex flex-col items-center gap-4 transition-all duration-200"
+            style={{
+              background: buildRgba(cfg.color, cfg.transparency),
+              backdropFilter: `blur(${cfg.blur}px) saturate(${cfg.saturation}%)`,
+              WebkitBackdropFilter: `blur(${cfg.blur}px) saturate(${cfg.saturation}%)`,
+              border: cfg.outline ? `1px solid rgba(255, 255, 255, ${cfg.borderOpacity})` : 'none',
+              borderRadius: `${cfg.borderRadius}px`,
+              boxShadow: `0 ${Math.round(cfg.shadowIntensity * 0.4)}px ${cfg.shadowIntensity}px rgba(0,0,0,${(cfg.shadowIntensity/100).toFixed(2)})`
+            }}
+          >
+            <div className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center backdrop-blur-md border border-white/30">
+              <Box className="w-6 h-6 text-white" />
+            </div>
+            
+            <div className="text-center">
+              <h4 className="text-lg font-bold mb-1">Glass Card</h4>
+              <p className="text-xs text-white/80 leading-relaxed">
+                Adjust the sliders to change this element's blur, opacity, and saturation in real-time.
+              </p>
+            </div>
+
+            <div className="w-full h-px bg-gradient-to-r from-transparent via-white/30 to-transparent my-2" />
+            
+            <button className="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-medium transition-colors w-full">
+              Button Action
+            </button>
           </div>
-          <p className="text-base font-semibold tracking-wide">Glass Preview</p>
-          <p className="text-xs text-white/70 text-center leading-relaxed">
-            Resize sliders to see blur, transparency and border in real-time.
-          </p>
-          <div className="w-full h-px bg-white/20 my-1" aria-hidden />
-          <div className="flex gap-3 text-xs text-white/60">
-            <span>blur: {cfg.blur}px</span>
-            <span>·</span>
-            <span>alpha: {Math.round(cfg.transparency * 100)}%</span>
+
+          {/* Background Switcher (Floating) */}
+          <div className="absolute bottom-6 right-6 flex gap-2 p-1.5 bg-slate-900/80 backdrop-blur rounded-full border border-slate-700">
+            {backgrounds.map((bg, i) => (
+              <button
+                key={i}
+                onClick={() => setBgIndex(i)}
+                className={`w-8 h-8 rounded-full border-2 transition-all overflow-hidden ${bgIndex === i ? 'border-indigo-500 scale-110' : 'border-transparent opacity-70 hover:opacity-100'}`}
+              >
+                <img src={bg} alt="bg" className="w-full h-full object-cover" />
+              </button>
+            ))}
           </div>
+
         </div>
+        
+        <p className="text-center text-xs text-slate-500">
+          <ImageIcon className="w-3 h-3 inline mr-1" />
+          Try different backgrounds to ensure text readability.
+        </p>
       </div>
 
     </div>
