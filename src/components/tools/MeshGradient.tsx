@@ -46,7 +46,7 @@ background-image:
   };
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 min-h-[550px]">
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 min-h-137.5">
       
       {/* ─── LEFT: Controls ────────────────────────────────────────────── */}
       <div className="bg-slate-900/50 p-6 rounded-2xl border border-slate-800 flex flex-col gap-6">
@@ -147,7 +147,7 @@ background-image:
 
       {/* ─── RIGHT: Preview ────────────────────────────────────────────── */}
       <div 
-        className="rounded-2xl shadow-2xl border border-slate-800 w-full h-full min-h-[400px] flex items-center justify-center relative overflow-hidden transition-all duration-500"
+        className="rounded-2xl shadow-2xl border border-slate-800 w-full h-full min-h-100 flex items-center justify-center relative overflow-hidden transition-all duration-500"
         style={{
           backgroundColor: bg,
           backgroundImage: `

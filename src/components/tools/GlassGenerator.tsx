@@ -118,7 +118,7 @@ export default function GlassGenerator() {
   };
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 min-h-[600px]">
+    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 min-h-150">
 
       {/* ─── LEFT PANEL: Controls (5 Cols) ──────────────────────────────── */}
       <div className="lg:col-span-5 space-y-8 bg-slate-900/50 p-6 rounded-2xl border border-slate-800 h-fit">
@@ -194,7 +194,7 @@ export default function GlassGenerator() {
         
         {/* Preview Container */}
         <div 
-          className="relative flex-1 min-h-[500px] rounded-3xl overflow-hidden shadow-2xl border border-slate-800 flex items-center justify-center transition-all duration-500"
+          className="relative flex-1 min-h-125 rounded-3xl overflow-hidden shadow-2xl border border-slate-800 flex items-center justify-center transition-all duration-500"
           style={{
             backgroundImage: `url(${backgrounds[bgIndex]})`,
             backgroundSize: 'cover',
@@ -227,7 +227,7 @@ export default function GlassGenerator() {
               </p>
             </div>
 
-            <div className="w-full h-px bg-gradient-to-r from-transparent via-white/30 to-transparent my-2" />
+            <div className="w-full h-px bg-linear-to-r from-transparent via-white/30 to-transparent my-2" />
             
             <button className="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-medium transition-colors w-full">
               Button Action

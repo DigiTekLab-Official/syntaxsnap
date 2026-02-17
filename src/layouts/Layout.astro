@@ -1,8 +1,6 @@
 ---
 // src/layouts/Layout.astro
 import '../styles/global.css';
-
-// FIX 1: Switch from lucide-react to lucide-astro for zero-JS overhead and native 'class' support.
 import { Wrench, Info, Mail, ShieldCheck } from 'lucide-astro';
 import Logo from '../components/Logo.astro';
 
@@ -16,8 +14,9 @@ const {
   description = "A privacy-first suite of developer tools that run entirely in your browser. No servers. No tracking." 
 } = Astro.props;
 
-// FIX 2: Explicitly cast URL to string to satisfy strict TypeScript requirements for meta tags.
+// Standardizing the URL for SEO
 const canonicalURL = new URL(Astro.url.pathname, "https://syntaxsnap.com").toString();
+const isHome = Astro.url.pathname === "/";
 ---
 
 <!doctype html>
@@ -67,58 +66,49 @@ const canonicalURL = new URL(Astro.url.pathname, "https://syntaxsnap.com").toStr
             "@type": "ContactPoint",
             "email": "contact@syntaxsnap.com",
             "contactType": "customer support"
-          },
-          "sameAs": ["https://github.com/DigiTekLab-Official"]
+          }
         },
         {
           "@type": "WebSite",
           "@id": "https://syntaxsnap.com/#website",
           "url": "https://syntaxsnap.com",
           "name": "SyntaxSnap",
-          "description": "Privacy-first suite of developer tools.",
           "publisher": { "@id": "https://syntaxsnap.com/#organization" }
-        },
-        {
-          "@type": "BreadcrumbList",
-          "itemListElement": [{
-            "@type": "ListItem",
-            "position": 1,
-            "name": "Home",
-            "item": "https://syntaxsnap.com"
-          }]
         }
       ]
     }
     </script>
   </head>
   
-  <body class="bg-slate-950 text-slate-200 min-h-screen font-sans antialiased flex flex-col">
+  <body class="bg-slate-950 text-slate-200 min-h-screen font-sans antialiased flex flex-col selection:bg-indigo-500/30">
     
     <header class="border-b border-slate-800 bg-slate-950/80 backdrop-blur-md sticky top-0 z-50">
       <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
         
         <a href="/" class="flex items-center gap-3 group" aria-label="SyntaxSnap home">
-          <Logo class="w-8 h-8 group-hover:scale-110 transition-transform duration-300" />
+          <div class="group-hover:rotate-12 transition-transform duration-300">
+             <Logo class="w-8 h-8" />
+          </div>
           <span class="text-xl font-bold tracking-tight text-white">
             Syntax<span class="text-indigo-400">Snap</span>
           </span>
         </a>
 
         <nav aria-label="Main navigation">
-          <ul class="flex gap-6 text-sm font-medium text-slate-400 list-none m-0 p-0">
+          <ul class="flex gap-4 md:gap-8 text-sm font-medium text-slate-400 list-none m-0 p-0">
             <li>
-              <a href="/#tools" class="hover:text-white transition-colors flex items-center gap-1.5">
-                <Wrench class="w-4 h-4" aria-hidden="true" /> Tools
+              <a href="/#tools" class="hover:text-white transition-colors flex items-center gap-1.5 py-2">
+                <Wrench class="w-4 h-4" /> <span class="hidden sm:inline">Tools</span>
               </a>
             </li>
             <li>
-              <a href="/about" class="hover:text-white transition-colors flex items-center gap-1.5">
-                <Info class="w-4 h-4" aria-hidden="true" /> About
+              <a href="/about" class="hover:text-white transition-colors flex items-center gap-1.5 py-2">
+                <Info class="w-4 h-4" /> <span class="hidden sm:inline">About</span>
               </a>
             </li>
             <li>
-              <a href="/contact" class="hover:text-white transition-colors flex items-center gap-1.5">
-                <Mail class="w-4 h-4" aria-hidden="true" /> Contact
+              <a href="/contact" class="hover:text-white transition-colors flex items-center gap-1.5 py-2">
+                <Mail class="w-4 h-4" /> <span class="hidden sm:inline">Contact</span>
               </a>
             </li>
           </ul>
@@ -126,47 +116,49 @@ const canonicalURL = new URL(Astro.url.pathname, "https://syntaxsnap.com").toStr
       </div>
     </header>
 
-    <main class="w-full max-w-6xl mx-auto px-4 py-8 flex-1">
+    <main class="w-full max-w-6xl mx-auto px-4 py-8 md:py-12 flex-1 animate-in fade-in duration-700">
       <slot />
     </main>
 
     <footer class="border-t border-slate-800 bg-slate-950 mt-auto">
-      <div class="max-w-6xl mx-auto px-4 py-12">
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+      <div class="max-w-6xl mx-auto px-4 py-16">
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-12 mb-12">
               
-              <div>
-                  <span class="text-lg font-bold text-white">Syntax<span class="text-indigo-500">Snap</span></span>
+              <div class="col-span-1 md:col-span-2">
+                  <span class="text-xl font-bold text-white tracking-tight">Syntax<span class="text-indigo-500">Snap</span></span>
                   <p class="mt-4 text-sm text-slate-400 max-w-xs leading-relaxed">
-                      Code fast. Stay private. A suite of local-first tools for the global developer community.
+                      High-performance, local-first utilities for modern developers. Built with privacy as a priority and speed as a requirement.
                   </p>
               </div>
   
               <div>
-                  <h2 class="font-semibold text-white mb-4">Popular Tools</h2>
-                  <ul class="space-y-2 text-sm text-slate-400 font-mono">
-                      <li><a href="/tools/glass-generator" class="hover:text-indigo-400 transition-colors">Glass Generator</a></li>
-                      <li><a href="/tools/json-to-zod" class="hover:text-indigo-400 transition-colors">JSON to Zod</a></li>
+                  <h2 class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-4">Utilities</h2>
+                  <ul class="space-y-3 text-sm text-slate-400 font-mono">
+                      <li><a href="/tools/glass-generator" class="hover:text-indigo-400 transition-colors">Glass Gen</a></li>
+                      <li><a href="/tools/json-to-zod" class="hover:text-indigo-400 transition-colors">JSON → Zod</a></li>
                       <li><a href="/tools/mesh-gradient" class="hover:text-indigo-400 transition-colors">Mesh Gradient</a></li>
                       <li><a href="/tools/regex-tester" class="hover:text-indigo-400 transition-colors">Regex Tester</a></li>
+                      <li><a href="/tools/svg-to-jsx" class="hover:text-indigo-400 transition-colors">SVG → JSX</a></li>
                   </ul>
               </div>
   
               <div>
-                <h3 class="font-semibold text-white mb-4 flex items-center gap-2">
-                  <ShieldCheck class="w-4 h-4 text-indigo-500" aria-hidden="true" /> Legal
-                </h3>
-                <ul class="space-y-2 text-sm text-slate-400">
-                    <li><a href="/privacy" class="hover:text-indigo-400 transition-colors">Privacy Policy</a></li>
-                    <li><a href="/terms" class="hover:text-indigo-400 transition-colors">Terms of Service</a></li>
-                    <li><a href="/contact" class="hover:text-indigo-400 transition-colors">Contact Support</a></li>
+                <h3 class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-4">Company</h3>
+                <ul class="space-y-3 text-sm text-slate-400">
+                    <li><a href="/about" class="hover:text-indigo-400 transition-colors">Our Story</a></li>
+                    <li><a href="/privacy" class="hover:text-indigo-400 transition-colors">Privacy</a></li>
+                    <li><a href="/terms" class="hover:text-indigo-400 transition-colors">Terms</a></li>
                 </ul>
               </div>
           </div>
           
-          <div class="border-t border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-slate-500">
-              <p>&copy; {new Date().getFullYear()} SyntaxSnap. Built with Astro & React.</p>
-              <p>
-                Built with ❤️ in <span class="text-slate-300 font-medium">Cuddalore</span> for the global dev community.
+          <div class="border-t border-slate-900 pt-8 flex flex-col md:flex-row justify-between items-center gap-6 text-[11px] text-slate-500">
+              <div class="flex items-center gap-2">
+                <ShieldCheck class="w-4 h-4 text-indigo-500/50" />
+                <p>&copy; {new Date().getFullYear()} SyntaxSnap. All rights reserved.</p>
+              </div>
+              <p class="flex items-center gap-1.5">
+                Built with ❤️ in <span class="text-slate-300 font-medium underline decoration-indigo-500/30 underline-offset-4">Cuddalore</span> for the global community.
               </p>
           </div>
       </div>

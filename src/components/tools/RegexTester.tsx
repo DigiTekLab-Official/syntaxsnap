@@ -68,7 +68,7 @@ export default function RegexTester() {
   const { html, matches, error } = useMemo(() => processRegex(pattern, flags, text), [pattern, flags, text]);
 
   return (
-    <div className="space-y-8 min-h-[600px]">
+    <div className="space-y-8 min-h-150">
       
       {/* ─── Controls ────────────────────────────────────────────────────── */}
       <div className="bg-slate-900/50 p-6 rounded-2xl border border-slate-800 shadow-sm">

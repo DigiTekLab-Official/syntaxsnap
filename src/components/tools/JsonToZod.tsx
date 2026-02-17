@@ -113,7 +113,7 @@ export default function JsonToZod() {
   };
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 min-h-[600px]">
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 min-h-150">
       
       {/* ─── LEFT: Input ───────────────────────────────────────────────── */}
       <div className="flex flex-col bg-slate-900/50 rounded-2xl border border-slate-800 overflow-hidden shadow-sm">

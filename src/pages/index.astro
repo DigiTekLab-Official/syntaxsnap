@@ -61,7 +61,7 @@ const tools = [
 
     <h1 class="text-5xl md:text-7xl font-extrabold text-white tracking-tight mb-6 max-w-4xl">
       Code fast. <br class="hidden md:block" />
-      <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-400">
+      <span class="text-transparent bg-clip-text bg-linear-to-r from-indigo-400 to-cyan-400">
         Stay private.
       </span>
     </h1>
@@ -89,7 +89,7 @@ const tools = [
         </div>
         
         <div class="mb-4 p-3 bg-slate-800 rounded-xl w-fit group-hover:bg-indigo-500/20 group-hover:text-indigo-400 transition-colors">
-          <tool.icon className="w-6 h-6" />
+          {(() => { const Icon = tool.icon; return <Icon className="w-6 h-6" /> })()}
         </div>
         
         <h2 class="text-xl font-bold text-white mb-2 group-hover:text-indigo-400 transition-colors">

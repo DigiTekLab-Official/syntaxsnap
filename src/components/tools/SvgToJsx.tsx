@@ -285,7 +285,7 @@ export default function SvgToJsx() {
 
       {/* ── Source SVG ───────────────────────────────────────────────── */}
       <div className="flex flex-col bg-slate-900/50 rounded-2xl border border-slate-800 overflow-hidden">
-        <div className="bg-slate-900 px-4 py-3 border-b border-slate-800 flex items-center gap-2 min-h-[48px]">
+        <div className="bg-slate-900 px-4 py-3 border-b border-slate-800 flex items-center gap-2 min-h-12">
           <FileCode className="w-4 h-4 text-slate-400" aria-hidden />
           <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
             Source SVG
@@ -305,7 +305,7 @@ export default function SvgToJsx() {
 
       {/* ── JSX Output ──────────────────────────────────────────────── */}
       <div className="flex flex-col bg-slate-950 rounded-2xl border border-slate-800 overflow-hidden">
-        <div className="bg-slate-900 px-4 py-3 border-b border-slate-800 flex justify-between items-center min-h-[48px]">
+        <div className="bg-slate-900 px-4 py-3 border-b border-slate-800 flex justify-between items-center min-h-12">
           <span className="text-xs font-semibold text-indigo-400 uppercase tracking-wider">
             React JSX
           </span>

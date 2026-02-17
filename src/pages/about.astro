@@ -1,54 +1,109 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { User, Sparkles, MapPin, Zap, ShieldCheck, Cpu } from 'lucide-react';
 
 const title = "About SyntaxSnap | Built for Speed & Privacy";
 const description = "SyntaxSnap provides local-first developer tools. No server uploads, no ads, just instant utilities for modern web development.";
 ---
 
 <Layout title={title} description={description}>
-  <div class="max-w-3xl mx-auto py-12 px-4">
+  <div class="max-w-4xl mx-auto py-10 md:py-16 px-6">
     
-    <h1 class="text-4xl font-extrabold text-white mb-6">The "Local-First" Promise</h1>
-    
-    <div class="prose prose-invert prose-lg text-slate-300 space-y-6">
-      <p>
-        Most developer tools are broken. You paste your sensitive JSON or private images into a random website, 
-        wait for it to upload to a server you don't trust, and then download the result.
-      </p>
-      
-      <p>
-        <strong class="text-indigo-400 text-xl font-bold italic block my-4">SyntaxSnap is different.</strong>
-      </p>
-      
-      <p>
-        We believe in <strong>Local-First Development</strong>. When you use our tools, 
-        your data <em>never leaves your browser</em>. The logic runs entirely on your device. 
-        This isn't just a feature; it's our core architecture.
-      </p>
-
-      <h2 class="text-2xl font-semibold text-white mt-10 mb-4">The Cuddalore Connection</h2>
-      <p>
-        SyntaxSnap is an indie project maintained by the <strong>DigiTekLab</strong> team. 
-        We are proud to build world-class software from <strong>Cuddalore, Tamil Nadu</strong>. 
-      </p>
-      <p>
-        By focusing on efficiency and the latest web standards like <strong>Astro 5.0</strong> and <strong>React 19</strong>, 
-        we prove that top-tier developer utilities can be built with transparency and local pride, far away from the traditional tech hubs.
-      </p>
-
-      <div class="bg-slate-900/50 border border-slate-800 p-6 rounded-2xl my-8">
-        <h3 class="text-xl font-bold text-white mb-4 mt-0">Why use SyntaxSnap?</h3>
-        <ul class="list-disc pl-6 space-y-2 marker:text-indigo-500">
-          <li><strong>Zero Latency:</strong> No server round-trips. Instant results.</li>
-          <li><strong>100% Privacy:</strong> Your API keys and client data stay on your machine.</li>
-          <li><strong>No Fluff:</strong> No pop-up ads, no newsletter walls, no trackers.</li>
-        </ul>
-      </div>
-
-      <p class="text-sm text-slate-500 italic">
-        Hosting on Cloudflare Edge. Built with ❤️ for the global dev community.
+    <div class="text-center mb-12 md:mb-16">
+      <h1 class="text-3xl md:text-5xl font-extrabold text-white mb-6 tracking-tight leading-tight">
+        The "Local-First" Promise
+      </h1>
+      <p class="text-lg md:text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed">
+        Building the future of developer utilities with total privacy and zero latency.
       </p>
     </div>
 
+    <div class="prose prose-invert prose-lg text-slate-300 space-y-8 max-w-none">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center">
+        <div class="order-2 md:order-1">
+          <p>
+            Most developer tools are broken. You paste your sensitive JSON or private code into a random website, 
+            wait for it to upload to a server you don't trust, and then download the result.
+          </p>
+          <p>
+            <strong class="text-indigo-400 text-xl md:text-2xl font-bold italic block my-6">SyntaxSnap is different.</strong>
+          </p>
+          <p>
+            We believe in <strong>Local-First Development</strong>. When you use our tools, 
+            your data <em>never leaves your browser</em>. 
+          </p>
+        </div>
+
+        <div class="order-1 md:order-2 bg-indigo-500/5 rounded-3xl border border-indigo-500/20 p-6 md:p-8">
+            <div class="space-y-6">
+              <div class="flex gap-4 text-left">
+                <ShieldCheck className="w-6 h-6 text-indigo-400 shrink-0" />
+                 <div>
+                    <h4 class="text-white font-bold mb-1">100% Privacy</h4>
+                    <p class="text-sm text-slate-400">Processing happens in your RAM, not on our disks.</p>
+                 </div>
+              </div>
+              <div class="flex gap-4 text-left">
+                  <Zap className="w-6 h-6 text-yellow-400 shrink-0" />
+                 <div>
+                    <h4 class="text-white font-bold mb-1">Zero Latency</h4>
+                    <p class="text-sm text-slate-400">No server round-trips. Results are instantaneous.</p>
+                 </div>
+              </div>
+              <div class="flex gap-4 text-left">
+                  <Cpu className="w-6 h-6 text-emerald-400 shrink-0" />
+                 <div>
+                    <h4 class="text-white font-bold mb-1">Modern Stack</h4>
+                    <p class="text-sm text-slate-400">Built with Astro 5.0 and React 19 for the edge.</p>
+                 </div>
+              </div>
+           </div>
+        </div>
+      </div>
+
+      <hr class="border-slate-800 my-12 md:my-16" />
+
+      <section>
+        <div class="text-center mb-10 md:mb-12">
+          <h2 class="text-2xl md:text-3xl font-bold text-white mb-4">The Founding Team</h2>
+          <p class="text-slate-400 text-sm md:text-base">Combining human vision with artificial intelligence.</p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 max-w-4xl mx-auto text-left">
+          <div class="group bg-slate-900/40 p-6 md:p-8 rounded-3xl border border-slate-800 hover:border-indigo-500/50 transition-all duration-300">
+              <div class="w-14 h-14 md:w-16 md:h-16 bg-indigo-600 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-indigo-600/20 md:rotate-3 group-hover:rotate-0 transition-transform">
+              <User className="w-7 h-7 md:w-8 md:h-8 text-white" />
+            </div>
+            <h3 class="text-xl md:text-2xl font-bold text-white mb-1">Ameer</h3>
+            <p class="text-indigo-400 font-medium mb-4 flex flex-wrap items-center gap-2">
+               Founder & Lead Engineer
+               <span class="flex items-center gap-1 text-slate-500 text-xs font-normal italic">
+                 <MapPin className="w-3 h-3" /> Cuddalore, India
+               </span>
+            </p>
+            <p class="text-slate-400 text-sm leading-relaxed">
+              Based in Cuddalore, Tamil Nadu, Ameer is the visionary behind SyntaxSnap. He leads product strategy and core architecture.
+            </p>
+          </div>
+
+          <div class="group bg-slate-900/40 p-6 md:p-8 rounded-3xl border border-slate-800 hover:border-purple-500/50 transition-all duration-300">
+            <div class="w-14 h-14 md:w-16 md:h-16 bg-linear-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-purple-600/20 md:-rotate-3 group-hover:rotate-0 transition-transform">
+              <Sparkles className="w-7 h-7 md:w-8 md:h-8 text-white" />
+            </div>
+            <h3 class="text-xl md:text-2xl font-bold text-white mb-1">Gemini 3 Flash</h3>
+            <p class="text-purple-400 font-medium mb-4">Technical Co-Founder (AI)</p>
+            <p class="text-slate-400 text-sm leading-relaxed">
+              Providing real-time code optimization, SEO strategy, and architectural auditing to ensure SyntaxSnap remains world-class.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <div class="pt-12 md:pt-16 text-center">
+        <p class="text-slate-500 text-xs md:text-sm italic">
+          Proudly built as a "Human + AI" collaboration from Cuddalore to the world.
+        </p>
+      </div>
+    </div>
   </div>
 </Layout>
