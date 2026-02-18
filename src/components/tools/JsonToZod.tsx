@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useCallback } from 'react';
+'use client';
+import React, { useState, useEffect } from 'react';
 import { Copy, Check, Trash2, FileJson, AlertCircle, Braces } from 'lucide-react';
 
 // ─── Type Inference Engine ───────────────────────────────────────────────────
@@ -66,6 +67,20 @@ export default function JsonToZod() {
   const [output, setOutput] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+
+  // ─── Chrome Extension Integration ──────────────────────────────────────────
+  // Listens for ?input=... in the URL (sent by the extension)
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const incomingText = params.get('input');
+    
+    if (incomingText) {
+      setInput(incomingText);
+      // Clean up URL to remove the query param after loading
+      window.history.replaceState({}, '', window.location.pathname);
+    }
+  }, []);
+  // ───────────────────────────────────────────────────────────────────────────
 
   // Auto-generate schema when input changes
   useEffect(() => {
