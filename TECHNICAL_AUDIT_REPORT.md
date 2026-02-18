@@ -1258,7 +1258,7 @@ SyntaxSnap is a well-architected privacy-first developer tool suite with solid f
 - [ ] Add unit tests
 
 ### Regex Tester
-- [x] Fix XSS vulnerability (escape single quotes)
+- [ ] Fix XSS vulnerability (escape single quotes)
 - [ ] Add ReDoS protection (1000ms timeout)
 - [ ] Add debouncing (300ms)
 - [ ] Limit match calculation to display limit
@@ -1278,14 +1278,14 @@ SyntaxSnap is a well-architected privacy-first developer tool suite with solid f
 - [ ] Add unit tests
 
 ### SVG to JSX
-- [x] Strip <script> tags
-- [x] Strip on* event handlers
+- [ ] Strip <script> tags
+- [ ] Strip on* event handlers
 - [ ] Add debouncing (300ms)
 - [ ] Add option to preserve comments
 - [ ] Add unit tests
 
 ### Glass Generator
-- [x] Replace Unsplash with local images
+- [ ] Replace Unsplash with local images
 - [ ] Add hex color validation
 - [ ] Detect low-end devices (disable backdrop-filter)
 - [ ] Add unit tests
