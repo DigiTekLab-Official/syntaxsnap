@@ -1,0 +1,146 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { 
+  WifiOff, 
+  Server, 
+  ShieldCheck, 
+  Terminal, 
+  CheckCircle2,
+  Cpu
+} from 'lucide-react';
+
+const title = "Offline & Self-Hosted SyntaxSnap | Enterprise Ready";
+const description = "Run SyntaxSnap locally inside your corporate firewall or without an internet connection. The ultimate privacy-first developer workbench.";
+---
+
+<Layout title={title} description={description}>
+  <div class="max-w-5xl mx-auto px-4 py-12">
+    
+    {/* HERO SECTION */}
+    <div class="text-center mb-16">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-medium mb-6">
+        <WifiOff className="w-3 h-3" />
+        Air-Gap Ready
+      </div>
+      <h1 class="text-4xl md:text-6xl font-extrabold text-white tracking-tight mb-6">
+        Run SyntaxSnap <br />
+        <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">
+          Entirely Offline.
+        </span>
+      </h1>
+      <p class="text-lg text-slate-400 max-w-2xl mx-auto leading-relaxed">
+        Need to process sensitive banking data, government records, or proprietary code? 
+        Deploy SyntaxSnap inside your corporate firewall. No internet required.
+      </p>
+    </div>
+
+    {/* BENEFITS GRID */}
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-20">
+      <div class="p-6 rounded-2xl bg-slate-900/40 border border-slate-800">
+        <ShieldCheck className="w-8 h-8 text-indigo-400 mb-4" />
+        <h3 class="text-lg font-bold text-white mb-2">Zero Data Leaks</h3>
+        <p class="text-sm text-slate-400">
+          Perfect for SOC2 / HIPAA compliance. Your data never leaves your localhost or internal network.
+        </p>
+      </div>
+      <div class="p-6 rounded-2xl bg-slate-900/40 border border-slate-800">
+        <Server className="w-8 h-8 text-purple-400 mb-4" />
+        <h3 class="text-lg font-bold text-white mb-2">Internal Hosting</h3>
+        <p class="text-sm text-slate-400">
+          Host it on your company's Intranet (e.g., <code>tools.corp.com</code>) for your entire engineering team.
+        </p>
+      </div>
+      <div class="p-6 rounded-2xl bg-slate-900/40 border border-slate-800">
+        <Cpu className="w-8 h-8 text-emerald-400 mb-4" />
+        <h3 class="text-lg font-bold text-white mb-2">Local Performance</h3>
+        <p class="text-sm text-slate-400">
+          Bypass network latency completely. Tools load instantly from your local disk or LAN.
+        </p>
+      </div>
+    </div>
+
+    {/* INSTALLATION OPTIONS */}
+    <div class="space-y-12">
+      
+      {/* METHOD 1: QUICK START */}
+      <div class="bg-slate-900/50 border border-slate-800 rounded-3xl p-8 md:p-10 relative overflow-hidden">
+        <div class="absolute top-0 right-0 p-4 opacity-10">
+          <Terminal className="w-32 h-32 text-white" />
+        </div>
+        
+        <div class="relative z-10">
+          <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+            <span class="flex items-center justify-center w-8 h-8 rounded-full bg-slate-800 text-sm border border-slate-700">1</span>
+            The "Developer" Way (Node.js)
+          </h2>
+          <p class="text-slate-400 mb-6 max-w-xl">
+            Clone the repository and run it locally using your package manager. This gives you the full development experience.
+          </p>
+
+          <div class="bg-slate-950 rounded-xl border border-slate-800 p-4 font-mono text-sm text-slate-300 overflow-x-auto">
+            <div class="flex flex-col gap-2">
+              <span class="text-slate-500"># 1. Clone the repo</span>
+              <span class="text-emerald-400">git clone https://github.com/DigiTekLab-Official/syntaxsnap.git</span>
+              <span class="text-slate-500 mt-2"># 2. Install dependencies</span>
+              <span class="text-emerald-400">cd syntaxsnap && pnpm install</span>
+              <span class="text-slate-500 mt-2"># 3. Start local server</span>
+              <span class="text-emerald-400">pnpm dev</span>
+            </div>
+          </div>
+          
+          <div class="mt-4 flex items-center gap-2 text-xs text-slate-500">
+             <CheckCircle2 className="w-3 h-3 text-emerald-500" />
+             <span>Accessible at <code class="text-slate-300">http://localhost:4321</code></span>
+          </div>
+        </div>
+      </div>
+
+      {/* METHOD 2: DOCKER */}
+      <div class="bg-slate-900/50 border border-slate-800 rounded-3xl p-8 md:p-10 relative overflow-hidden">
+        <div class="absolute top-0 right-0 p-4 opacity-10">
+          <Server className="w-32 h-32 text-indigo-400" />
+        </div>
+        
+        <div class="relative z-10">
+          <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+            <span class="flex items-center justify-center w-8 h-8 rounded-full bg-slate-800 text-sm border border-slate-700">2</span>
+            The "Enterprise" Way (Docker)
+          </h2>
+          <p class="text-slate-400 mb-6 max-w-xl">
+            Build a lightweight container that serves the static files via Nginx. Perfect for deploying to Kubernetes or an internal VPC.
+          </p>
+
+          <div class="bg-slate-950 rounded-xl border border-slate-800 p-4 font-mono text-sm text-slate-300 overflow-x-auto">
+            <div class="flex flex-col gap-2">
+              <span class="text-slate-500"># 1. Build the image</span>
+              <span class="text-indigo-400">docker build -t syntaxsnap .</span>
+              <span class="text-slate-500 mt-2"># 2. Run container on port 8080</span>
+              <span class="text-indigo-400">docker run -p 8080:80 syntaxsnap</span>
+            </div>
+          </div>
+
+           <div class="mt-6 p-4 bg-indigo-900/10 border border-indigo-500/20 rounded-xl">
+              <h4 class="text-sm font-bold text-white mb-1">Why use Docker?</h4>
+              <p class="text-xs text-slate-400">
+                {/* FIX: Used &lt; entity for "less than" symbol */}
+                The resulting image is static Nginx. It consumes &lt; 20MB of RAM and can handle thousands of concurrent users on a micro-instance.
+              </p>
+           </div>
+        </div>
+      </div>
+
+    </div>
+
+    {/* FAQ / SUPPORT */}
+    <div class="mt-20 text-center border-t border-slate-800 pt-16">
+      <h2 class="text-xl font-bold text-white mb-4">Need an Enterprise License?</h2>
+      <p class="text-slate-400 max-w-lg mx-auto mb-8">
+        If your organization requires a signed binary, SLA support, or custom tool integration, please contact our enterprise team.
+      </p>
+      <a href="/contact" class="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-white text-slate-900 font-bold hover:bg-slate-200 transition-colors">
+        Contact Sales
+      </a>
+    </div>
+
+  </div>
+</Layout>
