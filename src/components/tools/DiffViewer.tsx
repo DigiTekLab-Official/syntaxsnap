@@ -12,6 +12,7 @@ import {
   Lock,
   FileText,
   AlertCircle,
+  ArrowRightLeft
 } from 'lucide-react';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -121,6 +122,21 @@ export default function DiffViewer() {
   const [granularity, setGranularity] = useState<DiffGranularity>('lines');
   const [isFullscreen, setIsFullscreen] = useState(false);
 
+  // ─── CHROME EXTENSION LISTENER ──────────────────────────────────────────
+  // Listens for ?input=... in the URL (sent by the extension)
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const incomingText = params.get('input');
+    
+    if (incomingText) {
+      setOldText(incomingText);
+      setNewText(''); // Clear "New" so user can paste comparison
+      // Clean up URL to remove the query param after loading
+      window.history.replaceState({}, '', window.location.pathname);
+    }
+  }, []);
+  // ────────────────────────────────────────────────────────────────────────
+
   // FIX: Debounce text values to prevent diff calculation on every keystroke.
   // For large files (10k+ lines), computing diffs on every keystroke freezes the UI.
   const debouncedOld = useDebouncedValue(oldText, 400);
@@ -151,7 +167,6 @@ export default function DiffViewer() {
   }, []);
 
   // FIX: Real Fullscreen API instead of CSS fixed positioning.
-  // Hides browser chrome (address bar, tabs) for distraction-free review.
   const toggleFullscreen = useCallback(async () => {
     if (!document.fullscreenElement) {
       try {
@@ -262,7 +277,7 @@ export default function DiffViewer() {
         </div>
       </div>
 
-      {/* ── Input panels (FIX: always visible, not conditional) ───────── */}
+      {/* ── Input panels ──────────────────────────────────────────────── */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="space-y-2">
           <label htmlFor="old-text" className="text-xs font-bold uppercase tracking-widest text-slate-500 ml-1">
@@ -313,23 +328,25 @@ export default function DiffViewer() {
                 <div className="sticky top-0 bg-slate-900/95 backdrop-blur-sm p-2 border-b border-slate-800 text-[10px] uppercase font-bold text-red-400 z-10">
                   Original
                 </div>
-                {diffs.map((part, i) =>
-                  part.removed ? (
-                    <div
-                      key={getDiffKey(part, i)}
-                      className="px-4 py-1 bg-red-900/20 text-red-200 whitespace-pre-wrap break-all font-mono text-xs border-l-2 border-red-500"
-                    >
-                      {part.value}
-                    </div>
-                  ) : part.added ? null : (
-                    <div
-                      key={getDiffKey(part, i)}
-                      className="px-4 py-1 text-slate-600 whitespace-pre-wrap break-all font-mono text-xs"
-                    >
-                      {part.value}
-                    </div>
-                  ),
-                )}
+                <pre className="m-0">
+                  {diffs.map((part, i) =>
+                    part.removed ? (
+                      <div
+                        key={getDiffKey(part, i)}
+                        className="px-4 py-1 bg-red-900/20 text-red-200 whitespace-pre-wrap break-all font-mono text-xs border-l-2 border-red-500"
+                      >
+                        {part.value}
+                      </div>
+                    ) : part.added ? null : (
+                      <div
+                        key={getDiffKey(part, i)}
+                        className="px-4 py-1 text-slate-600 whitespace-pre-wrap break-all font-mono text-xs"
+                      >
+                        {part.value}
+                      </div>
+                    ),
+                  )}
+                </pre>
               </div>
 
               {/* Right panel (New) */}
@@ -346,45 +363,49 @@ export default function DiffViewer() {
                   <span>Modified</span>
                   <CopyButton text={newText} />
                 </div>
-                {diffs.map((part, i) =>
-                  part.added ? (
-                    <div
-                      key={getDiffKey(part, i)}
-                      className="px-4 py-1 bg-emerald-900/20 text-emerald-200 whitespace-pre-wrap break-all font-mono text-xs border-l-2 border-emerald-500"
-                    >
-                      {part.value}
-                    </div>
-                  ) : part.removed ? null : (
-                    <div
-                      key={getDiffKey(part, i)}
-                      className="px-4 py-1 text-slate-600 whitespace-pre-wrap break-all font-mono text-xs"
-                    >
-                      {part.value}
-                    </div>
-                  ),
-                )}
+                <pre className="m-0">
+                  {diffs.map((part, i) =>
+                    part.added ? (
+                      <div
+                        key={getDiffKey(part, i)}
+                        className="px-4 py-1 bg-emerald-900/20 text-emerald-200 whitespace-pre-wrap break-all font-mono text-xs border-l-2 border-emerald-500"
+                      >
+                        {part.value}
+                      </div>
+                    ) : part.removed ? null : (
+                      <div
+                        key={getDiffKey(part, i)}
+                        className="px-4 py-1 text-slate-600 whitespace-pre-wrap break-all font-mono text-xs"
+                      >
+                        {part.value}
+                      </div>
+                    ),
+                  )}
+                </pre>
               </div>
             </div>
           ) : (
             /* Unified view */
             <div className="overflow-auto max-h-[600px]">
-              {diffs.map((part, i) => (
-                <div
-                  key={getDiffKey(part, i)}
-                  className={`px-4 py-1 border-l-2 whitespace-pre-wrap break-all font-mono text-xs ${
-                    part.added
-                      ? 'bg-emerald-900/10 text-emerald-300 border-emerald-500'
-                      : part.removed
-                      ? 'bg-red-900/10 text-red-300 border-red-500'
-                      : 'text-slate-600 border-transparent'
-                  }`}
-                >
-                  <span className="select-none inline-block w-6 opacity-40 text-right mr-4 font-bold" aria-hidden>
-                    {part.added ? '+' : part.removed ? '−' : ' '}
-                  </span>
-                  {part.value}
-                </div>
-              ))}
+              <pre className="m-0">
+                {diffs.map((part, i) => (
+                  <div
+                    key={getDiffKey(part, i)}
+                    className={`px-4 py-1 border-l-2 whitespace-pre-wrap break-all font-mono text-xs ${
+                      part.added
+                        ? 'bg-emerald-900/10 text-emerald-300 border-emerald-500'
+                        : part.removed
+                        ? 'bg-red-900/10 text-red-300 border-red-500'
+                        : 'text-slate-600 border-transparent'
+                    }`}
+                  >
+                    <span className="select-none inline-block w-6 opacity-40 text-right mr-4 font-bold" aria-hidden>
+                      {part.added ? '+' : part.removed ? '−' : ' '}
+                    </span>
+                    {part.value}
+                  </div>
+                ))}
+              </pre>
             </div>
           )}
         </div>
