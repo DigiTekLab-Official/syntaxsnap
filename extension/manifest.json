@@ -1,0 +1,17 @@
+{
+  "manifest_version": 3,
+  "name": "SyntaxSnap - Developer Tools",
+  "version": "1.0",
+  "description": "Instant offline developer tools: JSON Viewer, Regex Tester, and Diff Viewer.",
+  "permissions": ["contextMenus", "activeTab"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Open SyntaxSnap"
+  },
+  "icons": {
+    "128": "icon.png"
+  }
+}
