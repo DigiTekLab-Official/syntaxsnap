@@ -1,0 +1,155 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import DiffViewerTool from '../../components/tools/DiffViewer';
+import RelatedTools from '../../components/RelatedTools.astro';
+
+const title = "Text Diff Viewer & File Compare Tool | SyntaxSnap";
+const description = "Compare text, code, JSON, config files, and API responses locally in your browser. Visualize changes with side-by-side or unified diff view. Zero server uploads — 100% private.";
+
+const schema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "Local Text Diff Viewer & File Compare Tool",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "Web",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "description": description,
+      "featureList": [
+        "Side-by-side split view and unified diff view",
+        "Line-level and word-level comparison",
+        "Synced scrolling for split view",
+        "Real-time diff statistics (additions/removals)",
+        "100% Client-side — zero server uploads",
+        "Works offline once loaded"
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Is my data sent to a server?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. SyntaxSnap calculates the diff entirely in your browser using the JavaScript diff library. Your text never leaves your device and is not uploaded anywhere."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What file types can I compare?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Any plain text format: code (JS, Python, Java, etc.), JSON, YAML, XML, CSV, config files (.env, nginx.conf), logs, API responses, and more. Just paste the content into the text boxes."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the difference between line-level and word-level diff?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Line-level highlights entire lines that changed. Word-level shows exactly which words within a line were modified — useful for spotting small typos or single-word changes."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I compare large files?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. The tool uses debounced diff calculation to handle large files smoothly. For extremely large files (10MB+), performance depends on your browser and device specs."
+          }
+        }
+      ]
+    }
+  ]
+};
+---
+
+<Layout title={title} description={description}>
+  <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+
+  <div class="max-w-6xl mx-auto">
+
+    <div class="mb-10">
+      <h1 class="text-4xl font-extrabold text-white mb-4 tracking-tight">
+        Diff Viewer
+      </h1>
+      <p class="text-slate-400 text-lg max-w-2xl">
+        Compare code, configs, or API responses.{' '}
+        <span class="text-indigo-400">Securely in your browser</span> — no uploads, no tracking.
+      </p>
+    </div>
+
+    <DiffViewerTool client:load />
+
+    <div class="mt-20 border-t border-slate-800 pt-16">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+
+        <div>
+          <h2 class="text-xl font-bold text-white mb-4">Why use a local diff tool?</h2>
+          <p class="text-slate-400 leading-relaxed mb-4">
+            Comparing configuration files, API responses, or large JSON schemas often involves
+            <strong class="text-slate-200"> sensitive production data</strong>. Online diff tools
+            require you to paste your content into their servers to process it.
+          </p>
+          <p class="text-slate-400 leading-relaxed mb-4">
+            <strong class="text-slate-200">SyntaxSnap</strong> calculates differences directly
+            in your browser using client-side JavaScript — your data stays in your device's RAM
+            and is never transmitted.
+          </p>
+          <p class="text-slate-400 leading-relaxed text-sm">
+            Perfect for reviewing merge conflicts, checking environment variable changes, or
+            auditing config drift between staging and production.
+          </p>
+        </div>
+
+        <div class="space-y-6">
+          <div class="bg-indigo-900/10 border border-indigo-500/20 p-6 rounded-2xl">
+            <h3 class="text-lg font-bold text-white mb-3">Common Use Cases</h3>
+            <ul class="text-sm text-slate-400 space-y-2">
+              <li class="flex items-start gap-2">
+                <span class="text-indigo-400 shrink-0">•</span>
+                <span><strong class="text-slate-200">Code review:</strong> Compare versions before/after a refactor</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-indigo-400 shrink-0">•</span>
+                <span><strong class="text-slate-200">API debugging:</strong> Spot payload changes between requests</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-indigo-400 shrink-0">•</span>
+                <span><strong class="text-slate-200">Config audits:</strong> Check .env or nginx.conf drift</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-indigo-400 shrink-0">•</span>
+                <span><strong class="text-slate-200">Merge conflicts:</strong> Understand what changed in git diffs</span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="bg-slate-900/40 border border-slate-800 p-6 rounded-2xl">
+            <h3 class="text-lg font-bold text-white mb-3">Features</h3>
+            <ul class="text-sm text-slate-400 space-y-2">
+              <li class="flex items-center gap-2">
+                ✓ <strong class="text-slate-200">Line & word-level</strong> granularity
+              </li>
+              <li class="flex items-center gap-2">
+                ✓ <strong class="text-slate-200">Split & unified</strong> view modes
+              </li>
+              <li class="flex items-center gap-2">
+                ✓ <strong class="text-slate-200">Synced scrolling</strong> in split view
+              </li>
+              <li class="flex items-center gap-2">
+                ✓ <strong class="text-slate-200">Real-time stats</strong> (+X −Y lines)
+              </li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <RelatedTools currentTool="diff-viewer" />
+
+  </div>
+</Layout>

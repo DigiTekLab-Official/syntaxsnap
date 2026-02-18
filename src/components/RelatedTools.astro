@@ -1,6 +1,6 @@
 ---
 // src/components/RelatedTools.astro
-import { FileJson, Hash, Box, Code2, ShieldCheck, FileCode } from 'lucide-astro';
+import { FileJson, Hash, Box, Code2, ShieldCheck, FileCode, GitCompare } from 'lucide-astro';
 
 const { currentTool } = Astro.props;
 
@@ -51,6 +51,15 @@ const tools = [
     bg: 'bg-pink-500/10'
   },
   {
+    id: 'diff-viewer',
+    title: 'Diff Viewer',
+    desc: 'Compare text and code versions side-by-side.',
+    href: '/tools/diff-viewer',
+    icon: GitCompare,
+    color: 'text-pink-400',
+    bg: 'bg-pink-500/10'
+  },
+  {
     id: 'jwt-debugger',
     title: 'JWT Debugger',
     desc: 'Decode and debug JWT tokens locally.',
@@ -58,7 +67,17 @@ const tools = [
     icon: ShieldCheck,
     color: 'text-cyan-400',
     bg: 'bg-cyan-500/10'
+  },
+  {
+    id: 'regex-tester',
+    title: 'Regex Tester',
+    desc: 'Test and debug regex patterns.',
+    href: '/tools/regex-tester',
+    icon: Code2,
+    color: 'text-emerald-400',
+    bg: 'bg-emerald-500/10'
   }
+  
 ];
 
 const relatedTools = tools.filter(tool => tool.id !== currentTool);
@@ -66,7 +85,7 @@ const relatedTools = tools.filter(tool => tool.id !== currentTool);
 
 <section class="border-t border-slate-800 mt-20 pt-16 mb-12">
   <div class="text-center mb-12 px-4">
-    <h3 class="text-2xl font-bold text-white mb-3 tracking-tight">Explore More Developer Tools</h3>
+    <h2 class="text-2xl font-bold text-white mb-3 tracking-tight">Explore More Developer Tools</h2>
     <p class="text-slate-400">Boost your productivity with our other privacy-first utilities.</p>
   </div>
 
