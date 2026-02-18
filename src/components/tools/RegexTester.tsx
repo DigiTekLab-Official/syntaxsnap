@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Regex, Flag, Zap, AlertTriangle, CheckCircle2 } from 'lucide-react';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
@@ -64,6 +64,20 @@ export default function RegexTester() {
   const [pattern, setPattern] = useState(PRESETS[0].pattern);
   const [flags, setFlags] = useState('g');
   const [text, setText] = useState(DEFAULT_TEXT);
+
+  // ─── Chrome Extension Integration ──────────────────────────────────────────
+  // Listens for ?input=... in the URL (sent by the extension) and populates the text area.
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const incomingText = params.get('input');
+    
+    if (incomingText) {
+      setText(incomingText);
+      // Clean up URL to remove the query param after loading
+      window.history.replaceState({}, '', window.location.pathname);
+    }
+  }, []);
+  // ───────────────────────────────────────────────────────────────────────────
 
   const { html, matches, error } = useMemo(() => processRegex(pattern, flags, text), [pattern, flags, text]);
 
