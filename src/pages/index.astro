@@ -10,7 +10,7 @@ import {
   GitCompare,
   ArrowRight,
   Zap
-} from 'lucide-react';
+} from 'lucide-astro';
 
 const tools = [
   {
@@ -110,9 +110,9 @@ const tools = [
 
         {/* WAVE Fix: Ensure contrast and size on these icons */}
         <div class="flex flex-wrap items-center justify-center md:justify-start gap-4 text-sm text-slate-400 font-medium">
-          <span class="flex items-center gap-2"><Zap className="w-4 h-4 text-yellow-400" /> Zero Latency</span>
+          <span class="flex items-center gap-2"><Zap class="w-4 h-4 text-yellow-400" /> Zero Latency</span>
           <span class="hidden md:inline text-slate-600">•</span>
-          <span class="flex items-center gap-2"><ShieldCheck className="w-4 h-4 text-emerald-400" /> 100% Client-Side</span>
+          <span class="flex items-center gap-2"><ShieldCheck class="w-4 h-4 text-emerald-400" /> 100% Client-Side</span>
         </div>
       </div>
 
@@ -125,7 +125,7 @@ const tools = [
             {tools.slice(0, 4).map((tool) => (
               <a href={tool.href} class="flex items-start gap-3 p-4 rounded-xl bg-slate-900/40 border border-slate-800 hover:border-indigo-500/40 hover:bg-slate-900 transition-all group">
                 <div class={`p-2 rounded-lg ${tool.bg} ${tool.color} shrink-0`}>
-                  <tool.icon className="w-5 h-5" />
+                  <tool.icon class="w-5 h-5" />
                 </div>
                 <div>
                   <h3 class="text-white font-bold text-sm group-hover:text-indigo-400 transition-colors flex items-center gap-2">
@@ -140,7 +140,7 @@ const tools = [
             ))}
             
             <a href="#all-tools" class="sm:col-span-2 p-3 rounded-xl border border-dashed border-slate-700 text-slate-400 text-sm font-medium hover:text-white hover:border-slate-500 hover:bg-slate-900/30 transition-all flex items-center justify-center gap-2">
-              View All 7 Utilities <ArrowRight className="w-4 h-4" />
+              View All 7 Utilities <ArrowRight class="w-4 h-4" />
             </a>
          </div>
       </div>
@@ -170,7 +170,7 @@ const tools = [
           
           <div class="flex items-center gap-4 mb-3">
             <div class={`p-2.5 rounded-xl ${tool.bg} ${tool.color}`}>
-              {(() => { const Icon = tool.icon; return <Icon className="w-5 h-5" /> })()}
+              {(() => { const Icon = tool.icon; return <Icon class="w-5 h-5" /> })()}
             </div>
             {/* H3 is correct here because it's inside the H2 "All Utilities" section */}
             <h3 class="text-base font-bold text-white group-hover:text-indigo-400 transition-colors">
