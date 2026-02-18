@@ -8,114 +8,181 @@ import {
   FileCode2, 
   ShieldCheck,
   GitCompare,
-  ArrowRight 
+  ArrowRight,
+  Zap
 } from 'lucide-react';
 
 const tools = [
   {
-    title: "Glassmorphism Generator",
-    desc: "Generate frosted glass CSS effects instantly.",
-    href: "/tools/glass-generator",
-    icon: GlassWater,
-    status: "Live"
-  },
-  {
-    title: "JSON to Zod Converter",
-    desc: "Infer Zod schemas from raw JSON objects.",
-    href: "/tools/json-to-zod",
-    icon: Database,
-    status: "Live"
-  },
-  {
-    title: "Mesh Gradient Studio",
-    desc: "Create beautiful, aurora-style mesh gradients.",
-    href: "/tools/mesh-gradient",
-    icon: Palette,
-    status: "Live"
-  },
-  {
-    title: "Regex Tester",
-    desc: "Test and debug JavaScript regex patterns.",
-    href: "/tools/regex-tester",
-    icon: Search,
-    status: "Live"
-  },
-  {
-    title: "SVG to JSX",
-    desc: "Transform SVG code into React components.",
-    href: "/tools/svg-to-jsx",
-    icon: FileCode2,
-    status: "Live"
-  },
-  {
     title: "Diff Viewer",
-    desc: "Compare text versions side-by-side or inline.",
+    desc: "Compare text & code versions.",
     href: "/tools/diff-viewer",
     icon: GitCompare,
-    status: "New"
+    status: "New",
+    color: "text-pink-400",
+    bg: "bg-pink-500/10"
   },
   {
     title: "JWT Debugger",
-    desc: "Decode and audit JWT tokens locally.",
+    desc: "Decode tokens locally.",
     href: "/tools/jwt-debugger",
     icon: ShieldCheck,
-    status: "New"
+    status: "New",
+    color: "text-cyan-400",
+    bg: "bg-cyan-500/10"
+  },
+  {
+    title: "JSON to Zod",
+    desc: "Infer Zod schemas instantly.",
+    href: "/tools/json-to-zod",
+    icon: Database,
+    status: "Popular",
+    color: "text-orange-400",
+    bg: "bg-orange-500/10"
+  },
+  {
+    title: "Regex Tester",
+    desc: "Debug JS regex patterns.",
+    href: "/tools/regex-tester",
+    icon: Search,
+    status: "Live",
+    color: "text-emerald-400",
+    bg: "bg-emerald-500/10"
+  },
+  {
+    title: "Mesh Gradient",
+    desc: "Create aurora backgrounds.",
+    href: "/tools/mesh-gradient",
+    icon: Palette,
+    status: "Live",
+    color: "text-purple-400",
+    bg: "bg-purple-500/10"
+  },
+  {
+    title: "Glassmorphism",
+    desc: "Generate frosted glass CSS.",
+    href: "/tools/glass-generator",
+    icon: GlassWater,
+    status: "Live",
+    color: "text-blue-400",
+    bg: "bg-blue-500/10"
+  },
+  {
+    title: "SVG to JSX",
+    desc: "Convert SVG to React.",
+    href: "/tools/svg-to-jsx",
+    icon: FileCode2,
+    status: "Live",
+    color: "text-yellow-400",
+    bg: "bg-yellow-500/10"
   }
 ];
 ---
 
 <Layout title="SyntaxSnap – Privacy-First Developer Tools">
-  <div class="flex flex-col items-center justify-center py-20 px-4 text-center">
-    
-    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-900/30 border border-indigo-500/30 text-indigo-300 text-xs font-medium mb-8 animate-fade-in">
-      <span class="relative flex h-2 w-2">
-        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
-        <span class="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
-      </span>
-      v1.1 Update: New Security Tools
+  
+  {/* HERO SECTION */}
+  <div class="pt-16 pb-12 px-4 max-w-6xl mx-auto text-center md:text-left">
+    <div class="flex flex-col md:flex-row items-center justify-between gap-12">
+      
+      {/* Left Column: Text */}
+      <div class="flex-1 max-w-2xl">
+        {/* WAVE Fix: Bumped text size to text-sm (14px) */}
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-900/50 border border-slate-700 text-slate-300 text-sm font-medium mb-6 animate-fade-in">
+          <span class="relative flex h-2.5 w-2.5">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+          </span>
+          v1.2 Live: Performance Update
+        </div>
+
+        <h1 class="text-4xl md:text-6xl font-extrabold text-white tracking-tight mb-6 leading-tight">
+          Developer tools that <br class="hidden md:block" />
+          <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-400">
+            respect your privacy.
+          </span>
+        </h1>
+
+        <p class="text-lg text-slate-400 mb-8 leading-relaxed max-w-lg mx-auto md:mx-0">
+          A local-first workbench for modern web development. <br />
+          <strong>No servers. No tracking. Just instant utilities.</strong>
+        </p>
+
+        {/* WAVE Fix: Ensure contrast and size on these icons */}
+        <div class="flex flex-wrap items-center justify-center md:justify-start gap-4 text-sm text-slate-400 font-medium">
+          <span class="flex items-center gap-2"><Zap className="w-4 h-4 text-yellow-400" /> Zero Latency</span>
+          <span class="hidden md:inline text-slate-600">•</span>
+          <span class="flex items-center gap-2"><ShieldCheck className="w-4 h-4 text-emerald-400" /> 100% Client-Side</span>
+        </div>
+      </div>
+
+      {/* Right Column: Quick Access Grid */}
+      <div class="flex-1 w-full max-w-lg">
+         {/* WAVE Fix: Added hidden H2 to fix "Skipped Heading Level" alert */}
+         <h2 class="sr-only">Quick Access Tools</h2>
+         
+         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {tools.slice(0, 4).map((tool) => (
+              <a href={tool.href} class="flex items-start gap-3 p-4 rounded-xl bg-slate-900/40 border border-slate-800 hover:border-indigo-500/40 hover:bg-slate-900 transition-all group">
+                <div class={`p-2 rounded-lg ${tool.bg} ${tool.color} shrink-0`}>
+                  <tool.icon className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 class="text-white font-bold text-sm group-hover:text-indigo-400 transition-colors flex items-center gap-2">
+                    {tool.title}
+                    {/* WAVE Fix: Bumped badge to text-xs (12px minimum) */}
+                    {tool.status === 'New' && <span class="text-xs bg-indigo-500 text-white px-1.5 py-0.5 rounded font-bold uppercase tracking-wider">New</span>}
+                  </h3>
+                  {/* WAVE Fix: Bumped description to text-sm (14px) */}
+                  <p class="text-slate-500 text-sm mt-1 leading-snug">{tool.desc}</p>
+                </div>
+              </a>
+            ))}
+            
+            <a href="#all-tools" class="sm:col-span-2 p-3 rounded-xl border border-dashed border-slate-700 text-slate-400 text-sm font-medium hover:text-white hover:border-slate-500 hover:bg-slate-900/30 transition-all flex items-center justify-center gap-2">
+              View All 7 Utilities <ArrowRight className="w-4 h-4" />
+            </a>
+         </div>
+      </div>
+
     </div>
-
-    <h1 class="text-5xl md:text-7xl font-extrabold text-white tracking-tight mb-6 max-w-4xl">
-      Code fast. <br class="hidden md:block" />
-      <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-400">
-        Stay private.
-      </span>
-    </h1>
-
-    <p class="text-lg md:text-xl text-slate-400 max-w-2xl mb-10 leading-relaxed">
-      A privacy-first suite of developer tools that run entirely in your browser. <br class="hidden md:block" />
-      No servers. No tracking. Just speed.
-    </p>
-
-    <div>
-      <a href="#tools" class="bg-indigo-600 hover:bg-indigo-500 text-white px-8 py-3.5 rounded-lg font-medium transition-all hover:scale-105 flex items-center gap-2 shadow-lg shadow-indigo-500/20">
-        Explore Tools <ArrowRight className="w-4 h-4" />
-      </a>
-    </div>
-
   </div>
 
-  <div id="tools" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 py-12 px-4">
-    {tools.map((tool) => (
-      <a href={tool.href} class="group relative bg-slate-900/50 border border-slate-800 hover:border-indigo-500/50 rounded-2xl p-6 transition-all hover:shadow-2xl hover:shadow-indigo-500/10 hover:-translate-y-1">
-        <div class="absolute top-6 right-6">
-           <span class={`inline-flex items-center px-2 py-1 rounded text-xs font-medium border ${tool.status === 'New' ? 'bg-indigo-500/10 text-indigo-400 border-indigo-500/20' : 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'}`}>
-             {tool.status}
-           </span>
-        </div>
-        
-        <div class="mb-4 p-3 bg-slate-800 rounded-xl w-fit group-hover:bg-indigo-500/20 group-hover:text-indigo-400 transition-colors">
-          {(() => { const Icon = tool.icon; return <Icon className="w-6 h-6" /> })()}
-        </div>
-        
-        <h2 class="text-xl font-bold text-white mb-2 group-hover:text-indigo-400 transition-colors">
-          {tool.title}
-        </h2>
-        
-        <p class="text-slate-400 text-sm leading-relaxed">
-          {tool.desc}
-        </p>
-      </a>
-    ))}
+  <div class="w-full h-px bg-gradient-to-r from-transparent via-slate-800 to-transparent my-8"></div>
+
+  {/* ALL TOOLS SECTION */}
+  <div id="all-tools" class="max-w-6xl mx-auto px-4 py-12">
+    <div class="flex items-center justify-between mb-8">
+      {/* This H2 follows the implicit H1 -> H2 structure now */}
+      <h2 class="text-2xl font-bold text-white">All Utilities</h2>
+      <span class="text-sm text-slate-500">{tools.length} tools available</span>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+      {tools.map((tool) => (
+        <a href={tool.href} class="group relative bg-slate-900/20 border border-slate-800 hover:border-indigo-500/30 rounded-2xl p-5 transition-all hover:shadow-xl hover:shadow-indigo-900/10 hover:-translate-y-0.5">
+          <div class="absolute top-5 right-5">
+             {/* WAVE Fix: Badge text-xs (12px) */}
+             <span class={`inline-flex items-center px-2 py-0.5 rounded text-xs font-bold uppercase tracking-wider border ${tool.status === 'New' ? 'bg-indigo-500/10 text-indigo-300 border-indigo-500/20' : 'bg-slate-800 text-slate-500 border-slate-700'}`}>
+               {tool.status}
+             </span>
+          </div>
+          
+          <div class="flex items-center gap-4 mb-3">
+            <div class={`p-2.5 rounded-xl ${tool.bg} ${tool.color}`}>
+              {(() => { const Icon = tool.icon; return <Icon className="w-5 h-5" /> })()}
+            </div>
+            {/* H3 is correct here because it's inside the H2 "All Utilities" section */}
+            <h3 class="text-base font-bold text-white group-hover:text-indigo-400 transition-colors">
+              {tool.title}
+            </h3>
+          </div>
+          
+          <p class="text-slate-400 text-sm leading-relaxed pl-[3.25rem]">
+            {tool.desc}
+          </p>
+        </a>
+      ))}
+    </div>
   </div>
 </Layout>
