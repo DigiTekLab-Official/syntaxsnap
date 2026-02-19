@@ -166,8 +166,10 @@ function renderAttrs(tokens: AttrToken[]): string {
 
 function sanitizeSvg(svg: string): string {
   return svg
-    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '') 
-    .replace(/\son\w+\s*=\s*["'][^"']*["']/gi, ''); 
+    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '') // Remove <script>...</script>
+    .replace(/<script\b[^>]*>/gi, '') // Remove self-closing <script/> and malformed scripts
+    .replace(/\son\w+\s*=\s*(?:["'][^"']*["']|[^\s>]*)/gi, '') // Remove event handlers (quoted and unquoted)
+    .replace(/\s(?:href|src)\s*=\s*["']javascript:[^"']*["']/gi, ''); // Remove javascript: protocol
 }
 
 // ─── Main converter ───────────────────────────────────────────────────────────
