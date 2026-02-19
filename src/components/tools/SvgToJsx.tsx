@@ -1,5 +1,6 @@
 'use client';
 import React, { useState, useEffect, useCallback } from 'react';
+import { useDebounce } from '../../hooks/useDebounce';
 import { FileCode, ClipboardCheck, Clipboard } from 'lucide-react';
 
 // ─── Attribute rename map ─────────────────────────────────────────────────────
@@ -47,23 +48,14 @@ function toJsxAttrName(attr: string): string {
 
 // ─── CSS string → React style object ─────────────────────────────────────────
 
-/**
- * Converts an inline CSS string to a React style object literal string.
- *
- * Uses a character-level parser instead of split(';') so that values
- * containing semicolons or colons — e.g. url(data:image/png;base64,…) —
- * are handled correctly.
- */
 function parseCssToStyleObject(css: string): string {
   const pairs: string[] = [];
   let i = 0;
 
   while (i < css.length) {
-    // skip leading whitespace
     while (i < css.length && css[i] === ' ') i++;
     if (i >= css.length) break;
 
-    // read property name — stop at the first ':' not inside parens
     const propStart = i;
     let depth = 0;
     while (i < css.length) {
@@ -74,9 +66,8 @@ function parseCssToStyleObject(css: string): string {
     }
     const prop = css.slice(propStart, i).trim();
     if (!prop || i >= css.length) break;
-    i++; // skip ':'
+    i++; 
 
-    // read value — stop at ';' not inside parens or quotes
     const valStart = i;
     depth = 0;
     let inQuote = false;
@@ -93,7 +84,6 @@ function parseCssToStyleObject(css: string): string {
     const val = css.slice(valStart, i).trim();
 
     if (prop && val) {
-      // vendor-prefixed props: -webkit-foo → WebkitFoo
       const camelProp = prop.startsWith('-')
         ? prop
             .replace(/^-([a-z])/, (_: string, c: string) => c.toUpperCase())
@@ -102,7 +92,7 @@ function parseCssToStyleObject(css: string): string {
 
       pairs.push(`${camelProp}: "${val}"`);
     }
-    i++; // skip ';'
+    i++; 
   }
 
   return `{ ${pairs.join(', ')} }`;
@@ -112,49 +102,39 @@ function parseCssToStyleObject(css: string): string {
 
 interface AttrToken {
   name:  string;
-  value: string | null; // null = boolean attribute
+  value: string | null; 
 }
 
-/**
- * Tokenises an attribute string into name/value pairs.
- * Handles both single-quoted and double-quoted values, and bare boolean attrs.
- * Does NOT use regex so there is no risk of re-processing already-transformed names.
- */
 function tokenizeAttrs(attrs: string): AttrToken[] {
   const tokens: AttrToken[] = [];
   let i = 0;
 
   while (i < attrs.length) {
-    // skip whitespace
     while (i < attrs.length && /\s/.test(attrs[i])) i++;
     if (i >= attrs.length) break;
 
-    // read name — stops at whitespace, '=', '/', or '>'
     const nameStart = i;
     while (i < attrs.length && !/[\s=/>]/.test(attrs[i])) i++;
     const name = attrs.slice(nameStart, i);
     if (!name) { i++; continue; }
 
-    // skip whitespace
     while (i < attrs.length && /\s/.test(attrs[i])) i++;
 
     if (attrs[i] !== '=') {
-      tokens.push({ name, value: null }); // boolean attr
+      tokens.push({ name, value: null });
       continue;
     }
-    i++; // skip '='
+    i++; 
 
-    // skip whitespace
     while (i < attrs.length && /\s/.test(attrs[i])) i++;
 
-    // read value (double-quoted, single-quoted, or unquoted)
     let value = '';
     if (i < attrs.length && (attrs[i] === '"' || attrs[i] === "'")) {
       const quote = attrs[i++];
       const start = i;
       while (i < attrs.length && attrs[i] !== quote) i++;
       value = attrs.slice(start, i);
-      i++; // skip closing quote
+      i++; 
     } else {
       const start = i;
       while (i < attrs.length && !/\s/.test(attrs[i])) i++;
@@ -184,41 +164,23 @@ function renderAttrs(tokens: AttrToken[]): string {
 
 // ─── Security Sanitizer ───────────────────────────────────────────────────────
 
-/**
- * Strips potentially malicious script tags and inline event handlers 
- * from the SVG before converting it to React JSX.
- */
 function sanitizeSvg(svg: string): string {
   return svg
-    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '') // Remove <script> tags
-    .replace(/\son\w+\s*=\s*["'][^"']*["']/gi, ''); // Remove inline events (onload, onerror, etc.)
+    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '') 
+    .replace(/\son\w+\s*=\s*["'][^"']*["']/gi, ''); 
 }
 
 // ─── Main converter ───────────────────────────────────────────────────────────
 
-/**
- * Converts raw SVG markup to React-compatible JSX.
- *
- * Fixes vs the naive regex-layering approach:
- * 1. Single-pass tag regex — no double-processing of self-closing tags
- * (the old two-step regex left a trailing space before `/>`)
- * 2. Proper attribute tokenizer — handles single-quoted values, boolean
- * attrs, and never re-processes already-converted attr names
- * 3. CSS parser respects parens/quotes, so url(data:…;…) values are intact
- * 4. `s` flag on the tag regex handles multiline attribute strings
- */
 function svgToJsx(raw: string): string {
-  // First, sanitize the input to prevent XSS injection
   const safeRaw = sanitizeSvg(raw);
 
   const stripped = safeRaw
-    .replace(/<\?xml[^>]*\?>/gi, '')   // XML declaration
-    .replace(/<!DOCTYPE[^>]*>/gi, '')   // DOCTYPE
-    .replace(/<!--[\s\S]*?-->/g, '')   // HTML/XML comments
+    .replace(/<\?xml[^>]*\?>/gi, '')   
+    .replace(/<!DOCTYPE[^>]*>/gi, '')   
+    .replace(/<!--[\s\S]*?-->/g, '')   
     .trimStart();
 
-  // Single pass over all tag tokens.
-  // Groups: (1) optional '/'  (2) tag name  (3) attr string  (4) optional '/' for self-close
   return stripped
     .replace(
       /<(\/?)([a-zA-Z][a-zA-Z0-9:.-]*)([^>]*?)(\/?)>/gs,
@@ -229,7 +191,7 @@ function svgToJsx(raw: string): string {
         attrs:        string,
         selfClose:    string,
       ) => {
-        if (closingSlash) return `</${tagName}>`; // closing tag — no attrs
+        if (closingSlash) return `</${tagName}>`; 
 
         const tokens        = tokenizeAttrs(attrs);
         const renderedAttrs = renderAttrs(tokens);
@@ -290,9 +252,12 @@ export default function SvgToJsx() {
   const [input,  setInput]  = useState(DEFAULT_SVG);
   const [output, setOutput] = useState('');
 
+  // Apply 300ms debounce to prevent freezing on large SVGs
+  const debouncedInput = useDebounce(input, 300);
+
   useEffect(() => {
-    setOutput(svgToJsx(input));
-  }, [input]);
+    setOutput(svgToJsx(debouncedInput));
+  }, [debouncedInput]);
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6" style={{ minHeight: '480px' }}>

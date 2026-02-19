@@ -1,5 +1,6 @@
 'use client';
 import React, { useState, useMemo, useEffect } from 'react';
+import { useDebounce } from '../../hooks/useDebounce';
 import { Regex, Flag, Zap, AlertTriangle, CheckCircle2 } from 'lucide-react';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
@@ -30,38 +31,46 @@ function escapeHtml(s: string) {
       .replace(/"/g, '&quot;')
       .replace(/'/g, '&#x27;') // FIX: Prevents attribute injection
       .replace(/\//g, '&#x2F;'); // FIX: Extra safety
+}
+
+// FIX: Prevent ReDoS (Regular Expression Denial of Service) browser freezes
+function executeRegexSafely(pattern: string, flags: string, text: string, timeoutMs = 1000): { matches: MatchInfo[]; timedOut: boolean } {
+  const regex = new RegExp(pattern, flags.includes('g') ? flags : flags + 'g'); // Ensure global for highlighting
+  const matches: MatchInfo[] = [];
+  const startTime = Date.now();
+  let match;
+  
+  while ((match = regex.exec(text)) !== null) {
+    if (Date.now() - startTime > timeoutMs) {
+      return { matches, timedOut: true }; // Circuit breaker
+    }
+    matches.push({ value: match[0], index: match.index, groups: match.groups });
+    if (match[0].length === 0) regex.lastIndex++; // Avoid infinite loops on empty matches
   }
+  return { matches, timedOut: false };
+}
 
 function processRegex(pattern: string, flags: string, text: string) {
-  if (!pattern) return { html: escapeHtml(text), matches: [], error: null };
+  if (!pattern) return { html: escapeHtml(text), matches: [], error: null, timedOut: false };
 
   try {
-    const regex = new RegExp(pattern, flags.includes('g') ? flags : flags + 'g'); // Ensure global for highlighting
-    const matches: MatchInfo[] = [];
-    let match;
-    
-    // Execute regex to find all matches
-    while ((match = regex.exec(text)) !== null) {
-      matches.push({ value: match[0], index: match.index, groups: match.groups });
-      if (match[0].length === 0) regex.lastIndex++; // Avoid infinite loops
-    }
+    const { matches, timedOut } = executeRegexSafely(pattern, flags, text);
 
     // Build Highlighted HTML
     let html = '';
     let lastIndex = 0;
+    
+    // Only highlight up to what we found if it timed out, or everything if normal
     matches.forEach((m) => {
-      // Append text before match
       html += escapeHtml(text.slice(lastIndex, m.index));
-      // Append highlighted match
       html += `<mark class="bg-indigo-500/30 text-indigo-200 rounded px-0.5 border-b-2 border-indigo-500">${escapeHtml(m.value)}</mark>`;
       lastIndex = m.index + m.value.length;
     });
-    // Append remaining text
     html += escapeHtml(text.slice(lastIndex));
 
-    return { html, matches, error: null };
+    return { html, matches, error: null, timedOut };
   } catch (e) {
-    return { html: escapeHtml(text), matches: [], error: (e as Error).message };
+    return { html: escapeHtml(text), matches: [], error: (e as Error).message, timedOut: false };
   }
 }
 
@@ -71,21 +80,27 @@ export default function RegexTester() {
   const [flags, setFlags] = useState('g');
   const [text, setText] = useState(DEFAULT_TEXT);
 
+  // Apply 300ms debounce to prevent freezing on large texts and complex patterns
+  const debouncedPattern = useDebounce(pattern, 300);
+  const debouncedText = useDebounce(text, 300);
+
   // ─── Chrome Extension Integration ──────────────────────────────────────────
-  // Listens for ?input=... in the URL (sent by the extension) and populates the text area.
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const incomingText = params.get('input');
     
     if (incomingText) {
       setText(incomingText);
-      // Clean up URL to remove the query param after loading
       window.history.replaceState({}, '', window.location.pathname);
     }
   }, []);
   // ───────────────────────────────────────────────────────────────────────────
 
-  const { html, matches, error } = useMemo(() => processRegex(pattern, flags, text), [pattern, flags, text]);
+  // Process against debounced values for massive performance gains
+  const { html, matches, error, timedOut } = useMemo(
+    () => processRegex(debouncedPattern, flags, debouncedText), 
+    [debouncedPattern, flags, debouncedText]
+  );
 
   return (
     <div className="space-y-8 min-h-150">
@@ -122,7 +137,7 @@ export default function RegexTester() {
               type="text"
               value={pattern}
               onChange={(e) => setPattern(e.target.value)}
-              className={`w-full bg-slate-950 border ${error ? 'border-red-500/50 focus:ring-red-500/20' : 'border-slate-700 focus:border-indigo-500 focus:ring-indigo-500/20'} rounded-xl py-3 pl-8 pr-4 font-mono text-sm text-indigo-300 focus:outline-none focus:ring-2 transition-all`}
+              className={`w-full bg-slate-950 border ${error || timedOut ? 'border-red-500/50 focus:ring-red-500/20' : 'border-slate-700 focus:border-indigo-500 focus:ring-indigo-500/20'} rounded-xl py-3 pl-8 pr-4 font-mono text-sm text-indigo-300 focus:outline-none focus:ring-2 transition-all`}
               placeholder="Enter regex pattern..."
             />
             <div className="flex items-center absolute right-3 top-3 text-slate-500 select-none font-mono text-lg">/</div>
@@ -143,11 +158,17 @@ export default function RegexTester() {
           </div>
         </div>
 
-        {/* Error Message */}
+        {/* Error / Timeout Messages */}
         {error && (
           <div className="mt-3 flex items-center gap-2 text-xs text-red-400 bg-red-900/20 px-4 py-2 rounded-lg border border-red-900/50">
             <AlertTriangle className="w-4 h-4" />
             <span className="font-mono">{error}</span>
+          </div>
+        )}
+        {timedOut && (
+          <div className="mt-3 flex items-center gap-2 text-xs text-yellow-400 bg-yellow-900/20 px-4 py-2 rounded-lg border border-yellow-900/50">
+            <AlertTriangle className="w-4 h-4" />
+            <span className="font-mono">Execution timed out. The regex pattern is too complex (Catastrophic Backtracking) and was stopped to prevent browser freezing.</span>
           </div>
         )}
       </div>
