@@ -2,7 +2,6 @@
 import { defineConfig } from 'astro/config';
 import react      from '@astrojs/react';
 import tailwindcss from '@tailwindcss/vite';
-import cloudflare  from '@astrojs/cloudflare';
 import sitemap     from '@astrojs/sitemap';
 
 export default defineConfig({
@@ -20,7 +19,7 @@ export default defineConfig({
     format: 'file',
   },
 
-  // ── Trailing slash ────────────────────────────────────────────────________
+  // ── Trailing slash ────────────────────────────────────────────────────────
   // Works together with build.format: 'file' to ensure no slashes ever appear.
   trailingSlash: 'never',
 
@@ -56,12 +55,6 @@ export default defineConfig({
       lastmod: new Date(),
     }),
   ],
-
-  // ── Cloudflare adapter ────────────────────────────────────────────────────
-  adapter: cloudflare({
-    platformProxy: { enabled: true },
-    imageService:  'passthrough',
-  }),
 
   // ── Vite ──────────────────────────────────────────────────────────────────
   vite: {
