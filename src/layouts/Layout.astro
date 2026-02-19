@@ -23,9 +23,6 @@ const canonicalURL = new URL(Astro.url.pathname, "https://syntaxsnap.com").toStr
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    
     {/* REAL FAVICON GENERATOR CODE */}
     <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -150,8 +147,10 @@ const canonicalURL = new URL(Astro.url.pathname, "https://syntaxsnap.com").toStr
               <div>
                   <h2 class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-4">Utilities</h2>
                   <ul class="space-y-3 text-sm text-slate-400 font-mono">
+                      <li><a href="/tools/diff-viewer" class="hover:text-indigo-400 transition-colors">Diff Viewer</a></li>
                       <li><a href="/tools/glass-generator" class="hover:text-indigo-400 transition-colors">Glass Gen</a></li>
                       <li><a href="/tools/json-to-zod" class="hover:text-indigo-400 transition-colors">JSON → Zod</a></li>
+                      <li><a href="/tools/jwt-debugger" class="hover:text-indigo-400 transition-colors">JWT Debugger</a></li>
                       <li><a href="/tools/mesh-gradient" class="hover:text-indigo-400 transition-colors">Mesh Gradient</a></li>
                       <li><a href="/tools/regex-tester" class="hover:text-indigo-400 transition-colors">Regex Tester</a></li>
                       <li><a href="/tools/svg-to-jsx" class="hover:text-indigo-400 transition-colors">SVG → JSX</a></li>

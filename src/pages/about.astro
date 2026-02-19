@@ -1,6 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { User, Sparkles, MapPin, Zap, ShieldCheck, Cpu } from 'lucide-react';
+import { User, Sparkles, MapPin, Zap, ShieldCheck, Cpu } from 'lucide-astro';
 
 const title = "About SyntaxSnap | Built for Speed & Privacy";
 const description = "SyntaxSnap provides local-first developer tools. No server uploads, no ads, just instant utilities for modern web development.";
@@ -38,21 +38,21 @@ const description = "SyntaxSnap provides local-first developer tools. No server 
         <div class="order-1 md:order-2 bg-indigo-500/5 rounded-3xl border border-indigo-500/20 p-6 md:p-8">
             <div class="space-y-6">
               <div class="flex gap-4 text-left">
-                <ShieldCheck className="w-6 h-6 text-indigo-400 shrink-0" />
+                <ShieldCheck class="w-6 h-6 text-indigo-400 shrink-0" />
                  <div>
                     <h4 class="text-white font-bold mb-1">100% Privacy</h4>
                     <p class="text-sm text-slate-400">Processing happens in your RAM, not on our disks.</p>
                  </div>
               </div>
               <div class="flex gap-4 text-left">
-                  <Zap className="w-6 h-6 text-yellow-400 shrink-0" />
+                  <Zap class="w-6 h-6 text-yellow-400 shrink-0" />
                  <div>
                     <h4 class="text-white font-bold mb-1">Zero Latency</h4>
                     <p class="text-sm text-slate-400">No server round-trips. Results are instantaneous.</p>
                  </div>
               </div>
               <div class="flex gap-4 text-left">
-                  <Cpu className="w-6 h-6 text-emerald-400 shrink-0" />
+                  <Cpu class="w-6 h-6 text-emerald-400 shrink-0" />
                  <div>
                     <h4 class="text-white font-bold mb-1">Modern Stack</h4>
                     <p class="text-sm text-slate-400">Built with Astro 5.0 and React 19 for the edge.</p>
@@ -73,13 +73,13 @@ const description = "SyntaxSnap provides local-first developer tools. No server 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 max-w-4xl mx-auto text-left">
           <div class="group bg-slate-900/40 p-6 md:p-8 rounded-3xl border border-slate-800 hover:border-indigo-500/50 transition-all duration-300">
               <div class="w-14 h-14 md:w-16 md:h-16 bg-indigo-600 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-indigo-600/20 md:rotate-3 group-hover:rotate-0 transition-transform">
-              <User className="w-7 h-7 md:w-8 md:h-8 text-white" />
+              <User class="w-7 h-7 md:w-8 md:h-8 text-white" />
             </div>
             <h3 class="text-xl md:text-2xl font-bold text-white mb-1">Ameer</h3>
             <p class="text-indigo-400 font-medium mb-4 flex flex-wrap items-center gap-2">
                Founder & Lead Engineer
                <span class="flex items-center gap-1 text-slate-500 text-xs font-normal italic">
-                 <MapPin className="w-3 h-3" /> Cuddalore, India
+                 <MapPin class="w-3 h-3" /> Cuddalore, India
                </span>
             </p>
             <p class="text-slate-400 text-sm leading-relaxed">
@@ -89,7 +89,7 @@ const description = "SyntaxSnap provides local-first developer tools. No server 
 
           <div class="group bg-slate-900/40 p-6 md:p-8 rounded-3xl border border-slate-800 hover:border-purple-500/50 transition-all duration-300">
             <div class="w-14 h-14 md:w-16 md:h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-purple-600/20 md:-rotate-3 group-hover:rotate-0 transition-transform">
-              <Sparkles className="w-7 h-7 md:w-8 md:h-8 text-white" />
+              <Sparkles class="w-7 h-7 md:w-8 md:h-8 text-white" />
             </div>
             <h3 class="text-xl md:text-2xl font-bold text-white mb-1">Gemini 3 Pro</h3>
             <p class="text-purple-400 font-medium mb-4">Technical Co-Founder (AI)</p>
