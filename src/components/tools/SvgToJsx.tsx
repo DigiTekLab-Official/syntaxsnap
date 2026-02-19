@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useDebounce } from '../../hooks/useDebounce';
 import { FileCode, ClipboardCheck, Clipboard } from 'lucide-react';
+import CopyButton from '../ui/CopyButton';
 
 // ─── Attribute rename map ─────────────────────────────────────────────────────
 
@@ -229,36 +230,7 @@ function svgToJsx(raw: string): string {
     .trim();
 }
 
-// ─── Copy button ──────────────────────────────────────────────────────────────
-
-function CopyButton({ text }: { text: string }) {
-  const [state, setState] = useState<'idle' | 'ok' | 'err'>('idle');
-
-  const copy = useCallback(async () => {
-    try {
-      await navigator.clipboard.writeText(text);
-      setState('ok');
-    } catch {
-      setState('err');
-    } finally {
-      setTimeout(() => setState('idle'), 2000);
-    }
-  }, [text]);
-
-  const Icon = state === 'ok' ? ClipboardCheck : Clipboard;
-
-  return (
-    <button
-      onClick={copy}
-      disabled={!text}
-      aria-label="Copy JSX to clipboard"
-      className="flex items-center gap-1.5 text-xs bg-indigo-600 hover:bg-indigo-500 disabled:opacity-40 disabled:cursor-not-allowed text-white px-3 py-1.5 rounded-lg transition-all active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400"
-    >
-      <Icon className="w-3.5 h-3.5" aria-hidden />
-      {state === 'ok' ? 'Copied!' : state === 'err' ? 'Failed' : 'Copy JSX'}
-    </button>
-  );
-}
+// using shared `CopyButton` from ui
 
 // ─── Default sample ───────────────────────────────────────────────────────────
 

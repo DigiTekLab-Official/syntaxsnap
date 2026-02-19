@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useDebounce } from '../../hooks/useDebounce';
 import { Copy, Check, Trash2, FileJson, AlertCircle, Braces, AlertTriangle } from 'lucide-react';
+import CopyButton from '../ui/CopyButton';
 
 // ─── Type Inference Engine ───────────────────────────────────────────────────
 
@@ -79,7 +80,6 @@ export default function JsonToZod() {
   const [output, setOutput] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [warning, setWarning] = useState<string | null>(null);
-  const [copied, setCopied] = useState(false);
 
   // Apply 300ms debounce to prevent freezing on large JSON files
   const debouncedInput = useDebounce(input, 300);
@@ -128,13 +128,7 @@ export default function JsonToZod() {
     }
   }, [debouncedInput]);
 
-  // Copy Handler
-  const handleCopy = async () => {
-    if (!output) return;
-    await navigator.clipboard.writeText(output);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
+  // Copy handled by shared `CopyButton` component
 
   // Format Handler
   const handleFormat = () => {
@@ -217,23 +211,7 @@ export default function JsonToZod() {
             <span className="text-xs font-semibold uppercase tracking-wider">Zod Schema</span>
           </div>
 
-          <button
-            onClick={handleCopy}
-            disabled={!output}
-            className={`
-              flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-all
-              ${copied 
-                ? 'bg-emerald-500/10 text-emerald-400 ring-1 ring-emerald-500/50' 
-                : 'bg-indigo-600 hover:bg-indigo-500 text-white shadow-indigo-500/20 shadow-lg'}
-              disabled:opacity-50 disabled:cursor-not-allowed
-            `}
-          >
-            {copied ? (
-              <> <Check className="w-3.5 h-3.5" /> Copied </>
-            ) : (
-              <> <Copy className="w-3.5 h-3.5" /> Copy Code </>
-            )}
-          </button>
+          <CopyButton text={output} label="Copy Code" />
         </div>
 
         <div className="flex-1 relative overflow-auto bg-[#0B1120]">

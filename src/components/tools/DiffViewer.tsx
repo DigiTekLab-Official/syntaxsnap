@@ -14,6 +14,7 @@ import {
   AlertCircle,
   ArrowRightLeft
 } from 'lucide-react';
+import CopyButton from '../ui/CopyButton';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -59,35 +60,7 @@ function getDiffKey(part: Diff.Change, index: number): string {
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
 
-function CopyButton({ text, disabled }: { text: string; disabled?: boolean }) {
-  const [state, setState] = useState<'idle' | 'ok' | 'err'>('idle');
-
-  const copy = useCallback(async () => {
-    try {
-      await navigator.clipboard.writeText(text);
-      setState('ok');
-    } catch {
-      setState('err');
-    } finally {
-      setTimeout(() => setState('idle'), 2000);
-    }
-  }, [text]);
-
-  return (
-    <button
-      onClick={copy}
-      disabled={disabled || !text}
-      aria-label="Copy new version to clipboard"
-      className="flex items-center gap-1.5 text-xs hover:text-white disabled:opacity-40 disabled:cursor-not-allowed transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-indigo-500 rounded px-2 py-1"
-    >
-      {state === 'ok'
-        ? <><Check className="w-3 h-3 text-emerald-400" /> Copied</>
-        : state === 'err'
-        ? <><AlertCircle className="w-3 h-3 text-red-400" /> Failed</>
-        : <><Copy className="w-3 h-3" /> Copy</>}
-    </button>
-  );
-}
+// using shared CopyButton from ui
 
 function DiffStats({ stats }: { stats: DiffStats }) {
   return (

@@ -1,6 +1,7 @@
 'use client';
 import React, { useState } from 'react';
 import { Shuffle, Copy, Check, Palette, RotateCcw, Sparkles } from 'lucide-react';
+import CopyButton from '../ui/CopyButton';
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -18,7 +19,6 @@ const PRESETS = {
 export default function MeshGradient() {
   // State: 4 corners + background
   const [colors, setColors] = useState<string[]>(PRESETS['Neon Night']);
-  const [copied, setCopied] = useState(false);
 
   const [c1, c2, c3, c4, bg] = colors;
 
@@ -39,11 +39,7 @@ background-image:
   radial-gradient(at 100% 100%, ${c3} 0px, transparent 50%),
   radial-gradient(at 0% 100%, ${c4} 0px, transparent 50%);`;
 
-  const handleCopy = async () => {
-    await navigator.clipboard.writeText(cssOutput);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
+  // copy handled by shared CopyButton
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 min-h-137.5">
@@ -132,12 +128,7 @@ background-image:
         <div className="mt-auto pt-4">
           <div className="flex justify-between items-center mb-2">
             <span className="text-xs font-semibold text-slate-500 uppercase">CSS Output</span>
-            <button
-              onClick={handleCopy}
-              className={`flex items-center gap-1.5 text-xs font-medium transition-colors ${copied ? 'text-emerald-400' : 'text-indigo-400 hover:text-indigo-300'}`}
-            >
-              {copied ? <><Check className="w-3.5 h-3.5" /> Copied</> : <><Copy className="w-3.5 h-3.5" /> Copy CSS</>}
-            </button>
+            <CopyButton text={cssOutput} label="Copy CSS" variant="ghost" />
           </div>
           <pre className="bg-slate-950 p-3 rounded-lg text-[10px] text-slate-400 font-mono overflow-x-auto border border-slate-800 whitespace-pre">
             {cssOutput}

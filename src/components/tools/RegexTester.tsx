@@ -2,6 +2,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { useDebounce } from '../../hooks/useDebounce';
 import { Regex, Flag, Zap, AlertTriangle, CheckCircle2 } from 'lucide-react';
+import CopyButton from '../ui/CopyButton';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 interface MatchInfo {
@@ -191,9 +192,12 @@ export default function RegexTester() {
         <div className="flex flex-col gap-2">
           <div className="flex justify-between items-center ml-1">
             <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Live Results</label>
-            <span className={`text-xs px-2 py-0.5 rounded-full font-mono ${matches.length > 0 ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-slate-800 text-slate-500'}`}>
-              {matches.length} Matches Found
-            </span>
+            <div className="flex items-center gap-2">
+              <span className={`text-xs px-2 py-0.5 rounded-full font-mono ${matches.length > 0 ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-slate-800 text-slate-500'}`}>
+                {matches.length} Matches Found
+              </span>
+              <CopyButton text={html} label="Copy Results" variant="ghost" />
+            </div>
           </div>
           
           <div 

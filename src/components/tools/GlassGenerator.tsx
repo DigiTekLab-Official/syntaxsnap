@@ -1,6 +1,7 @@
 'use client';
 import React, { useState, useCallback } from 'react';
 import { Copy, Check, RotateCcw, Layers, Image as ImageIcon, Sparkles, Box } from 'lucide-react';
+import CopyButton from '../ui/CopyButton';
 
 // ─── Types & Defaults ────────────────────────────────────────────────────────
 interface GlassConfig {
@@ -98,7 +99,6 @@ function SliderRow({ label, value, min, max, unit = '', onChange }: any) {
 export default function GlassGenerator() {
   const [cfg, setCfg] = useState<GlassConfig>(DEFAULTS);
   const [bgIndex, setBgIndex] = useState(0);
-  const [copied, setCopied] = useState(false);
 
   // Background options for testing - Replaced Unsplash URLs with local CSS gradients for Privacy
   const backgrounds = [
@@ -111,11 +111,7 @@ export default function GlassGenerator() {
 
   const cssOutput = buildCss(cfg);
 
-  const handleCopy = async () => {
-    await navigator.clipboard.writeText(cssOutput);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
+  // copy handled by shared CopyButton
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 min-h-150">
@@ -176,12 +172,7 @@ export default function GlassGenerator() {
         <div className="bg-slate-950 rounded-xl border border-slate-800 overflow-hidden">
           <div className="bg-slate-900/50 px-4 py-2 border-b border-slate-800 flex justify-between items-center">
             <span className="text-xs font-medium text-indigo-400">CSS Code</span>
-            <button
-              onClick={handleCopy}
-              className={`flex items-center gap-1.5 text-xs font-medium transition-colors ${copied ? 'text-emerald-400' : 'text-slate-400 hover:text-white'}`}
-            >
-              {copied ? <><Check className="w-3 h-3" /> Copied</> : <><Copy className="w-3 h-3" /> Copy</>}
-            </button>
+            <CopyButton text={cssOutput} label="Copy CSS" variant="ghost" />
           </div>
           <pre className="p-4 text-xs font-mono text-blue-300 whitespace-pre overflow-x-auto">
             {cssOutput}

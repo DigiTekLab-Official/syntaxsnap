@@ -4,6 +4,7 @@ import {
   ShieldCheck, ShieldAlert, Clock, Key, Lock, 
   Copy, Check, AlertTriangle, Download, ClipboardList 
 } from 'lucide-react';
+import CopyButton from '../ui/CopyButton';
 
 // ─── TYPES & HELPERS ─────────────────────────────────────────────────────────
 
@@ -67,7 +68,6 @@ const ActionButton = ({ onClick, icon: Icon, label, success, primary, ariaLabel 
 export default function JwtDebugger() {
   const [token, setToken] = useState('');
   const [decoded, setDecoded] = useState<any>({ header: null, payload: null, signature: null, isAlgNone: false, error: null });
-  const [copyState, setCopyState] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
     if (!token.trim()) { setDecoded({ header: null, payload: null, signature: null, isAlgNone: false, error: null }); return; }
@@ -80,11 +80,7 @@ export default function JwtDebugger() {
     } catch (e: any) { setDecoded({ header: null, payload: null, signature: null, isAlgNone: false, error: e.message }); }
   }, [token]);
 
-  const handleCopy = (text: string, id: string) => {
-    navigator.clipboard.writeText(text);
-    setCopyState({ ...copyState, [id]: true });
-    setTimeout(() => setCopyState({ ...copyState, [id]: false }), 2000);
-  };
+  // copy actions handled by shared CopyButton component
 
   const handleDownload = (data: object, filename: string) => {
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
@@ -98,21 +94,9 @@ export default function JwtDebugger() {
 
   const status = decoded.payload ? getTokenStatus(decoded.payload) : null;
 
-  const handleReport = () => {
-    if (!decoded.payload || !status) return;
-    
-    const report = `**JWT Security Report | SyntaxSnap**
-----------------------------------
-**Status:** ${status.status === 'active' ? '✅ Valid' : '🔴 ' + status.label}
-**Detail:** ${status.detail}
-**Algorithm:** ${decoded.header?.alg || 'Unknown'}
-${decoded.isAlgNone ? '**CRITICAL:** alg:none detected (Unsigned Token)\n' : ''}
-**Key Claims:**
-${Object.entries(decoded.payload).slice(0, 5).map(([k, v]) => `- ${k}: ${v}`).join('\n')}
-
-*Generated locally at: ${new Date().toLocaleString()}*`;
-
-    handleCopy(report, 'report');
+  const makeReport = () => {
+    if (!decoded.payload || !status) return '';
+    return `**JWT Security Report | SyntaxSnap**\n----------------------------------\n**Status:** ${status.status === 'active' ? '✅ Valid' : '🔴 ' + status.label}\n**Detail:** ${status.detail}\n**Algorithm:** ${decoded.header?.alg || 'Unknown'}\n${decoded.isAlgNone ? '**CRITICAL:** alg:none detected (Unsigned Token)\\n' : ''}\n**Key Claims:**\n${Object.entries(decoded.payload).slice(0, 5).map(([k, v]) => `- ${k}: ${v}`).join('\\n')}\n\n*Generated locally at: ${new Date().toLocaleString()}*`;
   };
 
   return (
@@ -124,7 +108,7 @@ ${Object.entries(decoded.payload).slice(0, 5).map(([k, v]) => `- ${k}: ${v}`).jo
             <Lock className="w-4 h-4" />
             <span className="text-xs font-bold uppercase">Encoded Token</span>
           </label>
-          <ActionButton onClick={() => handleCopy(token, 'token')} icon={copyState['token'] ? Check : Copy} label={copyState['token'] ? "Copied" : "Copy JWT"} success={copyState['token']} />
+            <CopyButton text={token} label="Copy JWT" />
         </div>
         <textarea 
           id="jwt-input"
@@ -147,7 +131,7 @@ ${Object.entries(decoded.payload).slice(0, 5).map(([k, v]) => `- ${k}: ${v}`).jo
               {decoded[key] && (
                 <div className="flex gap-2">
                    <ActionButton onClick={() => handleDownload(decoded[key], `jwt-${key}.json`)} icon={Download} label="JSON" />
-                   <ActionButton onClick={() => handleCopy(JSON.stringify(decoded[key], null, 2), key)} icon={copyState[key] ? Check : Copy} label={copyState[key] ? "Copied" : "Copy"} success={copyState[key]} />
+                     <CopyButton text={JSON.stringify(decoded[key], null, 2)} label="Copy" variant="ghost" />
                 </div>
               )}
             </div>
@@ -163,7 +147,7 @@ ${Object.entries(decoded.payload).slice(0, 5).map(([k, v]) => `- ${k}: ${v}`).jo
         <div className="bg-slate-900/30 border border-slate-800 rounded-2xl p-6 space-y-4">
           <div className="flex items-center justify-between">
             <h2 className="text-sm font-bold text-white flex items-center gap-2"><ShieldCheck className="w-4 h-4 text-emerald-400" /> Security Analysis</h2>
-            <ActionButton onClick={handleReport} icon={copyState['report'] ? Check : ClipboardList} label={copyState['report'] ? "Report Copied" : "Copy Report"} success={copyState['report']} primary />
+              <CopyButton text={makeReport()} label="Copy Report" variant="primary" />
           </div>
 
           {decoded.isAlgNone && (
@@ -185,7 +169,7 @@ ${Object.entries(decoded.payload).slice(0, 5).map(([k, v]) => `- ${k}: ${v}`).jo
                <div className="flex justify-between items-start mb-1">
                  <span className="text-[sm] font-bold text-slate-400 flex items-center gap-1"><Lock className="w-3 h-3" /> Signature</span>
                  {/* FIX: Added ariaLabel="Copy Signature" to handle empty label text */}
-                 <ActionButton onClick={() => handleCopy(decoded.signature, 'sig')} icon={copyState['sig'] ? Check : Copy} label="" ariaLabel="Copy Signature" success={copyState['sig']} />
+                   <CopyButton text={decoded.signature} label="Copy Signature" variant="ghost" />
                </div>
                <p className="text-[sm] text-slate-500 font-mono break-all line-clamp-2">{decoded.signature}</p>
             </div>
