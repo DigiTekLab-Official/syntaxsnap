@@ -53,13 +53,14 @@ setTimeout(() => setCopied(false), timeout); // No cleanup!
 const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
 useEffect(() => {
+  // Cleanup on unmount only - no need to re-run when timeout changes
   return () => {
     if (timeoutRef.current !== null) {
       clearTimeout(timeoutRef.current);
       timeoutRef.current = null;
     }
   };
-}, [timeout]);
+}, []); // Empty deps - only cleanup on unmount
 
 // Clear on new operation
 if (timeoutRef.current !== null) {
@@ -248,13 +249,11 @@ const { copy } = useCopyToClipboard({ checkPermissions: true });
       : `${label} - copy text to clipboard`
   }
   aria-disabled={isDisabled}
-  aria-live="polite" // Announces state changes
-  aria-atomic="true"
 >
   {getIcon()} {getLabel()}
 </button>
 
-{/* Dedicated screen reader region */}
+{/* Dedicated screen reader region (no duplicate aria-live on button) */}
 <span className="sr-only" role="status" aria-live="polite" aria-atomic="true">
   {isSuccess && `${copiedLabel}. Content copied to clipboard.`}
   {isError && `${errorLabel}. ${state.error.message}`}
@@ -324,14 +323,18 @@ switch (state.status) {
 // ✅ NEW CODE - Transitions for non-blocking UI
 const [isPending, startTransition] = useTransition();
 
-startTransition(() => {
-  navigator.clipboard.writeText(text).then(/* ... */);
+// Perform async clipboard write (already non-blocking)
+navigator.clipboard.writeText(text).then(() => {
+  // Use transition to mark state updates as non-urgent
+  startTransition(() => {
+    setState({ status: 'success' });
+  });
 });
 
 return { isPending }; // Consumers can show loading state
 ```
 
-**Benefit**: UI remains responsive even when copying 10MB+ text
+**Benefit**: State updates marked as non-urgent won't block high-priority updates (e.g., input fields)
 
 ---
 
