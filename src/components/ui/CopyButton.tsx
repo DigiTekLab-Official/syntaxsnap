@@ -228,8 +228,6 @@ export const CopyButton = forwardRef<HTMLButtonElement, CopyButtonProps>(
           disabled={isDisabled}
           aria-label={getAriaLabel()}
           aria-disabled={isDisabled}
-          aria-live="polite" // Announces state changes to screen readers
-          aria-atomic="true"
           className={clsx(
             BUTTON_STYLES.base,
             BUTTON_STYLES.sizes[size],

@@ -154,14 +154,14 @@ export function useCopyToClipboard(
   // ─── CLEANUP ───────────────────────────────────────────────────────────────
 
   useEffect(() => {
-    // Cleanup on unmount or when timeout changes
+    // Cleanup on unmount only
     return () => {
       if (timeoutRef.current !== null) {
         clearTimeout(timeoutRef.current);
         timeoutRef.current = null;
       }
     };
-  }, [timeout]);
+  }, []); // Empty deps - only cleanup on unmount
 
   // ─── RESET FUNCTION ────────────────────────────────────────────────────────
 
@@ -226,45 +226,53 @@ export function useCopyToClipboard(
       setState({ status: 'pending' });
       onCopyStart?.(text);
 
-      // Use transition to prevent blocking UI
-      startTransition(() => {
-        navigator.clipboard
-          .writeText(text)
-          .then(() => {
-            // Only update if this is still the current operation
-            if (currentOperationId === operationIdRef.current) {
+      // Perform clipboard write (already async and non-blocking)
+      navigator.clipboard
+        .writeText(text)
+        .then(() => {
+          // Only update if this is still the current operation
+          if (currentOperationId === operationIdRef.current) {
+            // Use transition to mark state updates as non-urgent
+            startTransition(() => {
               setState({ status: 'success' });
-              onCopySuccess?.(text);
+            });
+            onCopySuccess?.(text);
 
-              // Schedule reset
-              timeoutRef.current = setTimeout(() => {
-                if (currentOperationId === operationIdRef.current) {
+            // Schedule reset
+            timeoutRef.current = setTimeout(() => {
+              if (currentOperationId === operationIdRef.current) {
+                startTransition(() => {
                   setState({ status: 'idle' });
-                }
-                timeoutRef.current = null;
-              }, timeout);
-            }
-          })
-          .catch((err: unknown) => {
-            // Only update if this is still the current operation
-            if (currentOperationId === operationIdRef.current) {
-              const error: ClipboardError = {
-                type: 'write_failed',
-                message: err instanceof Error ? err.message : 'Failed to write to clipboard',
-              };
+                });
+              }
+              timeoutRef.current = null;
+            }, timeout);
+          }
+        })
+        .catch((err: unknown) => {
+          // Only update if this is still the current operation
+          if (currentOperationId === operationIdRef.current) {
+            const error: ClipboardError = {
+              type: 'write_failed',
+              message: err instanceof Error ? err.message : 'Failed to write to clipboard',
+            };
+            // Use transition to mark state updates as non-urgent
+            startTransition(() => {
               setState({ status: 'error', error });
-              onCopyError?.(error, text);
+            });
+            onCopyError?.(error, text);
 
-              // Schedule reset
-              timeoutRef.current = setTimeout(() => {
-                if (currentOperationId === operationIdRef.current) {
+            // Schedule reset
+            timeoutRef.current = setTimeout(() => {
+              if (currentOperationId === operationIdRef.current) {
+                startTransition(() => {
                   setState({ status: 'idle' });
-                }
-                timeoutRef.current = null;
-              }, timeout);
-            }
-          });
-      });
+                });
+              }
+              timeoutRef.current = null;
+            }, timeout);
+          }
+        });
     },
     [timeout, onCopyStart, onCopySuccess, onCopyError, checkPermissions]
   );
