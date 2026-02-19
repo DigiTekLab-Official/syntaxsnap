@@ -199,13 +199,15 @@ export function useCopyToClipboard(
         return;
       }
 
-      // Clear any pending timeout
+      // Clear any pending timeout to prevent stale resets
+      // This ensures rapid clicks don't cause old timeouts to fire
       if (timeoutRef.current !== null) {
         clearTimeout(timeoutRef.current);
         timeoutRef.current = null;
       }
 
       // Increment operation ID to handle race conditions
+      // This prevents stale async operations from updating state
       const currentOperationId = ++operationIdRef.current;
 
       // Check permissions if requested
@@ -238,8 +240,9 @@ export function useCopyToClipboard(
             });
             onCopySuccess?.(text);
 
-            // Schedule reset
+            // Schedule reset (protected by operation ID check)
             timeoutRef.current = setTimeout(() => {
+              // Only reset if this is still the current operation
               if (currentOperationId === operationIdRef.current) {
                 startTransition(() => {
                   setState({ status: 'idle' });
@@ -262,8 +265,9 @@ export function useCopyToClipboard(
             });
             onCopyError?.(error, text);
 
-            // Schedule reset
+            // Schedule reset (protected by operation ID check)
             timeoutRef.current = setTimeout(() => {
+              // Only reset if this is still the current operation
               if (currentOperationId === operationIdRef.current) {
                 startTransition(() => {
                   setState({ status: 'idle' });
