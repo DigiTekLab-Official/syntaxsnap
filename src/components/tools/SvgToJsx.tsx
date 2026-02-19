@@ -105,7 +105,7 @@ function parseCssToStyleObject(css: string): string {
     i++; // skip ';'
   }
 
-  return `{{ ${pairs.join(', ')} }}`;
+  return `{ ${pairs.join(', ')} }`;
 }
 
 // ─── Attribute tokenizer ──────────────────────────────────────────────────────
@@ -182,24 +182,39 @@ function renderAttrs(tokens: AttrToken[]): string {
   );
 }
 
+// ─── Security Sanitizer ───────────────────────────────────────────────────────
+
+/**
+ * Strips potentially malicious script tags and inline event handlers 
+ * from the SVG before converting it to React JSX.
+ */
+function sanitizeSvg(svg: string): string {
+  return svg
+    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '') // Remove <script> tags
+    .replace(/\son\w+\s*=\s*["'][^"']*["']/gi, ''); // Remove inline events (onload, onerror, etc.)
+}
+
 // ─── Main converter ───────────────────────────────────────────────────────────
 
 /**
  * Converts raw SVG markup to React-compatible JSX.
  *
  * Fixes vs the naive regex-layering approach:
- *   1. Single-pass tag regex — no double-processing of self-closing tags
- *      (the old two-step regex left a trailing space before `/>`)
- *   2. Proper attribute tokenizer — handles single-quoted values, boolean
- *      attrs, and never re-processes already-converted attr names
- *   3. CSS parser respects parens/quotes, so url(data:…;…) values are intact
- *   4. `s` flag on the tag regex handles multiline attribute strings
+ * 1. Single-pass tag regex — no double-processing of self-closing tags
+ * (the old two-step regex left a trailing space before `/>`)
+ * 2. Proper attribute tokenizer — handles single-quoted values, boolean
+ * attrs, and never re-processes already-converted attr names
+ * 3. CSS parser respects parens/quotes, so url(data:…;…) values are intact
+ * 4. `s` flag on the tag regex handles multiline attribute strings
  */
 function svgToJsx(raw: string): string {
-  const stripped = raw
+  // First, sanitize the input to prevent XSS injection
+  const safeRaw = sanitizeSvg(raw);
+
+  const stripped = safeRaw
     .replace(/<\?xml[^>]*\?>/gi, '')   // XML declaration
     .replace(/<!DOCTYPE[^>]*>/gi, '')   // DOCTYPE
-    .replace(/<!--[\s\S]*?-->/g,  '')   // HTML/XML comments
+    .replace(/<!--[\s\S]*?-->/g, '')   // HTML/XML comments
     .trimStart();
 
   // Single pass over all tag tokens.
@@ -262,7 +277,6 @@ function CopyButton({ text }: { text: string }) {
 
 const DEFAULT_SVG = `<svg width="100" height="100" viewBox="0 0 100 100" fill="none"
   xmlns="http://www.w3.org/2000/svg">
-  <!-- A red circle with a stroke -->
   <circle cx="50" cy="50" r="40"
     stroke="black" stroke-width="3"
     fill="red" class="my-circle" />

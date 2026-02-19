@@ -23,8 +23,14 @@ Server IP: 192.168.1.1 connected on 2025-10-25.`;
 
 // ─── Logic ───────────────────────────────────────────────────────────────────
 function escapeHtml(s: string) {
-  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-}
+    return s
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#x27;') // FIX: Prevents attribute injection
+      .replace(/\//g, '&#x2F;'); // FIX: Extra safety
+  }
 
 function processRegex(pattern: string, flags: string, text: string) {
   if (!pattern) return { html: escapeHtml(text), matches: [], error: null };

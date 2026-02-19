@@ -100,11 +100,11 @@ export default function GlassGenerator() {
   const [bgIndex, setBgIndex] = useState(0);
   const [copied, setCopied] = useState(false);
 
-  // Background options for testing
+  // Background options for testing - Replaced Unsplash URLs with local CSS gradients for Privacy
   const backgrounds = [
-    'https://images.unsplash.com/photo-1579546929518-9e396f3cc809?q=80&w=1200&auto=format&fit=crop',
-    'https://images.unsplash.com/photo-1557683316-973673baf926?q=80&w=1200&auto=format&fit=crop', // Dark Gradient
-    'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1200&auto=format&fit=crop', // Abstract
+    'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+    'linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%)',
+    'linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%)'
   ];
 
   const update = (key: keyof GlassConfig) => (val: any) => setCfg(p => ({ ...p, [key]: val }));
@@ -194,13 +194,12 @@ export default function GlassGenerator() {
         
         {/* Preview Container */}
         <div 
-          className="relative flex-1 min-h-125 rounded-3xl overflow-hidden shadow-2xl border border-slate-800 flex items-center justify-center transition-all duration-500"
-          style={{
-            backgroundImage: `url(${backgrounds[bgIndex]})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
+          className="relative w-full h-full rounded-2xl overflow-hidden transition-all duration-500 flex items-center justify-center p-8"
+          style={{ 
+            background: backgrounds[bgIndex], // Using background property and correct state variable
           }}
         >
+      
           {/* Dark overlay for contrast */}
           <div className="absolute inset-0 bg-black/10" />
 
@@ -241,9 +240,8 @@ export default function GlassGenerator() {
                 key={i}
                 onClick={() => setBgIndex(i)}
                 className={`w-8 h-8 rounded-full border-2 transition-all overflow-hidden ${bgIndex === i ? 'border-indigo-500 scale-110' : 'border-transparent opacity-70 hover:opacity-100'}`}
-              >
-                <img src={bg} alt="bg" className="w-full h-full object-cover" />
-              </button>
+                style={{ background: bg }} // Fixed to render CSS gradient instead of <img> tag
+              />
             ))}
           </div>
 
