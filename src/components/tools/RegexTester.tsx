@@ -1,4 +1,3 @@
-'use client';
 import React, { useState, useMemo, useEffect } from 'react';
 import { useDebounce } from '../../hooks/useDebounce';
 import { Regex, Flag, Zap, AlertTriangle, CheckCircle2 } from 'lucide-react';

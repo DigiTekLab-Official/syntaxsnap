@@ -1,0 +1,34 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PydanticConverter from '../../components/tools/PydanticConverter';
+---
+
+<Layout 
+  title="Offline Pydantic to Zod Converter | SyntaxSnap"
+  description="Instantly convert FastAPI Pydantic JSON schemas to TypeScript Zod schemas. 100% offline, privacy-safe, and browser-based."
+>
+  <main class="min-h-screen bg-slate-950 px-4 py-12">
+    <div class="max-w-4xl mx-auto text-center">
+      <h1 class="text-4xl font-extrabold text-white tracking-tight">
+        Pydantic to <span class="text-cyan-400">Zod</span> Converter
+      </h1>
+      <p class="mt-4 text-slate-400 text-lg">
+        Paste your <code class="bg-slate-800 px-1 py-0.5 rounded text-sm text-indigo-300">model_json_schema()</code> output below. 
+        Your code never leaves your browser.
+      </p>
+    </div>
+
+    <!-- The React Island - Notice the client:load directive -->
+    <PydanticConverter client:load />
+    
+    <article class="max-w-4xl mx-auto mt-16 text-slate-300 prose prose-invert">
+      <h2>Why use an offline converter?</h2>
+      <p>
+        When building modern web apps with FastAPI backends and Next.js or React frontends, 
+        keeping your backend Pydantic models in sync with your frontend Zod schemas is critical. 
+        SyntaxSnap parses your schemas directly in the browser, ensuring your proprietary backend 
+        structures remain private and secure.
+      </p>
+    </article>
+  </main>
+</Layout>

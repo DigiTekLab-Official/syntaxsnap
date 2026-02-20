@@ -1,4 +1,3 @@
-'use client';
 import React, { useState, useEffect, useCallback } from 'react';
 import { useDebounce } from '../../hooks/useDebounce';
 import { FileCode, ClipboardCheck, Clipboard } from 'lucide-react';

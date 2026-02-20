@@ -1,4 +1,3 @@
-'use client';
 import React, { useState, useEffect } from 'react';
 import { useDebounce } from '../../hooks/useDebounce';
 import { Copy, Check, Trash2, FileJson, AlertCircle, Braces, AlertTriangle } from 'lucide-react';

@@ -36,8 +36,8 @@
     .brand-icon {
       width: 28px;
       height: 28px;
-      color: var(--accent);
-      filter: drop-shadow(0 0 8px var(--accent-glow));
+      border-radius: 6px; /* Added to match your squircle curve perfectly */
+      /* Removed the shadow and color tint so your true image colors show */
     }
 
     h1 {
@@ -101,8 +101,8 @@
       justify-content: center;
       align-items: center;
       gap: 6px;
-      font-size: 11px;
-      color: #475569;
+      font-size: 12.5px; /* Bumped up from 11px */
+      color: #94a3b8;    /* Brighter, much more readable Slate 400 */
       font-weight: 500;
     }
 
@@ -117,9 +117,10 @@
 </head>
 <body>
 
-  <header>
-    <img src="icon.png" class="brand-icon" alt="Logo">
-    <h1>SyntaxSnap</h1>
+  <header style="display: flex; align-items: center; gap: 12px; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border);">
+    <img src="icon.svg" alt="Icon" style="width: 28px; height: 28px; border-radius: 6px;">
+    
+    <img src="logo.png" alt="SyntaxSnap Logo" style="height: 20px; width: auto;">
   </header>
 
   <nav class="menu">
@@ -146,12 +147,25 @@
       </svg>
       Diff Viewer
     </a>
+    
+    <button id="extract-svg-btn" class="tool-card" style="width: 100%; text-align: left; cursor: pointer; font-family: inherit; background: none;">
+      <svg class="tool-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+        <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+        <polyline points="2 17 12 22 22 17"></polyline>
+        <polyline points="2 12 12 17 22 12"></polyline>
+      </svg>
+      Extract SVGs from Page
+    </button>
+
+    <div id="svg-results" style="display: flex; flex-direction: column; gap: 8px; margin-top: 10px; max-height: 200px; overflow-y: auto;"></div>
   </nav>
 
   <footer>
     <span class="status-dot"></span>
     System Operational • v1.0
   </footer>
+
+  <script src="popup.js"></script>
 
 </body>
 </html>

@@ -1,4 +1,3 @@
-'use client';
 import React, { useState } from 'react';
 import { Shuffle, Copy, Check, Palette, RotateCcw, Sparkles } from 'lucide-react';
 import CopyButton from '../ui/CopyButton';
