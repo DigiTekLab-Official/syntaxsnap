@@ -1,34 +1,127 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import PydanticConverter from '../../components/tools/PydanticConverter';
+import RelatedTools from '../../components/RelatedTools.astro';
+
+const title = "Pydantic to Zod Converter (Offline) | SyntaxSnap";
+const description = "Convert FastAPI Pydantic JSON schemas to TypeScript Zod schemas instantly. Supports $defs, enums, unions, constraints and nested models. 100% offline and privacy-safe.";
+
+const schema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "Pydantic to Zod Converter",
+      "operatingSystem": "Web",
+      "applicationCategory": "DeveloperApplication",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "description": description,
+      "featureList": [
+        "Converts Pydantic v1 and v2 JSON schemas to Zod",
+        "Handles $defs / nested models and $ref references",
+        "Supports enums, unions (anyOf/oneOf), allOf inheritance",
+        "String, number and array constraint chaining",
+        "Local-first processing — data never leaves your browser"
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Is my schema data sent to a server?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. SyntaxSnap converts everything directly inside your browser. Your proprietary schemas never leave your device."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I get my Pydantic schema?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Run Model.model_json_schema() in Python (Pydantic v2) or Model.schema() (Pydantic v1) and paste the resulting JSON here."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does this support nested models and $defs?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Each model defined in $defs is emitted as a separate named Zod schema, and $ref references are resolved automatically."
+          }
+        }
+      ]
+    }
+  ]
+};
 ---
 
-<Layout 
-  title="Offline Pydantic to Zod Converter | SyntaxSnap"
-  description="Instantly convert FastAPI Pydantic JSON schemas to TypeScript Zod schemas. 100% offline, privacy-safe, and browser-based."
->
-  <main class="min-h-screen bg-slate-950 px-4 py-12">
-    <div class="max-w-4xl mx-auto text-center">
-      <h1 class="text-4xl font-extrabold text-white tracking-tight">
+<Layout title={title} description={description}>
+  <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+
+  <div class="max-w-6xl mx-auto">
+    <div class="mb-8">
+      <h1 class="text-3xl font-extrabold text-white mb-2">
         Pydantic to <span class="text-cyan-400">Zod</span> Converter
       </h1>
-      <p class="mt-4 text-slate-400 text-lg">
-        Paste your <code class="bg-slate-800 px-1 py-0.5 rounded text-sm text-indigo-300">model_json_schema()</code> output below. 
-        Your code never leaves your browser.
+      <p class="text-slate-400">
+        Paste your <code class="bg-slate-800 px-1 py-0.5 rounded text-sm text-indigo-300">Model.model_json_schema()</code> output below.
+        All conversion happens locally — your code never leaves your browser.
       </p>
     </div>
 
-    <!-- The React Island - Notice the client:load directive -->
-    <PydanticConverter client:load />
-    
-    <article class="max-w-4xl mx-auto mt-16 text-slate-300 prose prose-invert">
-      <h2>Why use an offline converter?</h2>
-      <p>
-        When building modern web apps with FastAPI backends and Next.js or React frontends, 
-        keeping your backend Pydantic models in sync with your frontend Zod schemas is critical. 
-        SyntaxSnap parses your schemas directly in the browser, ensuring your proprietary backend 
-        structures remain private and secure.
-      </p>
-    </article>
-  </main>
+    <PydanticConverter client:idle />
+
+    <div class="mt-16 grid grid-cols-1 md:grid-cols-2 gap-12 border-t border-slate-800 pt-12">
+
+      <div class="bg-slate-900/30 border border-slate-800 rounded-2xl p-8 h-fit">
+        <h2 class="text-xl font-bold text-white mb-4">Why use an offline converter?</h2>
+        <p class="text-slate-400 leading-relaxed">
+          When building apps with FastAPI backends and React or Next.js frontends, keeping
+          Pydantic models in sync with Zod validation schemas is critical. SyntaxSnap
+          parses your schemas entirely in the browser, so proprietary model structures
+          stay private.
+        </p>
+      </div>
+
+      <div>
+        <h2 class="text-xl font-bold text-white mb-6">Frequently Asked Questions</h2>
+        <div class="space-y-6">
+
+          <div>
+            <h3 class="font-medium text-slate-200 mb-2">Is my schema data sent to a server?</h3>
+            <p class="text-sm text-slate-400 leading-relaxed">
+              No. Everything runs inside your browser. Your schemas never leave your device.
+            </p>
+          </div>
+
+          <div>
+            <h3 class="font-medium text-slate-200 mb-2">How do I get my Pydantic schema?</h3>
+            <p class="text-sm text-slate-400 leading-relaxed">
+              Run <code class="bg-slate-800 px-1 rounded text-indigo-300">Model.model_json_schema()</code> in Python
+              (Pydantic v2) or <code class="bg-slate-800 px-1 rounded text-indigo-300">Model.schema()</code>
+              (Pydantic v1), then paste the JSON output above.
+            </p>
+          </div>
+
+          <div>
+            <h3 class="font-medium text-slate-200 mb-2">Does this support nested models?</h3>
+            <p class="text-sm text-slate-400 leading-relaxed">
+              Yes. Each model in <code class="bg-slate-800 px-1 rounded text-indigo-300">$defs</code> is emitted
+              as its own named Zod constant, and <code class="bg-slate-800 px-1 rounded text-indigo-300">$ref</code>
+              references are resolved automatically.
+            </p>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <RelatedTools currentTool="pydantic-to-zod" />
+  </div>
 </Layout>
