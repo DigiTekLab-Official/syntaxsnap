@@ -2,19 +2,28 @@ document.addEventListener('DOMContentLoaded', () => {
   const extractBtn = document.getElementById('extract-svg-btn');
   const resultsDiv = document.getElementById('svg-results');
 
+  function setStatus(message, isError) {
+    const div = document.createElement('div');
+    div.className = `status-message ${isError ? 'error' : 'info'}`;
+    div.textContent = message;
+    resultsDiv.replaceChildren(div);
+  }
+
+  const BLOCKED_URL_PREFIXES = ['chrome://', 'chrome-extension://', 'https://chrome.google.com', 'about:'];
+
   extractBtn.addEventListener('click', async () => {
     try {
       // 1. Get the current active tab
       const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
 
       // Chrome blocks extensions from running on its own internal pages
-      if (!tab.url || tab.url.startsWith('chrome://') || tab.url.startsWith('https://chrome.google.com')) {
-        resultsDiv.innerHTML = '<div style="text-align: center; color: #ef4444; font-size: 12px; padding: 10px;">Cannot extract from this page. Try a normal website!</div>';
+      if (!tab.url || BLOCKED_URL_PREFIXES.some(prefix => tab.url.startsWith(prefix))) {
+        setStatus('Cannot extract from this page. Try a normal website!', true);
         return;
       }
 
       // Show a loading state
-      resultsDiv.innerHTML = '<div style="text-align: center; color: #94a3b8; font-size: 12px; padding: 10px;">Scanning page...</div>';
+      setStatus('Scanning page...', false);
 
       // 2. Run this function DIRECTLY inside the current webpage
       const [{ result: svgs }] = await chrome.scripting.executeScript({
@@ -37,11 +46,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       });
 
-      resultsDiv.innerHTML = ''; // Clear loading text
+      resultsDiv.replaceChildren(); // Clear loading text
 
       // 3. Handle if no SVGs were found
       if (!svgs || svgs.length === 0) {
-        resultsDiv.innerHTML = '<div style="text-align: center; color: #94a3b8; font-size: 12px; padding: 10px;">No SVGs found on this page.</div>';
+        setStatus('No SVGs found on this page.', false);
         return;
       }
 
@@ -70,7 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
       });
 
     } catch (error) {
-      resultsDiv.innerHTML = '<div style="text-align: center; color: #ef4444; font-size: 12px; padding: 10px;">Error: Please refresh the page and try again.</div>';
+      setStatus('Error: Please refresh the page and try again.', true);
       console.error(error);
     }
   });

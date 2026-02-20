@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'unsafe-inline'; img-src 'self';">
   <style>
     /* ─── RESET & THEME ────────────────────────────────────────── */
     :root {
@@ -113,18 +114,27 @@
       border-radius: 50%;
       box-shadow: 0 0 6px rgba(16, 185, 129, 0.4);
     }
+
+    .status-message {
+      text-align: center;
+      font-size: 12px;
+      padding: 10px;
+    }
+
+    .status-message.error { color: #ef4444; }
+    .status-message.info  { color: #94a3b8; }
   </style>
 </head>
 <body>
 
-  <header style="display: flex; align-items: center; gap: 12px; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border);">
+  <header>
     <img src="icon.svg" alt="Icon" style="width: 28px; height: 28px; border-radius: 6px;">
     
     <img src="logo.png" alt="SyntaxSnap Logo" style="height: 20px; width: auto;">
   </header>
 
   <nav class="menu">
-    <a href="https://syntaxsnap.com/tools/regex-tester" target="_blank" class="tool-card">
+    <a href="https://syntaxsnap.com/tools/regex-tester" target="_blank" rel="noopener noreferrer" class="tool-card">
       <svg class="tool-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
         <circle cx="11" cy="11" r="8"></circle>
         <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
@@ -132,7 +142,7 @@
       Regex Tester
     </a>
     
-    <a href="https://syntaxsnap.com/tools/json-to-zod" target="_blank" class="tool-card">
+    <a href="https://syntaxsnap.com/tools/json-to-zod" target="_blank" rel="noopener noreferrer" class="tool-card">
       <svg class="tool-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
         <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
         <polyline points="14 2 14 8 20 8"></polyline>
@@ -141,7 +151,7 @@
       JSON to Zod
     </a>
 
-    <a href="https://syntaxsnap.com/tools/diff-viewer" target="_blank" class="tool-card">
+    <a href="https://syntaxsnap.com/tools/diff-viewer" target="_blank" rel="noopener noreferrer" class="tool-card">
       <svg class="tool-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
         <path d="M8 3H5a2 2 0 0 0-2 2v14c0 1.1.9 2 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2h-3m0 0a6 6 0 0 0-6 0m6 0a6 6 0 0 0-6 0"></path>
       </svg>
