@@ -3,15 +3,18 @@
 import '../styles/global.css';
 import Header from '../components/ui/Header.astro';
 import Footer from '../components/ui/Footer.astro';
+import JsonLd from '../components/SEO/JsonLd.astro'; // NEW: Import the schema component
 
 interface Props {
   title?: string;
   description?: string;
+  isTool?: boolean; // NEW: Flag to determine schema type
 }
 
 const { 
   title = "SyntaxSnap - Privacy-First Developer Tools",
-  description = "A privacy-first suite of developer tools that run entirely in your browser. No servers. No tracking." 
+  description = "A privacy-first suite of developer tools that run entirely in your browser. No servers. No tracking.",
+  isTool = false
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, "https://syntaxsnap.com").toString();
@@ -57,40 +60,13 @@ const canonicalURL = new URL(Astro.url.pathname, "https://syntaxsnap.com").toStr
         })(window, document, "clarity", "script", "viplajyvf3");
     </script>
 
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@graph": [
-        {
-          "@type": "WebSite",
-          "@id": "https://syntaxsnap.com/#website",
-          "url": "https://syntaxsnap.com",
-          "name": "SyntaxSnap",
-          "alternateName": ["Syntax Snap", "DigiTekLab SyntaxSnap"],
-          "description": "Privacy-first suite of developer tools.",
-          "publisher": { "@id": "https://syntaxsnap.com/#organization" }
-        },
-        {
-          "@type": "Organization",
-          "@id": "https://syntaxsnap.com/#organization",
-          "name": "SyntaxSnap",
-          "url": "https://syntaxsnap.com",
-          "logo": {
-            "@type": "ImageObject",
-            "url": "https://syntaxsnap.com/logo.png",
-            "width": 512,
-            "height": 512
-          },
-          "sameAs": ["https://github.com/DigiTekLab-Official"],
-          "contactPoint": {
-            "@type": "ContactPoint",
-            "email": "contact@syntaxsnap.com",
-            "contactType": "customer support"
-          }
-        }
-      ]
-    }
-    </script>
+    {/* NEW: Inject dynamic SEO Schema */}
+    <JsonLd 
+      type={isTool ? 'tool' : 'website'} 
+      title={title} 
+      description={description} 
+      url={canonicalURL} 
+    />
   </head>
   
   <body class="bg-slate-950 text-slate-200 min-h-screen font-sans antialiased flex flex-col selection:bg-indigo-500/30">
