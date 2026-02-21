@@ -73,21 +73,29 @@ export default function AiMockGenerator() {
 
       {/* Input Area */}
       {mode === 'prompt' ? (
-        <textarea
-          className="w-full p-4 bg-slate-900 border border-slate-700 rounded-lg font-mono text-sm text-slate-200 focus:ring-2 focus:ring-emerald-500 outline-none resize-y"
-          rows={5}
-          placeholder="e.g., Generate a list of users with id, firstName, lastName, email, and isActive status."
-          value={prompt}
-          onChange={(e) => setPrompt(e.target.value)}
-        />
+        <div className="flex flex-col gap-2">
+          <label htmlFor="promptTextarea" className="text-sm text-slate-400">Prompt Description</label>
+          <textarea
+            id="promptTextarea"
+            className="w-full p-4 bg-slate-900 border border-slate-700 rounded-lg font-mono text-sm text-slate-200 focus:ring-2 focus:ring-emerald-500 outline-none resize-y"
+            rows={5}
+            placeholder="e.g., Generate a list of users with id, firstName, lastName, email, and isActive status."
+            value={prompt}
+            onChange={(e) => setPrompt(e.target.value)}
+          />
+        </div>
       ) : (
-        <textarea
-          className="w-full p-4 bg-slate-900 border border-slate-700 rounded-lg font-mono text-sm text-slate-200 focus:ring-2 focus:ring-emerald-500 outline-none resize-y"
-          rows={8}
-          placeholder="Paste your OpenAPI v3 JSON or YAML here..."
-          value={openApiInput}
-          onChange={(e) => setOpenApiInput(e.target.value)}
-        />
+        <div className="flex flex-col gap-2">
+          <label htmlFor="openApiTextarea" className="text-sm text-slate-400">OpenAPI Schema</label>
+          <textarea
+            id="openApiTextarea"
+            className="w-full p-4 bg-slate-900 border border-slate-700 rounded-lg font-mono text-sm text-slate-200 focus:ring-2 focus:ring-emerald-500 outline-none resize-y"
+            rows={8}
+            placeholder="Paste your OpenAPI v3 JSON or YAML here..."
+            value={openApiInput}
+            onChange={(e) => setOpenApiInput(e.target.value)}
+          />
+        </div>
       )}
 
       {/* Privacy notice — data is relayed to OpenAI */}
@@ -101,14 +109,16 @@ export default function AiMockGenerator() {
       {/* Controls & Generate Button */}
       <div className="flex flex-col sm:flex-row gap-4 items-center">
         <div className="flex items-center gap-3 w-full sm:w-auto bg-slate-900 border border-slate-700 rounded-lg px-4 py-2">
-          <label className="text-sm text-slate-400 whitespace-nowrap">Row Count:</label>
+          <label htmlFor="rowCountInput" className="text-sm text-slate-400 whitespace-nowrap">Row Count:</label>
           <input
+            id="rowCountInput"
             type="number"
             min="1"
             max="100"
             className="bg-transparent text-white w-16 outline-none font-mono"
             value={rowCount}
             onChange={(e) => setRowCount(Number(e.target.value))}
+            aria-labelledby="rowCountInputLabel"
           />
         </div>
 

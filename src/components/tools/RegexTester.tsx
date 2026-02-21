@@ -113,7 +113,7 @@ export default function RegexTester() {
         <div className="flex flex-wrap justify-between items-center mb-4 gap-4">
           <div className="flex items-center gap-2 text-indigo-400">
             <Regex className="w-5 h-5" />
-            <h3 className="text-sm font-semibold uppercase tracking-wider">Pattern & Flags</h3>
+            <h2 className="text-sm font-semibold uppercase tracking-wider">Pattern & Flags</h2>
           </div>
           
           <div className="flex gap-2">
@@ -133,8 +133,10 @@ export default function RegexTester() {
         <div className="grid grid-cols-12 gap-4">
           {/* Pattern Input */}
           <div className="col-span-12 md:col-span-9 relative">
+            <label htmlFor="patternInput" className="sr-only">Regex Pattern</label>
             <div className="flex items-center absolute left-3 top-3 text-slate-500 select-none font-mono text-lg">/</div>
             <input
+              id="patternInput"
               type="text"
               value={pattern}
               onChange={(e) => setPattern(e.target.value)}
@@ -146,10 +148,12 @@ export default function RegexTester() {
 
           {/* Flags Input */}
           <div className="col-span-12 md:col-span-3 relative">
+            <label htmlFor="flagsInput" className="sr-only">Regex Flags</label>
             <div className="absolute left-3 top-3.5 text-slate-500">
               <Flag className="w-4 h-4" />
             </div>
             <input
+              id="flagsInput"
               type="text"
               value={flags}
               onChange={(e) => setFlags(e.target.value)}
@@ -179,8 +183,9 @@ export default function RegexTester() {
         
         {/* Test String Input */}
         <div className="flex flex-col gap-2">
-          <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider ml-1">Test String</label>
+          <label htmlFor="testStringInput" className="text-xs font-semibold text-slate-500 uppercase tracking-wider ml-1">Test String</label>
           <textarea
+            id="testStringInput"
             value={text}
             onChange={(e) => setText(e.target.value)}
             className="w-full h-80 bg-slate-900/30 border border-slate-800 rounded-2xl p-4 font-mono text-sm text-slate-300 focus:outline-none focus:border-indigo-500/50 focus:ring-1 focus:ring-indigo-500/20 resize-none leading-relaxed"
@@ -191,7 +196,7 @@ export default function RegexTester() {
         {/* Results Output */}
         <div className="flex flex-col gap-2">
           <div className="flex justify-between items-center ml-1">
-            <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Live Results</label>
+            <span id="resultsLabel" className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Live Results</span>
             <div className="flex items-center gap-2">
               <span className={`text-xs px-2 py-0.5 rounded-full font-mono ${matches.length > 0 ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-slate-800 text-slate-500'}`}>
                 {matches.length} Matches Found
@@ -201,6 +206,8 @@ export default function RegexTester() {
           </div>
           
           <div 
+            id="resultsOutput"
+            aria-labelledby="resultsLabel"
             className="w-full h-80 bg-slate-950 border border-slate-800 rounded-2xl p-4 font-mono text-sm text-slate-400 overflow-auto whitespace-pre-wrap leading-relaxed"
             dangerouslySetInnerHTML={{ __html: html || '<span class="text-slate-600 italic">// No matches found</span>' }}
           />

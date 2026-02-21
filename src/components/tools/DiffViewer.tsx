@@ -63,7 +63,7 @@ function getDiffKey(part: Diff.Change, index: number): string {
 
 function DiffStats({ stats }: { stats: DiffStats }) {
   return (
-    <div className="flex items-center gap-4 text-[10px] font-mono tabular-nums text-slate-500">
+    <div className="flex items-center gap-4 text-[12px] font-mono tabular-nums text-slate-500">
       <span className="flex items-center gap-1">
         <span className="text-emerald-400">+{stats.added}</span>
       </span>
@@ -297,7 +297,7 @@ export default function DiffViewer() {
                 }
                 className="overflow-auto max-h-[600px]"
               >
-                <div className="sticky top-0 bg-slate-900/95 backdrop-blur-sm p-2 border-b border-slate-800 text-[10px] uppercase font-bold text-red-400 z-10">
+                <div className="sticky top-0 bg-slate-900/95 backdrop-blur-sm p-2 border-b border-slate-800 text-[12px] uppercase font-bold text-red-400 z-10">
                   Original
                 </div>
                 <pre className="m-0">
@@ -331,7 +331,7 @@ export default function DiffViewer() {
                 }
                 className="overflow-auto max-h-[600px]"
               >
-                <div className="sticky top-0 bg-slate-900/95 backdrop-blur-sm p-2 border-b border-slate-800 text-[10px] uppercase font-bold text-emerald-400 z-10 flex justify-between items-center">
+                <div className="sticky top-0 bg-slate-900/95 backdrop-blur-sm p-2 border-b border-slate-800 text-[12px] uppercase font-bold text-emerald-400 z-10 flex justify-between items-center">
                   <span>Modified</span>
                   <CopyButton text={newText} />
                 </div>
@@ -384,7 +384,7 @@ export default function DiffViewer() {
       )}
 
       <div className="text-center pt-4">
-        <p className="text-[10px] text-slate-500 flex items-center justify-center gap-2">
+        <p className="text-[12px] text-slate-500 flex items-center justify-center gap-2">
           <Lock className="w-3 h-3" aria-hidden /> Comparison happens locally. Your text never leaves your device.
         </p>
       </div>

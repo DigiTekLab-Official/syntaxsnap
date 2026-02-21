@@ -137,7 +137,9 @@ export default function PydanticConverter() {
         )}
 
         <div className="relative flex-1 group">
+          <label htmlFor="pydanticInputTextarea" className="sr-only">Pydantic JSON Schema Input</label>
           <textarea
+            id="pydanticInputTextarea"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             spellCheck={false}

@@ -185,14 +185,15 @@ export default function JsonToZod() {
         )}
 
         <div className="relative flex-1 group">
+          <label htmlFor="jsonInputTextarea" className="sr-only">JSON Input</label>
           <textarea
+            id="jsonInputTextarea"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             spellCheck={false}
             placeholder="Paste your JSON here..."
             className="absolute inset-0 w-full h-full bg-transparent p-4 font-mono text-sm text-slate-300 focus:outline-none resize-none leading-relaxed"
           />
-          
           {error && (
             <div className="absolute bottom-4 right-4 bg-red-900/90 border border-red-500/50 text-red-200 text-xs px-3 py-2 rounded-lg flex items-center gap-2 backdrop-blur shadow-lg animate-in fade-in slide-in-from-bottom-2 z-20">
               <AlertCircle className="w-4 h-4" />
