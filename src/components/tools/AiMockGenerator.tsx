@@ -26,7 +26,7 @@ export default function AiMockGenerator() {
       if (mode === 'openapi') {
         if (!openApiInput.trim()) throw new Error('Please paste an OpenAPI schema.');
         const parsedSchema = parseOpenAPI(openApiInput);
-        finalPrompt = `Based on this OpenAPI schema, generate strictly typed mock data: ${parsedSchema}`;
+        finalPrompt = `Based on this OpenAPI schema, generate strictly typed mock data: ${JSON.stringify(parsedSchema)}`;
       } else {
         if (!prompt.trim()) throw new Error('Please enter a description of the data you need.');
       }
@@ -89,6 +89,14 @@ export default function AiMockGenerator() {
           onChange={(e) => setOpenApiInput(e.target.value)}
         />
       )}
+
+      {/* Privacy notice — data is relayed to OpenAI */}
+      <p className="text-xs text-slate-500 border border-slate-800 rounded-lg px-3 py-2">
+        <strong className="text-slate-400">Privacy notice:</strong> Your prompt or schema is sent to{' '}
+        <strong className="text-slate-400">OpenAI</strong> to generate mock data. Do not include real
+        personal data, credentials, or proprietary schemas. See our{' '}
+        <a href="/privacy" className="text-indigo-400 hover:underline">Privacy Policy</a>.
+      </p>
 
       {/* Controls & Generate Button */}
       <div className="flex flex-col sm:flex-row gap-4 items-center">

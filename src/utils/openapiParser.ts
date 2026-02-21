@@ -1,12 +1,18 @@
 // src/utils/openapiParser.ts
 import yaml from 'js-yaml';
 
+// Prevent processing of extremely large inputs that could block the main thread
+const MAX_INPUT_SIZE = 512 * 1024; // 512 KB
+
 export function parseOpenAPI(input: string): any {
   if (!input) throw new Error('Input is empty');
+  if (input.length > MAX_INPUT_SIZE) throw new Error('Input exceeds maximum allowed size (512 KB)');
+  
   try {
     return JSON.parse(input);
   } catch {
     try {
+      // In js-yaml v4, load() is safe by default. No schema argument needed.
       return yaml.load(input);
     } catch {
       throw new Error('Invalid JSON or YAML');
