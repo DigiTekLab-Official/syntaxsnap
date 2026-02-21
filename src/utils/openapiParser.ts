@@ -7,13 +7,13 @@ const MAX_INPUT_SIZE = 512 * 1024; // 512 KB
 export function parseOpenAPI(input: string): any {
   if (!input) throw new Error('Input is empty');
   if (input.length > MAX_INPUT_SIZE) throw new Error('Input exceeds maximum allowed size (512 KB)');
+  
   try {
     return JSON.parse(input);
   } catch {
     try {
-      // Use DEFAULT_SAFE_SCHEMA to prevent arbitrary JS execution via YAML tags
-      // such as !!js/undefined, !!js/regexp, !!js/function, etc.
-      return yaml.load(input, { schema: yaml.DEFAULT_SAFE_SCHEMA });
+      // In js-yaml v4, load() is safe by default. No schema argument needed.
+      return yaml.load(input);
     } catch {
       throw new Error('Invalid JSON or YAML');
     }
