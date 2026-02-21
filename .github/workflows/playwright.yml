@@ -10,15 +10,27 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
+    
+    # Use the official pnpm action for better caching and speed
+    - uses: pnpm/action-setup@v4
+      with:
+        version: 9
+        
     - uses: actions/setup-node@v4
       with:
         node-version: lts/*
+        cache: 'pnpm'
+        
     - name: Install dependencies
-      run: npm install -g pnpm && pnpm install
+      run: pnpm install
+      
+    # Only install the browsers we are actually testing (Chromium and Firefox)
     - name: Install Playwright Browsers
-      run: pnpm exec playwright install --with-deps
+      run: pnpm exec playwright install --with-deps chromium firefox
+      
     - name: Run Playwright tests
       run: pnpm exec playwright test
+      
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
       with:
