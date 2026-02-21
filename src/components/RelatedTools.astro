@@ -1,9 +1,38 @@
 ---
-// src/components/RelatedTools.astro
-import { FileJson, Hash, Box, Code2, ShieldCheck, FileCode, GitCompare, Braces } from 'lucide-astro';
+// src/components/ui/RelatedTools.astro
+import { 
+  FileJson, 
+  Hash, 
+  Box, 
+  Code2, 
+  ShieldCheck, 
+  FileCode, 
+  GitCompare, 
+  Braces, 
+  Sparkles, 
+  Server 
+} from 'lucide-astro';
 
 const { currentTool } = Astro.props;
 const tools = [
+  {
+    id: 'ai-mock-generator',
+    title: 'AI Mock Generator',
+    desc: 'Generate realistic JSON mock data using AI and OpenAPI schemas.',
+    href: '/tools/ai-mock-generator',
+    icon: Sparkles,
+    color: 'text-emerald-400',
+    bg: 'bg-emerald-500/10'
+  },
+  {
+    id: 'openapi-to-express',
+    title: 'OpenAPI to Express',
+    desc: 'Instantly convert OpenAPI specs into runnable Express mock servers.',
+    href: '/tools/openapi-to-express',
+    icon: Server,
+    color: 'text-sky-400',
+    bg: 'bg-sky-500/10'
+  },
   {
     id: 'pydantic-to-zod',
     title: 'Pydantic to Zod',

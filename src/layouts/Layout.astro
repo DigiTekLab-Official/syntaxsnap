@@ -1,8 +1,8 @@
 ---
 // src/layouts/Layout.astro
 import '../styles/global.css';
-import { Wrench, Info, Mail, ShieldCheck } from 'lucide-astro';
-import Logo from '../components/Logo.astro';
+import Header from '../components/ui/Header.astro';
+import Footer from '../components/ui/Footer.astro';
 
 interface Props {
   title?: string;
@@ -94,91 +94,10 @@ const canonicalURL = new URL(Astro.url.pathname, "https://syntaxsnap.com").toStr
   </head>
   
   <body class="bg-slate-950 text-slate-200 min-h-screen font-sans antialiased flex flex-col selection:bg-indigo-500/30">
-    
-    <header class="border-b border-slate-800 bg-slate-950/80 backdrop-blur-md sticky top-0 z-50">
-      <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
-        
-        <a href="/" class="flex items-center gap-3 group" aria-label="SyntaxSnap home">
-          <div class="group-hover:rotate-12 transition-transform duration-300">
-             <Logo class="w-8 h-8" />
-          </div>
-          <span class="text-xl font-bold tracking-tight text-white">
-            Syntax<span class="text-indigo-400">Snap</span>
-          </span>
-        </a>
-
-        <nav aria-label="Main navigation">
-          <ul class="flex gap-4 md:gap-8 text-sm font-medium text-slate-400 list-none m-0 p-0">
-            <li>
-              <a href="/#tools" class="hover:text-white transition-colors flex items-center gap-1.5 py-2" aria-label="View Tools">
-                <Wrench class="w-4 h-4" /> <span class="hidden sm:inline">Tools</span>
-              </a>
-            </li>
-            <li>
-              <a href="/about" class="hover:text-white transition-colors flex items-center gap-1.5 py-2" aria-label="About SyntaxSnap">
-                <Info class="w-4 h-4" /> <span class="hidden sm:inline">About</span>
-              </a>
-            </li>
-            <li>
-              <a href="/contact" class="hover:text-white transition-colors flex items-center gap-1.5 py-2" aria-label="Contact Support">
-                <Mail class="w-4 h-4" /> <span class="hidden sm:inline">Contact</span>
-              </a>
-            </li>
-          </ul>
-        </nav>
-      </div>
-    </header>
-
+    <Header />
     <main class="w-full max-w-6xl mx-auto px-4 py-8 md:py-12 flex-1 animate-in fade-in duration-700">
       <slot />
     </main>
-
-    <footer class="border-t border-slate-800 bg-slate-950 mt-auto">
-      <div class="max-w-6xl mx-auto px-4 py-16">
-          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-12 mb-12">
-              
-              <div class="col-span-1 md:col-span-2">
-                  <span class="text-xl font-bold text-white tracking-tight">Syntax<span class="text-indigo-500">Snap</span></span>
-                  <p class="mt-4 text-sm text-slate-400 max-w-xs leading-relaxed">
-                      High-performance, local-first utilities for modern developers. Built with privacy as a priority and speed as a requirement.
-                  </p>
-              </div>
-  
-              <div>
-                  <h2 class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-4">Utilities</h2>
-                  <ul class="space-y-3 text-sm text-slate-400 font-mono">
-                      <li><a href="/tools/diff-viewer" class="hover:text-indigo-400 transition-colors">Diff Viewer</a></li>
-                      <li><a href="/tools/glass-generator" class="hover:text-indigo-400 transition-colors">Glass Gen</a></li>
-                      <li><a href="/tools/json-to-zod" class="hover:text-indigo-400 transition-colors">JSON → Zod</a></li>
-                      <li><a href="/tools/jwt-debugger" class="hover:text-indigo-400 transition-colors">JWT Debugger</a></li>
-                      <li><a href="/tools/mesh-gradient" class="hover:text-indigo-400 transition-colors">Mesh Gradient</a></li>
-                      <li><a href="/tools/regex-tester" class="hover:text-indigo-400 transition-colors">Regex Tester</a></li>
-                      <li><a href="/tools/svg-to-jsx" class="hover:text-indigo-400 transition-colors">SVG → JSX</a></li>
-                  </ul>
-              </div>
-  
-              <div>
-                <h3 class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-4">Company</h3>
-                <ul class="space-y-3 text-sm text-slate-400">
-                    <li><a href="/about" class="hover:text-indigo-400 transition-colors">Our Story</a></li>
-                    <li><a href="/offline" class="hover:text-indigo-400 transition-colors flex items-center gap-2">Self-Host <span class="text-[10px] bg-slate-800 px-1.5 py-0.5 rounded text-slate-300 border border-slate-700">New</span></a></li>
-                    <li><a href="/privacy" class="hover:text-indigo-400 transition-colors">Privacy</a></li>
-                    <li><a href="/terms" class="hover:text-indigo-400 transition-colors">Terms</a></li>
-                </ul>
-              </div>
-          </div>
-          
-          <div class="border-t border-slate-900 pt-8 flex flex-col md:flex-row justify-between items-center gap-6 text-[11px] text-slate-500">
-              <div class="flex items-center gap-2">
-                <ShieldCheck class="w-4 h-4 text-indigo-500/50" />
-                <p>&copy; {new Date().getFullYear()} SyntaxSnap. All rights reserved.</p>
-              </div>
-              <p class="flex items-center gap-1.5">
-                Built with ❤️ in <span class="text-slate-300 font-medium">Cuddalore</span> for the global community.
-              </p>
-          </div>
-      </div>
-    </footer>
-
+    <Footer />
   </body>
 </html>

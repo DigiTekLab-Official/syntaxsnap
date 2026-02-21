@@ -1,0 +1,92 @@
+---
+// src/pages/tools/openapi-mock.astro
+import Layout from '../../layouts/Layout.astro'; // Adjust path to your layout
+---
+
+<Layout 
+  title="OpenAPI to Express Mock Server Generator | SyntaxSnap"
+  description="Instantly convert your FastAPI or OpenAPI v3 JSON specs into a runnable local Express.js mock server. 100% offline, privacy-first."
+>
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="mb-8 text-center">
+      <h1 class="text-3xl font-bold text-white mb-2">OpenAPI to Mock Server</h1>
+      <p class="text-slate-400 max-w-2xl mx-auto">
+        Paste your OpenAPI v3 JSON below to instantly generate a zero-dependency Express.js mock server. 100% offline. No data leaves your machine.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 h-[600px]">
+      
+      <div class="flex flex-col bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-lg">
+        <div class="bg-slate-800/50 px-4 py-3 border-b border-slate-700 flex justify-between items-center">
+          <span class="text-sm font-medium text-slate-300">openapi.json</span>
+          <button id="format-btn" class="text-xs text-[#27b4f2] hover:text-white transition-colors">Format JSON</button>
+        </div>
+        <textarea 
+          id="json-input" 
+          class="flex-1 w-full bg-transparent text-slate-300 p-4 resize-none focus:outline-none focus:ring-1 focus:ring-[#27b4f2] font-mono text-sm"
+          placeholder='{"openapi": "3.0.0", "paths": { ... }}'
+        ></textarea>
+      </div>
+
+      <div class="flex flex-col bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-lg">
+        <div class="bg-slate-800/50 px-4 py-3 border-b border-slate-700 flex justify-between items-center">
+          <span class="text-sm font-medium text-slate-300">server.js</span>
+          <button id="copy-btn" class="text-xs bg-[#27b4f2] text-slate-900 px-3 py-1 rounded hover:bg-cyan-400 transition-colors font-semibold">
+            Copy Code
+          </button>
+        </div>
+        <pre class="flex-1 overflow-auto p-4"><code id="code-output" class="text-emerald-400 font-mono text-sm whitespace-pre-wrap">// Your Express code will appear here...</code></pre>
+      </div>
+
+    </div>
+  </main>
+</Layout>
+
+<script>
+  // Import the parser utility we just wrote
+  import { generateMockServer } from '../../utils/openapiParser.js';
+
+  // 1. Add Type Assertions so TS knows exactly what HTML elements these are
+  const inputArea = document.getElementById('json-input') as HTMLTextAreaElement;
+  const outputArea = document.getElementById('code-output') as HTMLElement;
+  const copyBtn = document.getElementById('copy-btn') as HTMLButtonElement;
+  const formatBtn = document.getElementById('format-btn') as HTMLButtonElement;
+
+  // Real-time generation
+  inputArea.addEventListener('input', (e) => {
+    // Tell TS the event target is definitely a textarea
+    const target = e.target as HTMLTextAreaElement; 
+    const jsonStr = target.value;
+    
+    if (!jsonStr.trim()) {
+      outputArea.textContent = '// Your Express code will appear here...';
+      return;
+    }
+    const result = generateMockServer(jsonStr);
+    outputArea.textContent = result;
+  });
+
+  // Copy to clipboard functionality
+  copyBtn.addEventListener('click', async () => {
+    const code = outputArea.textContent;
+    if (!code || code.startsWith('// Error')) return;
+    
+    await navigator.clipboard.writeText(code);
+    const originalText = copyBtn.textContent;
+    copyBtn.textContent = 'Copied!';
+    setTimeout(() => {
+      copyBtn.textContent = originalText;
+    }, 2000);
+  });
+
+  // Format JSON helper
+  formatBtn.addEventListener('click', () => {
+    try {
+      const parsed = JSON.parse(inputArea.value);
+      inputArea.value = JSON.stringify(parsed, null, 2);
+    } catch (e) {
+      alert("Invalid JSON format");
+    }
+  });
+</script>

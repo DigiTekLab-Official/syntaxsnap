@@ -1,0 +1,64 @@
+---
+// src/pages/tools/ai-mock-generator.astro
+import Layout from '../../layouts/Layout.astro';
+import AiMockGeneratorTool from '../../components/tools/AiMockGenerator.tsx';
+
+// SEO Constants - 2026 Best Practices
+const title = "AI Mock JSON Generator | SyntaxSnap";
+const description = "Generate realistic JSON mock data from OpenAPI schemas or natural language prompts using AI. Free tool for developers and QA engineers.";
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+
+// JSON-LD for SoftwareApplication
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "AI Mock Data Generator",
+  "description": "A developer tool to generate realistic, strictly-typed mock JSON data using AI.",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Any",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "author": {
+    "@type": "Organization",
+    "name": "SyntaxSnap"
+  },
+  "url": canonicalURL.toString()
+};
+---
+
+<Layout title={title} description={description}>
+  <head>
+    <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+    <link rel="canonical" href={canonicalURL} />
+  </head>
+
+  <main class="container mx-auto py-12 px-4 max-w-5xl">
+    <header class="text-center mb-12">
+      <h1 class="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-blue-400 to-emerald-400 bg-clip-text text-transparent">
+        AI Mock Data Generator
+      </h1>
+      <p class="text-slate-400 text-lg max-w-2xl mx-auto">
+        Stop writing manual test data. Describe your schema or paste an OpenAPI spec to get production-ready JSON instantly.
+      </p>
+    </header>
+
+    <AiMockGeneratorTool client:load />
+    
+    <section class="mt-20 border-t border-slate-800 pt-12 text-slate-300">
+      <h2 class="text-2xl font-semibold mb-6">How it works</h2>
+      <div class="grid md:grid-cols-2 gap-8">
+        <div>
+          <h3 class="text-blue-400 font-medium mb-2">OpenAPI Integration</h3>
+          <p>Paste your swagger or OpenAPI schema. Our parser extracts the models so you can generate data that fits your API contract perfectly.</p>
+        </div>
+        <div>
+          <h3 class="text-blue-400 font-medium mb-2">Strict Type Safety</h3>
+          <p>Unlike standard LLM responses, our generator is tuned to preserve data types (Integers, Booleans, and UUIDs) without adding unwanted quotes.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+</Layout>

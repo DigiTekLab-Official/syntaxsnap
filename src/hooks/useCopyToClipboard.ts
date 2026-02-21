@@ -1,3 +1,4 @@
+// src/hooks/useCopyToClipboard.ts
 import { useState, useCallback, useEffect, useRef, useTransition } from 'react';
 
 // ─── TYPES ───────────────────────────────────────────────────────────────────
@@ -56,13 +57,18 @@ export interface UseCopyToClipboardReturn {
   /**
    * Initiate copy operation (transitions-aware)
    */
-  copy: (text: string) => Promise<void>;
+  copy: (text: string) => Promise<boolean>;
   
   /**
    * Legacy boolean for backward compatibility
    * @deprecated Use state.status === 'success' instead
    */
   copied: boolean;
+
+  /**
+   * The actual text that was successfully copied (required for SyntaxSnap components)
+   */
+  copiedText: string | null;
   
   /**
    * Whether a copy operation is in progress
@@ -118,16 +124,11 @@ async function checkClipboardPermission(): Promise<boolean> {
  * - Permission pre-checks
  * - Observability hooks
  * - Race condition prevention
- * 
- * @example
+ * * @example
  * ```tsx
- * const { copy, state, isPending } = useCopyToClipboard({
- *   onCopySuccess: (text) => analytics.track('copy', { text }),
- *   onCopyError: (error) => logger.error('Copy failed', error)
- * });
- * 
- * <button onClick={() => copy(content)} disabled={isPending}>
- *   {state.status === 'success' ? 'Copied!' : 'Copy'}
+ * const { copy, copiedText, isPending } = useCopyToClipboard();
+ * * <button onClick={() => copy(content)} disabled={isPending}>
+ * {copiedText === content ? 'Copied!' : 'Copy'}
  * </button>
  * ```
  */
@@ -143,6 +144,7 @@ export function useCopyToClipboard(
   } = options;
 
   const [state, setState] = useState<ClipboardState>({ status: 'idle' });
+  const [copiedText, setCopiedText] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
   
   // Track active timeout for cleanup
@@ -171,12 +173,13 @@ export function useCopyToClipboard(
       timeoutRef.current = null;
     }
     setState({ status: 'idle' });
+    setCopiedText(null);
   }, []);
 
   // ─── COPY FUNCTION ─────────────────────────────────────────────────────────
 
   const copy = useCallback(
-    async (text: string): Promise<void> => {
+    async (text: string): Promise<boolean> => {
       // Input validation
       if (!text || typeof text !== 'string') {
         const error: ClipboardError = {
@@ -184,8 +187,9 @@ export function useCopyToClipboard(
           message: 'Text must be a non-empty string',
         };
         setState({ status: 'error', error });
+        setCopiedText(null);
         onCopyError?.(error, text);
-        return;
+        return false;
       }
 
       // SSR guard
@@ -195,19 +199,18 @@ export function useCopyToClipboard(
           message: 'Clipboard API not available in this environment',
         };
         setState({ status: 'error', error });
+        setCopiedText(null);
         onCopyError?.(error, text);
-        return;
+        return false;
       }
 
       // Clear any pending timeout to prevent stale resets
-      // This ensures rapid clicks don't cause old timeouts to fire
       if (timeoutRef.current !== null) {
         clearTimeout(timeoutRef.current);
         timeoutRef.current = null;
       }
 
       // Increment operation ID to handle race conditions
-      // This prevents stale async operations from updating state
       const currentOperationId = ++operationIdRef.current;
 
       // Check permissions if requested
@@ -219,8 +222,9 @@ export function useCopyToClipboard(
             message: 'Clipboard write permission denied',
           };
           setState({ status: 'error', error });
+          setCopiedText(null);
           onCopyError?.(error, text);
-          return;
+          return false;
         }
       }
 
@@ -228,55 +232,53 @@ export function useCopyToClipboard(
       setState({ status: 'pending' });
       onCopyStart?.(text);
 
-      // Perform clipboard write (already async and non-blocking)
-      navigator.clipboard
-        .writeText(text)
-        .then(() => {
-          // Only update if this is still the current operation
-          if (currentOperationId === operationIdRef.current) {
-            // Use transition to mark state updates as non-urgent
-            startTransition(() => {
-              setState({ status: 'success' });
-            });
-            onCopySuccess?.(text);
+      try {
+        await navigator.clipboard.writeText(text);
+        
+        // Only update if this is still the current operation
+        if (currentOperationId === operationIdRef.current) {
+          startTransition(() => {
+            setState({ status: 'success' });
+            setCopiedText(text);
+          });
+          onCopySuccess?.(text);
 
-            // Schedule reset (protected by operation ID check)
-            timeoutRef.current = setTimeout(() => {
-              // Only reset if this is still the current operation
-              if (currentOperationId === operationIdRef.current) {
-                startTransition(() => {
-                  setState({ status: 'idle' });
-                });
-              }
-              timeoutRef.current = null;
-            }, timeout);
-          }
-        })
-        .catch((err: unknown) => {
-          // Only update if this is still the current operation
-          if (currentOperationId === operationIdRef.current) {
-            const error: ClipboardError = {
-              type: 'write_failed',
-              message: err instanceof Error ? err.message : 'Failed to write to clipboard',
-            };
-            // Use transition to mark state updates as non-urgent
-            startTransition(() => {
-              setState({ status: 'error', error });
-            });
-            onCopyError?.(error, text);
+          // Schedule reset
+          timeoutRef.current = setTimeout(() => {
+            if (currentOperationId === operationIdRef.current) {
+              startTransition(() => {
+                setState({ status: 'idle' });
+                setCopiedText(null);
+              });
+            }
+            timeoutRef.current = null;
+          }, timeout);
+        }
+        return true;
+      } catch (err: unknown) {
+        if (currentOperationId === operationIdRef.current) {
+          const error: ClipboardError = {
+            type: 'write_failed',
+            message: err instanceof Error ? err.message : 'Failed to write to clipboard',
+          };
+          startTransition(() => {
+            setState({ status: 'error', error });
+            setCopiedText(null);
+          });
+          onCopyError?.(error, text);
 
-            // Schedule reset (protected by operation ID check)
-            timeoutRef.current = setTimeout(() => {
-              // Only reset if this is still the current operation
-              if (currentOperationId === operationIdRef.current) {
-                startTransition(() => {
-                  setState({ status: 'idle' });
-                });
-              }
-              timeoutRef.current = null;
-            }, timeout);
-          }
-        });
+          timeoutRef.current = setTimeout(() => {
+            if (currentOperationId === operationIdRef.current) {
+              startTransition(() => {
+                setState({ status: 'idle' });
+                setCopiedText(null);
+              });
+            }
+            timeoutRef.current = null;
+          }, timeout);
+        }
+        return false;
+      }
     },
     [timeout, onCopyStart, onCopySuccess, onCopyError, checkPermissions]
   );
@@ -286,7 +288,8 @@ export function useCopyToClipboard(
   return {
     state,
     copy,
-    copied: state.status === 'success', // Backward compatibility
+    copied: state.status === 'success',
+    copiedText,
     isPending,
     reset,
   };

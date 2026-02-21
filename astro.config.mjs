@@ -4,6 +4,8 @@ import react      from '@astrojs/react';
 import tailwindcss from '@tailwindcss/vite';
 import sitemap     from '@astrojs/sitemap';
 
+import cloudflare from '@astrojs/cloudflare';
+
 export default defineConfig({
   // ── Site URL ───────────────────────────────────────────────────────────────
   site: 'https://syntaxsnap.com',
@@ -64,4 +66,6 @@ export default defineConfig({
       target: 'es2022',
     },
   },
+
+  adapter: cloudflare(),
 });

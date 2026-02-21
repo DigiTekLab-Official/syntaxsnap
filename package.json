@@ -12,20 +12,27 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@ai-sdk/openai": "^3.0.30",
+    "@astrojs/cloudflare": "^12.6.12",
+    "@astrojs/node": "^9.5.4",
     "@astrojs/react": "^4.4.2",
     "@astrojs/sitemap": "^3.7.0",
     "@tailwindcss/vite": "^4.1.18",
+    "ai": "^6.0.94",
     "astro": "^5.17.2",
     "clsx": "^2.1.1",
     "diff": "^8.0.3",
+    "js-yaml": "^4.1.1",
     "lucide-astro": "^0.556.0",
     "lucide-react": "^0.566.0",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "tailwind-merge": "^3.4.1",
-    "tailwindcss": "^4.1.18"
+    "tailwindcss": "^4.1.18",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
+    "@types/js-yaml": "^4.0.9",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3"
   },

@@ -1,0 +1,41 @@
+---
+// src/pages/tools/openapi-to-express.astro
+import Layout from '../../layouts/Layout.astro';
+import ExpressGenerator from '../../components/tools/ExpressGenerator';
+
+const title = "OpenAPI to Express Mock Server Generator | SyntaxSnap";
+const description = "Instantly convert OpenAPI (Swagger) specifications into a runnable Node.js Express mock server. Save time on frontend development.";
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "OpenAPI to Express Generator",
+  "description": "A tool that transforms OpenAPI specs into functional Express.js mock server code.",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Any",
+  "offers": { "@type": "Offer", "price": "0" }
+};
+---
+
+<Layout title={title} description={description}>
+  <head>
+    <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+  </head>
+
+  <main class="container mx-auto py-12 px-4 max-w-5xl">
+    <header class="text-center mb-10">
+      <h1 class="text-4xl font-bold mb-3 text-slate-100">OpenAPI to Express Mock</h1>
+      <p class="text-slate-400">Transform your API contract into a local development server in seconds.</p>
+    </header>
+
+    <ExpressGenerator client:load />
+
+    <article class="mt-16 prose prose-invert max-w-none border-t border-slate-800 pt-10">
+      <h2 class="text-2xl font-semibold text-blue-400">Why use an Express Mock Server?</h2>
+      <p class="text-slate-300">
+        By generating a local server based on your <strong>OpenAPI v3</strong> spec, you can begin frontend development before the backend is even built. 
+        This generator handles path parameter conversion (e.g., <code>{"{id}"}</code> to <code>:id</code>) and sets up CORS automatically.
+      </p>
+    </article>
+  </main>
+</Layout>
