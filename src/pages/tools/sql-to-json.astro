@@ -1,0 +1,151 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import SqlToJsonTool from '../../components/tools/SqlToJson';
+import RelatedTools from '../../components/RelatedTools.astro';
+
+const title = "SQL to JSON Schema & Zod Converter | SyntaxSnap";
+const description = "Convert SQL CREATE TABLE statements into JSON Schema and Zod TypeScript validation instantly. Supports VARCHAR lengths, ENUM values, NOT NULL, DEFAULT, and more. 100% client-side.";
+
+const schema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "SQL to JSON Schema & Zod Converter",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "Web",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "description": description,
+      "featureList": [
+        "SQL CREATE TABLE parsing",
+        "JSON Schema generation (Draft 07)",
+        "Zod TypeScript schema generation",
+        "VARCHAR length → maxLength mapping",
+        "ENUM values extraction",
+        "NOT NULL → required array",
+        "DEFAULT value capture",
+        "PRIMARY KEY, UNIQUE, AUTO_INCREMENT metadata",
+        "100% client-side privacy"
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Does this tool support all SQL types?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Supports INT, VARCHAR, CHAR, TEXT, DECIMAL, FLOAT, DOUBLE, BOOLEAN, DATE, DATETIME, TIMESTAMP, ENUM, JSON, BLOB, and more. Automatically maps SQL types to correct JSON Schema and Zod types."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Are constraints like NOT NULL and DEFAULT preserved?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. NOT NULL columns are added to the 'required' array in JSON Schema and use non-optional types in Zod. DEFAULT values are captured in both schemas."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is my SQL data sent to a server?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. This tool runs 100% client-side in your browser. Your SQL statements never leave your device."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I use this for database migration tools?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. The generated JSON Schema and Zod schemas are production-ready and can be used with Prisma, Drizzle, TypeORM, or custom migration scripts."
+          }
+        }
+      ]
+    }
+  ]
+};
+---
+
+<Layout title={title} description={description}>
+  <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+
+  <div class="max-w-6xl mx-auto px-4 py-12">
+
+    <div class="mb-10">
+      <h1 class="text-4xl font-extrabold text-white mb-4 tracking-tight">
+        SQL to JSON Schema
+      </h1>
+      <p class="text-slate-400 text-lg max-w-3xl">
+        Transform SQL <code class="text-indigo-400">CREATE TABLE</code> statements into
+        production-ready JSON Schema and Zod TypeScript validation.{' '}
+        <span class="text-emerald-400">100% client-side</span> — your SQL never leaves your browser.
+      </p>
+    </div>
+
+    <SqlToJsonTool client:load />
+
+    <div class="mt-20 border-t border-slate-800 pt-16">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+
+        <div>
+          <h2 class="text-2xl font-bold text-white mb-4">What Gets Converted?</h2>
+          <ul class="space-y-3 text-sm text-slate-400">
+            <li class="flex items-start gap-2">
+              <span class="text-emerald-400 shrink-0">✓</span>
+              <span><strong class="text-slate-200">Column types:</strong> INT → number, VARCHAR → string, BOOLEAN → boolean, etc.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-emerald-400 shrink-0">✓</span>
+              <span><strong class="text-slate-200">VARCHAR length:</strong> VARCHAR(50) → maxLength: 50 in JSON Schema, .max(50) in Zod</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-emerald-400 shrink-0">✓</span>
+              <span><strong class="text-slate-200">NOT NULL:</strong> Adds column to 'required' array, removes .optional() from Zod</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-emerald-400 shrink-0">✓</span>
+              <span><strong class="text-slate-200">DEFAULT values:</strong> Captured in both schemas using .default()</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-emerald-400 shrink-0">✓</span>
+              <span><strong class="text-slate-200">ENUM values:</strong> ENUM('a','b') → z.enum(['a','b']) and JSON enum array</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-emerald-400 shrink-0">✓</span>
+              <span><strong class="text-slate-200">Metadata:</strong> PRIMARY KEY, UNIQUE, AUTO_INCREMENT preserved in descriptions</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="bg-slate-900/40 border border-slate-800 p-6 rounded-2xl">
+          <h2 class="text-2xl font-bold text-white mb-4">Use Cases</h2>
+          <ul class="space-y-3 text-sm text-slate-400">
+            <li class="flex items-start gap-2">
+              <span class="text-indigo-400 shrink-0">→</span>
+              <span><strong class="text-slate-200">Database migrations:</strong> Convert existing tables to TypeScript types</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-indigo-400 shrink-0">→</span>
+              <span><strong class="text-slate-200">API documentation:</strong> Generate OpenAPI schemas from SQL</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-indigo-400 shrink-0">→</span>
+              <span><strong class="text-slate-200">Form validation:</strong> Use Zod schemas with React Hook Form or Formik</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-indigo-400 shrink-0">→</span>
+              <span><strong class="text-slate-200">ORM integration:</strong> Seed Prisma, Drizzle, or TypeORM schemas</span>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+
+    <RelatedTools currentTool="sql-to-json" />
+
+  </div>
+</Layout>

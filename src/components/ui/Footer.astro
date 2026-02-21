@@ -2,16 +2,31 @@
 // src/components/ui/Footer.astro
 import { ShieldCheck } from 'lucide-astro';
 import Logo from './Logo.astro';
-import { TOOLS } from '../../config/tools';
+import { TOOLS, type Tool } from '../../config/tools';
 
-// Sort tools alphabetically for a clean professional look
-const sortedTools = [...TOOLS].sort((a, b) => a.title.localeCompare(b.title));
+// Define the category display names
+const categoryLabels: Record<string, string> = {
+  json: "Data & JSON",
+  dev: "Development",
+  ai: "AI Powered",
+  css: "Design & CSS"
+};
+
+// Group tools by category
+const groupedTools = TOOLS.reduce((acc, tool) => {
+  if (!acc[tool.category]) acc[tool.category] = [];
+  acc[tool.category].push(tool);
+  return acc;
+}, {} as Record<string, Tool[]>);
+
+const categories = Object.keys(groupedTools);
 ---
 
 <footer class="border-t border-slate-800 bg-slate-950 mt-auto">
   <div class="max-w-6xl mx-auto px-4 py-16">
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-12 mb-12">
+      <div class="grid grid-cols-1 md:grid-cols-6 gap-12 mb-12">
           
+          {/* Brand Info - Spans 2 columns */}
           <div class="col-span-1 md:col-span-2">
               <div class="flex items-center gap-2 mb-4">
                   <Logo class="w-6 h-6" />
@@ -22,27 +37,35 @@ const sortedTools = [...TOOLS].sort((a, b) => a.title.localeCompare(b.title));
               </p>
           </div>
 
-          <div>
-              <h2 class="text-sm font-bold text-slate-500 uppercase tracking-widest mb-4">Utilities</h2>
-              <ul class="space-y-3 text-base text-slate-400 font-mono">
-                  {sortedTools.map((tool) => (
+          {/* Dynamic Utilities Columns - Spans 3 columns total */}
+          <div class="col-span-1 md:col-span-3 grid grid-cols-1 sm:grid-cols-2 gap-8">
+            {categories.map((cat) => (
+              <div>
+                <h2 class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-4">
+                  {categoryLabels[cat] || cat}
+                </h2>
+                <ul class="space-y-3 text-sm text-slate-400 font-mono">
+                  {groupedTools[cat].sort((a, b) => a.title.localeCompare(b.title)).map((tool) => (
                     <li>
                       <a 
                         href={tool.href} 
-                        class={`transition-colors ${tool.category === 'ai' ? 'hover:text-emerald-400' : 'hover:text-indigo-400'}`}
+                        class={`transition-colors hover:text-white ${tool.category === 'ai' ? 'text-emerald-400/80' : 'text-slate-300'}`}
                       >
                         {tool.title}
                       </a>
                     </li>
                   ))}
-              </ul>
+                </ul>
+              </div>
+            ))}
           </div>
 
-          <div>
-            <h3 class="text-sm font-bold text-slate-500 uppercase tracking-widest mb-4">Company</h3>
-            <ul class="space-y-3 text-base text-slate-400">
+          {/* Company/Misc Column - Spans 1 column */}
+          <div class="col-span-1">
+            <h3 class="text-sm font-bold text-slate-500 uppercase tracking-widest mb-4">Support</h3>
+            <ul class="space-y-3 text-sm text-slate-400">
                 <li><a href="/about" class="hover:text-indigo-400 transition-colors">Our Story</a></li>
-                <li><a href="/offline" class="hover:text-indigo-400 transition-colors flex items-center gap-2">Self-Host <span class="text-sm bg-slate-800 px-2 py-0.5 rounded text-slate-300 border border-slate-700">New</span></a></li>
+                <li><a href="/offline" class="hover:text-indigo-400 transition-colors flex items-center gap-2">Self-Host <span class="text-xs bg-slate-800 px-2 py-0.5 rounded text-slate-300 border border-slate-700">New</span></a></li>
                 <li><a href="/privacy" class="hover:text-indigo-400 transition-colors">Privacy</a></li>
                 <li><a href="/terms" class="hover:text-indigo-400 transition-colors">Terms</a></li>
             </ul>

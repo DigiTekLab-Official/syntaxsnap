@@ -1,7 +1,7 @@
 // src/config/tools.ts
 import { 
   GlassWater, Database, Palette, Search, FileCode2, 
-  ShieldCheck, GitCompare, Braces, Sparkles, Server, Zap 
+  ShieldCheck, GitCompare, Braces, Sparkles, Server, Zap, TableProperties 
 } from 'lucide-astro';
 
 export interface Tool {
@@ -136,6 +136,17 @@ export const TOOLS: Tool[] = [
     status: "Live",
     color: "text-cyan-300",
     bg: "bg-cyan-500/10",
+    category: "dev"
+  },
+  {
+    id: 'sql-to-json',
+    title: "SQL to JSON Schema",
+    desc: "Convert SQL CREATE TABLE to JSON Schema.",
+    href: "/tools/sql-to-json",
+    icon: TableProperties,
+    status: "New",
+    color: "text-orange-400",
+    bg: "bg-orange-500/10",
     category: "dev"
   }
 ];
