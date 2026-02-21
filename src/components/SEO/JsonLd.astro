@@ -1,0 +1,48 @@
+---
+// src/components/SEO/JsonLd.astro
+
+interface Props {
+  type: 'website' | 'tool';
+  title: string;
+  description: string;
+  url: string;
+  imageUrl?: string;
+}
+
+const { type, title, description, url, imageUrl = 'https://syntaxsnap.com/og-image.jpg' } = Astro.props;
+
+// 1. Base Website Schema (Always included)
+const websiteSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "SyntaxSnap",
+  "url": "https://syntaxsnap.com",
+  "description": "Privacy-first, lightning-fast developer tools and generators.",
+};
+
+// 2. Software Application Schema (Only for tool pages)
+const toolSchema = type === 'tool' ? {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": title,
+  "description": description,
+  "url": url,
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Web Browser",
+  "browserRequirements": "Requires JavaScript",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "image": imageUrl
+} : null;
+
+// Combine them into a graph if it's a tool page
+const schemaGraph = toolSchema 
+  ? { "@context": "https://schema.org", "@graph": [websiteSchema, toolSchema] }
+  : websiteSchema;
+---
+
+{/* The set:html directive safely injects the JSON string without Astro escaping the quotes */}
+<script type="application/ld+json" set:html={JSON.stringify(schemaGraph)} />
