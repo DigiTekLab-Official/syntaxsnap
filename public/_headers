@@ -1,0 +1,20 @@
+/*
+  # Prevent clickjacking
+  X-Frame-Options: DENY
+  # Prevent MIME-type sniffing
+  X-Content-Type-Options: nosniff
+  # Enforce HTTPS for 1 year, include sub-domains, allow preload
+  Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+  # Reduce referrer information leakage
+  Referrer-Policy: strict-origin-when-cross-origin
+  # Disable browser features not needed by this app
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=()
+  # Isolate browsing context to mitigate Spectre-class side-channel attacks
+  Cross-Origin-Opener-Policy: same-origin
+  Cross-Origin-Resource-Policy: same-origin
+  # Content Security Policy
+  # - script-src: 'unsafe-inline' required for Astro is:inline scripts and Microsoft Clarity
+  # - connect-src: Clarity telemetry endpoints; OpenAI is called server-side only
+  # - img-src: data: URIs for generated gradients; https: for OG image previews
+  # - frame-ancestors: blocks embedding in any cross-origin frame
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://www.clarity.ms; connect-src 'self' https://*.clarity.ms https://dc.services.visualstudio.com; img-src 'self' data: https:; style-src 'self' 'unsafe-inline'; font-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'
