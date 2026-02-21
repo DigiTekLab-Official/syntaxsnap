@@ -3,21 +3,25 @@
 import '../styles/global.css';
 import Header from '../components/ui/Header.astro';
 import Footer from '../components/ui/Footer.astro';
-import JsonLd from '../components/SEO/JsonLd.astro'; // NEW: Import the schema component
+import JsonLd from '../components/SEO/JsonLd.astro'; 
 
 interface Props {
   title?: string;
   description?: string;
-  isTool?: boolean; // NEW: Flag to determine schema type
+  isTool?: boolean; 
+  features?: string[]; // <-- Added features prop
 }
 
 const { 
   title = "SyntaxSnap - Privacy-First Developer Tools",
   description = "A privacy-first suite of developer tools that run entirely in your browser. No servers. No tracking.",
-  isTool = false
+  isTool = false,
+  features // <-- Destructured features
 } = Astro.props;
 
-const canonicalURL = new URL(Astro.url.pathname, "https://syntaxsnap.com").toString();
+// Use Astro.site if available, fallback to hardcoded URL
+const siteUrl = Astro.site?.toString() || "https://syntaxsnap.com";
+const canonicalURL = new URL(Astro.url.pathname, siteUrl).toString();
 ---
 
 <!doctype html>
@@ -26,7 +30,7 @@ const canonicalURL = new URL(Astro.url.pathname, "https://syntaxsnap.com").toStr
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     
-    {/* REAL FAVICON GENERATOR CODE */}
+    <!-- Favicon configuration based on RealFaviconGenerator standards -->
     <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="shortcut icon" href="/favicon.ico" />
@@ -40,6 +44,7 @@ const canonicalURL = new URL(Astro.url.pathname, "https://syntaxsnap.com").toStr
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalURL} />
 
+    <!-- Open Graph / Social Media Tags -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonicalURL} />
     <meta property="og:title" content={title} />
@@ -52,6 +57,7 @@ const canonicalURL = new URL(Astro.url.pathname, "https://syntaxsnap.com").toStr
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content="https://syntaxsnap.com/og-preview.jpg" />
 
+    <!-- Microsoft Clarity Analytics — Inlined as requested -->
     <script is:inline>
         (function(c,l,a,r,i,t,y){
             c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
@@ -60,12 +66,13 @@ const canonicalURL = new URL(Astro.url.pathname, "https://syntaxsnap.com").toStr
         })(window, document, "clarity", "script", "viplajyvf3");
     </script>
 
-    {/* NEW: Inject dynamic SEO Schema */}
+    {/* SEO Schema: Global (Org/WebSite) + Conditional (Tool) */}
     <JsonLd 
       type={isTool ? 'tool' : 'website'} 
       title={title} 
       description={description} 
       url={canonicalURL} 
+      features={features}
     />
   </head>
   

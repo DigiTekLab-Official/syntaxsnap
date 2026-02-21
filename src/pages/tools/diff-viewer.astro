@@ -6,72 +6,88 @@ import RelatedTools from '../../components/RelatedTools.astro';
 const title = "Text Diff Viewer & File Compare Tool | SyntaxSnap";
 const description = "Compare text, code, JSON, config files, and API responses locally in your browser. Visualize changes with side-by-side or unified diff view. Zero server uploads — 100% private.";
 
-const schema = {
+// Extract features for the Layout
+const features = [
+  "Side-by-side split view and unified diff view",
+  "Line-level and word-level comparison",
+  "Synced scrolling for split view",
+  "Real-time diff statistics (additions/removals)",
+  "100% Client-side — zero server uploads",
+  "Works offline once loaded"
+];
+
+// Isolated FAQ Schema
+const faqSchema = {
   "@context": "https://schema.org",
-  "@graph": [
+  "@type": "FAQPage",
+  "mainEntity": [
     {
-      "@type": "SoftwareApplication",
-      "name": "Local Text Diff Viewer & File Compare Tool",
-      "applicationCategory": "DeveloperApplication",
-      "operatingSystem": "Web",
-      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-      "description": description,
-      "featureList": [
-        "Side-by-side split view and unified diff view",
-        "Line-level and word-level comparison",
-        "Synced scrolling for split view",
-        "Real-time diff statistics (additions/removals)",
-        "100% Client-side — zero server uploads",
-        "Works offline once loaded"
-      ]
+      "@type": "Question",
+      "name": "Is my data sent to a server?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. SyntaxSnap calculates the diff entirely in your browser using the JavaScript diff library. Your text never leaves your device and is not uploaded anywhere."
+      }
     },
     {
-      "@type": "FAQPage",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "Is my data sent to a server?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "No. SyntaxSnap calculates the diff entirely in your browser using the JavaScript diff library. Your text never leaves your device and is not uploaded anywhere."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "What file types can I compare?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Any plain text format: code (JS, Python, Java, etc.), JSON, YAML, XML, CSV, config files (.env, nginx.conf), logs, API responses, and more. Just paste the content into the text boxes."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "What is the difference between line-level and word-level diff?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Line-level highlights entire lines that changed. Word-level shows exactly which words within a line were modified — useful for spotting small typos or single-word changes."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Can I compare large files?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Yes. The tool uses debounced diff calculation to handle large files smoothly. For extremely large files (10MB+), performance depends on your browser and device specs."
-          }
-        }
-      ]
+      "@type": "Question",
+      "name": "What file types can I compare?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Any plain text format: code (JS, Python, Java, etc.), JSON, YAML, XML, CSV, config files (.env, nginx.conf), logs, API responses, and more. Just paste the content into the text boxes."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is the difference between line-level and word-level diff?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Line-level highlights entire lines that changed. Word-level shows exactly which words within a line were modified — useful for spotting small typos or single-word changes."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I compare large files?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. The tool uses debounced diff calculation to handle large files smoothly. For extremely large files (10MB+), performance depends on your browser and device specs."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is my code secure when using the SyntaxSnap Diff Viewer?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Unlike other online diff tools, SyntaxSnap calculates text differences entirely client-side. Your code, API keys, or sensitive logs never leave your browser and are never transmitted to a server."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is the difference between line-level and word-level diffing?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Line-level diffing identifies changed blocks of code, while word-level diffing highlights exact character changes within a line. This is ideal for spotting subtle typos or logic changes in dense files like JSON or YAML."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I compare large log files or JSON payloads?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Our tool uses debounced, non-blocking algorithms to compare large text files efficiently. It handles configuration files, ENV variables, and production logs smoothly without freezing your browser tab."
+      }
     }
   ]
 };
 ---
 
-<Layout title={title} description={description} isTool={true}>
-  <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+{/* Pass the features prop to Layout */}
+<Layout title={title} description={description} isTool={true} features={features}>
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
 
-  <div class="max-w-6xl mx-auto">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6">
 
-    <div class="mb-10">
+    <div class="mb-10 pt-8">
       <h1 class="text-4xl font-extrabold text-white mb-4 tracking-tight">
         Diff Viewer
       </h1>
@@ -126,24 +142,63 @@ const schema = {
               </li>
             </ul>
           </div>
+        </div>
 
-          <div class="bg-slate-900/40 border border-slate-800 p-6 rounded-2xl">
-            <h3 class="text-lg font-bold text-white mb-3">Features</h3>
-            <ul class="text-sm text-slate-400 space-y-2">
-              <li class="flex items-center gap-2">
-                ✓ <strong class="text-slate-200">Line & word-level</strong> granularity
-              </li>
-              <li class="flex items-center gap-2">
-                ✓ <strong class="text-slate-200">Split & unified</strong> view modes
-              </li>
-              <li class="flex items-center gap-2">
-                ✓ <strong class="text-slate-200">Synced scrolling</strong> in split view
-              </li>
-              <li class="flex items-center gap-2">
-                ✓ <strong class="text-slate-200">Real-time stats</strong> (+X −Y lines)
-              </li>
-            </ul>
-          </div>
+      </div>
+    </div>
+
+    {/* Visible FAQ Section to match the 7 Schema questions perfectly */}
+    <div class="mt-16 pt-12 border-t border-slate-800">
+      <h2 class="text-2xl font-bold text-white mb-8">Frequently Asked Questions</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        
+        <div>
+          <h3 class="font-medium text-slate-200 mb-2">Is my data sent to a server?</h3>
+          <p class="text-sm text-slate-400 leading-relaxed">
+            No. SyntaxSnap calculates the diff entirely in your browser using the JavaScript diff library. Your text never leaves your device and is not uploaded anywhere.
+          </p>
+        </div>
+
+        <div>
+          <h3 class="font-medium text-slate-200 mb-2">What file types can I compare?</h3>
+          <p class="text-sm text-slate-400 leading-relaxed">
+            Any plain text format: code (JS, Python, Java, etc.), JSON, YAML, XML, CSV, config files (.env, nginx.conf), logs, API responses, and more. Just paste the content into the text boxes.
+          </p>
+        </div>
+
+        <div>
+          <h3 class="font-medium text-slate-200 mb-2">What is the difference between line-level and word-level diff?</h3>
+          <p class="text-sm text-slate-400 leading-relaxed">
+            Line-level highlights entire lines that changed. Word-level shows exactly which words within a line were modified — useful for spotting small typos or single-word changes.
+          </p>
+        </div>
+
+        <div>
+          <h3 class="font-medium text-slate-200 mb-2">Can I compare large files?</h3>
+          <p class="text-sm text-slate-400 leading-relaxed">
+            Yes. The tool uses debounced diff calculation to handle large files smoothly. For extremely large files (10MB+), performance depends on your browser and device specs.
+          </p>
+        </div>
+
+        <div>
+          <h3 class="font-medium text-slate-200 mb-2">Is my code secure when using the SyntaxSnap Diff Viewer?</h3>
+          <p class="text-sm text-slate-400 leading-relaxed">
+            Yes. Unlike other online diff tools, SyntaxSnap calculates text differences entirely client-side. Your code, API keys, or sensitive logs never leave your browser and are never transmitted to a server.
+          </p>
+        </div>
+
+        <div>
+          <h3 class="font-medium text-slate-200 mb-2">What is the difference between line-level and word-level diffing?</h3>
+          <p class="text-sm text-slate-400 leading-relaxed">
+            Line-level diffing identifies changed blocks of code, while word-level diffing highlights exact character changes within a line. This is ideal for spotting subtle typos or logic changes in dense files like JSON or YAML.
+          </p>
+        </div>
+
+        <div>
+          <h3 class="font-medium text-slate-200 mb-2">Can I compare large log files or JSON payloads?</h3>
+          <p class="text-sm text-slate-400 leading-relaxed">
+            Yes. Our tool uses debounced, non-blocking algorithms to compare large text files efficiently. It handles configuration files, ENV variables, and production logs smoothly without freezing your browser tab.
+          </p>
         </div>
 
       </div>

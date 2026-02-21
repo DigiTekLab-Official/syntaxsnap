@@ -7,67 +7,61 @@ import RelatedTools from '../../components/RelatedTools.astro';
 const title = "SVG to JSX Converter | SyntaxSnap";
 const description = "Instantly convert SVG code into clean React JSX. Automatically handles camelCase attributes, className updates, and style objects.";
 
-// Schema Data
-const schema = {
+// Extract features for the Layout
+const features = [
+  "Converts kebab-case attributes to camelCase",
+  "Transforms style strings to objects",
+  "Fixes class to className",
+  "Local-first privacy (no server upload)"
+];
+
+// Isolated FAQ Schema (4 Questions)
+const faqSchema = {
   "@context": "https://schema.org",
-  "@graph": [
+  "@type": "FAQPage",
+  "mainEntity": [
     {
-      "@type": "SoftwareApplication",
-      "name": "SVG to JSX Converter",
-      "operatingSystem": "Web",
-      "applicationCategory": "DeveloperApplication",
-      "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "USD"
-      },
-      "description": description,
-      "featureList": [
-        "Converts kebab-case attributes to camelCase",
-        "Transforms style strings to objects",
-        "Fixes class to className",
-        "Local-first privacy (no server upload)"
-      ]
+      "@type": "Question",
+      "name": "Is my SVG data sent to a server?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. SyntaxSnap is a local-first platform. All processing happens locally in your browser using JavaScript. Your code never leaves your device."
+      }
     },
     {
-      "@type": "FAQPage",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "Is my SVG data sent to a server?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "No. SyntaxSnap is a local-first platform. All processing happens locally in your browser using JavaScript. Your code never leaves your device."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Does this tool fix style attributes?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Yes. It automatically parses CSS strings in the style attribute and converts them into a React-compatible JavaScript object."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Is this tool free to use?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Yes, this SVG to JSX converter is 100% free and open for all developers."
-          }
-        }
-      ]
+      "@type": "Question",
+      "name": "Does this tool fix style attributes?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. It automatically parses CSS strings in the style attribute and converts them into a React-compatible JavaScript object."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is this tool free to use?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, this SVG to JSX converter is 100% free and open for all developers."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How does this tool prepare SVGs for React and Next.js?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "It automatically converts 'kebab-case' attributes to 'camelCase', transforms inline style strings into React objects, and renames the 'class' attribute to 'className' for immediate use in JSX components."
+      }
     }
   ]
 };
 ---
 
-<Layout title={title} description={description} isTool={true}>
-  
-  <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+{/* Pass features to Layout */}
+<Layout title={title} description={description} isTool={true} features={features}>
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
 
-  <div class="max-w-6xl mx-auto">
-    <div class="mb-10">
+  <div class="max-w-6xl mx-auto px-4">
+    <div class="mb-10 pt-8">
       <h1 class="text-4xl font-extrabold text-white mb-4">SVG to JSX Transformer</h1>
       <p class="text-slate-400 text-lg">
         Paste your raw SVG code to get a React-compatible component instantly.
@@ -76,9 +70,9 @@ const schema = {
 
     <SvgTool client:idle />
     
-    <div class="mt-16 grid grid-cols-1 md:grid-cols-2 gap-12">
+    <div class="mt-16 grid grid-cols-1 md:grid-cols-2 gap-12 border-t border-slate-800 pt-12">
       
-      <div class="bg-slate-900/30 border border-slate-800 rounded-2xl p-8">
+      <div class="bg-slate-900/30 border border-slate-800 rounded-2xl p-8 h-fit">
         <h2 class="text-xl font-bold text-white mb-4">Why use this converter?</h2>
         <p class="text-slate-400 mb-4 leading-relaxed">
           React uses a synthetic event system and expects HTML attributes to be in <code class="text-indigo-400">camelCase</code>. 
@@ -94,6 +88,8 @@ const schema = {
 
       <div>
         <h2 class="text-xl font-bold text-white mb-6">Frequently Asked Questions</h2>
+        
+        {/* Visible FAQ Section matching Schema exactly */}
         <div class="space-y-6">
           
           <div>
@@ -117,9 +113,16 @@ const schema = {
             </p>
           </div>
 
+          <div>
+            <h3 class="font-medium text-slate-200 mb-2">How does this tool prepare SVGs for React and Next.js?</h3>
+            <p class="text-sm text-slate-400 leading-relaxed">
+              It automatically converts 'kebab-case' attributes to 'camelCase', transforms inline style strings into React objects, and renames the 'class' attribute to 'className' for immediate use in JSX components.
+            </p>
+          </div>
+
         </div>
       </div>
-     <RelatedTools currentTool="svg-to-jsx" />  
     </div>
+    <RelatedTools currentTool="svg-to-jsx" />  
   </div>
 </Layout>

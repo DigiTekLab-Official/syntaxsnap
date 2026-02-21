@@ -1,4 +1,5 @@
 ---
+// src/pages/tools/regex-tester.astro
 import Layout from '../../layouts/Layout.astro';
 // 1. Alias import to "RegexTool"
 import RegexTool from '../../components/tools/RegexTester';
@@ -7,66 +8,61 @@ import RelatedTools from '../../components/RelatedTools.astro';
 const title = "Regex Tester & Debugger (Javascript) | SyntaxSnap";
 const description = "Test and debug JavaScript regular expressions in real-time. Highlight matches and validate patterns instantly.";
 
-// Schema Data
-const schema = {
+// Extract features for the Layout
+const features = [
+  "Real-time Javascript regex testing",
+  "Instant pattern matching",
+  "Support for flags (g, i, m, s, u, y)",
+  "Privacy-focused (No server processing)"
+];
+
+// Isolated FAQ Schema (Consolidated into 4 strong questions)
+const faqSchema = {
   "@context": "https://schema.org",
-  "@graph": [
+  "@type": "FAQPage",
+  "mainEntity": [
     {
-      "@type": "SoftwareApplication",
-      "name": "Regex Tester & Debugger",
-      "operatingSystem": "Web",
-      "applicationCategory": "DeveloperApplication",
-      "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "USD"
-      },
-      "description": description,
-      "featureList": [
-        "Real-time Javascript regex testing",
-        "Instant pattern matching",
-        "Support for flags (g, i, m, s, u, y)",
-        "Privacy-focused (No server processing)"
-      ]
+      "@type": "Question",
+      "name": "Which Regex engine does this tester use?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "This tool uses your browser's native ECMAScript Regular Expression engine. This ensures 100% accuracy for JavaScript and TypeScript development."
+      }
     },
     {
-      "@type": "FAQPage",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "Which Regex flavor is supported?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "This tool supports JavaScript (ECMAScript) Regular Expressions. It uses the browser's native RegExp engine for 100% accuracy."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Are my test strings saved?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "No. SyntaxSnap is a local-first platform. All testing happens in your browser's memory and is cleared when you refresh the page."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "How do I use flags?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "You can add flags like 'g' (global) or 'i' (insensitive) directly in the pattern input to control how the regex engine matches your text."
-          }
-        }
-      ]
+      "@type": "Question",
+      "name": "Are my test strings saved?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. SyntaxSnap is a local-first platform. All testing happens in your browser's memory and is cleared when you refresh the page."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I use flags?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "You can add flags like 'g' (global) or 'i' (insensitive) directly in the pattern input to control how the regex engine matches your text."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does this tool protect against ReDoS attacks?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Our tester includes a built-in circuit breaker that stops execution if a pattern is too complex (catastrophic backtracking), preventing your browser from freezing."
+      }
     }
   ]
 };
 ---
 
-<Layout title={title} description={description} isTool={true}>
-  <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+{/* Pass features to Layout */}
+<Layout title={title} description={description} isTool={true} features={features}>
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
 
-  <div class="max-w-6xl mx-auto">
-    <div class="mb-10 text-center">
+  <div class="max-w-6xl mx-auto px-4">
+    <div class="mb-10 pt-8 text-center">
       <h1 class="text-4xl font-extrabold text-white mb-4">Regex Tester & Debugger</h1>
       <p class="text-slate-400 text-lg">
         Validate your Regular Expressions against test strings in real-time.
@@ -86,12 +82,14 @@ const schema = {
 
       <div>
         <h2 class="text-xl font-bold text-white mb-6">Frequently Asked Questions</h2>
+        
+        {/* Visible FAQ Section matching Schema exactly */}
         <div class="space-y-6">
           
           <div>
-            <h3 class="font-medium text-slate-200 mb-2">Which Regex flavor is supported?</h3>
+            <h3 class="font-medium text-slate-200 mb-2">Which Regex engine does this tester use?</h3>
             <p class="text-sm text-slate-400 leading-relaxed">
-              This tool supports JavaScript (ECMAScript) Regular Expressions. It uses the browser's native RegExp engine for 100% accuracy.
+              This tool uses your browser's native ECMAScript Regular Expression engine. This ensures 100% accuracy for JavaScript and TypeScript development.
             </p>
           </div>
 
@@ -106,6 +104,13 @@ const schema = {
             <h3 class="font-medium text-slate-200 mb-2">How do I use flags?</h3>
             <p class="text-sm text-slate-400 leading-relaxed">
               You can add flags like 'g' (global) or 'i' (insensitive) directly in the pattern input to control how the regex engine matches your text.
+            </p>
+          </div>
+
+          <div>
+            <h3 class="font-medium text-slate-200 mb-2">Does this tool protect against ReDoS attacks?</h3>
+            <p class="text-sm text-slate-400 leading-relaxed">
+              Yes. Our tester includes a built-in circuit breaker that stops execution if a pattern is too complex (catastrophic backtracking), preventing your browser from freezing.
             </p>
           </div>
 

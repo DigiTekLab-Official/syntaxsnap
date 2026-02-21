@@ -7,6 +7,7 @@ interface Props {
   description: string;
   url: string;
   imageUrl?: string;
+  features?: string[]; // <-- Added features prop
 }
 
 const { 
@@ -14,7 +15,8 @@ const {
   title, 
   description, 
   url, 
-  imageUrl = 'https://syntaxsnap.com/og-preview.jpg' 
+  imageUrl = 'https://syntaxsnap.com/og-preview.jpg',
+  features // <-- Destructured features
 } = Astro.props;
 
 // Base schema that applies to EVERY page
@@ -63,12 +65,13 @@ const toolSchema = type === 'tool' ? {
   },
   "image": imageUrl,
   "author": { "@id": "https://syntaxsnap.com/#organization" },
-  // FIX: Added aggregateRating to clear the warning and enable review stars in search
   "aggregateRating": {
     "@type": "AggregateRating",
     "ratingValue": "4.9",
     "ratingCount": "14"
-  }
+  },
+  // Conditionally spread the featureList if features array exists and has items
+  ...(features && features.length > 0 ? { "featureList": features } : {})
 } : null;
 
 // Combine into a single JSON-LD graph

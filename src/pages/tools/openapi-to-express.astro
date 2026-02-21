@@ -6,21 +6,50 @@ import ExpressGenerator from '../../components/tools/ExpressGenerator';
 const title = "OpenAPI to Express Mock Server Generator | SyntaxSnap";
 const description = "Instantly convert OpenAPI (Swagger) specifications into a runnable Node.js Express mock server. Save time on frontend development.";
 
-const structuredData = {
+// NEW: Tool-specific features for SoftwareApplication schema
+const features = [
+  "Converts OpenAPI v3/3.1 specs to Express.js boilerplate",
+  "100% offline deterministic parsing (No AI used)",
+  "Automatically converts path parameters (e.g., {id} to :id)",
+  "Generates ready-to-use CORS and express.json() middleware"
+];
+
+const faqSchema = {
   "@context": "https://schema.org",
-  "@type": "SoftwareApplication",
-  "name": "OpenAPI to Express Generator",
-  "description": "A tool that transforms OpenAPI specs into functional Express.js mock server code.",
-  "applicationCategory": "DeveloperApplication",
-  "operatingSystem": "Any",
-  "offers": { "@type": "Offer", "price": "0" }
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Is this Express generator AI-powered?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. This tool uses a deterministic JavaScript parser to transform your OpenAPI paths into Express.js router code. Since it doesn't use AI, it works 100% offline and your schema never leaves your browser."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What versions of OpenAPI are supported?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The generator currently supports OpenAPI 3.0 and 3.1 (Swagger 2.0 support is planned). It maps parameters, request bodies, and paths directly to standard Express syntax."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does it generate a full project structure?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "It generates a production-ready 'server.js' or 'app.js' boilerplate including necessary imports, middleware setup, and route handlers based on your specific API endpoints."
+      }
+    }
+  ]
 };
 ---
 
-<Layout title={title} description={description} isTool={true}>
-  <head>
-    <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
-  </head>
+{/* Pass features to Layout */}
+<Layout title={title} description={description} isTool={true} features={features}>
+  {/* Inject the FAQ Schema directly into the DOM */}
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
 
   <main class="container mx-auto py-12 px-4 max-w-5xl">
     <header class="text-center mb-10">
@@ -37,5 +66,30 @@ const structuredData = {
         This generator handles path parameter conversion (e.g., <code>{"{id}"}</code> to <code>:id</code>) and sets up CORS automatically.
       </p>
     </article>
+
+    {/* Visible FAQ Section to match Schema */}
+    <section class="mt-16 border-t border-slate-800 pt-12">
+      <h2 class="text-2xl font-bold text-white mb-8">Frequently Asked Questions</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div>
+          <h3 class="font-medium text-slate-200 mb-2">Is this Express generator AI-powered?</h3>
+          <p class="text-sm text-slate-400 leading-relaxed">
+            No. This tool uses a deterministic JavaScript parser to transform your OpenAPI paths into Express.js router code. Since it doesn't use AI, it works 100% offline and your schema never leaves your browser.
+          </p>
+        </div>
+        <div>
+          <h3 class="font-medium text-slate-200 mb-2">What versions of OpenAPI are supported?</h3>
+          <p class="text-sm text-slate-400 leading-relaxed">
+            The generator currently supports OpenAPI 3.0 and 3.1 (Swagger 2.0 support is planned). It maps parameters, request bodies, and paths directly to standard Express syntax.
+          </p>
+        </div>
+        <div>
+          <h3 class="font-medium text-slate-200 mb-2">Does it generate a full project structure?</h3>
+          <p class="text-sm text-slate-400 leading-relaxed">
+            It generates a production-ready 'server.js' or 'app.js' boilerplate including necessary imports, middleware setup, and route handlers based on your specific API endpoints.
+          </p>
+        </div>
+      </div>
+    </section>
   </main>
 </Layout>

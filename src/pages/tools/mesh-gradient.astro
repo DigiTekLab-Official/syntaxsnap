@@ -7,66 +7,61 @@ import RelatedTools from '../../components/RelatedTools.astro';
 const title = "CSS Mesh Gradient Generator (Aurora Backgrounds) | SyntaxSnap";
 const description = "Create trendy, multi-color mesh gradients for your website backgrounds. Export pure CSS radial gradients instantly.";
 
-// Schema Data
-const schema = {
+// Extract features for the Layout
+const features = [
+  "Create Aurora-style backgrounds",
+  "Pure CSS export (No images required)",
+  "Fully customizable colors and positions",
+  "Lightweight performance"
+];
+
+// Isolated FAQ Schema (4 Questions)
+const faqSchema = {
   "@context": "https://schema.org",
-  "@graph": [
+  "@type": "FAQPage",
+  "mainEntity": [
     {
-      "@type": "SoftwareApplication",
-      "name": "CSS Mesh Gradient Generator",
-      "operatingSystem": "Web",
-      "applicationCategory": "DesignApplication",
-      "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "USD"
-      },
-      "description": description,
-      "featureList": [
-        "Create Aurora-style backgrounds",
-        "Pure CSS export (No images required)",
-        "Fully customizable colors and positions",
-        "Lightweight performance"
-      ]
+      "@type": "Question",
+      "name": "Is this better than using an image?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Pure CSS gradients are resolution-independent and much lighter than image files, which improves your website's load speed and SEO score."
+      }
     },
     {
-      "@type": "FAQPage",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "Is this better than using an image?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Yes. Pure CSS gradients are resolution-independent and much lighter than image files, which improves your website's load speed and SEO score."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Can I animate these gradients?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Yes. Since the output is standard CSS, you can easily add keyframe animations to shift the background positions."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Is it free to use commercially?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Absolutely. You can use any gradient generated here in your commercial projects without attribution."
-          }
-        }
-      ]
+      "@type": "Question",
+      "name": "Can I animate these gradients?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Since the output is standard CSS, you can easily add keyframe animations to shift the background positions."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why use CSS mesh gradients instead of high-res images?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "CSS gradients are resolution-independent and have a near-zero file size. This significantly improves your Core Web Vitals and LCP scores compared to using large 'Aurora' style image backgrounds."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is it free to use commercially?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Absolutely. You can use any gradient generated here in your commercial projects without attribution."
+      }
     }
   ]
 };
 ---
 
-<Layout title={title} description={description} isTool={true}>
-  <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+{/* Pass the features prop to Layout */}
+<Layout title={title} description={description} isTool={true} features={features}>
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
 
-  <div class="max-w-6xl mx-auto">
-    <div class="mb-10 text-center">
+  <div class="max-w-6xl mx-auto px-4">
+    <div class="mb-10 text-center pt-8">
       <h1 class="text-4xl font-extrabold text-white mb-4">Mesh Gradient Studio</h1>
       <p class="text-slate-400 text-lg">
         Design modern "Aurora" style backgrounds using blended radial gradients.
@@ -86,6 +81,8 @@ const schema = {
 
       <div>
         <h2 class="text-xl font-bold text-white mb-6">Frequently Asked Questions</h2>
+        
+        {/* Visible FAQ Section matching the 4 Schema questions perfectly */}
         <div class="space-y-6">
           
           <div>
@@ -99,6 +96,13 @@ const schema = {
             <h3 class="font-medium text-slate-200 mb-2">Can I animate these gradients?</h3>
             <p class="text-sm text-slate-400 leading-relaxed">
               Yes. Since the output is standard CSS, you can easily add keyframe animations to shift the background positions.
+            </p>
+          </div>
+
+          <div>
+            <h3 class="font-medium text-slate-200 mb-2">Why use CSS mesh gradients instead of high-res images?</h3>
+            <p class="text-sm text-slate-400 leading-relaxed">
+              CSS gradients are resolution-independent and have a near-zero file size. This significantly improves your Core Web Vitals and LCP scores compared to using large 'Aurora' style image backgrounds.
             </p>
           </div>
 

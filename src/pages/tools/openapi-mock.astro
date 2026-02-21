@@ -1,11 +1,55 @@
 ---
 // src/pages/tools/openapi-mock.astro
 import Layout from '../../layouts/Layout.astro'; // Adjust path to your layout
+
+const title = "OpenAPI to Express Mock Server Generator | SyntaxSnap";
+const description = "Instantly convert your FastAPI or OpenAPI v3 JSON specs into a runnable local Express.js mock server. 100% offline, privacy-first.";
+
+// NEW: Tool-specific features for SoftwareApplication schema
+const features = [
+  "Instantly generates Express.js mock servers from OpenAPI JSON",
+  "100% offline deterministic parsing (zero server uploads)",
+  "Maps path parameters to Express syntax automatically",
+  "Provides copy-pasteable zero-dependency boilerplate"
+];
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Is this Express generator AI-powered?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. This tool uses a deterministic JavaScript parser to transform your OpenAPI paths into Express.js router code. Since it doesn't use AI, it works 100% offline and your schema never leaves your browser."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What versions of OpenAPI are supported?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The generator currently supports OpenAPI 3.0 and 3.1 (Swagger 2.0 support is planned). It maps parameters, request bodies, and paths directly to standard Express syntax."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does it generate a full project structure?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "It generates a production-ready 'server.js' or 'app.js' boilerplate including necessary imports, middleware setup, and route handlers based on your specific API endpoints."
+      }
+    }
+  ]
+};
 ---
 
-<Layout 
-  title="OpenAPI to Express Mock Server Generator | SyntaxSnap"
-  description="Instantly convert your FastAPI or OpenAPI v3 JSON specs into a runnable local Express.js mock server. 100% offline, privacy-first." isTool={true}>
+{/* Pass features to Layout */}
+<Layout title={title} description={description} isTool={true} features={features}>
+  {/* Inject the FAQ Schema directly into the DOM */}
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+
   <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
     <div class="mb-8 text-center">
       <h1 class="text-3xl font-bold text-white mb-2">OpenAPI to Mock Server</h1>
@@ -39,6 +83,31 @@ import Layout from '../../layouts/Layout.astro'; // Adjust path to your layout
       </div>
 
     </div>
+
+    {/* Visible FAQ Section to match Schema */}
+    <section class="mt-16 border-t border-slate-800 pt-12">
+      <h2 class="text-2xl font-bold text-white mb-8">Frequently Asked Questions</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div>
+          <h3 class="font-medium text-slate-200 mb-2">Is this Express generator AI-powered?</h3>
+          <p class="text-sm text-slate-400 leading-relaxed">
+            No. This tool uses a deterministic JavaScript parser to transform your OpenAPI paths into Express.js router code. Since it doesn't use AI, it works 100% offline and your schema never leaves your browser.
+          </p>
+        </div>
+        <div>
+          <h3 class="font-medium text-slate-200 mb-2">What versions of OpenAPI are supported?</h3>
+          <p class="text-sm text-slate-400 leading-relaxed">
+            The generator currently supports OpenAPI 3.0 and 3.1 (Swagger 2.0 support is planned). It maps parameters, request bodies, and paths directly to standard Express syntax.
+          </p>
+        </div>
+        <div>
+          <h3 class="font-medium text-slate-200 mb-2">Does it generate a full project structure?</h3>
+          <p class="text-sm text-slate-400 leading-relaxed">
+            It generates a production-ready 'server.js' or 'app.js' boilerplate including necessary imports, middleware setup, and route handlers based on your specific API endpoints.
+          </p>
+        </div>
+      </div>
+    </section>
   </main>
 </Layout>
 

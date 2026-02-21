@@ -6,9 +6,52 @@ import AiMockGeneratorTool from '../../components/tools/AiMockGenerator.tsx';
 // SEO Constants - 2026 Best Practices
 const title = "AI Mock JSON Generator | SyntaxSnap";
 const description = "Generate realistic JSON mock data from OpenAPI schemas or natural language prompts using AI. Free tool for developers and QA engineers.";
+
+// NEW: Tool-specific features for SoftwareApplication schema
+const features = [
+  "Generates realistic JSON from natural language or OpenAPI specs",
+  "Maintains strict type safety (Integers, Booleans, UUIDs)",
+  "Supports nested objects and complex schema contracts",
+  "Privacy-conscious: No database storage of prompts or generated data"
+];
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Is my data sent to an AI provider?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. When you click 'Generate', your prompt or schema is sent server-side to OpenAI to generate the mock data. However, SyntaxSnap does not store your inputs or the generated results in any database."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I use real personal data or API keys?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. We strongly advise against submitting real PII (Personally Identifiable Information), credentials, or proprietary business schemas. Always use dummy variables and generic field names for your prompts."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How does the generator handle complex OpenAPI schemas?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Our AI logic parses the provided OpenAPI 3.0/3.1 spec, identifies data types, enums, and required fields, and produces a JSON object that adheres strictly to your defined API contract."
+      }
+    }
+  ]
+};
 ---
 
-<Layout title={title} description={description} isTool={true}>
+{/* Pass features to Layout */}
+<Layout title={title} description={description} isTool={true} features={features}>
+  {/* Inject the FAQ Schema directly into the DOM */}
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+
   <main class="container mx-auto py-12 px-4 max-w-5xl">
     <header class="text-center mb-12">
       <h1 class="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-blue-400 to-emerald-400 bg-clip-text text-transparent">
@@ -31,6 +74,31 @@ const description = "Generate realistic JSON mock data from OpenAPI schemas or n
         <div>
           <h3 class="text-blue-400 font-medium mb-2">Strict Type Safety</h3>
           <p>Unlike standard LLM responses, our generator is tuned to preserve data types (Integers, Booleans, and UUIDs) without adding unwanted quotes.</p>
+        </div>
+      </div>
+    </section>
+
+    {/* Visible FAQ Section to match Schema */}
+    <section class="mt-16 border-t border-slate-800 pt-12">
+      <h2 class="text-2xl font-bold text-white mb-8">Frequently Asked Questions</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div>
+          <h3 class="font-medium text-slate-200 mb-2">Is my data sent to an AI provider?</h3>
+          <p class="text-sm text-slate-400 leading-relaxed">
+            Yes. When you click 'Generate', your prompt or schema is sent server-side to OpenAI to generate the mock data. However, SyntaxSnap does not store your inputs or the generated results in any database.
+          </p>
+        </div>
+        <div>
+          <h3 class="font-medium text-slate-200 mb-2">Can I use real personal data or API keys?</h3>
+          <p class="text-sm text-slate-400 leading-relaxed">
+            No. We strongly advise against submitting real PII (Personally Identifiable Information), credentials, or proprietary business schemas. Always use dummy variables and generic field names for your prompts.
+          </p>
+        </div>
+        <div>
+          <h3 class="font-medium text-slate-200 mb-2">How does the generator handle complex OpenAPI schemas?</h3>
+          <p class="text-sm text-slate-400 leading-relaxed">
+            Our AI logic parses the provided OpenAPI 3.0/3.1 spec, identifies data types, enums, and required fields, and produces a JSON object that adheres strictly to your defined API contract.
+          </p>
         </div>
       </div>
     </section>

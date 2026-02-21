@@ -6,42 +6,50 @@ import RelatedTools from '../../components/RelatedTools.astro';
 const title = "Local JWT Debugger & Decoder (Private) | SyntaxSnap";
 const description = "Decode and debug JSON Web Tokens (JWT) locally in your browser. Inspect expiration, claims, and detect alg:none vulnerabilities instantly.";
 
-const schema = {
+// Extract features for the Layout
+const features = [
+  "100% Client-side decoding",
+  "UTF-8 and Base64Url padding support",
+  "Alg:none attack detection",
+  "Expiration and NBF claim analysis"
+];
+
+// Isolated FAQ Schema (3 Questions)
+const faqSchema = {
   "@context": "https://schema.org",
-  "@graph": [
+  "@type": "FAQPage",
+  "mainEntity": [
     {
-      "@type": "SoftwareApplication",
-      "name": "Local JWT Debugger",
-      "operatingSystem": "Web",
-      "applicationCategory": "DeveloperApplication",
-      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-      "description": description,
-      "featureList": [
-        "100% Client-side decoding",
-        "UTF-8 and Base64Url padding support",
-        "Alg:none attack detection",
-        "Expiration and NBF claim analysis"
-      ]
+      "@type": "Question",
+      "name": "Is my data safe?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. SyntaxSnap uses the browser's native atob() API. No data is sent to a server, making it safer than tools like jwt.io for production tokens."
+      }
     },
     {
-      "@type": "FAQPage",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "Is my data safe?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Yes. SyntaxSnap uses the browser's native atob() API. No data is sent to a server, making it safer than tools like jwt.io for production tokens."
-          }
-        }
-      ]
+      "@type": "Question",
+      "name": "Why is a local JWT debugger safer than online decoders?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Most online debuggers upload your token to their servers. SyntaxSnap uses the browser's native 'atob' API to decode tokens locally, ensuring your production JWTs and sensitive claims are never exposed."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does this tool detect 'alg: none' vulnerabilities?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Our debugger checks for common security pitfalls like the 'alg: none' attack and analyzes Expiration (exp) and Not Before (nbf) claims to help you debug authentication flows."
+      }
     }
   ]
 };
 ---
 
-<Layout title={title} description={description} isTool={true}>
-  <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+{/* Pass the features prop to Layout */}
+<Layout title={title} description={description} isTool={true} features={features}>
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
 
   <div class="max-w-6xl mx-auto px-4">
     <div class="mb-10">
@@ -55,7 +63,7 @@ const schema = {
 
     <div class="mt-20 border-t border-slate-800 pt-16">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-        <div class="bg-slate-900/40 p-8 rounded-3xl border border-slate-800 shadow-xl">
+        <div class="bg-slate-900/40 p-8 rounded-3xl border border-slate-800 shadow-xl h-fit">
           <h2 class="text-xl font-bold text-white mb-4">Privacy is not a feature, it's the core.</h2>
           <p class="text-slate-400 leading-relaxed text-sm">
             Standard online decoders log your tokens for "analytics." SyntaxSnap runs locally. We don't want your data, we just want to help you debug.
@@ -79,6 +87,35 @@ const schema = {
             </div>
           </dl>
         </div>
+      </div>
+    </div>
+
+    {/* Visible FAQ Section matching the 3 Schema questions perfectly */}
+    <div class="mt-16 border-t border-slate-800 pt-12">
+      <h2 class="text-2xl font-bold text-white mb-8">Frequently Asked Questions</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        
+        <div>
+          <h3 class="font-medium text-slate-200 mb-2">Is my data safe?</h3>
+          <p class="text-sm text-slate-400 leading-relaxed">
+            Yes. SyntaxSnap uses the browser's native atob() API. No data is sent to a server, making it safer than tools like jwt.io for production tokens.
+          </p>
+        </div>
+
+        <div>
+          <h3 class="font-medium text-slate-200 mb-2">Why is a local JWT debugger safer than online decoders?</h3>
+          <p class="text-sm text-slate-400 leading-relaxed">
+            Most online debuggers upload your token to their servers. SyntaxSnap uses the browser's native 'atob' API to decode tokens locally, ensuring your production JWTs and sensitive claims are never exposed.
+          </p>
+        </div>
+
+        <div>
+          <h3 class="font-medium text-slate-200 mb-2">Does this tool detect 'alg: none' vulnerabilities?</h3>
+          <p class="text-sm text-slate-400 leading-relaxed">
+            Yes. Our debugger checks for common security pitfalls like the 'alg: none' attack and analyzes Expiration (exp) and Not Before (nbf) claims to help you debug authentication flows.
+          </p>
+        </div>
+
       </div>
     </div>
 
