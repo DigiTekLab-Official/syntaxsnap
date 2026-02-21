@@ -11,7 +11,6 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     
-    # Use the official pnpm action for better caching and speed
     - uses: pnpm/action-setup@v4
       with:
         version: 9
@@ -24,11 +23,11 @@ jobs:
     - name: Install dependencies
       run: pnpm install
       
-    # Only install the browsers we are actually testing (Chromium and Firefox)
     - name: Install Playwright Browsers
       run: pnpm exec playwright install --with-deps chromium firefox
       
     - name: Run Playwright tests
+      # This command tells Playwright to handle starting the server via the config
       run: pnpm exec playwright test
       
     - uses: actions/upload-artifact@v4
