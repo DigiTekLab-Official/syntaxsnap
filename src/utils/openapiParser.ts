@@ -1,6 +1,6 @@
 // src/utils/openapiParser.ts
 import yaml from 'js-yaml';
-
+//Fix js-yaml version 4 syntax
 // Prevent processing of extremely large inputs that could block the main thread
 const MAX_INPUT_SIZE = 512 * 1024; // 512 KB
 
