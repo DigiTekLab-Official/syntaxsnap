@@ -1,103 +1,24 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { TOOLS } from '../config/tools';
 import { 
-  GlassWater, 
-  Database, 
-  Palette, 
-  Search, 
-  FileCode2, 
   ShieldCheck,
-  GitCompare,
   ArrowRight,
-  Zap,
-  Braces
+  Zap
 } from 'lucide-astro';
 
-const tools = [
-  {
-    title: "Pydantic to Zod",
-    desc: "FastAPI JSON to Zod schemas.",
-    href: "/tools/pydantic-to-zod",
-    icon: Braces,
-    status: "New",
-    color: "text-indigo-400",
-    bg: "bg-indigo-500/10"
-  },
-  {
-    title: "Diff Viewer",
-    desc: "Compare text & code versions.",
-    href: "/tools/diff-viewer",
-    icon: GitCompare,
-    status: "New",
-    color: "text-pink-400",
-    bg: "bg-pink-500/10"
-  },
-  {
-    title: "JWT Debugger",
-    desc: "Decode tokens locally.",
-    href: "/tools/jwt-debugger",
-    icon: ShieldCheck,
-    status: "New",
-    color: "text-cyan-400",
-    bg: "bg-cyan-500/10"
-  },
-  {
-    title: "JSON to Zod",
-    desc: "Infer Zod schemas instantly.",
-    href: "/tools/json-to-zod",
-    icon: Database,
-    status: "Popular",
-    color: "text-orange-400",
-    bg: "bg-orange-500/10"
-  },
-  {
-    title: "Regex Tester",
-    desc: "Debug JS regex patterns.",
-    href: "/tools/regex-tester",
-    icon: Search,
-    status: "Live",
-    color: "text-emerald-400",
-    bg: "bg-emerald-500/10"
-  },
-  {
-    title: "Mesh Gradient",
-    desc: "Create aurora backgrounds.",
-    href: "/tools/mesh-gradient",
-    icon: Palette,
-    status: "Live",
-    color: "text-purple-400",
-    bg: "bg-purple-500/10"
-  },
-  {
-    title: "Glassmorphism",
-    desc: "Generate frosted glass CSS.",
-    href: "/tools/glass-generator",
-    icon: GlassWater,
-    status: "Live",
-    color: "text-blue-400",
-    bg: "bg-blue-500/10"
-  },
-  {
-    title: "SVG to JSX",
-    desc: "Convert SVG to React.",
-    href: "/tools/svg-to-jsx",
-    icon: FileCode2,
-    status: "Live",
-    color: "text-yellow-400",
-    bg: "bg-yellow-500/10"
-  }
-];
+// We take the first 4 tools for the Quick Access hero grid
+const featuredTools = TOOLS.slice(0, 4);
 ---
 
 <Layout title="SyntaxSnap – Privacy-First Developer Tools">
   
-  {/* HERO SECTION */}
+  {/* HERO SECTION - RESTORED & AUTOMATED */}
   <div class="pt-16 pb-12 px-4 max-w-6xl mx-auto text-center md:text-left">
     <div class="flex flex-col md:flex-row items-center justify-between gap-12">
       
-      {/* Left Column: Text */}
+      {/* Left Column: Text Content */}
       <div class="flex-1 max-w-2xl">
-        {/* WAVE Fix: Bumped text size to text-sm (14px) */}
         <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-900/50 border border-slate-700 text-slate-300 text-sm font-medium mb-6 animate-fade-in">
           <span class="relative flex h-2.5 w-2.5">
             <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
@@ -118,7 +39,6 @@ const tools = [
           <strong>No servers. No tracking. Just instant utilities.</strong>
         </p>
 
-        {/* WAVE Fix: Ensure contrast and size on these icons */}
         <div class="flex flex-wrap items-center justify-center md:justify-start gap-4 text-sm text-slate-400 font-medium">
           <span class="flex items-center gap-2"><Zap class="w-4 h-4 text-yellow-400" /> Zero Latency</span>
           <span class="hidden md:inline text-slate-600">•</span>
@@ -126,13 +46,12 @@ const tools = [
         </div>
       </div>
 
-      {/* Right Column: Quick Access Grid */}
+      {/* Right Column: Automated Quick Access Grid */}
       <div class="flex-1 w-full max-w-lg">
-         {/* WAVE Fix: Added hidden H2 to fix "Skipped Heading Level" alert */}
          <h2 class="sr-only">Quick Access Tools</h2>
          
          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            {tools.slice(0, 4).map((tool) => (
+            {featuredTools.map((tool) => (
               <a href={tool.href} class="flex items-start gap-3 p-4 rounded-xl bg-slate-900/40 border border-slate-800 hover:border-indigo-500/40 hover:bg-slate-900 transition-all group">
                 <div class={`p-2 rounded-lg ${tool.bg} ${tool.color} shrink-0`}>
                   <tool.icon class="w-5 h-5" />
@@ -140,17 +59,15 @@ const tools = [
                 <div>
                   <h3 class="text-white font-bold text-sm group-hover:text-indigo-400 transition-colors flex items-center gap-2">
                     {tool.title}
-                    {/* WAVE Fix: Bumped badge to text-xs (12px minimum) */}
                     {tool.status === 'New' && <span class="text-xs bg-indigo-500 text-white px-1.5 py-0.5 rounded font-bold uppercase tracking-wider">New</span>}
                   </h3>
-                  {/* WAVE Fix: Bumped description to text-sm (14px) */}
                   <p class="text-slate-500 text-sm mt-1 leading-snug">{tool.desc}</p>
                 </div>
               </a>
             ))}
             
             <a href="#all-tools" class="sm:col-span-2 p-3 rounded-xl border border-dashed border-slate-700 text-slate-400 text-sm font-medium hover:text-white hover:border-slate-500 hover:bg-slate-900/30 transition-all flex items-center justify-center gap-2">
-              View All 8 Utilities <ArrowRight class="w-4 h-4" />
+              View All {TOOLS.length} Utilities <ArrowRight class="w-4 h-4" />
             </a>
          </div>
       </div>
@@ -160,19 +77,17 @@ const tools = [
 
   <div class="w-full h-px bg-gradient-to-r from-transparent via-slate-800 to-transparent my-8"></div>
 
-  {/* ALL TOOLS SECTION */}
+  {/* ALL TOOLS SECTION - FULLY AUTOMATED */}
   <div id="all-tools" class="max-w-6xl mx-auto px-4 py-12">
     <div class="flex items-center justify-between mb-8">
-      {/* This H2 follows the implicit H1 -> H2 structure now */}
       <h2 class="text-2xl font-bold text-white">All Utilities</h2>
-      <span class="text-sm text-slate-500">{tools.length} tools available</span>
+      <span class="text-sm text-slate-500">{TOOLS.length} tools available</span>
     </div>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-      {tools.map((tool) => (
+      {TOOLS.map((tool) => (
         <a href={tool.href} class="group relative bg-slate-900/20 border border-slate-800 hover:border-indigo-500/30 rounded-2xl p-5 transition-all hover:shadow-xl hover:shadow-indigo-900/10 hover:-translate-y-0.5">
           <div class="absolute top-5 right-5">
-             {/* WAVE Fix: Badge text-xs (12px) */}
              <span class={`inline-flex items-center px-2 py-0.5 rounded text-xs font-bold uppercase tracking-wider border ${tool.status === 'New' ? 'bg-indigo-500/10 text-indigo-300 border-indigo-500/20' : 'bg-slate-800 text-slate-500 border-slate-700'}`}>
                {tool.status}
              </span>
@@ -180,9 +95,8 @@ const tools = [
           
           <div class="flex items-center gap-4 mb-3">
             <div class={`p-2.5 rounded-xl ${tool.bg} ${tool.color}`}>
-              {(() => { const Icon = tool.icon; return <Icon class="w-5 h-5" /> })()}
+               <tool.icon class="w-5 h-5" />
             </div>
-            {/* H3 is correct here because it's inside the H2 "All Utilities" section */}
             <h3 class="text-base font-bold text-white group-hover:text-indigo-400 transition-colors">
               {tool.title}
             </h3>

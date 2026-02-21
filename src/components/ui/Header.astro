@@ -2,6 +2,10 @@
 // src/components/ui/Header.astro
 import { Wrench, Info, Mail, Sparkles } from 'lucide-astro';
 import Logo from './Logo.astro';
+import { TOOLS } from '../../config/tools';
+
+// Dynamically find the AI tool so the link never breaks
+const aiTool = TOOLS.find(t => t.category === 'ai') || TOOLS[0];
 ---
 
 <header class="border-b border-slate-800 bg-slate-950/80 backdrop-blur-md sticky top-0 z-50">
@@ -19,12 +23,13 @@ import Logo from './Logo.astro';
     <nav aria-label="Main navigation">
       <ul class="flex gap-4 md:gap-8 text-base font-medium text-slate-400 list-none m-0 p-0">
         <li>
-          <a href="/tools/ai-mock-generator" class="text-emerald-400 hover:text-emerald-300 transition-colors flex items-center gap-1.5 py-2" aria-label="Try AI Tools">
+          {/* Automatically links to your AI tool from config */}
+          <a href={aiTool.href} class="text-emerald-400 hover:text-emerald-300 transition-colors flex items-center gap-1.5 py-2" aria-label="Try AI Tools">
             <Sparkles class="w-4 h-4" /> <span class="hidden sm:inline">AI Tools</span>
           </a>
         </li>
         <li>
-          <a href="/#tools" class="hover:text-white transition-colors flex items-center gap-1.5 py-2" aria-label="View Tools">
+          <a href="/#all-tools" class="hover:text-white transition-colors flex items-center gap-1.5 py-2" aria-label="View Tools">
             <Wrench class="w-4 h-4" /> <span class="hidden sm:inline">Tools</span>
           </a>
         </li>

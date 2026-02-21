@@ -1,113 +1,24 @@
 ---
-// src/components/ui/RelatedTools.astro
-import { 
-  FileJson, 
-  Hash, 
-  Box, 
-  Code2, 
-  ShieldCheck, 
-  FileCode, 
-  GitCompare, 
-  Braces, 
-  Sparkles, 
-  Server 
-} from 'lucide-astro';
+// src/components/RelatedTools.astro
+import { TOOLS, type Tool } from '../config/tools';
+
+interface Props {
+  currentTool: string;
+}
 
 const { currentTool } = Astro.props;
-const tools = [
-  {
-    id: 'ai-mock-generator',
-    title: 'AI Mock Generator',
-    desc: 'Generate realistic JSON mock data using AI and OpenAPI schemas.',
-    href: '/tools/ai-mock-generator',
-    icon: Sparkles,
-    color: 'text-emerald-400',
-    bg: 'bg-emerald-500/10'
-  },
-  {
-    id: 'openapi-to-express',
-    title: 'OpenAPI to Express',
-    desc: 'Instantly convert OpenAPI specs into runnable Express mock servers.',
-    href: '/tools/openapi-to-express',
-    icon: Server,
-    color: 'text-sky-400',
-    bg: 'bg-sky-500/10'
-  },
-  {
-    id: 'pydantic-to-zod',
-    title: 'Pydantic to Zod',
-    desc: 'Convert FastAPI Pydantic schemas to Zod.',
-    href: '/tools/pydantic-to-zod',
-    icon: Braces,
-    color: 'text-indigo-400',
-    bg: 'bg-indigo-500/10'
-  },
-  {
-    id: 'json-to-zod',
-    title: 'JSON to Zod',
-    desc: 'Convert JSON objects to Zod schemas instantly.',
-    href: '/tools/json-to-zod',
-    icon: FileJson,
-    color: 'text-orange-400',
-    bg: 'bg-orange-500/10'
-  },
-  {
-    id: 'glass-generator',
-    title: 'Glass Generator',
-    desc: 'Generate CSS for the glassmorphism effect.',
-    href: '/tools/glass-generator',
-    icon: Box,
-    color: 'text-blue-400',
-    bg: 'bg-blue-500/10'
-  },
-  {
-    id: 'regex-tester',
-    title: 'Regex Tester',
-    desc: 'Test and debug your regular expressions.',
-    href: '/tools/regex-tester',
-    icon: Code2,
-    color: 'text-emerald-400',
-    bg: 'bg-emerald-500/10'
-  },
-  {
-    id: 'mesh-gradient',
-    title: 'Mesh Gradient',
-    desc: 'Create beautiful, flowing mesh gradients.',
-    href: '/tools/mesh-gradient',
-    icon: Hash,
-    color: 'text-purple-400',
-    bg: 'bg-purple-500/10'
-  },
-  {
-    id: 'svg-to-jsx',
-    title: 'SVG to JSX',
-    desc: 'Transform SVG code into React components.',
-    href: '/tools/svg-to-jsx',
-    icon: FileCode,
-    color: 'text-pink-400',
-    bg: 'bg-pink-500/10'
-  },
-  {
-    id: 'diff-viewer',
-    title: 'Diff Viewer',
-    desc: 'Compare text and code versions side-by-side.',
-    href: '/tools/diff-viewer',
-    icon: GitCompare,
-    color: 'text-pink-400',
-    bg: 'bg-pink-500/10'
-  },
-  {
-    id: 'jwt-debugger',
-    title: 'JWT Debugger',
-    desc: 'Decode and debug JWT tokens locally.',
-    href: '/tools/jwt-debugger',
-    icon: ShieldCheck,
-    color: 'text-cyan-400',
-    bg: 'bg-cyan-500/10'
-  }
-];
 
-const relatedTools = tools.filter(tool => tool.id !== currentTool);
+// Filter out the current tool
+const relatedTools = TOOLS.filter((tool: Tool) => tool.id !== currentTool);
+
+// Logic to find tools in the same category
+const currentToolData = TOOLS.find((t: Tool) => t.id === currentTool);
+const sameCategory = relatedTools.filter((t: Tool) => t.category === currentToolData?.category);
+
+// Determine which 3 tools to display
+const displayTools = sameCategory.length >= 3 
+  ? sameCategory.slice(0, 3) 
+  : relatedTools.slice(0, 3);
 ---
 
 <section class="border-t border-slate-800 mt-20 pt-16 mb-12">
@@ -117,7 +28,7 @@ const relatedTools = tools.filter(tool => tool.id !== currentTool);
   </div>
 
   <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto px-4">
-    {relatedTools.slice(0, 3).map((tool) => (
+    {displayTools.map((tool) => (
       <a 
         href={tool.href}
         class="group p-6 rounded-2xl bg-slate-900/50 border border-slate-800 hover:border-indigo-500/50 hover:bg-slate-900 transition-all duration-300 flex flex-col items-start shadow-sm"

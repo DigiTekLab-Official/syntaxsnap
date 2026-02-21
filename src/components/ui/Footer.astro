@@ -2,6 +2,10 @@
 // src/components/ui/Footer.astro
 import { ShieldCheck } from 'lucide-astro';
 import Logo from './Logo.astro';
+import { TOOLS } from '../../config/tools';
+
+// Sort tools alphabetically for a clean professional look
+const sortedTools = [...TOOLS].sort((a, b) => a.title.localeCompare(b.title));
 ---
 
 <footer class="border-t border-slate-800 bg-slate-950 mt-auto">
@@ -21,16 +25,16 @@ import Logo from './Logo.astro';
           <div>
               <h2 class="text-sm font-bold text-slate-500 uppercase tracking-widest mb-4">Utilities</h2>
               <ul class="space-y-3 text-base text-slate-400 font-mono">
-                  <li><a href="/tools/ai-mock-generator" class="hover:text-emerald-400 transition-colors text-slate-300">AI Mock Generator</a></li>
-                  <li><a href="/tools/openapi-to-express" class="hover:text-sky-400 transition-colors text-slate-300">OpenAPI → Express</a></li>
-                  <li><a href="/tools/diff-viewer" class="hover:text-indigo-400 transition-colors">Diff Viewer</a></li>
-                  <li><a href="/tools/glass-generator" class="hover:text-indigo-400 transition-colors">Glass Gen</a></li>
-                  <li><a href="/tools/json-to-zod" class="hover:text-indigo-400 transition-colors">JSON → Zod</a></li>
-                  <li><a href="/tools/jwt-debugger" class="hover:text-indigo-400 transition-colors">JWT Debugger</a></li>
-                  <li><a href="/tools/mesh-gradient" class="hover:text-indigo-400 transition-colors">Mesh Gradient</a></li>
-                  <li><a href="/tools/pydantic-to-zod" class="hover:text-indigo-400 transition-colors">Pydantic → Zod</a></li>
-                  <li><a href="/tools/regex-tester" class="hover:text-indigo-400 transition-colors">Regex Tester</a></li>
-                  <li><a href="/tools/svg-to-jsx" class="hover:text-indigo-400 transition-colors">SVG → JSX</a></li>
+                  {sortedTools.map((tool) => (
+                    <li>
+                      <a 
+                        href={tool.href} 
+                        class={`transition-colors ${tool.category === 'ai' ? 'hover:text-emerald-400' : 'hover:text-indigo-400'}`}
+                      >
+                        {tool.title}
+                      </a>
+                    </li>
+                  ))}
               </ul>
           </div>
 
