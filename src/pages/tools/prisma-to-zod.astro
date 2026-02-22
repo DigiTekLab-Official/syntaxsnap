@@ -1,0 +1,140 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PrismaToZodTool from '../../components/tools/PrismaToZod';
+import RelatedTools from '../../components/RelatedTools.astro';
+
+const metadata = {
+  title: "Prisma to Zod Schema Converter | SyntaxSnap",
+  description: "Convert Prisma ORM models and enums into type-safe Zod validation schemas with auto-generated CreateInput types. 100% client-side, zero data transmission.",
+  url: "https://syntaxsnap.com/tools/prisma-to-zod",
+  features: [
+    "Full scalar type mapping (String, Int, Float, Decimal, BigInt, DateTime, Json, Bytes, Boolean)",
+    "Enum to z.enum() conversion",
+    "Relation handling with z.lazy()",
+    "Nullable and array field support",
+    "Auto-generated CreateInput schemas",
+    "Composite @@id detection",
+    "@default() to .default() mapping",
+    "Zero-dependency browser-only conversion"
+  ]
+};
+
+const faqData = [
+  {
+    question: "Does this tool send my Prisma schema to a server?",
+    answer: "No. SyntaxSnap converts your schema entirely inside the browser using JavaScript. Your data never leaves your machine — there are no API calls, no telemetry, and no server processing."
+  },
+  {
+    question: "Which Prisma field types are supported?",
+    answer: "All standard Prisma scalars: String, Int, Float, Decimal, BigInt, Boolean, DateTime, Json, and Bytes. Enums are converted to z.enum(), relations use z.lazy(), and nullable/array modifiers are fully supported."
+  },
+  {
+    question: "What is the CreateInput schema in the output?",
+    answer: "For each model, the converter generates a CreateInput variant that omits auto-generated fields like @id @default(cuid()), @default(now()), @default(autoincrement()), and @updatedAt. This gives you a ready-to-use schema for validating user input in API routes or Server Actions."
+  },
+  {
+    question: "Does it handle Prisma relations and circular references?",
+    answer: "Yes. Relation fields are mapped using z.lazy(() => ModelSchema) to support circular and self-referencing models. A depth limit prevents infinite recursion during conversion."
+  }
+];
+---
+
+<Layout
+  title={metadata.title}
+  description={metadata.description}
+  isTool={true}
+  features={metadata.features}
+>
+  <!-- FAQPage JSON-LD -->
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": faqData.map(faq => ({
+      "@type": "Question",
+      "name": faq.question,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": faq.answer
+      }
+    }))
+  })} />
+
+  <div class="max-w-6xl mx-auto px-4 py-12">
+    <div class="mb-10 text-center">
+      <h1 class="text-4xl font-extrabold text-white mb-4 tracking-tight">
+        Prisma to Zod Converter
+      </h1>
+      <p class="text-slate-400 text-lg max-w-2xl mx-auto">
+        Keep your database models and frontend validation perfectly in sync. Paste your <code class="text-indigo-400">schema.prisma</code> to generate production-ready <strong class="text-indigo-400">Zod schemas</strong> with CreateInput types.
+      </p>
+    </div>
+
+    <PrismaToZodTool client:idle />
+
+    <!-- FAQ + Info Section -->
+    <div class="mt-20 border-t border-slate-800 pt-16">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+        <div>
+          <h2 class="text-2xl font-bold text-white mb-6">Frequently Asked Questions</h2>
+          <div class="space-y-6">
+            {faqData.map((faq) => (
+              <details class="group">
+                <summary class="cursor-pointer text-base font-semibold text-slate-200 hover:text-indigo-400 transition-colors list-none flex items-center gap-2">
+                  <span class="text-indigo-500 group-open:rotate-90 transition-transform">&#9656;</span>
+                  {faq.question}
+                </summary>
+                <p class="text-slate-400 text-sm leading-relaxed mt-2 pl-5">{faq.answer}</p>
+              </details>
+            ))}
+          </div>
+        </div>
+
+        <div class="space-y-6">
+          <div class="bg-slate-900/40 border border-slate-800 p-6 rounded-2xl">
+            <h2 class="text-xl font-bold text-white mb-4">Type Mapping Reference</h2>
+            <ul class="space-y-3 text-sm text-slate-400">
+              <li class="flex justify-between border-b border-slate-800 pb-2">
+                <code class="text-indigo-400">String / String?</code> <span>→</span> <code class="text-sky-400">z.string() / .nullable()</code>
+              </li>
+              <li class="flex justify-between border-b border-slate-800 pb-2">
+                <code class="text-indigo-400">Int</code> <span>→</span> <code class="text-sky-400">z.number().int()</code>
+              </li>
+              <li class="flex justify-between border-b border-slate-800 pb-2">
+                <code class="text-indigo-400">Float / Decimal</code> <span>→</span> <code class="text-sky-400">z.number()</code>
+              </li>
+              <li class="flex justify-between border-b border-slate-800 pb-2">
+                <code class="text-indigo-400">BigInt</code> <span>→</span> <code class="text-sky-400">z.bigint()</code>
+              </li>
+              <li class="flex justify-between border-b border-slate-800 pb-2">
+                <code class="text-indigo-400">DateTime</code> <span>→</span> <code class="text-sky-400">z.coerce.date()</code>
+              </li>
+              <li class="flex justify-between border-b border-slate-800 pb-2">
+                <code class="text-indigo-400">Json</code> <span>→</span> <code class="text-sky-400">z.record(z.unknown())</code>
+              </li>
+              <li class="flex justify-between border-b border-slate-800 pb-2">
+                <code class="text-indigo-400">Bytes</code> <span>→</span> <code class="text-sky-400">z.string()</code>
+              </li>
+              <li class="flex justify-between">
+                <code class="text-indigo-400">Enum</code> <span>→</span> <code class="text-sky-400">z.enum([...])</code>
+              </li>
+            </ul>
+          </div>
+
+          <div class="bg-slate-900/40 border border-slate-800 p-6 rounded-2xl">
+            <h2 class="text-xl font-bold text-white mb-4">Supported Prisma Features</h2>
+            <ul class="space-y-2 text-sm text-slate-400">
+              <li class="flex items-center gap-2"><span class="text-emerald-400">✓</span> All scalar types + BigInt, Bytes, Json</li>
+              <li class="flex items-center gap-2"><span class="text-emerald-400">✓</span> Enums with @default()</li>
+              <li class="flex items-center gap-2"><span class="text-emerald-400">✓</span> Relations (self-ref, one-to-many, one-to-one)</li>
+              <li class="flex items-center gap-2"><span class="text-emerald-400">✓</span> Composite @@id detection</li>
+              <li class="flex items-center gap-2"><span class="text-emerald-400">✓</span> @updatedAt auto-omitted from CreateInput</li>
+              <li class="flex items-center gap-2"><span class="text-yellow-400">~</span> @@index, @@unique, @@map (warned, skipped)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <RelatedTools currentTool="prisma-to-zod" />
+  </div>
+</Layout>
