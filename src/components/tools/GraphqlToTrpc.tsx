@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowRight, Copy, Check, Code2, Database } from 'lucide-react';
+import { ArrowRight, Code2, Database } from 'lucide-react';
+import { useDebounce } from '../../hooks/useDebounce';
+import CopyButton from '../ui/CopyButton';
 
 const DEFAULT_GRAPHQL = `type User {
   id: ID!
@@ -17,20 +19,9 @@ type Mutation {
   createUser(name: String!, email: String, age: Int): User!
 }`;
 
-// Lightweight debounce hook to avoid blocking the main thread on each keystroke
-function useDebounce<T>(value: T, delay: number): T {
-  const [debounced, setDebounced] = useState(value);
-  useEffect(() => {
-    const t = setTimeout(() => setDebounced(value), delay);
-    return () => clearTimeout(t);
-  }, [value, delay]);
-  return debounced;
-}
-
 export default function GraphqlToTrpc() {
   const [input, setInput] = useState(DEFAULT_GRAPHQL);
   const [output, setOutput] = useState('');
-  const [copyStatus, setCopyStatus] = useState(false);
 
   const debouncedInput = useDebounce(input, 300);
 
@@ -45,12 +36,6 @@ export default function GraphqlToTrpc() {
       setOutput('// Error parsing schema. Please ensure it is valid GraphQL.');
     }
   }, [debouncedInput]);
-
-  const handleCopy = async () => {
-    await navigator.clipboard.writeText(output);
-    setCopyStatus(true);
-    setTimeout(() => setCopyStatus(false), 2000);
-  };
 
   return (
     <div className="max-w-6xl mx-auto space-y-6">
@@ -78,13 +63,7 @@ export default function GraphqlToTrpc() {
               <Code2 className="w-4 h-4 text-sky-400" />
               <span className="text-sm font-medium text-slate-300">tRPC Router (TypeScript)</span>
             </div>
-            <button
-              onClick={handleCopy}
-              className="flex items-center gap-1.5 text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 px-2 py-1 rounded transition-colors"
-            >
-              {copyStatus ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
-              {copyStatus ? 'Copied' : 'Copy'}
-            </button>
+            <CopyButton text={output} variant="ghost" size="sm" />
           </div>
           <label htmlFor="trpcOutput" className="sr-only">tRPC Router Output</label>
           <textarea

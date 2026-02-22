@@ -14,6 +14,7 @@ import {
   ArrowRightLeft
 } from 'lucide-react';
 import CopyButton from '../ui/CopyButton';
+import { useDebounce } from '../../hooks/useDebounce';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -27,17 +28,6 @@ interface DiffStats {
 }
 
 // ─── Utilities ────────────────────────────────────────────────────────────────
-
-function useDebouncedValue<T>(value: T, delay: number): T {
-  const [debouncedValue, setDebouncedValue] = useState(value);
-
-  useEffect(() => {
-    const handler = setTimeout(() => setDebouncedValue(value), delay);
-    return () => clearTimeout(handler);
-  }, [value, delay]);
-
-  return debouncedValue;
-}
 
 function calculateStats(diffs: Diff.Change[]): DiffStats {
   let added = 0, removed = 0, unchanged = 0;
@@ -111,8 +101,8 @@ export default function DiffViewer() {
 
   // FIX: Debounce text values to prevent diff calculation on every keystroke.
   // For large files (10k+ lines), computing diffs on every keystroke freezes the UI.
-  const debouncedOld = useDebouncedValue(oldText, 400);
-  const debouncedNew = useDebouncedValue(newText, 400);
+  const debouncedOld = useDebounce(oldText, 400);
+  const debouncedNew = useDebounce(newText, 400);
 
   // FIX: useMemo instead of useEffect — diff calculation is pure and synchronous
   const diffs = useMemo(() => {

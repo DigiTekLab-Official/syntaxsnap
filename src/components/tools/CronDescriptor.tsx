@@ -1,8 +1,9 @@
 'use client';
-import React, { useState, useEffect, useMemo, useCallback, useId } from 'react';
+import React, { useState, useMemo, useCallback, useId } from 'react';
 import cronstrue from 'cronstrue';
 import cronParser from 'cron-parser';
 import { Clock, CalendarDays, AlertTriangle, Copy, Check, Trash2 } from 'lucide-react';
+import { useDebounce } from '../../hooks/useDebounce';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -13,17 +14,6 @@ interface CronField {
 }
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
-
-function useDebouncedValue<T>(value: T, delay: number): T {
-  const [debouncedValue, setDebouncedValue] = useState(value);
-
-  useEffect(() => {
-    const handler = setTimeout(() => setDebouncedValue(value), delay);
-    return () => clearTimeout(handler);
-  }, [value, delay]);
-
-  return debouncedValue;
-}
 
 function getUserTimezone(): string {
   return Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -77,7 +67,7 @@ export default function CronDescriptor() {
   const inputId = useId();
 
   // Debounce cron input to prevent excessive parsing on every keystroke
-  const debouncedCron = useDebouncedValue(cron, 300);
+  const debouncedCron = useDebounce(cron, 300);
 
   const timezone = useMemo(() => getUserTimezone(), []);
 

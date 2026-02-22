@@ -1,6 +1,7 @@
 'use client';
-import React, { useState, useEffect, useCallback, useMemo, useId } from 'react';
+import React, { useState, useCallback, useMemo, useId } from 'react';
 import { Copy, Check, Trash2 } from 'lucide-react';
+import { useDebounce } from '../../hooks/useDebounce';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -221,21 +222,12 @@ const SAMPLE_SQL = `CREATE TABLE users (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );`;
 
-function useDebouncedValue<T>(value: T, delay: number): T {
-  const [debouncedValue, setDebouncedValue] = useState(value);
-  useEffect(() => {
-    const handler = setTimeout(() => setDebouncedValue(value), delay);
-    return () => clearTimeout(handler);
-  }, [value, delay]);
-  return debouncedValue;
-}
-
 export default function SqlToJson() {
   const [sql, setSql] = useState(SAMPLE_SQL);
   const [activeTab, setActiveTab] = useState<'json' | 'zod'>('json');
   const [copyState, setCopyState] = useState<'idle' | 'success' | 'error'>('idle');
   const textareaId = useId();
-  const debouncedSql = useDebouncedValue(sql, 300);
+  const debouncedSql = useDebounce(sql, 300);
 
   const { jsonSchema, zodSchema, error } = useMemo(() => {
     if (!debouncedSql.trim()) {
