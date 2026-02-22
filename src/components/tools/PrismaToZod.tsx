@@ -173,12 +173,12 @@ function parseField(line: string, knownEnums: Set<string>): PrismaField | null {
   if (tokens.length < 2) return null;
 
   const name = tokens[0];
-  let rawType = tokens[1];
+  const rawType = tokens[1];
 
   // Detect nullable and array
   const isNullable = rawType.endsWith('?');
   const isArray = rawType.endsWith('[]');
-  const cleanType = rawType.replace(/[?\[\]]/g, '');
+  const cleanType = rawType.replace(/[?[\]]/g, '');
 
   // Determine if this is a relation (non-scalar, non-enum type)
   const isRelation = !PRISMA_SCALARS.has(cleanType) && !knownEnums.has(cleanType);

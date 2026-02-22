@@ -112,7 +112,7 @@ function parseColumn(line: string): ColumnDef | null {
   const isAutoIncrement = /auto_increment|autoincrement/i.test(trimmed);
 
   let defaultValue: string | undefined;
-  const defaultMatch = trimmed.match(/DEFAULT\s+['"]?([^'",\s\)]+)['"]?/i);
+  const defaultMatch = trimmed.match(/DEFAULT\s+['"]?([^'",\s)]+)['"]?/i);
   if (defaultMatch) {
     defaultValue = defaultMatch[1];
   }
@@ -251,7 +251,7 @@ export default function SqlToJson() {
       }
 
       // Split by comma but handle commas inside parentheses (like DECIMAL(10,2))
-      const lines = extracted.columns.split(/,(?![^\(]*\))/).filter((l) => l.trim());
+      const lines = extracted.columns.split(/,(?![^(]*\))/).filter((l) => l.trim());
       const columns: ColumnDef[] = lines.map(parseColumn).filter((c): c is ColumnDef => c !== null);
 
       if (columns.length === 0) {

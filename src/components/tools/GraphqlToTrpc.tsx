@@ -85,7 +85,7 @@ function mapTypeToZod(gqlType: string): string {
   const isRequired = gqlType.endsWith('!');
   const cleanType = gqlType.replace(/!/g, '').replace(/\[|\]/g, '');
   
-  let zodType = 'z.unknown()';
+  let zodType: string;
   if (cleanType === 'String' || cleanType === 'ID') zodType = 'z.string()';
   else if (cleanType === 'Int' || cleanType === 'Float') zodType = 'z.number()';
   else if (cleanType === 'Boolean') zodType = 'z.boolean()';

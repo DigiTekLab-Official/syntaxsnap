@@ -14,6 +14,7 @@ export default tseslint.config(
       'playwright-report/**',
       'test-results/**',
       'extension/**',
+      '**/*.astro',
     ],
   },
 
@@ -58,9 +59,4 @@ export default tseslint.config(
     },
   },
 
-  // ── Astro files: parser not available, skip type-aware rules ────────────────
-  {
-    files: ['**/*.astro'],
-    ...tseslint.configs.disableTypeChecked,
-  },
 );

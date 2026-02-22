@@ -34,7 +34,7 @@ function getTokenStatus(payload: JwtPayload) {
   const hours = Math.round(msLeft / 3600000);
   const mins = Math.round(msLeft / 60000);
 
-  let detail = "";
+  let detail: string;
   if (days > 365) detail = "Expires in more than a year";
   else if (days > 0) detail = `Expires in ~${days}d`;
   else if (hours > 0) detail = `Expires in ~${hours}h`;

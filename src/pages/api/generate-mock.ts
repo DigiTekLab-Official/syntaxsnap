@@ -17,7 +17,8 @@ const REQUEST_TIMEOUT_MS = 30_000;
  */
 function sanitizePrompt(raw: string): string {
   return raw
-    .replace(/[\u0000-\u001F\u007F]/g, ' ') // replace control chars with space
+    // eslint-disable-next-line no-control-regex -- intentional: strip control chars for security
+    .replace(/[\u0000-\u001F\u007F]/g, ' ')
     .slice(0, MAX_PROMPT_LENGTH)
     .trim();
 }

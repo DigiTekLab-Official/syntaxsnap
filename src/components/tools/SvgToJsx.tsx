@@ -128,7 +128,7 @@ function tokenizeAttrs(attrs: string): AttrToken[] {
 
     while (i < attrs.length && /\s/.test(attrs[i])) i++;
 
-    let value = '';
+    let value: string;
     if (i < attrs.length && (attrs[i] === '"' || attrs[i] === "'")) {
       const quote = attrs[i++];
       const start = i;
