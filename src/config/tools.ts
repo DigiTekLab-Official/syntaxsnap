@@ -1,7 +1,7 @@
 // src/config/tools.ts
 import { 
   GlassWater, Database, Palette, Search, FileCode2, 
-  ShieldCheck, GitCompare, Braces, Sparkles, Server, Zap, TableProperties 
+  ShieldCheck, GitCompare, Braces, Sparkles, Server, Zap, Clock, TableProperties 
 } from 'lucide-astro';
 
 export interface Tool {
@@ -136,6 +136,17 @@ export const TOOLS: Tool[] = [
     status: "Live",
     color: "text-cyan-300",
     bg: "bg-cyan-500/10",
+    category: "dev"
+  },
+  {
+    id: 'cron-descriptor',
+    title: "Cron Descriptor",
+    desc: "Translate cron expressions to human-readable text and predict next runs.",
+    href: "/tools/cron-descriptor",
+    icon: Clock,
+    status: "New",
+    color: "text-sky-400",
+    bg: "bg-sky-500/10",
     category: "dev"
   },
   {
