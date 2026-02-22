@@ -1,0 +1,68 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import GraphqlToTrpcTool from '../../components/tools/GraphqlToTrpc';
+import RelatedTools from '../../components/RelatedTools.astro';
+
+const metadata = {
+  title: "GraphQL Schema to tRPC Router Generator | SyntaxSnap",
+  description: "Instantly convert your GraphQL schemas (Queries and Mutations) into type-safe tRPC routers with automatic Zod input validation.",
+  url: "https://syntaxsnap.com/tools/graphql-to-trpc",
+  features: [
+    "Automatic Zod schema generation",
+    "Query and Mutation mapping",
+    "Zero-dependency client-side conversion",
+    "TypeScript strict types output"
+  ]
+};
+---
+
+<Layout
+  title={metadata.title}
+  description={metadata.description}
+  isTool={true}
+  features={metadata.features}
+>
+
+  <div class="max-w-6xl mx-auto px-4 py-12">
+    <div class="mb-10 text-center">
+      <h1 class="text-4xl font-extrabold text-white mb-4 tracking-tight">
+        GraphQL to tRPC Generator
+      </h1>
+      <p class="text-slate-400 text-lg max-w-2xl mx-auto">
+        Migrating away from GraphQL? Paste your schema below to instantly generate a type-safe <strong class="text-sky-400">tRPC router</strong> complete with Zod validation.
+      </p>
+    </div>
+
+    <GraphqlToTrpcTool client:load />
+
+    <div class="mt-20 border-t border-slate-800 pt-16">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+        <div>
+          <h2 class="text-2xl font-bold text-white mb-4">Why migrate to tRPC?</h2>
+          <p class="text-slate-400 mb-4 text-sm leading-relaxed">
+            While GraphQL is excellent for public APIs, internal dashboards and monoliths often suffer from GraphQL's boilerplate overhead. tRPC allows you to share types directly between your server and client without code generation steps, drastically improving developer velocity.
+          </p>
+        </div>
+        <div class="bg-slate-900/40 border border-slate-800 p-6 rounded-2xl">
+          <h2 class="text-xl font-bold text-white mb-4">Type Mapping Reference</h2>
+          <ul class="space-y-3 text-sm text-slate-400">
+            <li class="flex justify-between border-b border-slate-800 pb-2">
+              <code class="text-pink-400">String! / ID!</code> <span>→</span> <code class="text-sky-400">z.string()</code>
+            </li>
+            <li class="flex justify-between border-b border-slate-800 pb-2">
+              <code class="text-pink-400">Int / Float</code> <span>→</span> <code class="text-sky-400">z.number().optional()</code>
+            </li>
+            <li class="flex justify-between border-b border-slate-800 pb-2">
+              <code class="text-pink-400">Boolean!</code> <span>→</span> <code class="text-sky-400">z.boolean()</code>
+            </li>
+            <li class="flex justify-between">
+              <code class="text-pink-400">[String!]!</code> <span>→</span> <code class="text-sky-400">z.array(z.string())</code>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <RelatedTools currentTool="graphql-to-trpc" />
+  </div>
+</Layout>

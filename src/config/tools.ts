@@ -159,5 +159,16 @@ export const TOOLS: Tool[] = [
     color: "text-orange-400",
     bg: "bg-orange-500/10",
     category: "dev"
+  },
+  {
+    id: 'graphql-to-trpc',
+    title: "GraphQL to tRPC",
+    desc: "Convert GraphQL schemas into tRPC routers with Zod validation instantly.",
+    href: "/tools/graphql-to-trpc",
+    icon: FileCode2,
+    status: "New",
+    color: "text-pink-400",
+    bg: "bg-pink-500/10",
+    category: "dev"
   }
 ];
