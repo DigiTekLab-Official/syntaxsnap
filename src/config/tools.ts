@@ -1,6 +1,6 @@
 // src/config/tools.ts
 import { 
-  GlassWater, Database, Palette, Search, FileCode2, 
+  GlassWater, Database, Palette, Search, FileCode2, Container,
   ShieldCheck, GitCompare, Braces, Sparkles, Server, Zap, Clock, TableProperties 
 } from 'lucide-astro';
 
@@ -170,5 +170,16 @@ export const TOOLS: Tool[] = [
     color: "text-pink-400",
     bg: "bg-pink-500/10",
     category: "dev"
-  }
+  },
+  {
+    id: 'dockerfile-generator',
+    title: "Dockerfile Generator",
+    desc: "Create optimized, multi-stage Dockerfiles for Node.js, Next.js, and Astro instantly.",
+    href: "/tools/dockerfile-generator",
+    icon: Container,
+    status: "New",
+    color: "text-blue-400",
+    bg: "bg-blue-500/10",
+    category: "dev"
+  },
 ];

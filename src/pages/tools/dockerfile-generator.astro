@@ -1,0 +1,76 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import DockerfileGeneratorTool from '../../components/tools/DockerfileGenerator';
+import RelatedTools from '../../components/RelatedTools.astro';
+
+const metadata = {
+  title: "Dockerfile Generator for Next.js, Node & Astro | SyntaxSnap",
+  description: "Instantly generate optimized, multi-stage Dockerfiles and .dockerignore files for Node.js, Next.js, and Astro. Supports npm, yarn, pnpm, and bun.",
+  url: "https://syntaxsnap.com/tools/dockerfile-generator",
+  features: [
+    "Multi-stage build optimization",
+    "Next.js standalone mode support",
+    "Automatic .dockerignore generation",
+    "pnpm, bun, yarn, and npm support",
+    "Node 18, 20, and 22 alpine base images"
+  ]
+};
+---
+
+<Layout
+  title={metadata.title}
+  description={metadata.description}
+  isTool={true}
+  features={metadata.features}
+>
+
+  <div class="max-w-6xl mx-auto px-4 py-12">
+    <div class="mb-10 text-center">
+      <h1 class="text-4xl font-extrabold text-white mb-4 tracking-tight">
+        Dockerfile Generator
+      </h1>
+      <p class="text-slate-400 text-lg max-w-2xl mx-auto">
+        Create production-ready, highly optimized <strong class="text-blue-400">multi-stage Dockerfiles</strong> and <code>.dockerignore</code> files for your JavaScript frameworks instantly.
+      </p>
+    </div>
+
+    <DockerfileGeneratorTool client:idle />
+
+    <div class="mt-20 border-t border-slate-800 pt-16">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+        <div>
+          <h2 class="text-2xl font-bold text-white mb-4">Why Multi-Stage Builds?</h2>
+          <p class="text-slate-400 mb-4 text-sm leading-relaxed">
+            A standard Dockerfile copies all your source code and development dependencies into the final image, resulting in bloated sizes (often 1GB+) and increased security vulnerabilities. 
+          </p>
+          <p class="text-slate-400 text-sm leading-relaxed">
+            <strong>Multi-stage builds</strong> solve this by using separate environments: one for installing dependencies and building the application (the <code>builder</code> stage), and a completely fresh, lightweight image that only receives the compiled artifacts (the <code>runner</code> stage). This often reduces the final image size to under 150MB.
+          </p>
+        </div>
+        <div class="bg-slate-900/40 border border-slate-800 p-6 rounded-2xl">
+          <h2 class="text-xl font-bold text-white mb-4">Best Practices Included</h2>
+          <ul class="space-y-3 text-sm text-slate-400">
+            <li class="flex items-start gap-3 border-b border-slate-800 pb-3">
+              <code class="text-blue-400 shrink-0 font-bold">Alpine</code>
+              <span>Uses <code>node:alpine</code> base images by default for the smallest possible OS footprint.</span>
+            </li>
+            <li class="flex items-start gap-3 border-b border-slate-800 pb-3">
+              <code class="text-blue-400 shrink-0 font-bold">Standalone</code>
+              <span>Next.js configurations automatically utilize the <code>standalone</code> output trace to drastically reduce container size.</span>
+            </li>
+            <li class="flex items-start gap-3 border-b border-slate-800 pb-3">
+              <code class="text-blue-400 shrink-0 font-bold">Security</code>
+              <span>Runs the application as a non-root <code>node</code> user to prevent privilege escalation attacks.</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <code class="text-blue-400 shrink-0 font-bold">Ignore</code>
+              <span>Generates a strict <code>.dockerignore</code> to prevent secrets (.env) and local modules from leaking into the build context.</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <RelatedTools currentTool="dockerfile-generator" />
+  </div>
+</Layout>
