@@ -1,7 +1,6 @@
 ---
 // src/components/ui/Footer.astro
 import { ShieldCheck } from 'lucide-astro';
-import Logo from './Logo.astro';
 import { TOOLS, type Tool } from '../../config/tools';
 
 // Define the category display names
@@ -9,7 +8,8 @@ const categoryLabels: Record<string, string> = {
   json: "Data & JSON",
   dev: "Development",
   ai: "AI Powered",
-  css: "Design & CSS"
+  css: "Design & CSS",
+  data: "Data Conversion"
 };
 
 // Group tools by category
@@ -28,19 +28,19 @@ const categories = Object.keys(groupedTools);
           
           {/* Brand Info - Spans 2 columns */}
           <div class="col-span-1 md:col-span-2">
-              <div class="flex items-center gap-2 mb-4">
-                  <Logo class="w-6 h-6" />
+              <a href="/" class="flex items-center gap-2 mb-4 group w-fit" aria-label="SyntaxSnap home">
+                  <img src="/icon.svg" alt="SyntaxSnap Logo" width="24" height="24" class="w-6 h-6 object-contain group-hover:scale-105 transition-transform" />
                   <span class="text-xl font-bold text-white tracking-tight">Syntax<span class="text-indigo-500">Snap</span></span>
-              </div>
+              </a>
               <p class="text-base text-slate-400 max-w-sm leading-relaxed">
                   High-performance, local-first utilities for modern developers. Built with privacy as a priority and speed as a requirement.
               </p>
           </div>
 
-          {/* Dynamic Utilities Columns - Spans 3 columns total */}
-          <div class="col-span-1 md:col-span-3 grid grid-cols-1 sm:grid-cols-2 gap-8">
+          {/* Dynamic Utilities Columns - Swapped to columns layout for masonry stacking */}
+          <div class="col-span-1 md:col-span-3 columns-1 sm:columns-2 gap-8">
             {categories.map((cat) => (
-              <div>
+              <div class="break-inside-avoid mb-10">
                 <h2 class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-4">
                   {categoryLabels[cat] || cat}
                 </h2>
