@@ -23,10 +23,15 @@ test.describe('JSON to Zod Converter Tool', () => {
     // 1. Navigate to the tool
     await page.goto('http://localhost:4321/tools/json-to-zod');
 
-    // 2. Locate the JSON input textarea
+    // 2. Wait for React hydration (client:idle defers until browser is idle)
+    await page.waitForSelector('[data-hydrated="true"]', { timeout: 15000 });
+    // Verify the default schema has rendered so we know the component is fully interactive
+    await expect(page.locator('pre')).toContainText('z.object(', { timeout: 5000 });
+
+    // 3. Locate the JSON input textarea
     const inputArea = page.locator('textarea').first();
 
-    // 3. The tool loads with default JSON. We use .fill() to clear it and type our own.
+    // 4. Clear existing content then fill with our test JSON
     const customJson = `{
       "testString": "SyntaxSnap",
       "testNumber": 2026,
@@ -34,11 +39,8 @@ test.describe('JSON to Zod Converter Tool', () => {
     }`;
     await inputArea.fill(customJson);
 
-    // 4. Playwright is incredibly smart. It will automatically wait and retry these 
-    // assertions until the React state updates and the text appears on the screen!
-    
-    // We expect the output to contain the correct inferred Zod types:
-    await expect(page.locator('body')).toContainText('testString: z.string()');
+    // 5. We expect the output to contain the correct inferred Zod types:
+    await expect(page.locator('body')).toContainText('testString: z.string()', { timeout: 10000 });
     await expect(page.locator('body')).toContainText('testNumber: z.number()');
     await expect(page.locator('body')).toContainText('testBoolean: z.boolean()');
   });
