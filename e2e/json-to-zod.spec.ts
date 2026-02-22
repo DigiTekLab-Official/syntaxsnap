@@ -23,10 +23,10 @@ test.describe('JSON to Zod Converter Tool', () => {
     // 1. Navigate to the tool
     await page.goto('http://localhost:4321/tools/json-to-zod');
 
-    // 2. Wait for React hydration (client:idle defers until browser is idle)
-    await page.waitForSelector('[data-hydrated="true"]', { timeout: 15000 });
-    // Verify the default schema has rendered so we know the component is fully interactive
-    await expect(page.locator('pre')).toContainText('z.object(', { timeout: 5000 });
+    // 2. Wait for React hydration + default schema render (client:idle defers hydration)
+    // Checking for output text is the most reliable hydration signal — it proves
+    // React mounted, state initialised, and the debounced effect ran.
+    await expect(page.locator('pre')).toContainText('z.object(', { timeout: 15000 });
 
     // 3. Locate the JSON input textarea
     const inputArea = page.locator('textarea').first();

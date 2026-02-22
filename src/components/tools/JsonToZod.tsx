@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useDebounce } from '../../hooks/useDebounce';
 import { Copy, Check, Trash2, FileJson, AlertCircle, Braces, AlertTriangle } from 'lucide-react';
 import CopyButton from '../ui/CopyButton';
@@ -147,8 +147,14 @@ export default function JsonToZod() {
     setWarning(null);
   };
 
+  // Hydration signal for E2E tests (client:idle defers hydration)
+  const rootRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    rootRef.current?.setAttribute('data-hydrated', 'true');
+  }, []);
+
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 min-h-150">
+    <div ref={rootRef} className="grid grid-cols-1 lg:grid-cols-2 gap-6 min-h-150">
       
       {/* ─── LEFT: Input ───────────────────────────────────────────────── */}
       <div className="flex flex-col bg-slate-900/50 rounded-2xl border border-slate-800 overflow-hidden shadow-sm relative">
