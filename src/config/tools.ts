@@ -37,7 +37,8 @@ import {
   TableProperties,
   Workflow,
   Zap,
-  Wand2
+  Wand2,
+  FileJson,
 } from 'lucide-astro';
 
 // ─── CATEGORY REGISTRY ───────────────────────────────────────────────────────
@@ -281,5 +282,16 @@ export const TOOLS: Tool[] = [
     color: 'text-fuchsia-400',
     bg: 'bg-fuchsia-500/10',
     category: 'css',
-  }
+  },
+  {
+    id: 'json-schema-to-zod',
+    title: 'JSON Schema to Zod',
+    desc: 'Convert JSON Schema definitions into type-safe Zod validation schemas. Supports nested objects, arrays, and complex constraints with zero data transmission.',
+    href: '/tools/json-schema-to-zod',
+    icon: FileJson,
+    status: 'New',
+    color: 'text-orange-400',
+    bg: 'bg-orange-500/10',
+    category: 'json',
+  },
 ];
