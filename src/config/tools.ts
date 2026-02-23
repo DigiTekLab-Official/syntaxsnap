@@ -37,6 +37,7 @@ import {
   TableProperties,
   Workflow,
   Zap,
+  Wand2
 } from 'lucide-astro';
 
 // ─── CATEGORY REGISTRY ───────────────────────────────────────────────────────
@@ -269,5 +270,16 @@ export const TOOLS: Tool[] = [
     color: 'text-indigo-400',
     bg: 'bg-indigo-500/10',
     category: 'data',
+  },
+  {
+    id: 'aurora-gradient',
+    title: 'Aurora Gradient Generator',
+    desc: 'Create animated, pure CSS aurora backgrounds and mesh gradients. Generate Tailwind classes or raw CSS instantly. 100% local, privacy-first execution.',
+    href: '/tools/aurora-gradient',
+    icon: Wand2,
+    status: 'New',
+    color: 'text-fuchsia-400',
+    bg: 'bg-fuchsia-500/10',
+    category: 'css',
   }
 ];

@@ -1,0 +1,82 @@
+---
+// src/pages/tools/aurora-gradient.astro
+import Layout from '../../layouts/Layout.astro';
+import AuroraGenerator from '../../components/tools/AuroraGenerator.tsx';
+import RelatedTools from '../../components/ui/RelatedTools.astro';
+
+const title = "Aurora Gradient Generator | Pure CSS & Tailwind | SyntaxSnap";
+const description = "Create beautiful, animated aurora mesh backgrounds. Export to pure CSS or Tailwind CSS instantly. A free, local-first design tool for modern developers.";
+
+const features = [
+  "Visual editor for animated aurora and mesh gradients",
+  "Export to standard CSS or Tailwind CSS",
+  "Zero dependencies, 100% client-side processing",
+  "Customizable blur, opacity, and color palettes"
+];
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How do you make an aurora gradient in CSS?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "An aurora gradient is typically made using multiple absolute-positioned elements with radial gradients or solid colors, heavily blurred using the CSS filter: blur() property, and animated with @keyframes to simulate the movement of the Northern Lights."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does this work with Tailwind CSS?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes! The generator provides a copy-and-paste Tailwind HTML structure utilizing arbitrary values for blurs and background colors, making it seamless to drop into Next.js, Astro, or any Tailwind-enabled project."
+      }
+    }
+  ]
+};
+---
+
+<Layout title={title} description={description} isTool={true} features={features}>
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+
+  <div class="max-w-6xl mx-auto px-4 py-12">
+    <header class="text-center mb-10">
+      <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-4 tracking-tight">Aurora Gradient Generator</h1>
+      <p class="text-slate-400 text-lg max-w-2xl mx-auto">
+        Design animated, glowing <strong class="text-fuchsia-400">Aurora mesh backgrounds</strong>. Export production-ready pure CSS or Tailwind code instantly.
+      </p>
+    </header>
+
+    <AuroraGenerator client:idle />
+
+    <article class="mt-20 prose prose-invert max-w-none border-t border-slate-800 pt-12">
+      <h2 class="text-2xl font-bold text-white mb-4">The Modern Mesh Gradient</h2>
+      <p class="text-slate-400 leading-relaxed">
+        The "Aurora" effect has become a staple of 2026 web design, seen on top-tier SaaS landing pages and AI dashboards. Unlike traditional linear gradients, aurora backgrounds use heavily blurred, overlapping shapes to create an organic, glowing depth. This generator calculates the optimal CSS <code>filter: blur()</code> and animation keyframes so you don't have to guess the math.
+      </p>
+    </article>
+
+    {/* Visible FAQ Section */}
+    <section class="mt-16 border-t border-slate-800 pt-12 mb-16">
+      <h2 class="text-2xl font-bold text-white mb-8">Frequently Asked Questions</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div>
+          <h3 class="font-medium text-slate-200 mb-2">How do you make an aurora gradient in CSS?</h3>
+          <p class="text-sm text-slate-400 leading-relaxed">
+            An aurora gradient is typically made using multiple absolute-positioned elements with radial gradients or solid colors, heavily blurred using the CSS <code>filter: blur()</code> property, and animated with <code>@keyframes</code> to simulate the movement of the Northern Lights.
+          </p>
+        </div>
+        <div>
+          <h3 class="font-medium text-slate-200 mb-2">Does this work with Tailwind CSS?</h3>
+          <p class="text-sm text-slate-400 leading-relaxed">
+            Yes! The generator provides a copy-and-paste Tailwind HTML structure utilizing arbitrary values for blurs and background colors, making it seamless to drop into Next.js, Astro, or any Tailwind-enabled project.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <RelatedTools currentTool="aurora-gradient" />
+  </div>
+</Layout>
