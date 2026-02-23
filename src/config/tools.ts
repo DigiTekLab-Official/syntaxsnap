@@ -39,7 +39,8 @@ import {
   Zap,
   Wand2,
   FileJson,
-  Bot
+  Bot,
+  Network
 } from 'lucide-astro';
 
 // ─── CATEGORY REGISTRY ───────────────────────────────────────────────────────
@@ -305,5 +306,16 @@ export const TOOLS: Tool[] = [
     color: 'text-emerald-400',
     bg: 'bg-emerald-500/10',
     category: 'ai',
-  }
+  },
+  {
+    id: 'trpc-to-openapi',
+    title: 'tRPC to OpenAPI',
+    desc: 'Instantly convert tRPC routers and Zod input/output schemas into standard OpenAPI (Swagger) 3.1.0 specifications for public API documentation.',
+    href: '/tools/trpc-to-openapi',
+    icon: Network,
+    status: 'New',
+    color: 'text-blue-400',
+    bg: 'bg-blue-500/10',
+    category: 'dev',
+  },
 ];
