@@ -2,6 +2,7 @@
 // src/pages/tools/ai-mock-generator.astro
 import Layout from '../../layouts/Layout.astro';
 import AiMockGeneratorTool from '../../components/tools/AiMockGenerator.tsx';
+import RelatedTools from '../../components/ui/RelatedTools.astro';
 
 // SEO Constants - 2026 Best Practices
 const title = "AI Mock JSON Generator | SyntaxSnap";
@@ -52,7 +53,8 @@ const faqSchema = {
   {/* Inject the FAQ Schema directly into the DOM */}
   <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
 
-  <main class="container mx-auto py-12 px-4 max-w-5xl">
+  {/* Replaced <main> with standard div wrapper, as Layout.astro provides the <main> element */}
+  <div class="max-w-6xl mx-auto">
     <header class="text-center mb-12">
       <h1 class="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-blue-400 to-emerald-400 bg-clip-text text-transparent">
         AI Mock Data Generator
@@ -62,24 +64,24 @@ const faqSchema = {
       </p>
     </header>
 
-    <AiMockGeneratorTool client:load />
+    <AiMockGeneratorTool client:idle />
     
     <section class="mt-20 border-t border-slate-800 pt-12 text-slate-300">
       <h2 class="text-2xl font-semibold mb-6">How it works</h2>
       <div class="grid md:grid-cols-2 gap-8">
         <div>
           <h3 class="text-blue-400 font-medium mb-2">OpenAPI Integration</h3>
-          <p>Paste your swagger or OpenAPI schema. Our parser extracts the models so you can generate data that fits your API contract perfectly.</p>
+          <p class="text-slate-400">Paste your swagger or OpenAPI schema. Our parser extracts the models so you can generate data that fits your API contract perfectly.</p>
         </div>
         <div>
           <h3 class="text-blue-400 font-medium mb-2">Strict Type Safety</h3>
-          <p>Unlike standard LLM responses, our generator is tuned to preserve data types (Integers, Booleans, and UUIDs) without adding unwanted quotes.</p>
+          <p class="text-slate-400">Unlike standard LLM responses, our generator is tuned to preserve data types (Integers, Booleans, and UUIDs) without adding unwanted quotes.</p>
         </div>
       </div>
     </section>
 
     {/* Visible FAQ Section to match Schema */}
-    <section class="mt-16 border-t border-slate-800 pt-12">
+    <section class="mt-16 border-t border-slate-800 pt-12 mb-16">
       <h2 class="text-2xl font-bold text-white mb-8">Frequently Asked Questions</h2>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
         <div>
@@ -102,5 +104,7 @@ const faqSchema = {
         </div>
       </div>
     </section>
-  </main>
+    
+    <RelatedTools currentTool="ai-mock-generator" />
+  </div>
 </Layout>

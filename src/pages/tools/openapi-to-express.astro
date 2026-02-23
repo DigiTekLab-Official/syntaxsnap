@@ -2,11 +2,11 @@
 // src/pages/tools/openapi-to-express.astro
 import Layout from '../../layouts/Layout.astro';
 import ExpressGenerator from '../../components/tools/ExpressGenerator';
+import RelatedTools from '../../components/ui/RelatedTools.astro';
 
 const title = "OpenAPI to Express Mock Server Generator | SyntaxSnap";
 const description = "Instantly convert OpenAPI (Swagger) specifications into a runnable Node.js Express mock server. Save time on frontend development.";
 
-// NEW: Tool-specific features for SoftwareApplication schema
 const features = [
   "Converts OpenAPI v3/3.1 specs to Express.js boilerplate",
   "100% offline deterministic parsing (No AI used)",
@@ -46,29 +46,27 @@ const faqSchema = {
 };
 ---
 
-{/* Pass features to Layout */}
 <Layout title={title} description={description} isTool={true} features={features}>
-  {/* Inject the FAQ Schema directly into the DOM */}
   <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
 
-  <main class="container mx-auto py-12 px-4 max-w-5xl">
+  <div class="max-w-6xl mx-auto">
     <header class="text-center mb-10">
-      <h1 class="text-4xl font-bold mb-3 text-slate-100">OpenAPI to Express Mock</h1>
-      <p class="text-slate-400">Transform your API contract into a local development server in seconds.</p>
+      <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-4 tracking-tight">OpenAPI to Express Mock</h1>
+      <p class="text-slate-400 text-lg max-w-2xl mx-auto">Transform your API contract into a local development server in seconds.</p>
     </header>
 
-    <ExpressGenerator client:load />
+    <ExpressGenerator client:idle />
 
     <article class="mt-16 prose prose-invert max-w-none border-t border-slate-800 pt-10">
-      <h2 class="text-2xl font-semibold text-blue-400">Why use an Express Mock Server?</h2>
-      <p class="text-slate-300">
+      <h2 class="text-2xl font-bold text-white mb-4">Why use an Express Mock Server?</h2>
+      <p class="text-slate-400 leading-relaxed">
         By generating a local server based on your <strong>OpenAPI v3</strong> spec, you can begin frontend development before the backend is even built. 
         This generator handles path parameter conversion (e.g., <code>{"{id}"}</code> to <code>:id</code>) and sets up CORS automatically.
       </p>
     </article>
 
     {/* Visible FAQ Section to match Schema */}
-    <section class="mt-16 border-t border-slate-800 pt-12">
+    <section class="mt-16 border-t border-slate-800 pt-12 mb-16">
       <h2 class="text-2xl font-bold text-white mb-8">Frequently Asked Questions</h2>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
         <div>
@@ -91,5 +89,7 @@ const faqSchema = {
         </div>
       </div>
     </section>
-  </main>
+
+    <RelatedTools currentTool="openapi-to-express" />
+  </div>
 </Layout>

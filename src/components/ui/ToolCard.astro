@@ -1,0 +1,32 @@
+---
+// src/components/ui/ToolCard.astro
+import type { Tool } from '../../config/tools';
+
+interface Props {
+  tool: Tool;
+}
+
+const { tool } = Astro.props;
+const Icon = tool.icon;
+---
+
+<a href={tool.href} class="group relative bg-slate-900/20 border border-slate-800 hover:border-indigo-500/30 rounded-2xl p-5 transition-all hover:shadow-xl hover:shadow-indigo-900/10 hover:-translate-y-0.5">
+  <div class="absolute top-5 right-5">
+     <span class={`inline-flex items-center px-2 py-0.5 rounded text-xs font-bold uppercase tracking-wider border ${tool.status === 'New' ? 'bg-indigo-500/10 text-indigo-300 border-indigo-500/20' : 'bg-slate-800 text-slate-500 border-slate-700'}`}>
+       {tool.status}
+     </span>
+  </div>
+  
+  <div class="flex items-center gap-4 mb-3">
+    <div class={`p-2.5 rounded-xl ${tool.bg} ${tool.color}`}>
+       <Icon class="w-5 h-5" />
+    </div>
+    <h3 class="text-base font-bold text-white group-hover:text-indigo-400 transition-colors">
+      {tool.title}
+    </h3>
+  </div>
+  
+  <p class="text-slate-400 text-sm leading-relaxed pl-[3.25rem] line-clamp-3">
+    {tool.desc}
+  </p>
+</a>
