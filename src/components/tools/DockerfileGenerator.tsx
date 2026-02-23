@@ -136,7 +136,7 @@ export default function DockerfileGenerator() {
               </label>
               <textarea
                 id="dockerOutput"
-                className="w-full h-full min-h-[500px] bg-[#0d1117] p-6 text-[13px] leading-relaxed font-mono text-slate-300 focus:outline-none resize-none"
+                className="w-full h-full min-h-125 bg-[#0d1117] p-6 text-[13px] leading-relaxed font-mono text-slate-300 focus:outline-none resize-none"
                 value={activeOutput}
                 readOnly
                 spellCheck={false}

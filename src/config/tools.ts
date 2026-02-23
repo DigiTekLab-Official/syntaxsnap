@@ -318,4 +318,15 @@ export const TOOLS: Tool[] = [
     bg: 'bg-blue-500/10',
     category: 'dev',
   },
+  {
+    id: 'openapi-to-zod',
+    title: 'OpenAPI to Zod',
+    desc: 'Parse OpenAPI 3.x specifications and instantly generate TypeScript Zod validation schemas for all components. 100% client-side execution.',
+    href: '/tools/openapi-to-zod',
+    icon: FileJson,
+    status: 'New',
+    color: 'text-indigo-400',
+    bg: 'bg-indigo-500/10',
+    category: 'json',
+  }
 ];

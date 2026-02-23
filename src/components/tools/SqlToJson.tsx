@@ -306,7 +306,7 @@ export default function SqlToJson() {
           </div>
           <textarea
             id={textareaId}
-            className="w-full h-[450px] p-4 bg-slate-900 border border-slate-800 rounded-xl font-mono text-sm text-indigo-300 outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 resize-none transition-colors"
+            className="w-full h-112.5 p-4 bg-slate-900 border border-slate-800 rounded-xl font-mono text-sm text-indigo-300 outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 resize-none transition-colors"
             value={sql}
             onChange={(e) => setSql(e.target.value)}
             spellCheck={false}
@@ -353,7 +353,7 @@ export default function SqlToJson() {
             </div>
           )}
 
-          <pre id="output-panel" role="tabpanel" className="w-full h-[415px] p-4 bg-slate-950 border border-slate-800 rounded-xl font-mono text-sm text-emerald-400 overflow-auto leading-relaxed">
+          <pre id="output-panel" role="tabpanel" className="w-full h-103.75 p-4 bg-slate-950 border border-slate-800 rounded-xl font-mono text-sm text-emerald-400 overflow-auto leading-relaxed">
             {currentOutput}
           </pre>
         </div>

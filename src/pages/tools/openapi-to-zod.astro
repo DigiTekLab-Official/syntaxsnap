@@ -1,0 +1,89 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import OpenapiToZodTool from '../../components/tools/OpenapiToZod.tsx';
+import RelatedTools from '../../components/ui/RelatedTools.astro';
+
+const metadata = {
+  title: "OpenAPI to Zod Converter | Runtime-Safe API Validation | SyntaxSnap",
+  description: "Convert OpenAPI 3.x and Swagger JSON specifications into TypeScript Zod validation schemas instantly. Supports complex schemas, discriminated unions, and format constraints. Zero server round-trips, 100% private.",
+  features: [
+    "Full OpenAPI 3.x schema extraction with nested object support",
+    "Smart type inference: strings, numbers, arrays, enums, unions, and allOf/oneOf",
+    "Format validators: .email(), .uuid(), .datetime(), .url() with constraint mapping",
+    "Discriminated unions, nullable fields, and description preservation",
+    "100% client-side processing—your API specs never leave your browser"
+  ],
+  keywords: "openapi to zod, swagger to zod, api schema validation, typescript zod generator, openapi converter"
+};
+---
+
+<Layout 
+  title={metadata.title} 
+  description={metadata.description} 
+  isTool={true} 
+  features={metadata.features}
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-12 lg:py-16">
+    <header class="text-center mb-12">
+      <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white mb-4 tracking-tight">
+        OpenAPI → Zod Converter
+      </h1>
+      <p class="text-slate-400 text-lg md:text-xl max-w-3xl mx-auto leading-relaxed">
+        Transform third-party API specs into <strong class="text-indigo-400">runtime type safety</strong>. 
+        Parse OpenAPI 3.x JSON directly into production-ready <strong class="text-emerald-400">Zod schemas</strong> with full validation support.
+      </p>
+    </header>
+
+    <OpenapiToZodTool client:idle />
+
+    <!-- SEO-Enhanced Content Section -->
+    <section class="mt-20 border-t border-slate-800 pt-12" aria-labelledby="type-safety-heading">
+      <h2 id="type-safety-heading" class="text-3xl font-bold text-white mb-8">
+        Why Runtime Validation Matters
+      </h2>
+      <div class="grid md:grid-cols-2 gap-8 text-slate-300 leading-relaxed">
+        <div>
+          <h3 class="text-xl font-semibold text-slate-200 mb-3">From Static Types to Runtime Safety</h3>
+          <p class="text-slate-400">
+            TypeScript interfaces provide compile-time guarantees, but they vanish at runtime. When consuming external APIs, 
+            a single schema change can crash your production app. <strong>Zod schemas</strong> bridge this gap by validating 
+            actual payloads against expected structures, catching breaking changes before they reach your users.
+          </p>
+        </div>
+        <div>
+          <h3 class="text-xl font-semibold text-slate-200 mb-3">How This Tool Works</h3>
+          <p class="text-slate-400">
+            This converter parses the <code class="text-indigo-300 bg-slate-800 px-1.5 py-0.5 rounded">components.schemas</code> block 
+            of OpenAPI 3.x documents and recursively maps properties, arrays, enums, discriminated unions, and format constraints 
+            (emails, UUIDs, datetimes) into production-ready Zod definitions. All processing happens locally—your proprietary 
+            API specs remain 100% private.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Use Cases Section -->
+    <section class="mt-16" aria-labelledby="use-cases-heading">
+      <h2 id="use-cases-heading" class="text-2xl font-bold text-white mb-6">Common Use Cases</h2>
+      <ul class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {[
+          "Validate third-party API responses in Next.js/Remix apps",
+          "Generate type-safe SDK clients from OpenAPI specs",
+          "Ensure contract compliance in microservices architectures",
+          "Build fail-fast data pipelines with schema enforcement",
+          "Create mock data generators with Zod faker integration",
+          "Document API contracts with runtime-checkable schemas"
+        ].map(useCase => (
+          <li class="bg-slate-800/30 border border-slate-700/50 rounded-lg px-4 py-3 text-slate-300 text-sm flex items-start gap-2">
+            <svg class="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+            <span>{useCase}</span>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <RelatedTools currentTool="openapi-to-zod" />
+  </div>
+</Layout>

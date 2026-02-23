@@ -50,7 +50,7 @@ const ActionButton = ({ onClick, icon: Icon, label, success, primary, ariaLabel 
   <button
     onClick={onClick}
     aria-label={ariaLabel || label}
-    className={`flex items-center gap-1.5 text-[sm] font-medium transition-all px-2 py-1 rounded-md ${
+    className={`flex items-center gap-1.5 text-sm font-medium transition-all px-2 py-1 rounded-md ${
       primary 
         ? 'bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg shadow-indigo-500/20' 
         : success 
@@ -119,12 +119,12 @@ export default function JwtDebugger() {
       </div>
 
       {/* Decoded Boxes */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 h-[400px]">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 h-100">
         {['header', 'payload'].map((key) => (
           <div key={key} className="flex flex-col">
             <div className="flex justify-between items-center mb-2 px-1">
               {/* FIX: Replaced <label> with <h3> to avoid orphaned label error */}
-              <h2 className={`text-[sm] font-bold uppercase tracking-widest ${key === 'header' ? 'text-pink-500' : 'text-indigo-400'}`}>
+              <h2 className={`text-sm font-bold uppercase tracking-widest ${key === 'header' ? 'text-pink-500' : 'text-indigo-400'}`}>
                 {key}
               </h2>
               {decoded[key] && (
@@ -157,20 +157,20 @@ export default function JwtDebugger() {
           )}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className={`p-4 rounded-xl border ${status.status === 'active' ? 'bg-emerald-500/5 border-emerald-500/20 text-emerald-400' : 'bg-red-500/5 border-red-500/20 text-red-400'}`}>
-              <span className="text-[sm] font-bold opacity-70 flex items-center gap-1 mb-1"><Clock className="w-3 h-3" /> Status</span>
-              <p className="text-sm font-bold">{status.label}</p><p className="text-[sm] opacity-60">{status.detail}</p>
+              <span className="text-sm font-bold opacity-70 flex items-center gap-1 mb-1"><Clock className="w-3 h-3" /> Status</span>
+              <p className="text-sm font-bold">{status.label}</p><p className="text-sm opacity-60">{status.detail}</p>
             </div>
             <div className="p-4 rounded-xl bg-slate-800/50 border border-slate-700">
-               <span className="text-[sm] font-bold text-slate-400 flex items-center gap-1 mb-1"><Key className="w-3 h-3" /> Algorithm</span>
+               <span className="text-sm font-bold text-slate-400 flex items-center gap-1 mb-1"><Key className="w-3 h-3" /> Algorithm</span>
                <p className="text-sm font-mono text-white">{decoded.header?.alg || 'None'}</p>
             </div>
             <div className="p-4 rounded-xl bg-slate-800/50 border border-slate-700">
                <div className="flex justify-between items-start mb-1">
-                 <span className="text-[sm] font-bold text-slate-400 flex items-center gap-1"><Lock className="w-3 h-3" /> Signature</span>
+                 <span className="text-sm font-bold text-slate-400 flex items-center gap-1"><Lock className="w-3 h-3" /> Signature</span>
                  {/* FIX: Added ariaLabel="Copy Signature" to handle empty label text */}
                    <CopyButton text={decoded.signature} label="Copy Signature" variant="ghost" />
                </div>
-               <p className="text-[sm] text-slate-400 font-mono break-all line-clamp-2">{decoded.signature}</p>
+               <p className="text-sm text-slate-400 font-mono break-all line-clamp-2">{decoded.signature}</p>
             </div>
           </div>
         </div>

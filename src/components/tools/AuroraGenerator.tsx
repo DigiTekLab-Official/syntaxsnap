@@ -183,7 +183,7 @@ export default function AuroraGenerator() {
             <span className="text-sm font-medium text-slate-300">Live Preview</span>
           </div>
           <div 
-            className="relative w-full h-[400px] bg-slate-950 overflow-hidden flex items-center justify-center"
+            className="relative w-full h-100 bg-slate-950 overflow-hidden flex items-center justify-center"
             role="img"
             aria-label="Interactive aurora gradient preview"
           >

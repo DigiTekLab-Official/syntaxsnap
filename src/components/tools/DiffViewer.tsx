@@ -285,7 +285,7 @@ export default function DiffViewer() {
                   rightPanelRef.current &&
                   syncScroll(leftPanelRef.current, rightPanelRef.current)
                 }
-                className="overflow-auto max-h-[600px]"
+                className="overflow-auto max-h-150"
               >
                 <div className="sticky top-0 bg-slate-900/95 backdrop-blur-sm p-2 border-b border-slate-800 text-[12px] uppercase font-bold text-red-400 z-10">
                   Original
@@ -319,7 +319,7 @@ export default function DiffViewer() {
                   leftPanelRef.current &&
                   syncScroll(rightPanelRef.current, leftPanelRef.current)
                 }
-                className="overflow-auto max-h-[600px]"
+                className="overflow-auto max-h-150"
               >
                 <div className="sticky top-0 bg-slate-900/95 backdrop-blur-sm p-2 border-b border-slate-800 text-[12px] uppercase font-bold text-emerald-400 z-10 flex justify-between items-center">
                   <span>Modified</span>
@@ -348,7 +348,7 @@ export default function DiffViewer() {
             </div>
           ) : (
             /* Unified view */
-            <div className="overflow-auto max-h-[600px]">
+            <div className="overflow-auto max-h-150">
               <pre className="m-0">
                 {diffs.map((part, i) => (
                   <div

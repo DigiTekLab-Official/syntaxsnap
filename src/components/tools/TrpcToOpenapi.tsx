@@ -469,7 +469,7 @@ export default function TrpcToOpenapiTool() {
   }, [debouncedInput]);
 
   return (
-    <div ref={rootRef} className="grid grid-cols-1 lg:grid-cols-2 gap-6 h-[600px]">
+    <div ref={rootRef} className="grid grid-cols-1 lg:grid-cols-2 gap-6 h-150">
       {/* Input Panel */}
       <div className="flex flex-col bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl">
         <div className="bg-slate-800/50 px-4 py-3 border-b border-slate-700 flex justify-between items-center">

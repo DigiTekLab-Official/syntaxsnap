@@ -151,7 +151,7 @@ export default function AiMockGenerator() {
           >
             {copiedText === result ? 'Copied!' : 'Copy JSON'}
           </button>
-          <pre className="p-6 pt-14 bg-slate-950 rounded-lg border border-slate-800 overflow-x-auto shadow-2xl max-h-[500px] overflow-y-auto">
+          <pre className="p-6 pt-14 bg-slate-950 rounded-lg border border-slate-800 overflow-x-auto shadow-2xl max-h-125 overflow-y-auto">
             <code className="text-emerald-300 text-sm font-mono">{result}</code>
           </pre>
         </div>

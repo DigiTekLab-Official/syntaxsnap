@@ -48,7 +48,7 @@ export default function GraphqlToTrpc() {
           </div>
           <textarea
             id="graphqlInput"
-            className="w-full flex-1 min-h-[500px] bg-transparent p-4 text-sm font-mono text-slate-300 focus:outline-none resize-none"
+            className="w-full flex-1 min-h-125 bg-transparent p-4 text-sm font-mono text-slate-300 focus:outline-none resize-none"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             spellCheck={false}
@@ -68,7 +68,7 @@ export default function GraphqlToTrpc() {
           <label htmlFor="trpcOutput" className="sr-only">tRPC Router Output</label>
           <textarea
             id="trpcOutput"
-            className="w-full flex-1 min-h-[500px] bg-transparent p-4 text-sm font-mono text-sky-300 focus:outline-none resize-none"
+            className="w-full flex-1 min-h-125 bg-transparent p-4 text-sm font-mono text-sky-300 focus:outline-none resize-none"
             value={output}
             readOnly
             spellCheck={false}
