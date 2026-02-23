@@ -35,7 +35,7 @@ export default function DockerfileGenerator() {
 
             {/* Framework Select */}
             <div className="space-y-3 mb-6">
-              <span id="frameworkLabel" className="text-xs font-bold text-slate-500 uppercase tracking-wider block">Framework</span>
+              <span id="frameworkLabel" className="text-xs font-bold text-slate-400 uppercase tracking-wider block">Framework</span>
               <div className="grid grid-cols-1 gap-2" role="radiogroup" aria-labelledby="frameworkLabel">
                 {(['next', 'node', 'astro'] as Framework[]).map((f) => (
                   <button
@@ -58,7 +58,7 @@ export default function DockerfileGenerator() {
 
             {/* Package Manager Select */}
             <div className="space-y-3 mb-6">
-              <span id="pmLabel" className="text-xs font-bold text-slate-500 uppercase tracking-wider block">Package Manager</span>
+              <span id="pmLabel" className="text-xs font-bold text-slate-400 uppercase tracking-wider block">Package Manager</span>
               <div className="grid grid-cols-2 gap-2" role="radiogroup" aria-labelledby="pmLabel">
                 {(['npm', 'yarn', 'pnpm', 'bun'] as PackageManager[]).map((p) => (
                   <button
@@ -80,7 +80,7 @@ export default function DockerfileGenerator() {
 
             {/* Node Version Select */}
             <div className="space-y-3">
-              <span id="nodeVersionLabel" className="text-xs font-bold text-slate-500 uppercase tracking-wider block">Node.js Version</span>
+              <span id="nodeVersionLabel" className="text-xs font-bold text-slate-400 uppercase tracking-wider block">Node.js Version</span>
               <div className="flex gap-2 bg-slate-950 p-1.5 rounded-xl border border-slate-800" role="radiogroup" aria-labelledby="nodeVersionLabel">
                 {(['18', '20', '22'] as NodeVersion[]).map((v) => (
                   <button
@@ -91,7 +91,7 @@ export default function DockerfileGenerator() {
                     className={`flex-1 py-1.5 rounded-lg text-sm font-medium transition-all ${
                       nodeVersion === v 
                         ? 'bg-slate-800 text-slate-200 shadow' 
-                        : 'text-slate-500 hover:text-slate-300'
+                        : 'text-slate-400 hover:text-slate-300'
                     }`}
                   >
                     v{v}
@@ -111,7 +111,7 @@ export default function DockerfileGenerator() {
                 <button 
                   onClick={() => setActiveTab('dockerfile')}
                   className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
-                    activeTab === 'dockerfile' ? 'bg-slate-800 text-blue-400' : 'text-slate-500 hover:text-slate-300 hover:bg-slate-800/50'
+                    activeTab === 'dockerfile' ? 'bg-slate-800 text-blue-400' : 'text-slate-400 hover:text-slate-300 hover:bg-slate-800/50'
                   }`}
                 >
                   <Box className="w-4 h-4" /> Dockerfile
@@ -119,7 +119,7 @@ export default function DockerfileGenerator() {
                 <button 
                   onClick={() => setActiveTab('ignore')}
                   className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
-                    activeTab === 'ignore' ? 'bg-slate-800 text-amber-400' : 'text-slate-500 hover:text-slate-300 hover:bg-slate-800/50'
+                    activeTab === 'ignore' ? 'bg-slate-800 text-amber-400' : 'text-slate-400 hover:text-slate-300 hover:bg-slate-800/50'
                   }`}
                 >
                   <FileCode2 className="w-4 h-4" /> .dockerignore

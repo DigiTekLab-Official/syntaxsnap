@@ -19,6 +19,10 @@ export default defineConfig({
   // 'directory' = dist/tools/json-to-zod/index.html (Cloudflare forces slash)
   build: {
     format: 'file',
+    // Inline CSS into <style> tags in the HTML to eliminate render-blocking requests.
+    // 'auto' inlines sheets below Vite's assetsInlineLimit (default 4 KB).
+    // 'always' inlines all stylesheets — removes the blocking /_astro/*.css request entirely.
+    inlineStylesheets: 'always',
   },
 
   // ── Trailing slash ────────────────────────────────────────────────────────

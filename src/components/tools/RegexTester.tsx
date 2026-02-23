@@ -134,7 +134,7 @@ export default function RegexTester() {
           {/* Pattern Input */}
           <div className="col-span-12 md:col-span-9 relative">
             <label htmlFor="patternInput" className="sr-only">Regex Pattern</label>
-            <div className="flex items-center absolute left-3 top-3 text-slate-500 select-none font-mono text-lg">/</div>
+            <div className="flex items-center absolute left-3 top-3 text-slate-400 select-none font-mono text-lg">/</div>
             <input
               id="patternInput"
               type="text"
@@ -143,13 +143,13 @@ export default function RegexTester() {
               className={`w-full bg-slate-950 border ${error || timedOut ? 'border-red-500/50 focus:ring-red-500/20' : 'border-slate-700 focus:border-indigo-500 focus:ring-indigo-500/20'} rounded-xl py-3 pl-8 pr-4 font-mono text-sm text-indigo-300 focus:outline-none focus:ring-2 transition-all`}
               placeholder="Enter regex pattern..."
             />
-            <div className="flex items-center absolute right-3 top-3 text-slate-500 select-none font-mono text-lg">/</div>
+            <div className="flex items-center absolute right-3 top-3 text-slate-400 select-none font-mono text-lg">/</div>
           </div>
 
           {/* Flags Input */}
           <div className="col-span-12 md:col-span-3 relative">
             <label htmlFor="flagsInput" className="sr-only">Regex Flags</label>
-            <div className="absolute left-3 top-3.5 text-slate-500">
+            <div className="absolute left-3 top-3.5 text-slate-400">
               <Flag className="w-4 h-4" />
             </div>
             <input
@@ -183,7 +183,7 @@ export default function RegexTester() {
         
         {/* Test String Input */}
         <div className="flex flex-col gap-2">
-          <label htmlFor="testStringInput" className="text-xs font-semibold text-slate-500 uppercase tracking-wider ml-1">Test String</label>
+          <label htmlFor="testStringInput" className="text-xs font-semibold text-slate-400 uppercase tracking-wider ml-1">Test String</label>
           <textarea
             id="testStringInput"
             value={text}
@@ -196,9 +196,9 @@ export default function RegexTester() {
         {/* Results Output */}
         <div className="flex flex-col gap-2">
           <div className="flex justify-between items-center ml-1">
-            <span id="resultsLabel" className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Live Results</span>
+            <span id="resultsLabel" className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Live Results</span>
             <div className="flex items-center gap-2">
-              <span className={`text-xs px-2 py-0.5 rounded-full font-mono ${matches.length > 0 ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-slate-800 text-slate-500'}`}>
+              <span className={`text-xs px-2 py-0.5 rounded-full font-mono ${matches.length > 0 ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-slate-800 text-slate-400'}`}>
                 {matches.length} Matches Found
               </span>
               <CopyButton text={html} label="Copy Results" variant="ghost" />
@@ -223,7 +223,7 @@ export default function RegexTester() {
           </div>
           <div className="overflow-x-auto">
             <table className="w-full text-left text-sm text-slate-400">
-              <thead className="text-xs uppercase bg-slate-900/50 text-slate-500 font-medium">
+              <thead className="text-xs uppercase bg-slate-900/50 text-slate-400 font-medium">
                 <tr>
                   <th className="px-6 py-3">#</th>
                   <th className="px-6 py-3">Match</th>
@@ -236,7 +236,7 @@ export default function RegexTester() {
                   <tr key={i} className="hover:bg-slate-800/30 transition-colors">
                     <td className="px-6 py-3 font-mono text-slate-600">{i + 1}</td>
                     <td className="px-6 py-3 font-mono text-indigo-300">{m.value}</td>
-                    <td className="px-6 py-3 font-mono text-slate-500">{m.index}</td>
+                    <td className="px-6 py-3 font-mono text-slate-400">{m.index}</td>
                     <td className="px-6 py-3 font-mono text-slate-400">
                       {m.groups ? JSON.stringify(m.groups) : <span className="text-slate-600">-</span>}
                     </td>
@@ -246,7 +246,7 @@ export default function RegexTester() {
             </table>
           </div>
           {matches.length > 50 && (
-            <div className="px-6 py-2 text-xs text-center text-slate-500 bg-slate-900/30 border-t border-slate-800">
+            <div className="px-6 py-2 text-xs text-center text-slate-400 bg-slate-900/30 border-t border-slate-800">
               Showing first 50 matches only
             </div>
           )}

@@ -29,6 +29,15 @@ const canonicalURL = new URL(Astro.url.pathname, siteUrl).toString();
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Preconnect to third-party origins used by Clarity (saves ~330ms) -->
+    <link rel="preconnect" href="https://www.clarity.ms" crossorigin />
+    <link rel="preconnect" href="https://c.clarity.ms" crossorigin />
+    <link rel="preconnect" href="https://c.bing.com" crossorigin />
+    <!-- dns-prefetch fallback for browsers without preconnect support -->
+    <link rel="dns-prefetch" href="https://www.clarity.ms" />
+    <link rel="dns-prefetch" href="https://c.clarity.ms" />
+    <link rel="dns-prefetch" href="https://c.bing.com" />
     
     <link rel="icon" type="image/svg+xml" href="/icon.svg" />
     
@@ -56,14 +65,6 @@ const canonicalURL = new URL(Astro.url.pathname, siteUrl).toString();
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content="https://syntaxsnap.com/og-preview.jpg" />
 
-    <script is:inline>
-        (function(c,l,a,r,i,t,y){
-            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-        })(window, document, "clarity", "script", "viplajyvf3");
-    </script>
-
     {/* SEO Schema: Global (Org/WebSite) + Conditional (Tool) */}
     <JsonLd 
       type={isTool ? 'tool' : 'website'} 
@@ -80,5 +81,14 @@ const canonicalURL = new URL(Astro.url.pathname, siteUrl).toString();
       <slot />
     </main>
     <Footer />
+
+    {/* Analytics: Loaded at end of body to avoid competing with LCP */}
+    <script is:inline>
+        (function(c,l,a,r,i,t,y){
+            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+        })(window, document, "clarity", "script", "viplajyvf3");
+    </script>
   </body>
 </html>

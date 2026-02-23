@@ -99,7 +99,7 @@ export default function AiMockGenerator() {
       )}
 
       {/* Privacy notice — data is relayed to OpenAI */}
-      <p className="text-xs text-slate-500 border border-slate-800 rounded-lg px-3 py-2">
+      <p className="text-xs text-slate-400 border border-slate-800 rounded-lg px-3 py-2">
         <strong className="text-slate-400">Privacy notice:</strong> Your prompt or schema is sent to{' '}
         <strong className="text-slate-400">OpenAI</strong> to generate mock data. Do not include real
         personal data, credentials, or proprietary schemas. See our{' '}

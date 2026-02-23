@@ -299,7 +299,7 @@ export default function SqlToJson() {
             <button
               type="button"
               onClick={() => setSql('')}
-              className="flex items-center gap-1.5 text-xs text-slate-500 hover:text-red-400 transition-colors rounded px-2 py-1"
+              className="flex items-center gap-1.5 text-xs text-slate-400 hover:text-red-400 transition-colors rounded px-2 py-1"
             >
               <Trash2 className="w-3.5 h-3.5" aria-hidden /> Clear
             </button>
@@ -321,7 +321,7 @@ export default function SqlToJson() {
                 role="tab"
                 aria-selected={activeTab === 'json'}
                 onClick={() => setActiveTab('json')}
-                className={`px-4 py-1.5 rounded-lg text-sm font-bold transition-colors ${activeTab === 'json' ? 'bg-indigo-500 text-white' : 'text-slate-500 hover:text-slate-300'}`}
+                className={`px-4 py-1.5 rounded-lg text-sm font-bold transition-colors ${activeTab === 'json' ? 'bg-indigo-500 text-white' : 'text-slate-400 hover:text-slate-300'}`}
               >
                 JSON Schema
               </button>
@@ -330,7 +330,7 @@ export default function SqlToJson() {
                 role="tab"
                 aria-selected={activeTab === 'zod'}
                 onClick={() => setActiveTab('zod')}
-                className={`px-4 py-1.5 rounded-lg text-sm font-bold transition-colors ${activeTab === 'zod' ? 'bg-indigo-500 text-white' : 'text-slate-500 hover:text-slate-300'}`}
+                className={`px-4 py-1.5 rounded-lg text-sm font-bold transition-colors ${activeTab === 'zod' ? 'bg-indigo-500 text-white' : 'text-slate-400 hover:text-slate-300'}`}
               >
                 Zod Schema
               </button>

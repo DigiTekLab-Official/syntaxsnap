@@ -77,7 +77,7 @@ background-image:
             { label: 'Bottom Left', idx: 3 },
           ].map(({ label, idx }) => (
             <div key={idx} className="group">
-              <label htmlFor={`colorInput${idx}`} className="text-[12px] text-slate-500 uppercase font-semibold tracking-wider mb-1.5 block group-hover:text-indigo-400 transition-colors">{label}</label>
+              <label htmlFor={`colorInput${idx}`} className="text-[12px] text-slate-400 uppercase font-semibold tracking-wider mb-1.5 block group-hover:text-indigo-400 transition-colors">{label}</label>
               <div className="flex items-center gap-2 bg-slate-950 border border-slate-800 p-1.5 rounded-lg group-focus-within:border-indigo-500/50 transition-colors">
                 <input 
                   id={`colorInput${idx}`}
@@ -94,7 +94,7 @@ background-image:
 
         {/* Background Color */}
         <div className="pt-4 border-t border-slate-800">
-          <label htmlFor="bgColorInput" className="text-[12px] text-slate-500 uppercase font-semibold tracking-wider mb-2 block">Base Background</label>
+          <label htmlFor="bgColorInput" className="text-[12px] text-slate-400 uppercase font-semibold tracking-wider mb-2 block">Base Background</label>
           <div className="flex items-center gap-3 bg-slate-950 border border-slate-800 p-2 rounded-lg">
             <input 
               id="bgColorInput"
@@ -108,7 +108,7 @@ background-image:
 
         {/* Presets */}
         <div>
-          <span id="presetLabel" className="text-[12px] text-slate-500 uppercase font-semibold tracking-wider mb-2 block">Quick Presets</span>
+          <span id="presetLabel" className="text-[12px] text-slate-400 uppercase font-semibold tracking-wider mb-2 block">Quick Presets</span>
           <div id="presetButtons" className="grid grid-cols-4 gap-2" aria-labelledby="presetLabel">
             {Object.entries(PRESETS).map(([name, vals]) => (
               <button
@@ -128,7 +128,7 @@ background-image:
         {/* Output */}
         <div className="mt-auto pt-4">
           <div className="flex justify-between items-center mb-2">
-            <span className="text-xs font-semibold text-slate-500 uppercase">CSS Output</span>
+            <span className="text-xs font-semibold text-slate-400 uppercase">CSS Output</span>
             <CopyButton text={cssOutput} label="Copy CSS" variant="ghost" />
           </div>
           <pre className="bg-slate-950 p-3 rounded-lg text-[12px] text-slate-400 font-mono overflow-x-auto border border-slate-800 whitespace-pre">

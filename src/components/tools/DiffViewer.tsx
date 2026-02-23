@@ -53,7 +53,7 @@ function getDiffKey(part: Diff.Change, index: number): string {
 
 function DiffStats({ stats }: { stats: DiffStats }) {
   return (
-    <div className="flex items-center gap-4 text-[12px] font-mono tabular-nums text-slate-500">
+    <div className="flex items-center gap-4 text-[12px] font-mono tabular-nums text-slate-400">
       <span className="flex items-center gap-1">
         <span className="text-emerald-400">+{stats.added}</span>
       </span>
@@ -242,7 +242,7 @@ export default function DiffViewer() {
       {/* ── Input panels ──────────────────────────────────────────────── */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="space-y-2">
-          <label htmlFor="old-text" className="text-xs font-bold uppercase tracking-widest text-slate-500 ml-1">
+          <label htmlFor="old-text" className="text-xs font-bold uppercase tracking-widest text-slate-400 ml-1">
             Original Version
           </label>
           <textarea
@@ -374,7 +374,7 @@ export default function DiffViewer() {
       )}
 
       <div className="text-center pt-4">
-        <p className="text-[12px] text-slate-500 flex items-center justify-center gap-2">
+        <p className="text-[12px] text-slate-400 flex items-center justify-center gap-2">
           <Lock className="w-3 h-3" aria-hidden /> Comparison happens locally. Your text never leaves your device.
         </p>
       </div>

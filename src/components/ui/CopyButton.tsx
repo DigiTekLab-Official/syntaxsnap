@@ -114,10 +114,10 @@ const BUTTON_STYLES = {
       pending: 'border border-slate-700 text-slate-400 cursor-wait',
     },
     minimal: {
-      idle: 'text-slate-500 hover:text-slate-300 focus:ring-slate-500',
+      idle: 'text-slate-400 hover:text-slate-300 focus:ring-slate-500',
       success: 'text-emerald-400 focus:ring-emerald-500',
       error: 'text-red-400 focus:ring-red-500',
-      pending: 'text-slate-500 cursor-wait',
+      pending: 'text-slate-400 cursor-wait',
     },
   },
 } as const;

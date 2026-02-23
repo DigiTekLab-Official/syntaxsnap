@@ -55,7 +55,7 @@ const ActionButton = ({ onClick, icon: Icon, label, success, primary, ariaLabel 
         ? 'bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg shadow-indigo-500/20' 
         : success 
           ? 'text-emerald-400 bg-emerald-500/10' 
-          : 'text-slate-500 hover:text-white hover:bg-slate-800'
+          : 'text-slate-400 hover:text-white hover:bg-slate-800'
     }`}
   >
     <Icon className="w-3 h-3" aria-hidden="true" /> {label}
@@ -170,7 +170,7 @@ export default function JwtDebugger() {
                  {/* FIX: Added ariaLabel="Copy Signature" to handle empty label text */}
                    <CopyButton text={decoded.signature} label="Copy Signature" variant="ghost" />
                </div>
-               <p className="text-[sm] text-slate-500 font-mono break-all line-clamp-2">{decoded.signature}</p>
+               <p className="text-[sm] text-slate-400 font-mono break-all line-clamp-2">{decoded.signature}</p>
             </div>
           </div>
         </div>

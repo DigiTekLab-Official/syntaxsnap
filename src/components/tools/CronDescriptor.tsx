@@ -164,7 +164,7 @@ export default function CronDescriptor() {
           <button
             type="button"
             onClick={() => setCron('')}
-            className="flex items-center gap-1.5 text-xs text-slate-500 hover:text-red-400 transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-red-500 rounded px-2 py-1"
+            className="flex items-center gap-1.5 text-xs text-slate-400 hover:text-red-400 transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-red-500 rounded px-2 py-1"
           >
             <Trash2 className="w-3.5 h-3.5" aria-hidden /> Clear
           </button>
@@ -186,7 +186,7 @@ export default function CronDescriptor() {
 
         {/* Quick Presets */}
         <div className="mt-4">
-          <p className="text-xs text-slate-500 mb-2">Quick Presets:</p>
+          <p className="text-xs text-slate-400 mb-2">Quick Presets:</p>
           <div className="flex flex-wrap gap-2">
             {CRON_PRESETS.map((preset) => (
               <button
@@ -211,7 +211,7 @@ export default function CronDescriptor() {
           <div className="grid grid-cols-5 gap-3">
             {fields.map((field) => (
               <div key={field.name} className="bg-slate-950 border border-slate-800 rounded-lg p-3">
-                <div className="text-[10px] text-slate-500 mb-1 uppercase tracking-wide">
+                <div className="text-[10px] text-slate-400 mb-1 uppercase tracking-wide">
                   {field.name}
                 </div>
                 <div className="text-lg font-mono font-bold text-indigo-300 mb-1">
@@ -285,7 +285,7 @@ export default function CronDescriptor() {
               <CalendarDays className="w-5 h-5 text-sky-400" aria-hidden />
               <h3 className="font-semibold">Next Expected Runs</h3>
             </div>
-            <label className="flex items-center gap-2 text-xs text-slate-500">
+            <label className="flex items-center gap-2 text-xs text-slate-400">
               Show:
               <input
                 type="number"

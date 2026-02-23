@@ -78,7 +78,7 @@ function SliderRow({ label, value, min, max, unit = '', onChange }: any) {
     <div className="group">
       <div className="flex justify-between items-center mb-2">
         <label className="text-xs font-medium text-slate-400 group-hover:text-indigo-400 transition-colors uppercase tracking-wider">{label}</label>
-        <span className="text-xs font-mono text-slate-500 tabular-nums bg-slate-800 px-1.5 py-0.5 rounded">
+        <span className="text-xs font-mono text-slate-400 tabular-nums bg-slate-800 px-1.5 py-0.5 rounded">
           {value}{unit}
         </span>
       </div>
@@ -126,7 +126,7 @@ export default function GlassGenerator() {
             </h3>
             <button 
               onClick={() => setCfg(DEFAULTS)}
-              className="text-xs text-slate-500 hover:text-white flex items-center gap-1 transition-colors"
+              className="text-xs text-slate-400 hover:text-white flex items-center gap-1 transition-colors"
               title="Reset to default"
             >
               <RotateCcw className="w-3 h-3" /> Reset
@@ -237,7 +237,7 @@ export default function GlassGenerator() {
 
         </div>
         
-        <p className="text-center text-xs text-slate-500">
+        <p className="text-center text-xs text-slate-400">
           <ImageIcon className="w-3 h-3 inline mr-1" />
           Try different backgrounds to ensure text readability.
         </p>
