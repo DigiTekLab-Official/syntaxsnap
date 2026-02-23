@@ -39,6 +39,7 @@ import {
   Zap,
   Wand2,
   FileJson,
+  Bot
 } from 'lucide-astro';
 
 // ─── CATEGORY REGISTRY ───────────────────────────────────────────────────────
@@ -294,4 +295,15 @@ export const TOOLS: Tool[] = [
     bg: 'bg-orange-500/10',
     category: 'json',
   },
+  {
+    id: 'zod-to-prompt',
+    title: 'Zod to LLM Prompt',
+    desc: 'Convert TypeScript Zod schemas into optimized LLM system prompts. Force Claude, GPT-4, and Gemini to return perfectly structured, predictable JSON.',
+    href: '/tools/zod-to-prompt',
+    icon: Bot,
+    status: 'New',
+    color: 'text-emerald-400',
+    bg: 'bg-emerald-500/10',
+    category: 'ai',
+  }
 ];
