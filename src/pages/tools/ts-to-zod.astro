@@ -1,0 +1,115 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import TsToZodTool from '../../components/tools/TsToZod.tsx';
+import RelatedTools from '../../components/ui/RelatedTools.astro';
+
+const metadata = {
+  title: "TypeScript to Zod Converter | Runtime-Safe Schema Generator | SyntaxSnap",
+  description: "Convert TypeScript interfaces and types into Zod validation schemas instantly. Supports complex types, unions, arrays, nested objects, and utility types. Zero server round-trips, 100% private client-side processing.",
+  features: [
+    "Auto-parses TypeScript interfaces, types, and enums from your codebase",
+    "Smart inference: primitives, arrays, tuples, unions, intersections, and nested objects",
+    "Preserves optional (?) properties, readonly modifiers, and literal types",
+    "Handles utility types: Partial, Required, Pick, Omit, Record",
+    "100% client-side AST processing—your proprietary types never leave your browser"
+  ],
+  keywords: "typescript to zod, ts to zod, interface to zod schema, type to zod converter, runtime validation"
+};
+---
+
+<Layout 
+  title={metadata.title} 
+  description={metadata.description} 
+  isTool={true} 
+  features={metadata.features}
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-12 lg:py-16">
+    <header class="text-center mb-12">
+      <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white mb-4 tracking-tight">
+        TypeScript → Zod Converter
+      </h1>
+      <p class="text-slate-400 text-lg md:text-xl max-w-3xl mx-auto leading-relaxed">
+        Transform static types into <strong class="text-blue-400">runtime validation</strong>. 
+        Paste your TypeScript interfaces and instantly generate production-ready <strong class="text-emerald-400">Zod schemas</strong> 
+        with full type inference support.
+      </p>
+    </header>
+
+    <TsToZodTool client:idle />
+
+    <!-- SEO-Enhanced Content Section -->
+    <section class="mt-20 border-t border-slate-800 pt-12" aria-labelledby="why-zod-heading">
+      <h2 id="why-zod-heading" class="text-3xl font-bold text-white mb-8">
+        Why Convert TypeScript to Zod?
+      </h2>
+      <div class="grid md:grid-cols-2 gap-8 text-slate-300 leading-relaxed">
+        <div>
+          <h3 class="text-xl font-semibold text-slate-200 mb-3">The Runtime Gap in TypeScript</h3>
+          <p class="text-slate-400">
+            TypeScript provides excellent compile-time safety and developer experience, but <strong>types are completely erased at runtime</strong>. 
+            When your application receives data from form submissions, external APIs, databases, or user uploads, TypeScript interfaces 
+            cannot protect you from malformed data causing runtime crashes or security vulnerabilities.
+          </p>
+        </div>
+        <div>
+          <h3 class="text-xl font-semibold text-slate-200 mb-3">Runtime Boundaries with Zod</h3>
+          <p class="text-slate-400">
+            By converting your <code class="text-blue-300 bg-slate-800 px-1.5 py-0.5 rounded">interface</code> and 
+            <code class="text-blue-300 bg-slate-800 px-1.5 py-0.5 rounded">type</code> definitions into <strong>Zod schemas</strong>, 
+            you create a runtime validation boundary. Parse incoming data, strip unknown fields, coerce types, and throw actionable 
+            validation errors—all before bad data touches your core application logic.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Use Cases Section -->
+    <section class="mt-16" aria-labelledby="use-cases-heading">
+      <h2 id="use-cases-heading" class="text-2xl font-bold text-white mb-6">Common Use Cases</h2>
+      <ul class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {[
+          "Validate form submissions in React/Next.js with react-hook-form",
+          "Parse environment variables with type safety at startup",
+          "Validate API responses from third-party services",
+          "Protect tRPC endpoints with runtime input validation",
+          "Generate mock data with Zod faker integration",
+          "Build configuration parsers with .parse() and .safeParse()",
+          "Validate database query results before business logic",
+          "Create type-safe webhooks and event handlers",
+          "Enforce data contracts in microservices architectures"
+        ].map(useCase => (
+          <li class="bg-slate-800/30 border border-slate-700/50 rounded-lg px-4 py-3 text-slate-300 text-sm flex items-start gap-2">
+            <svg class="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+            <span>{useCase}</span>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <!-- Technical Details -->
+    <section class="mt-16 bg-slate-800/20 border border-slate-700/50 rounded-2xl p-8" aria-labelledby="how-it-works">
+      <h2 id="how-it-works" class="text-2xl font-bold text-white mb-4">How It Works</h2>
+      <div class="text-slate-400 space-y-3 leading-relaxed">
+        <p>
+          This tool performs lightweight AST-style parsing of your TypeScript code to extract interface and type declarations. 
+          It recursively traverses property definitions, maps TypeScript primitives to Zod equivalents, and intelligently handles:
+        </p>
+        <ul class="list-disc list-inside space-y-1 ml-4 text-slate-300">
+          <li>Optional properties (<code class="text-blue-300">?</code>) → <code class="text-emerald-300">.optional()</code></li>
+          <li>Union types (<code class="text-blue-300">string | number</code>) → <code class="text-emerald-300">z.union([&hellip;])</code></li>
+          <li>Literal types (<code class="text-blue-300">"ADMIN" | "USER"</code>) → <code class="text-emerald-300">z.enum([&hellip;])</code></li>
+          <li>Array types (<code class="text-blue-300">string[]</code>) → <code class="text-emerald-300">z.array(z.string())</code></li>
+          <li>Nested objects → Recursive <code class="text-emerald-300">z.object({'{…}'})</code> construction</li>
+        </ul>
+        <p class="mt-4">
+          All processing happens <strong>locally in your browser</strong>—no code is uploaded to any server, 
+          ensuring your proprietary type definitions remain completely private.
+        </p>
+      </div>
+    </section>
+
+    <RelatedTools currentTool="ts-to-zod" />
+  </div>
+</Layout>

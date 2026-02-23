@@ -25,6 +25,7 @@ import {
   Clock,
   Container,
   Database,
+  FileType,
   FileCode2,
   GitCompare,
   GlassWater,
@@ -328,5 +329,16 @@ export const TOOLS: Tool[] = [
     color: 'text-indigo-400',
     bg: 'bg-indigo-500/10',
     category: 'json',
+  },
+  {
+    id: 'ts-to-zod',
+    title: 'TypeScript to Zod',
+    desc: 'Instantly convert TypeScript interfaces and types into Zod validation schemas. 100% client-side execution for total privacy.',
+    href: '/tools/ts-to-zod',
+    icon: FileType,
+    status: 'New',
+    color: 'text-blue-400',
+    bg: 'bg-blue-500/10',
+    category: 'dev',
   }
 ];
