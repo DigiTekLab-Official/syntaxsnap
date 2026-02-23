@@ -110,7 +110,7 @@ function parseZodFields(source: string): ParsedField[] {
     // Extract base type: z.string, z.number, z.boolean, z.enum, z.array, z.object, z.literal, z.union, z.date, z.any, z.unknown, z.record
     const typeMatch = chain.match(/^z\.([a-zA-Z]+)/);
     if (!typeMatch) continue;
-    let baseType = typeMatch[1];
+    const baseType = typeMatch[1];
 
     // Special handling: z.enum(["A", "B"]) — extract values
     let typeDisplay = baseType;
@@ -288,7 +288,7 @@ export default function ZodToPromptTool() {
   }, [debouncedInput]);
 
   return (
-    <div ref={rootRef} className="grid grid-cols-1 lg:grid-cols-2 gap-6 h-150">
+    <div ref={rootRef} className="grid grid-cols-1 lg:grid-cols-2 gap-6 h-[600px]">
       {/* Input Panel */}
       <div className="flex flex-col bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl">
         <div className="bg-slate-800/50 px-4 py-3 border-b border-slate-700 flex justify-between items-center">
