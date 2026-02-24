@@ -1,0 +1,38 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import TailwindShadowGeneratorClient from '../../components/tools/TailwindShadowGenerator';
+
+const title = "Tailwind Shadow & Glow Generator | SyntaxSnap";
+const description = "Visually design multi-layered box shadows and neon glows, and instantly copy the Tailwind CSS v4 arbitrary classes. 100% free and offline.";
+const slug = "tailwind-shadow-generator";
+---
+
+<Layout title={title} description={description} isTool={true} slug={slug}>
+  <div class="max-w-6xl mx-auto">
+    <div class="mb-8">
+      <h1 class="text-3xl md:text-4xl font-extrabold text-white mb-4 flex items-center gap-3">
+        Tailwind Shadow & Glow Generator
+      </h1>
+      <p class="text-slate-400 text-lg max-w-2xl">
+        Build complex, multi-layered <code class="text-indigo-400">box-shadow</code> effects visually. Stack soft ambient shadows or vibrant neon glows, and grab the exact arbitrary Tailwind class.
+      </p>
+    </div>
+
+    <TailwindShadowGeneratorClient client:idle />
+
+    <div class="mt-16 grid grid-cols-1 md:grid-cols-2 gap-12 border-t border-slate-800 pt-12">
+      <div>
+        <h3 class="text-xl font-bold text-white mb-3">Why use arbitrary values for shadows?</h3>
+        <p class="text-slate-400 text-sm leading-relaxed">
+          While Tailwind provides excellent default shadows like <code class="bg-slate-800 px-1 py-0.5 rounded text-slate-300">shadow-xl</code>, modern web design often requires highly specific visual depth. Colored shadows, inner glows, and multi-layered soft drop shadows are best handled using Tailwind's arbitrary value engine (e.g., <code class="bg-slate-800 px-1 py-0.5 rounded text-slate-300">shadow-[0_4px_...]</code>) which compiles down to exactly what you need without bloating your CSS config.
+        </p>
+      </div>
+      <div>
+        <h3 class="text-xl font-bold text-white mb-3">How do I create a "Glow" effect?</h3>
+        <p class="text-slate-400 text-sm leading-relaxed">
+          A glow is simply a shadow with a vibrant color, zero offset, and a high blur radius. Set your X and Y offsets to <code class="bg-slate-800 px-1 py-0.5 rounded text-slate-300">0px</code>, increase the Blur to <code class="bg-slate-800 px-1 py-0.5 rounded text-slate-300">40px</code> or higher, and choose a bright color like cyan or fuchsia. For a more intense glow, stack two layers: one with a wide, soft blur, and a second with a tighter blur radius.
+        </p>
+      </div>
+    </div>
+  </div>
+</Layout>

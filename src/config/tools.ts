@@ -42,7 +42,8 @@ import {
   FileJson,
   Bot,
   Network,
-  FileKey
+  FileKey,
+  Blend
 } from 'lucide-astro';
 
 // ─── CATEGORY REGISTRY ───────────────────────────────────────────────────────
@@ -352,5 +353,16 @@ export const TOOLS: Tool[] = [
     color: 'text-green-400',
     bg: 'bg-green-500/10',
     category: 'dev',
+  },
+  {
+    id: 'tailwind-shadow-generator',
+    title: 'Tailwind Shadow Gen',
+    desc: 'Visually design multi-layered box shadows and neon glows, then instantly copy the Tailwind CSS v4 arbitrary class. 100% free and offline.',
+    href: '/tools/tailwind-shadow-generator',
+    icon: Blend,
+    status: 'New',
+    color: 'text-violet-400',
+    bg: 'bg-violet-500/10',
+    category: 'css',
   }
 ];
