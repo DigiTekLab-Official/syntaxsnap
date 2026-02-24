@@ -1,6 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import EnvToZodClient from '../../components/tools/EnvToZod';
+import RelatedTools from '../../components/ui/RelatedTools.astro';
 
 const title = "Env to Zod Converter | SyntaxSnap";
 const description = "Instantly convert your .env files into strict, type-safe Zod validation schemas for Next.js and Node.js. 100% offline and secure.";
@@ -36,5 +37,6 @@ const slug = "env-to-zod";
         </p>
       </div>
     </div>
+    <RelatedTools currentTool="env-to-zod" />
   </div>
 </Layout>
