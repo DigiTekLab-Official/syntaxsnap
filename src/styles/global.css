@@ -5,3 +5,8 @@
   /* This makes h-125 work everywhere in your project */
   --spacing-125: 31.25rem; 
 }
+
+/* Force-hide Monaco cursor in read-only output panes (Chrome ignores cursorWidth:0) */
+[data-output-pane] .monaco-editor .cursors-layer .cursor {
+  display: none !important;
+}
