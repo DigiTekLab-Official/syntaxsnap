@@ -204,7 +204,7 @@ export default function EnvToZod() {
                   overviewRulerLanes: 0,
                   hideCursorInOverviewRuler: true,
                   cursorWidth: 0,
-                  cursorBlinking: 'hidden',
+                  cursorBlinking: 'solid',
                   scrollbar: { verticalScrollbarSize: 8 },
                 }}
               />
