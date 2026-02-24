@@ -9,19 +9,26 @@ interface Props {
   title?: string;
   description?: string;
   isTool?: boolean; 
-  features?: string[]; // <-- Added features prop
+  features?: string[]; 
+  slug?: string; // <-- Added slug prop for dynamic OG images
 }
 
 const { 
   title = "SyntaxSnap - Privacy-First Developer Tools",
   description = "A privacy-first suite of developer tools that run entirely in your browser. No servers. No tracking.",
   isTool = false,
-  features // <-- Destructured features
+  features,
+  slug // <-- Destructured slug
 } = Astro.props;
 
 // Use Astro.site if available, fallback to hardcoded URL
 const siteUrl = Astro.site?.toString() || "https://syntaxsnap.com";
 const canonicalURL = new URL(Astro.url.pathname, siteUrl).toString();
+
+// Determine the OG Image URL dynamically
+// If a slug is provided, point to the dynamic PNG endpoint. Otherwise, fallback to the default image.
+const ogImagePath = slug ? `/og/${slug}.png` : '/og-preview.jpg';
+const socialImageURL = new URL(ogImagePath, siteUrl).toString();
 ---
 
 <!doctype html>
@@ -30,11 +37,9 @@ const canonicalURL = new URL(Astro.url.pathname, siteUrl).toString();
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <!-- Preconnect to third-party origins used by Clarity (saves ~330ms) -->
     <link rel="preconnect" href="https://www.clarity.ms" crossorigin />
     <link rel="preconnect" href="https://c.clarity.ms" crossorigin />
     <link rel="preconnect" href="https://c.bing.com" crossorigin />
-    <!-- dns-prefetch fallback for browsers without preconnect support -->
     <link rel="dns-prefetch" href="https://www.clarity.ms" />
     <link rel="dns-prefetch" href="https://c.clarity.ms" />
     <link rel="dns-prefetch" href="https://c.bing.com" />
@@ -57,13 +62,13 @@ const canonicalURL = new URL(Astro.url.pathname, siteUrl).toString();
     <meta property="og:url" content={canonicalURL} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content="https://syntaxsnap.com/og-preview.jpg" />
+    <meta property="og:image" content={socialImageURL} />
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:url" content={canonicalURL} />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content="https://syntaxsnap.com/og-preview.jpg" />
+    <meta name="twitter:image" content={socialImageURL} />
 
     {/* SEO Schema: Global (Org/WebSite) + Conditional (Tool) */}
     <JsonLd 

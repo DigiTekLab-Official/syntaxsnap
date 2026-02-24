@@ -65,6 +65,12 @@ export default defineConfig({
   // ── Vite ──────────────────────────────────────────────────────────────────
   vite: {
     plugins: [tailwindcss()],
+    ssr: {
+      // @resvg/resvg-js ships a native .node addon that Rollup cannot parse.
+      // node:fs and node:path are used by the OG image generator at build time.
+      // Externalize them so Node.js loads them directly during static pre-render.
+      external: ['@resvg/resvg-js', 'node:fs', 'node:path'],
+    },
     build: {
       // Target Cloudflare Workers' V8 engine directly.
       target: 'es2022',
