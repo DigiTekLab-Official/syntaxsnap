@@ -41,7 +41,8 @@ import {
   Wand2,
   FileJson,
   Bot,
-  Network
+  Network,
+  FileKey
 } from 'lucide-astro';
 
 // ─── CATEGORY REGISTRY ───────────────────────────────────────────────────────
@@ -339,6 +340,17 @@ export const TOOLS: Tool[] = [
     status: 'New',
     color: 'text-blue-400',
     bg: 'bg-blue-500/10',
+    category: 'dev',
+  },
+  {
+    id: 'env-to-zod',
+    title: 'Env to Zod',
+    desc: 'Convert .env files into strict, type-safe Zod validation schemas for Next.js and Node.js. Infers URLs, emails, booleans, and numbers automatically.',
+    href: '/tools/env-to-zod',
+    icon: FileKey,
+    status: 'New',
+    color: 'text-green-400',
+    bg: 'bg-green-500/10',
     category: 'dev',
   }
 ];

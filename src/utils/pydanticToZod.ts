@@ -68,6 +68,34 @@ function refToName(ref: string): string {
   return ref.split('/').pop() ?? 'Unknown';
 }
 
+/** Sanitizes a title string into a valid JS identifier */
+function toSafeIdentifier(name: string): string {
+  return name.replace(/[^a-zA-Z0-9_$]/g, '_').replace(/^(\d)/, '_$1') || 'Schema';
+}
+
+/**
+ * Resolves a `type` field that may be a string or a string array.
+ * JSON Schema allows `"type": ["string", "null"]` — Pydantic v2 emits this
+ * for Optional fields without anyOf.
+ */
+function resolveTypeArray(
+  node: JsonSchemaNode,
+  ctx: ConversionContext,
+): string | null {
+  if (!Array.isArray(node.type)) return null;
+  const types = node.type as string[];
+  const hasNull = types.includes('null');
+  const nonNull = types.filter((t) => t !== 'null');
+
+  if (nonNull.length === 0) return 'z.null()';
+
+  // Build a synthetic node for each non-null type
+  const parts = nonNull.map((t) => nodeToZod({ ...node, type: t }, ctx));
+  let zod = parts.length === 1 ? parts[0] : `z.union([${parts.join(', ')}])`;
+  if (hasNull) zod += '.nullable()';
+  return zod;
+}
+
 /**
  * Builds a z.string() expression with format and constraint chaining.
  * Note: `.date()` and `.time()` require Zod ≥ 3.22. A warning is emitted
@@ -140,6 +168,15 @@ function buildObjectZod(node: JsonSchemaNode, ctx: ConversionContext): string {
 // ─── CORE RECURSIVE CONVERTER ────────────────────────────────────────────────
 
 /**
+ * If a node has a `default` value, append `.default(...)` to the Zod expression.
+ * Pydantic v2 frequently emits defaults on fields.
+ */
+function maybeDefault(zod: string, node: JsonSchemaNode): string {
+  if (node.default === undefined) return zod;
+  return `${zod}.default(${JSON.stringify(node.default)})`;
+}
+
+/**
  * Recursively converts a single JSON Schema node into a Zod expression string.
  * All logic is pure (no side-effects except appending to `ctx.warnings`).
  */
@@ -182,32 +219,55 @@ function nodeToZod(node: JsonSchemaNode, ctx: ConversionContext): string {
     return node.allOf.map(v => nodeToZod(v, child)).reduce((acc, part) => `${acc}.and(${part})`);
   }
 
+  // ── type as array (e.g. ["string", "null"]) ─────────────────────────────
+  if (Array.isArray(node.type)) {
+    const resolved = resolveTypeArray(node, child);
+    if (resolved) return maybeDefault(resolved, node);
+  }
+
   // ── null ───────────────────────────────────────────────────────────────────
   if (node.type === 'null') return 'z.null()';
 
   // ── string ─────────────────────────────────────────────────────────────────
-  if (node.type === 'string') return buildStringZod(node, ctx);
+  if (node.type === 'string') return maybeDefault(buildStringZod(node, child), node);
 
   // ── integer ────────────────────────────────────────────────────────────────
-  if (node.type === 'integer') return buildNumberZod(node, true);
+  if (node.type === 'integer') return maybeDefault(buildNumberZod(node, true), node);
 
   // ── number ─────────────────────────────────────────────────────────────────
-  if (node.type === 'number') return buildNumberZod(node, false);
+  if (node.type === 'number') return maybeDefault(buildNumberZod(node, false), node);
 
   // ── boolean ────────────────────────────────────────────────────────────────
-  if (node.type === 'boolean') return 'z.boolean()';
+  if (node.type === 'boolean') return maybeDefault('z.boolean()', node);
 
-  // ── array ──────────────────────────────────────────────────────────────────
+  // ── array (with prefixItems / tuple support) ──────────────────────────────
   if (node.type === 'array') {
+    // JSON Schema tuples: prefixItems defines positional element types
+    if (node.prefixItems && node.prefixItems.length > 0) {
+      const parts = node.prefixItems.map((item) => nodeToZod(item, child));
+      return maybeDefault(`z.tuple([${parts.join(', ')}])`, node);
+    }
     const itemZod = node.items ? nodeToZod(node.items, child) : 'z.unknown()';
     let zod = `z.array(${itemZod})`;
     if (node.minItems !== undefined) zod += `.min(${node.minItems})`;
     if (node.maxItems !== undefined) zod += `.max(${node.maxItems})`;
-    return zod;
+    return maybeDefault(zod, node);
   }
 
   // ── object ─────────────────────────────────────────────────────────────────
-  if (node.type === 'object' || node.properties) return buildObjectZod(node, child);
+  if (node.type === 'object' || node.properties) {
+    let zod = buildObjectZod(node, child);
+    // additionalProperties handling
+    if (node.additionalProperties === true) {
+      zod += '.passthrough()';
+    } else if (
+      typeof node.additionalProperties === 'object' &&
+      node.additionalProperties !== null
+    ) {
+      zod += `.catchall(${nodeToZod(node.additionalProperties, child)})`;
+    }
+    return maybeDefault(zod, node);
+  }
 
   return 'z.unknown()';
 }
@@ -237,13 +297,14 @@ export function convertPydanticToZod(schema: JsonSchemaNode): ConversionResult {
 
   // Emit named sub-models from $defs first so $ref names resolve
   for (const [name, defSchema] of Object.entries(defs)) {
-    lines.push(`const ${name} = ${nodeToZod(defSchema, ctx)};`);
-    lines.push(`export type ${name}Type = z.infer<typeof ${name}>;`);
+    const safeName = toSafeIdentifier(name);
+    lines.push(`const ${safeName} = ${nodeToZod(defSchema, ctx)};`);
+    lines.push(`export type ${safeName}Type = z.infer<typeof ${safeName}>;`);
     lines.push('');
   }
 
-  // Emit the root schema
-  const rootName = schema.title ?? 'Schema';
+  // Emit the root schema — sanitize title for safe variable names
+  const rootName = toSafeIdentifier(schema.title ?? 'Schema');
   lines.push(`const ${rootName} = ${nodeToZod(schema, ctx)};`);
   lines.push(`export type ${rootName}Type = z.infer<typeof ${rootName}>;`);
 

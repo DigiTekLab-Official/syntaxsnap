@@ -1,0 +1,40 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import EnvToZodClient from '../../components/tools/EnvToZod';
+
+const title = "Env to Zod Converter | SyntaxSnap";
+const description = "Instantly convert your .env files into strict, type-safe Zod validation schemas for Next.js and Node.js. 100% offline and secure.";
+const slug = "env-to-zod";
+---
+
+<Layout title={title} description={description} isTool={true} slug={slug}>
+  <div class="max-w-6xl mx-auto">
+    <div class="mb-8">
+      <h1 class="text-3xl md:text-4xl font-extrabold text-white mb-4 flex items-center gap-3">
+        Env to Zod Validator
+      </h1>
+      <p class="text-slate-400 text-lg max-w-2xl">
+        Paste your <code class="text-indigo-400">.env</code> file below to instantly generate a type-safe Zod validation schema. Secure your environment variables at runtime, zero server round-trips required.
+      </p>
+    </div>
+
+    <!-- Mount the interactive React component -->
+    <EnvToZodClient client:idle />
+
+    <!-- SEO & FAQ Content -->
+    <div class="mt-16 grid grid-cols-1 md:grid-cols-2 gap-12 border-t border-slate-800 pt-12">
+      <div>
+        <h3 class="text-xl font-bold text-white mb-3">Why validate environment variables?</h3>
+        <p class="text-slate-400 text-sm leading-relaxed">
+          Relying on raw <code class="bg-slate-800 px-1 py-0.5 rounded text-slate-300">process.env</code> strings in Next.js or Node.js is an anti-pattern. If a developer forgets to add an API key locally, or a deployment misses a database URL, the app will crash unpredictably at runtime. Using Zod ensures your app fails fast at startup if configuration is missing or malformed.
+        </p>
+      </div>
+      <div>
+        <h3 class="text-xl font-bold text-white mb-3">How does this handle Booleans?</h3>
+        <p class="text-slate-400 text-sm leading-relaxed">
+          Standard <code class="bg-slate-800 px-1 py-0.5 rounded text-slate-300">z.coerce.boolean()</code> is dangerous for env files, because in JavaScript, <code class="bg-slate-800 px-1 py-0.5 rounded text-slate-300">Boolean("false")</code> evaluates to true. Our engine specifically maps true/false strings to strict literal enums to prevent critical configuration bugs.
+        </p>
+      </div>
+    </div>
+  </div>
+</Layout>
