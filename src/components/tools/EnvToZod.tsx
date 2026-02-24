@@ -23,6 +23,7 @@ function handleEditorWillMount(monaco: Monaco) {
     rules: [],
     colors: {
       'editor.background': '#0f172a',
+      'editorCursor.foreground': '#00000000',
     },
   });
 }
