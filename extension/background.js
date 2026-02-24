@@ -1,51 +1,48 @@
-// Create the Main Menu and Sub-menus
+// ─── CONSTANTS ──────────────────────────────────────────────────────────────
+
+const MAX_SELECTION_CHARS = 10_000;
+
+const TOOLS = [
+  { id: 'tool-ts-zod',      title: '📘 Convert TS to Zod',      path: '/tools/ts-to-zod' },
+  { id: 'tool-openapi-zod', title: '⚙️ Convert OpenAPI to Zod', path: '/tools/openapi-to-zod' },
+  { id: 'tool-json',        title: '📄 Convert JSON to Zod',    path: '/tools/json-to-zod' },
+  { id: 'tool-regex',       title: '🔍 Test Regex Pattern',     path: '/tools/regex-tester' },
+  { id: 'tool-diff',        title: '⚖️ Compare Text (Diff)',    path: '/tools/diff-viewer' },
+];
+
+// ─── SERVICE WORKER LIFECYCLE ───────────────────────────────────────────────
+// Both listeners are registered synchronously at the top level to guarantee
+// the service worker wakes reliably after being spun down (MV3 requirement).
+
 chrome.runtime.onInstalled.addListener(() => {
-  
-  // 1. Parent Item
-  chrome.contextMenus.create({
-    id: "syntaxsnap-root",
-    title: "SyntaxSnap Tools",
-    contexts: ["selection"]
-  });
+  // removeAll prevents duplicate-ID errors when the extension updates
+  chrome.contextMenus.removeAll(() => {
+    chrome.contextMenus.create({
+      id: 'syntaxsnap-root',
+      title: 'SyntaxSnap Tools',
+      contexts: ['selection'],
+    });
 
-  // 2. Child: Regex Tester
-  chrome.contextMenus.create({
-    id: "tool-regex",
-    parentId: "syntaxsnap-root",
-    title: "🔍 Test Regex Pattern",
-    contexts: ["selection"]
-  });
-
-  // 3. Child: JSON to Zod
-  chrome.contextMenus.create({
-    id: "tool-json",
-    parentId: "syntaxsnap-root",
-    title: "📄 Convert JSON to Zod",
-    contexts: ["selection"]
-  });
-
-  // 4. Child: Diff Viewer
-  chrome.contextMenus.create({
-    id: "tool-diff",
-    parentId: "syntaxsnap-root",
-    title: "⚖️ Compare Text (Diff)",
-    contexts: ["selection"]
+    for (const tool of TOOLS) {
+      chrome.contextMenus.create({
+        id: tool.id,
+        parentId: 'syntaxsnap-root',
+        title: tool.title,
+        contexts: ['selection'],
+      });
+    }
   });
 });
 
-// Handle the clicks
-chrome.contextMenus.onClicked.addListener((info, tab) => {
-  const text = encodeURIComponent(info.selectionText);
+chrome.contextMenus.onClicked.addListener((info) => {
+  const raw = info.selectionText;
+  if (!raw) return;
 
-  // Route to the correct tool based on which menu item was clicked
-  if (info.menuItemId === "tool-regex") {
-    chrome.tabs.create({ url: `https://syntaxsnap.com/tools/regex-tester?input=${text}` });
-  } 
-  else if (info.menuItemId === "tool-json") {
-    chrome.tabs.create({ url: `https://syntaxsnap.com/tools/json-to-zod?input=${text}` });
-  }
-  else if (info.menuItemId === "tool-diff") {
-    // For Diff Viewer, we put the text in the "Original" side (left)
-    chrome.tabs.create({ url: `https://syntaxsnap.com/tools/diff-viewer?input=${text}` });
-  }
+  const tool = TOOLS.find(t => t.id === info.menuItemId);
+  if (!tool) return;
+
+  // Truncate to prevent URL-length overflow (browsers cap at ~2 MB but
+  // servers and Cloudflare Workers may reject much earlier).
+  const text = encodeURIComponent(raw.slice(0, MAX_SELECTION_CHARS));
+  chrome.tabs.create({ url: `https://syntaxsnap.com${tool.path}?input=${text}` });
 });

@@ -2,17 +2,15 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'unsafe-inline'; img-src 'self';">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; frame-src 'none'; font-src 'none';">
   <style>
-    /* ─── RESET & THEME ────────────────────────────────────────── */
     :root {
-      --bg: #0f172a;       /* Slate 950 */
-      --card-bg: #1e293b;  /* Slate 800 */
-      --border: #334155;   /* Slate 700 */
+      --bg: #0f172a;       
+      --card-bg: #1e293b;  
+      --border: #334155;   
       --text-main: #f8fafc;
       --text-muted: #94a3b8;
-      --accent: #6366f1;   /* Indigo 500 */
-      --accent-glow: rgba(99, 102, 241, 0.15);
+      --accent: #6366f1;   
     }
 
     body {
@@ -24,7 +22,6 @@
       color: var(--text-main);
     }
 
-    /* ─── HEADER ───────────────────────────────────────────────── */
     header {
       display: flex;
       align-items: center;
@@ -34,24 +31,6 @@
       border-bottom: 1px solid var(--border);
     }
 
-    .brand-icon {
-      width: 28px;
-      height: 28px;
-      border-radius: 6px; /* Added to match your squircle curve perfectly */
-      /* Removed the shadow and color tint so your true image colors show */
-    }
-
-    h1 {
-      margin: 0;
-      font-size: 18px;
-      font-weight: 700;
-      letter-spacing: -0.5px;
-      background: linear-gradient(to right, #fff, #cbd5e1);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    /* ─── MENU GRID ────────────────────────────────────────────── */
     .menu {
       display: flex;
       flex-direction: column;
@@ -75,7 +54,6 @@
       overflow: hidden;
     }
 
-    /* Hover Effects */
     .tool-card:hover {
       background-color: #263346;
       border-color: var(--accent);
@@ -95,22 +73,21 @@
       color: var(--accent);
     }
 
-    /* ─── FOOTER ───────────────────────────────────────────────── */
     footer {
       margin-top: 24px;
       display: flex;
       justify-content: center;
       align-items: center;
       gap: 6px;
-      font-size: 12.5px; /* Bumped up from 11px */
-      color: #94a3b8;    /* Brighter, much more readable Slate 400 */
+      font-size: 12.5px; 
+      color: #94a3b8;    
       font-weight: 500;
     }
 
     .status-dot {
       width: 6px;
       height: 6px;
-      background-color: #10b981; /* Emerald 500 */
+      background-color: #10b981; 
       border-radius: 50%;
       box-shadow: 0 0 6px rgba(16, 185, 129, 0.4);
     }
@@ -120,20 +97,56 @@
       font-size: 12px;
       padding: 10px;
     }
-
     .status-message.error { color: #ef4444; }
     .status-message.info  { color: #94a3b8; }
+
+    .header-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+    }
+
+    .header-logo {
+      height: 20px;
+      width: auto;
+    }
+
+    .extract-btn {
+      width: 100%;
+      text-align: left;
+      cursor: pointer;
+      font-family: inherit;
+      background: none;
+    }
+
+    .svg-results {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 10px;
+      max-height: 200px;
+      overflow-y: auto;
+    }
   </style>
 </head>
 <body>
 
   <header>
-    <img src="icon.svg" alt="Icon" style="width: 28px; height: 28px; border-radius: 6px;">
-    
-    <img src="logo.png" alt="SyntaxSnap Logo" style="height: 20px; width: auto;">
+    <img src="icon.svg" alt="Icon" class="header-icon">
+    <img src="logo.png" alt="SyntaxSnap Logo" class="header-logo">
   </header>
 
   <nav class="menu">
+    <a href="https://syntaxsnap.com/tools/ts-to-zod" target="_blank" rel="noopener noreferrer" class="tool-card">
+      <svg class="tool-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+        <polyline points="14 2 14 8 20 8"></polyline>
+        <path d="M9 15h6"></path>
+        <path d="M12 12v6"></path>
+      </svg>
+      TS to Zod
+    </a>
+
     <a href="https://syntaxsnap.com/tools/regex-tester" target="_blank" rel="noopener noreferrer" class="tool-card">
       <svg class="tool-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
         <circle cx="11" cy="11" r="8"></circle>
@@ -150,15 +163,8 @@
       </svg>
       JSON to Zod
     </a>
-
-    <a href="https://syntaxsnap.com/tools/diff-viewer" target="_blank" rel="noopener noreferrer" class="tool-card">
-      <svg class="tool-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M8 3H5a2 2 0 0 0-2 2v14c0 1.1.9 2 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2h-3m0 0a6 6 0 0 0-6 0m6 0a6 6 0 0 0-6 0"></path>
-      </svg>
-      Diff Viewer
-    </a>
     
-    <button id="extract-svg-btn" class="tool-card" style="width: 100%; text-align: left; cursor: pointer; font-family: inherit; background: none;">
+    <button id="extract-svg-btn" class="tool-card extract-btn">
       <svg class="tool-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
         <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
         <polyline points="2 17 12 22 22 17"></polyline>
@@ -167,12 +173,12 @@
       Extract SVGs from Page
     </button>
 
-    <div id="svg-results" style="display: flex; flex-direction: column; gap: 8px; margin-top: 10px; max-height: 200px; overflow-y: auto;"></div>
+    <div id="svg-results" class="svg-results"></div>
   </nav>
 
   <footer>
     <span class="status-dot"></span>
-    System Operational • v1.0
+    System Operational • v1.2
   </footer>
 
   <script src="popup.js"></script>
