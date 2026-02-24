@@ -13,8 +13,10 @@
   Cross-Origin-Opener-Policy: same-origin
   Cross-Origin-Resource-Policy: same-origin
   # Content Security Policy
-  # - script-src: 'unsafe-inline' required for Astro is:inline scripts, Microsoft Clarity, and CF Insights
+  # - script-src: 'unsafe-inline' required for Astro is:inline scripts, Microsoft Clarity, CF Insights, and Monaco Editor CDN
   # - connect-src: Clarity telemetry, AppInsights, and CF Insights
   # - img-src: data: URIs for generated gradients; https: for OG image previews
+  # - worker-src: blob: required by Monaco Editor web workers
+  # - font-src: jsdelivr for Monaco Editor codicon font
   # - frame-ancestors: blocks embedding in any cross-origin frame
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://www.clarity.ms https://scripts.clarity.ms https://static.cloudflareinsights.com; connect-src 'self' https://*.clarity.ms https://dc.services.visualstudio.com https://cloudflareinsights.com; img-src 'self' data: https:; style-src 'self' 'unsafe-inline'; font-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://www.clarity.ms https://scripts.clarity.ms https://static.cloudflareinsights.com https://cdn.jsdelivr.net; connect-src 'self' https://*.clarity.ms https://dc.services.visualstudio.com https://cloudflareinsights.com; img-src 'self' data: https:; style-src 'self' 'unsafe-inline'; font-src 'self' https://cdn.jsdelivr.net; worker-src 'self' blob:; frame-ancestors 'none'; base-uri 'self'; form-action 'self'
