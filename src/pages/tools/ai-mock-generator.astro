@@ -5,8 +5,9 @@ import AiMockGeneratorTool from '../../components/tools/AiMockGenerator.tsx';
 import RelatedTools from '../../components/ui/RelatedTools.astro';
 
 // SEO Constants - 2026 Best Practices
-const title = "AI Mock JSON Generator | SyntaxSnap";
-const description = "Generate realistic JSON mock data from OpenAPI schemas or natural language prompts using AI. Free tool for developers and QA engineers.";
+const title = "AI Mock Data Generator | SyntaxSnap";
+const description = "Generate realistic JSON mock data from OpenAPI schemas or natural language prompts using AI. Free tool for developers and QA engineers. Supports nested objects, UUIDs, and strict type safety.";
+const slug = "ai-mock-generator";
 
 // NEW: Tool-specific features for SoftwareApplication schema
 const features = [
@@ -49,7 +50,7 @@ const faqSchema = {
 ---
 
 {/* Pass features to Layout */}
-<Layout title={title} description={description} isTool={true} features={features}>
+<Layout title={title} description={description} isTool={true} features={features} slug={slug}>
   {/* Inject the FAQ Schema directly into the DOM */}
   <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
 

@@ -4,14 +4,17 @@ import Layout from '../../layouts/Layout.astro';
 import ExpressGenerator from '../../components/tools/ExpressGenerator';
 import RelatedTools from '../../components/ui/RelatedTools.astro';
 
-const title = "OpenAPI to Express Mock Server Generator | SyntaxSnap";
-const description = "Instantly convert OpenAPI (Swagger) specifications into a runnable Node.js Express mock server. Save time on frontend development.";
+const title = "OpenAPI to Express.js Generator | SyntaxSnap";
+const description = "Convert OpenAPI 3.x specifications into production-ready Express.js route handlers with CORS and express.json() middleware pre-configured. 100% offline, no data leaves your browser.";
+const slug = "openapi-to-express";
 
 const features = [
   "Converts OpenAPI v3/3.1 specs to Express.js boilerplate",
   "100% offline deterministic parsing (No AI used)",
   "Automatically converts path parameters (e.g., {id} to :id)",
-  "Generates ready-to-use CORS and express.json() middleware"
+  "Generates ready-to-use CORS and express.json() middleware",
+  "Produces router.get/post/put/delete handlers per endpoint",
+  "Zero server upload — your schema never leaves your browser"
 ];
 
 const faqSchema = {
@@ -20,33 +23,33 @@ const faqSchema = {
   "mainEntity": [
     {
       "@type": "Question",
-      "name": "Is this Express generator AI-powered?",
+      "name": "What Express.js middleware does this generator include?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "No. This tool uses a deterministic JavaScript parser to transform your OpenAPI paths into Express.js router code. Since it doesn't use AI, it works 100% offline and your schema never leaves your browser."
+        "text": "The output includes express.json() for request body parsing and a CORS middleware setup out of the box. Each route handler is scaffolded with a res.json() stub so you can immediately run the server and test your frontend against it."
       }
     },
     {
       "@type": "Question",
-      "name": "What versions of OpenAPI are supported?",
+      "name": "How does it handle OpenAPI path parameters like {id}?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "The generator currently supports OpenAPI 3.0 and 3.1 (Swagger 2.0 support is planned). It maps parameters, request bodies, and paths directly to standard Express syntax."
+        "text": "The generator automatically converts OpenAPI curly-brace parameters (e.g., /users/{id}) into Express colon-prefix syntax (e.g., /users/:id), making the output immediately runnable without any manual edits."
       }
     },
     {
       "@type": "Question",
-      "name": "Does it generate a full project structure?",
+      "name": "Can I use the generated code with TypeScript?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "It generates a production-ready 'server.js' or 'app.js' boilerplate including necessary imports, middleware setup, and route handlers based on your specific API endpoints."
+        "text": "The output is standard JavaScript compatible with Node.js 18+. You can rename the file to .ts and add type annotations since the structure follows Express's standard router pattern. TypeScript output is planned for a future release."
       }
     }
   ]
 };
 ---
 
-<Layout title={title} description={description} isTool={true} features={features}>
+<Layout title={title} description={description} isTool={true} features={features} slug={slug}>
   <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
 
   <div class="max-w-6xl mx-auto">
@@ -70,21 +73,21 @@ const faqSchema = {
       <h2 class="text-2xl font-bold text-white mb-8">Frequently Asked Questions</h2>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
         <div>
-          <h3 class="font-medium text-slate-200 mb-2">Is this Express generator AI-powered?</h3>
+          <h3 class="font-medium text-slate-200 mb-2">What Express.js middleware does this generator include?</h3>
           <p class="text-sm text-slate-400 leading-relaxed">
-            No. This tool uses a deterministic JavaScript parser to transform your OpenAPI paths into Express.js router code. Since it doesn't use AI, it works 100% offline and your schema never leaves your browser.
+            The output includes <code class="text-slate-300 bg-slate-800 px-1 rounded">express.json()</code> for request body parsing and a CORS middleware setup out of the box. Each route handler is scaffolded with a <code class="text-slate-300 bg-slate-800 px-1 rounded">res.json()</code> stub so you can immediately run the server and test your frontend against it.
           </p>
         </div>
         <div>
-          <h3 class="font-medium text-slate-200 mb-2">What versions of OpenAPI are supported?</h3>
+          <h3 class="font-medium text-slate-200 mb-2">How does it handle OpenAPI path parameters like {'{id}'}?</h3>
           <p class="text-sm text-slate-400 leading-relaxed">
-            The generator currently supports OpenAPI 3.0 and 3.1 (Swagger 2.0 support is planned). It maps parameters, request bodies, and paths directly to standard Express syntax.
+            The generator automatically converts OpenAPI curly-brace parameters (e.g., <code class="text-slate-300 bg-slate-800 px-1 rounded">/users/{'{id}'}</code>) into Express colon-prefix syntax (e.g., <code class="text-slate-300 bg-slate-800 px-1 rounded">/users/:id</code>), making the output immediately runnable without any manual edits.
           </p>
         </div>
         <div>
-          <h3 class="font-medium text-slate-200 mb-2">Does it generate a full project structure?</h3>
+          <h3 class="font-medium text-slate-200 mb-2">Can I use the generated code with TypeScript?</h3>
           <p class="text-sm text-slate-400 leading-relaxed">
-            It generates a production-ready 'server.js' or 'app.js' boilerplate including necessary imports, middleware setup, and route handlers based on your specific API endpoints.
+            The output is standard JavaScript compatible with Node.js 18+. You can rename the file to <code class="text-slate-300 bg-slate-800 px-1 rounded">.ts</code> and add type annotations since the structure follows Express's standard router pattern. TypeScript output is planned for a future release.
           </p>
         </div>
       </div>

@@ -3,15 +3,18 @@
 import Layout from '../../layouts/Layout.astro';
 import RelatedTools from '../../components/ui/RelatedTools.astro';
 
-const title = "OpenAPI to Mock Server Generator | SyntaxSnap";
-const description = "Instantly convert your FastAPI or OpenAPI v3 JSON specs into a runnable local mock server. 100% offline, privacy-first.";
+const title = "Zero-Dependency OpenAPI Mock Server Generator | SyntaxSnap";
+const description = "Generate a vanilla Node.js mock server from any OpenAPI 3.x or FastAPI JSON spec — no Express, no Fastify, no npm install. Paste your spec and get copy-ready Node.js http.createServer() code instantly.";
+const slug = "openapi-mock";
 
 // Tool-specific features for SoftwareApplication schema
 const features = [
-  "Instantly generates mock servers from OpenAPI JSON",
+  "Generates vanilla Node.js mock servers (no Express or Fastify required)",
+  "Works with FastAPI, Django Ninja, and any OpenAPI 3.0/3.1 JSON spec",
   "100% offline deterministic parsing (zero server uploads)",
-  "Maps path parameters to standard syntax automatically",
-  "Provides copy-pasteable zero-dependency boilerplate"
+  "Single-file output — copy and run with node server.js instantly",
+  "Maps path parameters to standard regex route matching",
+  "Zero npm dependencies in the generated output"
 ];
 
 const faqSchema = {
@@ -20,40 +23,40 @@ const faqSchema = {
   "mainEntity": [
     {
       "@type": "Question",
-      "name": "Is this generator AI-powered?",
+      "name": "Does the generated server require Express or any npm packages?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "No. This tool uses a deterministic JavaScript parser to transform your OpenAPI paths. Since it doesn't use AI, it works 100% offline and your schema never leaves your browser."
+        "text": "No. The output uses only Node.js's built-in 'http' module and zero external dependencies. You can run it immediately with 'node server.js' on any machine with Node.js 16+ installed, without running npm install."
       }
     },
     {
       "@type": "Question",
-      "name": "What versions of OpenAPI are supported?",
+      "name": "How is this different from the OpenAPI to Express generator?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "The generator currently supports OpenAPI 3.0 and 3.1. It maps parameters, request bodies, and paths directly to standard server syntax."
+        "text": "The OpenAPI to Express generator produces Express.js-specific code with router() handlers and middleware. This tool outputs pure vanilla Node.js using the built-in http.createServer() API — ideal for sandboxed environments, Docker containers, or scripts where you cannot install npm packages."
       }
     },
     {
       "@type": "Question",
-      "name": "Does it generate a full project structure?",
+      "name": "Can I generate a mock server from a FastAPI or Django Ninja schema?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "It generates a production-ready boilerplate including necessary imports, middleware setup, and route handlers based on your specific API endpoints."
+        "text": "Yes. FastAPI and Django Ninja both export standard OpenAPI 3.0 JSON at '/openapi.json'. Paste that JSON directly into the input field and the generator will produce a matching mock server reflecting all your Python API routes and response shapes."
       }
     }
   ]
 };
 ---
 
-<Layout title={title} description={description} isTool={true} features={features}>
+<Layout title={title} description={description} isTool={true} features={features} slug={slug}>
   <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
 
   <div class="max-w-6xl mx-auto">
     <div class="mb-10 text-center">
-      <h1 class="text-3xl md:text-5xl font-extrabold text-white mb-4 tracking-tight">OpenAPI to Mock Server</h1>
+      <h1 class="text-3xl md:text-5xl font-extrabold text-white mb-4 tracking-tight">Zero-Dependency OpenAPI Mock Server</h1>
       <p class="text-slate-400 text-lg max-w-2xl mx-auto">
-        Paste your OpenAPI v3 JSON below to instantly generate a zero-dependency mock server. 100% offline. No data leaves your machine.
+        Paste your OpenAPI 3.x or FastAPI JSON spec to instantly generate a <strong class="text-white">vanilla Node.js</strong> mock server — no Express, no npm install. Copy and run with <code class="text-cyan-300 bg-slate-800 px-1 rounded">node server.js</code>.
       </p>
     </div>
 
@@ -88,21 +91,21 @@ const faqSchema = {
       <h2 class="text-2xl font-bold text-white mb-8">Frequently Asked Questions</h2>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
         <div>
-          <h3 class="font-medium text-slate-200 mb-2">Is this generator AI-powered?</h3>
+          <h3 class="font-medium text-slate-200 mb-2">Does the generated server require Express or any npm packages?</h3>
           <p class="text-sm text-slate-400 leading-relaxed">
-            No. This tool uses a deterministic JavaScript parser to transform your OpenAPI paths. Since it doesn't use AI, it works 100% offline and your schema never leaves your browser.
+            No. The output uses only Node.js's built-in <code class="text-slate-300 bg-slate-800 px-1 rounded">http</code> module and zero external dependencies. Run it immediately with <code class="text-slate-300 bg-slate-800 px-1 rounded">node server.js</code> on any machine with Node.js 16+, without running <code class="text-slate-300 bg-slate-800 px-1 rounded">npm install</code>.
           </p>
         </div>
         <div>
-          <h3 class="font-medium text-slate-200 mb-2">What versions of OpenAPI are supported?</h3>
+          <h3 class="font-medium text-slate-200 mb-2">How is this different from the OpenAPI to Express generator?</h3>
           <p class="text-sm text-slate-400 leading-relaxed">
-            The generator currently supports OpenAPI 3.0 and 3.1. It maps parameters, request bodies, and paths directly to standard server syntax.
+            The <a href="/tools/openapi-to-express" class="text-cyan-400 hover:underline">OpenAPI to Express generator</a> produces Express.js-specific code with <code class="text-slate-300 bg-slate-800 px-1 rounded">router()</code> handlers and middleware. This tool outputs pure vanilla Node.js using <code class="text-slate-300 bg-slate-800 px-1 rounded">http.createServer()</code> — ideal for sandboxed environments or containers where you cannot run npm install.
           </p>
         </div>
         <div>
-          <h3 class="font-medium text-slate-200 mb-2">Does it generate a full project structure?</h3>
+          <h3 class="font-medium text-slate-200 mb-2">Can I use this with a FastAPI or Django Ninja schema?</h3>
           <p class="text-sm text-slate-400 leading-relaxed">
-            It generates a production-ready boilerplate including necessary imports, middleware setup, and route handlers based on your specific API endpoints.
+            Yes. FastAPI and Django Ninja both export standard OpenAPI 3.0 JSON at <code class="text-slate-300 bg-slate-800 px-1 rounded">/openapi.json</code>. Paste that JSON into the input field and the generator will produce a matching mock server for all your Python API routes.
           </p>
         </div>
       </div>
