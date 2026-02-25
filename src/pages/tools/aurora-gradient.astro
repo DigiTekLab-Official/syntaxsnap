@@ -3,9 +3,11 @@
 import Layout from '../../layouts/Layout.astro';
 import AuroraGenerator from '../../components/tools/AuroraGenerator.tsx';
 import RelatedTools from '../../components/ui/RelatedTools.astro';
+import { buildFAQPage } from '../../utils/schema';
 
 const title = "Aurora Gradient Generator | Pure CSS & Tailwind | SyntaxSnap";
 const description = "Create beautiful, animated aurora mesh backgrounds. Export to pure CSS or Tailwind CSS instantly. A free, local-first design tool for modern developers.";
+const slug = "aurora-gradient";
 
 const features = [
   "Visual editor for animated aurora and mesh gradients",
@@ -14,31 +16,24 @@ const features = [
   "Customizable blur, opacity, and color palettes"
 ];
 
-const faqSchema = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "mainEntity": [
-    {
-      "@type": "Question",
-      "name": "How do you make an aurora gradient in CSS?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "An aurora gradient is typically made using multiple absolute-positioned elements with radial gradients or solid colors, heavily blurred using the CSS filter: blur() property, and animated with @keyframes to simulate the movement of the Northern Lights."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Does this work with Tailwind CSS?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Yes! The generator provides a copy-and-paste Tailwind HTML structure utilizing arbitrary values for blurs and background colors, making it seamless to drop into Next.js, Astro, or any Tailwind-enabled project."
-      }
-    }
-  ]
-};
+// SEO: FAQPage — answers supported by on-page controls and output
+const faqSchema = buildFAQPage([
+  {
+    question: "How do you make an aurora gradient in CSS?",
+    answer: "An aurora gradient is typically made using multiple absolute-positioned elements with radial gradients or solid colors, heavily blurred using the CSS filter: blur() property, and animated with @keyframes to simulate the movement of the Northern Lights."
+  },
+  {
+    question: "Does this work with Tailwind CSS?",
+    answer: "Yes! The generator provides a copy-and-paste Tailwind HTML structure utilizing arbitrary values for blurs and background colors, making it seamless to drop into Next.js, Astro, or any Tailwind-enabled project."
+  },
+  {
+    question: "Is this tool free to use?",
+    answer: "Yes. SyntaxSnap's Aurora Gradient Generator is completely free with no accounts, no ads, and no usage limits. All processing happens locally in your browser."
+  }
+]);
 ---
 
-<Layout title={title} description={description} isTool={true} features={features}>
+<Layout title={title} description={description} isTool={true} slug={slug} features={features}>
   <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
 
   <div class="max-w-6xl mx-auto px-4 py-12">

@@ -1,0 +1,68 @@
+---
+// src/pages/tools/category/[slug].astro
+// Dynamic category pages — one per TOOL_CATEGORIES key.
+// Provides CollectionPage JSON-LD for topical authority signals.
+import Layout from '../../../layouts/Layout.astro';
+import ToolCard from '../../../components/ui/ToolCard.astro';
+import { TOOLS, TOOL_CATEGORIES, type ToolCategory } from '../../../config/tools';
+import { buildCollectionPage, buildBreadcrumbList, SITE_URL, SITE_NAME } from '../../../utils/schema';
+import { ArrowLeft } from 'lucide-astro';
+
+export function getStaticPaths() {
+  return (Object.keys(TOOL_CATEGORIES) as ToolCategory[]).map((key) => ({
+    params: { slug: key },
+    props: { categoryKey: key },
+  }));
+}
+
+const { categoryKey } = Astro.props as { categoryKey: ToolCategory };
+const meta = TOOL_CATEGORIES[categoryKey];
+const categoryTools = TOOLS.filter(t => t.category === categoryKey);
+
+const title = `${meta.label} | ${SITE_NAME}`;
+const description = `Browse ${categoryTools.length} free, privacy-first ${meta.label.toLowerCase()} that run entirely in your browser. No servers, no tracking.`;
+const pageUrl = `${SITE_URL}/tools/category/${categoryKey}`;
+
+// SEO: CollectionPage — clusters tools by topic for search engines
+const collectionSchema = buildCollectionPage(
+  meta.label,
+  description,
+  pageUrl,
+  categoryTools.map(t => ({ name: t.title, url: `${SITE_URL}${t.href}` })),
+);
+
+// SEO: BreadcrumbList — Home → Tools → {Category}
+const breadcrumbSchema = buildBreadcrumbList([
+  { name: 'Home', url: SITE_URL },
+  { name: 'Developer Tools', url: `${SITE_URL}/tools` },
+  { name: meta.label, url: pageUrl },
+]);
+---
+
+<Layout title={title} description={description}>
+  {/* SEO: CollectionPage schema */}
+  <script type="application/ld+json" set:html={JSON.stringify(collectionSchema)} />
+  {/* SEO: BreadcrumbList schema */}
+  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+
+  <div class="max-w-6xl mx-auto px-4 py-16">
+    <a href="/" class="inline-flex items-center gap-2 text-slate-400 hover:text-white text-sm mb-8 transition-colors">
+      <ArrowLeft class="w-4 h-4" /> Back to all tools
+    </a>
+
+    <div class="mb-10">
+      <h1 class="text-3xl md:text-4xl font-extrabold text-white tracking-tight mb-3">
+        {meta.label}
+      </h1>
+      <p class="text-slate-300 text-lg max-w-2xl">
+        {categoryTools.length} free, privacy-first {meta.label.toLowerCase()} that run entirely in your browser.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+      {categoryTools.map((tool) => (
+        <ToolCard tool={tool} />
+      ))}
+    </div>
+  </div>
+</Layout>

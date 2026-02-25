@@ -2,27 +2,56 @@
 import Layout from '../../layouts/Layout.astro';
 import DockerfileGeneratorTool from '../../components/tools/DockerfileGenerator';
 import RelatedTools from '../../components/ui/RelatedTools.astro';
+import { buildFAQPage, buildHowTo } from '../../utils/schema';
 
-const metadata = {
-  title: "Dockerfile Generator for Next.js, Node & Astro | SyntaxSnap",
-  description: "Instantly generate optimized, multi-stage Dockerfiles and .dockerignore files for Node.js, Next.js, and Astro. Supports npm, yarn, pnpm, and bun.",
-  url: "https://syntaxsnap.com/tools/dockerfile-generator",
-  features: [
-    "Multi-stage build optimization",
-    "Next.js standalone mode support",
-    "Automatic .dockerignore generation",
-    "pnpm, bun, yarn, and npm support",
-    "Node 18, 20, and 22 alpine base images"
+const title = "Dockerfile Generator for Next.js, Node & Astro | SyntaxSnap";
+const description = "Instantly generate optimized, multi-stage Dockerfiles and .dockerignore files for Node.js, Next.js, and Astro. Supports npm, yarn, pnpm, and bun.";
+const slug = "dockerfile-generator";
+const features = [
+  "Multi-stage build optimization",
+  "Next.js standalone mode support",
+  "Automatic .dockerignore generation",
+  "pnpm, bun, yarn, and npm support",
+  "Node 18, 20, and 22 alpine base images"
+];
+
+// SEO: FAQPage
+const faqSchema = buildFAQPage([
+  {
+    question: "Is this Dockerfile generator free?",
+    answer: "Yes. SyntaxSnap's Dockerfile Generator is completely free with no accounts, no ads, and no usage limits."
+  },
+  {
+    question: "Does my code leave the browser?",
+    answer: "No. All Dockerfile generation happens 100% client-side in your browser. No data is transmitted to any server."
+  },
+  {
+    question: "Which frameworks are supported?",
+    answer: "Node.js, Next.js (with standalone mode), and Astro. The generator supports npm, yarn, pnpm, and bun package managers with Node 18, 20, and 22 alpine base images."
+  },
+  {
+    question: "Does it follow Docker security best practices?",
+    answer: "Yes. Generated Dockerfiles use multi-stage builds, non-root users, minimal alpine base images, and health checks to follow container security best practices."
+  }
+]);
+
+// SEO: HowTo — tool has clear sequential steps matching the UI workflow
+const howToSchema = buildHowTo(
+  "How to Generate an Optimized Dockerfile",
+  "Use SyntaxSnap's visual generator to create production-ready Dockerfiles.",
+  [
+    { name: "Choose your framework", text: "Select Node.js, Next.js, or Astro from the framework dropdown." },
+    { name: "Select package manager and Node version", text: "Pick your package manager (npm/yarn/pnpm/bun) and Node.js version (18/20/22)." },
+    { name: "Configure options", text: "Toggle multi-stage builds, health checks, and non-root user settings." },
+    { name: "Copy the Dockerfile", text: "Click the copy button to get the optimized Dockerfile and .dockerignore ready for your project." }
   ]
-};
+);
 ---
 
-<Layout
-  title={metadata.title}
-  description={metadata.description}
-  isTool={true}
-  features={metadata.features}
->
+<Layout title={title} description={description} isTool={true} slug={slug} features={features}>
+  {/* SEO: FAQPage + HowTo schemas */}
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(howToSchema)} />
 
   <div class="max-w-6xl mx-auto px-4 py-12">
     <div class="mb-10 text-center">

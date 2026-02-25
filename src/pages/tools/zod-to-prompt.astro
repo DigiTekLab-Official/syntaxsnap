@@ -2,20 +2,38 @@
 import Layout from '../../layouts/Layout.astro';
 import ZodToPromptTool from '../../components/tools/ZodToPrompt.tsx';
 import RelatedTools from '../../components/ui/RelatedTools.astro';
+import { buildFAQPage } from '../../utils/schema';
 
-const metadata = {
-  title: "Zod to LLM System Prompt Generator | SyntaxSnap",
-  description: "Convert TypeScript Zod schemas into highly optimized system prompts. Force LLMs to return strict, predictable JSON without hallucinated fields.",
-  features: [
-    "Extracts keys, types, and .describe() metadata automatically",
-    "Generates zero-shot strict JSON system instructions",
-    "100% Client-side AST-lite parsing (No server required)",
-    "Optimized for Claude, Gemini, and GPT-4 formatting"
-  ]
-};
+const title = "Zod to LLM System Prompt Generator | SyntaxSnap";
+const description = "Convert TypeScript Zod schemas into highly optimized system prompts. Force LLMs to return strict, predictable JSON without hallucinated fields.";
+const slug = "zod-to-prompt";
+const features = [
+  "Extracts keys, types, and .describe() metadata automatically",
+  "Generates zero-shot strict JSON system instructions",
+  "100% Client-side AST-lite parsing (No server required)",
+  "Optimized for Claude, Gemini, and GPT-4 formatting"
+];
+
+// SEO: FAQPage
+const faqSchema = buildFAQPage([
+  {
+    question: "Is this tool free?",
+    answer: "Yes. SyntaxSnap's Zod to LLM Prompt generator is completely free with no accounts, ads, or usage limits."
+  },
+  {
+    question: "Does my Zod schema leave the browser?",
+    answer: "No. All parsing and prompt generation happens 100% client-side. Your schemas and generated prompts never leave your device."
+  },
+  {
+    question: "Which LLMs does this work with?",
+    answer: "Any LLM that accepts system prompts, including Claude, GPT-4, Gemini, Llama, and Mistral. The generated prompts use zero-shot strict JSON formatting instructions compatible with all major models."
+  }
+]);
 ---
 
-<Layout title={metadata.title} description={metadata.description} isTool={true} features={metadata.features}>
+<Layout title={title} description={description} isTool={true} slug={slug} features={features}>
+  {/* SEO: FAQPage schema */}
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
   <div class="max-w-6xl mx-auto px-4 py-12">
     <header class="text-center mb-10">
       <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-4 tracking-tight">Zod to LLM Prompt</h1>

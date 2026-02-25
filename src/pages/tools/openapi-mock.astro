@@ -2,12 +2,12 @@
 // src/pages/tools/openapi-mock.astro
 import Layout from '../../layouts/Layout.astro';
 import RelatedTools from '../../components/ui/RelatedTools.astro';
+import { buildFAQPage } from '../../utils/schema';
 
 const title = "Zero-Dependency OpenAPI Mock Server Generator | SyntaxSnap";
 const description = "Generate a vanilla Node.js mock server from any OpenAPI 3.x or FastAPI JSON spec — no Express, no Fastify, no npm install. Paste your spec and get copy-ready Node.js http.createServer() code instantly.";
 const slug = "openapi-mock";
 
-// Tool-specific features for SoftwareApplication schema
 const features = [
   "Generates vanilla Node.js mock servers (no Express or Fastify required)",
   "Works with FastAPI, Django Ninja, and any OpenAPI 3.0/3.1 JSON spec",
@@ -17,39 +17,25 @@ const features = [
   "Zero npm dependencies in the generated output"
 ];
 
-const faqSchema = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "mainEntity": [
-    {
-      "@type": "Question",
-      "name": "Does the generated server require Express or any npm packages?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "No. The output uses only Node.js's built-in 'http' module and zero external dependencies. You can run it immediately with 'node server.js' on any machine with Node.js 16+ installed, without running npm install."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "How is this different from the OpenAPI to Express generator?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "The OpenAPI to Express generator produces Express.js-specific code with router() handlers and middleware. This tool outputs pure vanilla Node.js using the built-in http.createServer() API — ideal for sandboxed environments, Docker containers, or scripts where you cannot install npm packages."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Can I generate a mock server from a FastAPI or Django Ninja schema?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Yes. FastAPI and Django Ninja both export standard OpenAPI 3.0 JSON at '/openapi.json'. Paste that JSON directly into the input field and the generator will produce a matching mock server reflecting all your Python API routes and response shapes."
-      }
-    }
-  ]
-};
+// SEO: FAQPage — answers supported by on-page generator behavior
+const faqSchema = buildFAQPage([
+  {
+    question: "Does the generated server require Express or any npm packages?",
+    answer: "No. The output uses only Node.js's built-in http module and zero external dependencies. You can run it immediately with node server.js on any machine with Node.js 16+ installed, without running npm install."
+  },
+  {
+    question: "How is this different from the OpenAPI to Express generator?",
+    answer: "The OpenAPI to Express generator produces Express.js-specific code with router() handlers and middleware. This tool outputs pure vanilla Node.js using the built-in http.createServer() API — ideal for sandboxed environments, Docker containers, or scripts where you cannot install npm packages."
+  },
+  {
+    question: "Can I generate a mock server from a FastAPI or Django Ninja schema?",
+    answer: "Yes. FastAPI and Django Ninja both export standard OpenAPI 3.0 JSON at /openapi.json. Paste that JSON directly into the input field and the generator will produce a matching mock server reflecting all your Python API routes and response shapes."
+  }
+]);
 ---
 
 <Layout title={title} description={description} isTool={true} features={features} slug={slug}>
+  {/* SEO: FAQPage schema */}
   <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
 
   <div class="max-w-6xl mx-auto">

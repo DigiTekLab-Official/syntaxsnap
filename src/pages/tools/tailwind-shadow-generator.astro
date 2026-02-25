@@ -2,13 +2,38 @@
 import Layout from '../../layouts/Layout.astro';
 import TailwindShadowGeneratorClient from '../../components/tools/TailwindShadowGenerator';
 import RelatedTools from '../../components/ui/RelatedTools.astro';
+import { buildFAQPage } from '../../utils/schema';
 
 const title = "Tailwind Shadow & Glow Generator | SyntaxSnap";
 const description = "Visually design multi-layered box shadows and neon glows, and instantly copy the Tailwind CSS v4 arbitrary classes. 100% free and offline.";
 const slug = "tailwind-shadow-generator";
+const features = [
+  "Visual multi-layer box-shadow editor",
+  "Neon glow and ambient shadow presets",
+  "Exports Tailwind CSS v4 arbitrary classes",
+  "100% offline — no data leaves your browser"
+];
+
+// SEO: FAQPage
+const faqSchema = buildFAQPage([
+  {
+    question: "Is this shadow generator free?",
+    answer: "Yes. SyntaxSnap's Tailwind Shadow Generator is completely free with no accounts, ads, or usage limits."
+  },
+  {
+    question: "Does it support Tailwind CSS v4?",
+    answer: "Yes. The generator outputs Tailwind CSS v4 arbitrary value classes like shadow-[...] that work with the latest Tailwind version."
+  },
+  {
+    question: "Can I create neon glow effects?",
+    answer: "Yes. Stack multiple shadow layers with bright colors and wide blur radii to create vibrant neon glow effects for buttons, cards, and other UI elements."
+  }
+]);
 ---
 
-<Layout title={title} description={description} isTool={true} slug={slug}>
+<Layout title={title} description={description} isTool={true} slug={slug} features={features}>
+  {/* SEO: FAQPage schema */}
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
   <div class="max-w-6xl mx-auto">
     <div class="mb-8">
       <h1 class="text-3xl md:text-4xl font-extrabold text-white mb-4 flex items-center gap-3">

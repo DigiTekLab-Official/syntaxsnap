@@ -3,6 +3,7 @@
 import Layout from '../../layouts/Layout.astro';
 import ExpressGenerator from '../../components/tools/ExpressGenerator';
 import RelatedTools from '../../components/ui/RelatedTools.astro';
+import { buildFAQPage, buildHowTo } from '../../utils/schema';
 
 const title = "OpenAPI to Express.js Generator | SyntaxSnap";
 const description = "Convert OpenAPI 3.x specifications into production-ready Express.js route handlers with CORS and express.json() middleware pre-configured. 100% offline, no data leaves your browser.";
@@ -17,40 +18,39 @@ const features = [
   "Zero server upload — your schema never leaves your browser"
 ];
 
-const faqSchema = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "mainEntity": [
-    {
-      "@type": "Question",
-      "name": "What Express.js middleware does this generator include?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "The output includes express.json() for request body parsing and a CORS middleware setup out of the box. Each route handler is scaffolded with a res.json() stub so you can immediately run the server and test your frontend against it."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "How does it handle OpenAPI path parameters like {id}?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "The generator automatically converts OpenAPI curly-brace parameters (e.g., /users/{id}) into Express colon-prefix syntax (e.g., /users/:id), making the output immediately runnable without any manual edits."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Can I use the generated code with TypeScript?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "The output is standard JavaScript compatible with Node.js 18+. You can rename the file to .ts and add type annotations since the structure follows Express's standard router pattern. TypeScript output is planned for a future release."
-      }
-    }
+// SEO: FAQPage — answers supported by on-page Express generator
+const faqSchema = buildFAQPage([
+  {
+    question: "What Express.js middleware does this generator include?",
+    answer: "The output includes express.json() for request body parsing and a CORS middleware setup out of the box. Each route handler is scaffolded with a res.json() stub so you can immediately run the server and test your frontend against it."
+  },
+  {
+    question: "How does it handle OpenAPI path parameters like {id}?",
+    answer: "The generator automatically converts OpenAPI curly-brace parameters (e.g., /users/{id}) into Express colon-prefix syntax (e.g., /users/:id), making the output immediately runnable without any manual edits."
+  },
+  {
+    question: "Can I use the generated code with TypeScript?",
+    answer: "The output is standard JavaScript compatible with Node.js 18+. You can rename the file to .ts and add type annotations since the structure follows Express's standard router pattern. TypeScript output is planned for a future release."
+  }
+]);
+
+// SEO: HowTo — tool has clear sequential steps matching the UI workflow
+const howToSchema = buildHowTo(
+  "How to Generate Express.js Routes from OpenAPI",
+  "Use SyntaxSnap to convert your API specification into running Express server code.",
+  [
+    { name: "Paste your OpenAPI spec", text: "Copy your OpenAPI 3.x JSON specification and paste it into the input editor." },
+    { name: "Review generated routes", text: "The tool instantly parses paths, methods, and parameters to generate Express route handlers." },
+    { name: "Copy the Express server code", text: "Click the copy button to get the full server.js file with CORS, express.json(), and all route stubs." },
+    { name: "Run the mock server", text: "Save the output as server.js, run npm install express cors, then node server.js to start your local API server." }
   ]
-};
+);
 ---
 
 <Layout title={title} description={description} isTool={true} features={features} slug={slug}>
+  {/* SEO: FAQPage + HowTo schemas */}
   <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(howToSchema)} />
 
   <div class="max-w-6xl mx-auto">
     <header class="text-center mb-10">

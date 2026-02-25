@@ -1,13 +1,13 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-// 1. We alias the import to "MeshTool" to avoid the TypeScript naming conflict
 import MeshTool from '../../components/tools/MeshGradient';
 import RelatedTools from '../../components/ui/RelatedTools.astro';
+import { buildFAQPage } from '../../utils/schema';
 
 const title = "CSS Mesh Gradient Generator (Aurora Backgrounds) | SyntaxSnap";
 const description = "Create trendy, multi-color mesh gradients for your website backgrounds. Export pure CSS radial gradients instantly.";
+const slug = "mesh-gradient";
 
-// Extract features for the Layout
 const features = [
   "Create Aurora-style backgrounds",
   "Pure CSS export (No images required)",
@@ -15,49 +15,28 @@ const features = [
   "Lightweight performance"
 ];
 
-// Isolated FAQ Schema (4 Questions)
-const faqSchema = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "mainEntity": [
-    {
-      "@type": "Question",
-      "name": "Is this better than using an image?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Yes. Pure CSS gradients are resolution-independent and much lighter than image files, which improves your website's load speed and SEO score."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Can I animate these gradients?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Yes. Since the output is standard CSS, you can easily add keyframe animations to shift the background positions."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Why use CSS mesh gradients instead of high-res images?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "CSS gradients are resolution-independent and have a near-zero file size. This significantly improves your Core Web Vitals and LCP scores compared to using large 'Aurora' style image backgrounds."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Is it free to use commercially?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Absolutely. You can use any gradient generated here in your commercial projects without attribution."
-      }
-    }
-  ]
-};
+// SEO: FAQPage — answers supported by on-page gradient editor
+const faqSchema = buildFAQPage([
+  {
+    question: "Why use CSS mesh gradients instead of high-res images?",
+    answer: "CSS gradients are resolution-independent and have a near-zero file size. This significantly improves your Core Web Vitals and LCP scores compared to using large Aurora-style image backgrounds."
+  },
+  {
+    question: "Can I animate these gradients?",
+    answer: "Yes. Since the output is standard CSS, you can easily add keyframe animations to shift the background positions."
+  },
+  {
+    question: "Is it free to use commercially?",
+    answer: "Absolutely. You can use any gradient generated here in your commercial projects without attribution."
+  },
+  {
+    question: "Does my data leave the browser?",
+    answer: "No. All gradient generation and CSS export happens entirely in your browser. SyntaxSnap never sends any data to external servers."
+  }
+]);
 ---
 
-{/* Pass the features prop to Layout */}
-<Layout title={title} description={description} isTool={true} features={features}>
+<Layout title={title} description={description} isTool={true} slug={slug} features={features}>
   <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
 
   <div class="max-w-6xl mx-auto px-4">

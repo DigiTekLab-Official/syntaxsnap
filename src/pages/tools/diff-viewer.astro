@@ -2,11 +2,12 @@
 import Layout from '../../layouts/Layout.astro';
 import DiffViewerTool from '../../components/tools/DiffViewer';
 import RelatedTools from '../../components/ui/RelatedTools.astro';
+import { buildFAQPage } from '../../utils/schema';
 
 const title = "Text Diff Viewer & File Compare Tool | SyntaxSnap";
 const description = "Compare text, code, JSON, config files, and API responses locally in your browser. Visualize changes with side-by-side or unified diff view. Zero server uploads — 100% private.";
+const slug = "diff-viewer";
 
-// Extract features for the Layout
 const features = [
   "Side-by-side split view and unified diff view",
   "Line-level and word-level comparison",
@@ -16,73 +17,32 @@ const features = [
   "Works offline once loaded"
 ];
 
-// Isolated FAQ Schema
-const faqSchema = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "mainEntity": [
-    {
-      "@type": "Question",
-      "name": "Is my data sent to a server?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "No. SyntaxSnap calculates the diff entirely in your browser using the JavaScript diff library. Your text never leaves your device and is not uploaded anywhere."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "What file types can I compare?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Any plain text format: code (JS, Python, Java, etc.), JSON, YAML, XML, CSV, config files (.env, nginx.conf), logs, API responses, and more. Just paste the content into the text boxes."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "What is the difference between line-level and word-level diff?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Line-level highlights entire lines that changed. Word-level shows exactly which words within a line were modified — useful for spotting small typos or single-word changes."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Can I compare large files?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Yes. The tool uses debounced diff calculation to handle large files smoothly. For extremely large files (10MB+), performance depends on your browser and device specs."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Is my code secure when using the SyntaxSnap Diff Viewer?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Yes. Unlike other online diff tools, SyntaxSnap calculates text differences entirely client-side. Your code, API keys, or sensitive logs never leave your browser and are never transmitted to a server."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "What is the difference between line-level and word-level diffing?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Line-level diffing identifies changed blocks of code, while word-level diffing highlights exact character changes within a line. This is ideal for spotting subtle typos or logic changes in dense files like JSON or YAML."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Can I compare large log files or JSON payloads?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Yes. Our tool uses debounced, non-blocking algorithms to compare large text files efficiently. It handles configuration files, ENV variables, and production logs smoothly without freezing your browser tab."
-      }
-    }
-  ]
-};
+// SEO: FAQPage — de-duplicated (was 7 Qs with 2 near-duplicate pairs, now 5 unique)
+const faqSchema = buildFAQPage([
+  {
+    question: "Is my data sent to a server?",
+    answer: "No. SyntaxSnap calculates the diff entirely in your browser using the JavaScript diff library. Your text never leaves your device and is not uploaded anywhere."
+  },
+  {
+    question: "What file types can I compare?",
+    answer: "Any plain text format: code (JS, Python, Java, etc.), JSON, YAML, XML, CSV, config files (.env, nginx.conf), logs, API responses, and more. Just paste the content into the text boxes."
+  },
+  {
+    question: "What is the difference between line-level and word-level diff?",
+    answer: "Line-level highlights entire lines that changed. Word-level highlights exact character changes within a line — ideal for spotting subtle typos or logic changes in dense files like JSON or YAML."
+  },
+  {
+    question: "Can I compare large files?",
+    answer: "Yes. The tool uses debounced, non-blocking diff calculation to handle large text files, configuration files, and production logs smoothly without freezing your browser tab."
+  },
+  {
+    question: "Is my code secure when using the SyntaxSnap Diff Viewer?",
+    answer: "Yes. Unlike other online diff tools, SyntaxSnap calculates text differences entirely client-side. Your code, API keys, or sensitive logs never leave your browser and are never transmitted to a server."
+  }
+]);
 ---
 
-{/* Pass the features prop to Layout */}
-<Layout title={title} description={description} isTool={true} features={features}>
+<Layout title={title} description={description} isTool={true} slug={slug} features={features}>
   <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
 
   <div class="max-w-6xl mx-auto px-4 sm:px-6">

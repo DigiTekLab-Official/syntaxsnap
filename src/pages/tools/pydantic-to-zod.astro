@@ -2,11 +2,12 @@
 import Layout from '../../layouts/Layout.astro';
 import PydanticConverter from '../../components/tools/PydanticConverter';
 import RelatedTools from '../../components/ui/RelatedTools.astro';
+import { buildFAQPage } from '../../utils/schema';
 
 const title = "Pydantic to Zod Converter (Offline) | SyntaxSnap";
 const description = "Convert FastAPI Pydantic JSON schemas to TypeScript Zod schemas instantly. Supports $defs, enums, unions, constraints and nested models. 100% offline and privacy-safe.";
+const slug = "pydantic-to-zod";
 
-// Extract features for the Layout
 const features = [
   "Converts Pydantic v1 and v2 JSON schemas to Zod",
   "Handles $defs / nested models and $ref references",
@@ -15,41 +16,24 @@ const features = [
   "Local-first processing — data never leaves your browser"
 ];
 
-// Isolated FAQ Schema (3 Consolidated Questions)
-const faqSchema = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "mainEntity": [
-    {
-      "@type": "Question",
-      "name": "Is my schema data sent to a server?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "No. SyntaxSnap converts everything directly inside your browser. Your proprietary schemas never leave your device."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "How do I export a Pydantic model to Zod?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "First, generate a JSON schema from your Python model using Model.model_json_schema() (Pydantic v2) or Model.schema() (Pydantic v1). Paste that JSON here to instantly get the equivalent TypeScript Zod schema."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Does this support $ref references and nested models?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Yes. The converter resolves '$ref' pointers and handles '$defs' by creating separate named Zod schemas, preserving the relationship between your complex Python models."
-      }
-    }
-  ]
-};
+// SEO: FAQPage — answers supported by on-page converter
+const faqSchema = buildFAQPage([
+  {
+    question: "Is my schema data sent to a server?",
+    answer: "No. SyntaxSnap converts everything directly inside your browser. Your proprietary schemas never leave your device."
+  },
+  {
+    question: "How do I export a Pydantic model to Zod?",
+    answer: "First, generate a JSON schema from your Python model using Model.model_json_schema() (Pydantic v2) or Model.schema() (Pydantic v1). Paste that JSON here to instantly get the equivalent TypeScript Zod schema."
+  },
+  {
+    question: "Does this support $ref references and nested models?",
+    answer: "Yes. The converter resolves $ref pointers and handles $defs by creating separate named Zod schemas, preserving the relationship between your complex Python models."
+  }
+]);
 ---
 
-{/* Pass the features prop to Layout */}
-<Layout title={title} description={description} isTool={true} features={features}>
+<Layout title={title} description={description} isTool={true} slug={slug} features={features}>
   <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
 
   <div class="max-w-6xl mx-auto px-4">

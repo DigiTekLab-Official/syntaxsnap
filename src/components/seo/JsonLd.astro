@@ -1,5 +1,15 @@
 ---
 // src/components/seo/JsonLd.astro
+// ─────────────────────────────────────────────────────────────────
+// Central JSON-LD graph emitted on every page.
+//
+// Includes:
+//   • WebSite + Organization  — always
+//   • SoftwareApplication     — when type='tool'
+//   • BreadcrumbList          — when type='tool' (Home → Tools → {Tool})
+// ─────────────────────────────────────────────────────────────────
+
+import { buildToolBreadcrumbs, extractToolName } from '../../utils/schema';
 
 interface Props {
   type?: 'website' | 'tool';
@@ -19,7 +29,7 @@ const {
   features
 } = Astro.props;
 
-// Base schema that applies to EVERY page
+// ── Base schemas (every page) ────────────────────────────────────
 const baseSchema = [
   {
     "@type": "WebSite",
@@ -50,7 +60,7 @@ const baseSchema = [
   }
 ];
 
-// Appends Software schema only if this page is a tool
+// ── SoftwareApplication (tool pages only) ────────────────────────
 const toolSchema = type === 'tool' ? {
   "@type": "SoftwareApplication",
   "name": title,
@@ -65,17 +75,28 @@ const toolSchema = type === 'tool' ? {
   },
   "image": imageUrl,
   "author": { "@id": "https://syntaxsnap.com/#organization" },
-  // FIX: Removed the hardcoded 'aggregateRating' block to prevent Google Rich Snippet Penalties.
-  
-  // Conditionally spread the featureList if features array exists and has items
   ...(features && features.length > 0 ? { "featureList": features } : {})
 } : null;
 
-// Combine into a single JSON-LD graph
+// ── BreadcrumbList (tool pages only) ─────────────────────────────
+// Automatic: Home → Developer Tools → {Tool Name}
+// Tool name is extracted from the page title; slug from the URL path.
+const breadcrumbSchema = type === 'tool' ? (() => {
+  const toolName = extractToolName(title);
+  const slug = new URL(url).pathname.split('/').filter(Boolean).pop() || '';
+  return buildToolBreadcrumbs(toolName, slug);
+})() : null;
+
+// ── Assemble @graph ──────────────────────────────────────────────
+const graph: Record<string, unknown>[] = [...baseSchema];
+if (toolSchema) graph.push(toolSchema);
+if (breadcrumbSchema) graph.push(breadcrumbSchema);
+
 const schemaGraph = {
   "@context": "https://schema.org",
-  "@graph": toolSchema ? [...baseSchema, toolSchema] : baseSchema
+  "@graph": graph
 };
 ---
 
+{/* SEO: Single JSON-LD graph — WebSite + Org + (SoftwareApp + Breadcrumbs when tool) */}
 <script type="application/ld+json" set:html={JSON.stringify(schemaGraph)} />

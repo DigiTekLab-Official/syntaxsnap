@@ -2,11 +2,12 @@
 import Layout from '../../layouts/Layout.astro';
 import JwtTool from '../../components/tools/JwtDebugger';
 import RelatedTools from '../../components/ui/RelatedTools.astro';
+import { buildFAQPage } from '../../utils/schema';
 
 const title = "Local JWT Debugger & Decoder (Private) | SyntaxSnap";
 const description = "Decode and debug JSON Web Tokens (JWT) locally in your browser. Inspect expiration, claims, and detect alg:none vulnerabilities instantly.";
+const slug = "jwt-debugger";
 
-// Extract features for the Layout
 const features = [
   "100% Client-side decoding",
   "UTF-8 and Base64Url padding support",
@@ -14,41 +15,28 @@ const features = [
   "Expiration and NBF claim analysis"
 ];
 
-// Isolated FAQ Schema (3 Questions)
-const faqSchema = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "mainEntity": [
-    {
-      "@type": "Question",
-      "name": "Is my data safe?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Yes. SyntaxSnap uses the browser's native atob() API. No data is sent to a server, making it safer than tools like jwt.io for production tokens."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Why is a local JWT debugger safer than online decoders?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Most online debuggers upload your token to their servers. SyntaxSnap uses the browser's native 'atob' API to decode tokens locally, ensuring your production JWTs and sensitive claims are never exposed."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Does this tool detect 'alg: none' vulnerabilities?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Yes. Our debugger checks for common security pitfalls like the 'alg: none' attack and analyzes Expiration (exp) and Not Before (nbf) claims to help you debug authentication flows."
-      }
-    }
-  ]
-};
+// SEO: FAQPage — answers supported by on-page decoder behavior
+const faqSchema = buildFAQPage([
+  {
+    question: "Is my JWT data safe with this debugger?",
+    answer: "Yes. SyntaxSnap uses the browser's native atob() API. No data is sent to a server, making it safer than tools like jwt.io for production tokens."
+  },
+  {
+    question: "Why is a local JWT debugger safer than online decoders?",
+    answer: "Most online debuggers upload your token to their servers. SyntaxSnap uses the browser's native atob API to decode tokens locally, ensuring your production JWTs and sensitive claims are never exposed."
+  },
+  {
+    question: "Does this tool detect alg:none vulnerabilities?",
+    answer: "Yes. Our debugger checks for common security pitfalls like the alg:none attack and analyzes Expiration (exp) and Not Before (nbf) claims to help you debug authentication flows."
+  },
+  {
+    question: "Can I decode expired tokens?",
+    answer: "Yes. The debugger decodes any structurally valid JWT regardless of expiration. It also highlights expired and not-yet-valid tokens so you can inspect claims for debugging purposes."
+  }
+]);
 ---
 
-{/* Pass the features prop to Layout */}
-<Layout title={title} description={description} isTool={true} features={features}>
+<Layout title={title} description={description} isTool={true} slug={slug} features={features}>
   <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
 
   <div class="max-w-6xl mx-auto px-4">

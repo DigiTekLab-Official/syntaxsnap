@@ -2,13 +2,38 @@
 import Layout from '../../layouts/Layout.astro';
 import EnvToZodClient from '../../components/tools/EnvToZod';
 import RelatedTools from '../../components/ui/RelatedTools.astro';
+import { buildFAQPage } from '../../utils/schema';
 
 const title = "Env to Zod Converter | SyntaxSnap";
 const description = "Instantly convert your .env files into strict, type-safe Zod validation schemas for Next.js and Node.js. 100% offline and secure.";
 const slug = "env-to-zod";
+const features = [
+  "Auto-detects URLs, emails, booleans, and numbers",
+  "Generates strict Zod schemas with .url(), .email(), .min(1)",
+  "Supports Next.js NEXT_PUBLIC_ prefix conventions",
+  "100% offline — your .env secrets never leave your browser"
+];
+
+// SEO: FAQPage
+const faqSchema = buildFAQPage([
+  {
+    question: "Is my .env data sent to a server?",
+    answer: "No. All conversion happens 100% client-side in your browser. Your environment variables and secrets never leave your device."
+  },
+  {
+    question: "Which value types are auto-detected?",
+    answer: "The converter automatically identifies URLs, email addresses, boolean values (true/false), port numbers, and integers. Each is mapped to the appropriate Zod validator."
+  },
+  {
+    question: "Can I use this with Next.js?",
+    answer: "Yes. The converter handles NEXT_PUBLIC_ prefixed variables and generates schemas suitable for both server-side and client-side environment validation in Next.js."
+  }
+]);
 ---
 
-<Layout title={title} description={description} isTool={true} slug={slug}>
+<Layout title={title} description={description} isTool={true} slug={slug} features={features}>
+  {/* SEO: FAQPage schema */}
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
   <div class="max-w-6xl mx-auto">
     <div class="mb-8">
       <h1 class="text-3xl md:text-4xl font-extrabold text-white mb-4 flex items-center gap-3">

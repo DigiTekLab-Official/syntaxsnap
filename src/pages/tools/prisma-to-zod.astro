@@ -2,23 +2,24 @@
 import Layout from '../../layouts/Layout.astro';
 import PrismaToZodTool from '../../components/tools/PrismaToZod';
 import RelatedTools from '../../components/ui/RelatedTools.astro';
+import { buildFAQPage } from '../../utils/schema';
 
-const metadata = {
-  title: "Prisma to Zod Schema Converter | SyntaxSnap",
-  description: "Convert Prisma ORM models and enums into type-safe Zod validation schemas with auto-generated CreateInput types. 100% client-side, zero data transmission.",
-  url: "https://syntaxsnap.com/tools/prisma-to-zod",
-  features: [
-    "Full scalar type mapping (String, Int, Float, Decimal, BigInt, DateTime, Json, Bytes, Boolean)",
-    "Enum to z.enum() conversion",
-    "Relation handling with z.lazy()",
-    "Nullable and array field support",
-    "Auto-generated CreateInput schemas",
-    "Composite @@id detection",
-    "@default() to .default() mapping",
-    "Zero-dependency browser-only conversion"
-  ]
-};
+const title = "Prisma to Zod Schema Converter | SyntaxSnap";
+const description = "Convert Prisma ORM models and enums into type-safe Zod validation schemas with auto-generated CreateInput types. 100% client-side, zero data transmission.";
+const slug = "prisma-to-zod";
 
+const features = [
+  "Full scalar type mapping (String, Int, Float, Decimal, BigInt, DateTime, Json, Bytes, Boolean)",
+  "Enum to z.enum() conversion",
+  "Relation handling with z.lazy()",
+  "Nullable and array field support",
+  "Auto-generated CreateInput schemas",
+  "Composite @@id detection",
+  "@default() to .default() mapping",
+  "Zero-dependency browser-only conversion"
+];
+
+// FAQ content — shared between visible HTML and JSON-LD schema
 const faqData = [
   {
     question: "Does this tool send my Prisma schema to a server?",
@@ -37,27 +38,14 @@ const faqData = [
     answer: "Yes. Relation fields are mapped using z.lazy(() => ModelSchema) to support circular and self-referencing models. A depth limit prevents infinite recursion during conversion."
   }
 ];
+
+// SEO: FAQPage — answers supported by on-page Prisma converter
+const faqSchema = buildFAQPage(faqData);
 ---
 
-<Layout
-  title={metadata.title}
-  description={metadata.description}
-  isTool={true}
-  features={metadata.features}
->
-  <!-- FAQPage JSON-LD -->
-  <script type="application/ld+json" set:html={JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": faqData.map(faq => ({
-      "@type": "Question",
-      "name": faq.question,
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": faq.answer
-      }
-    }))
-  })} />
+<Layout title={title} description={description} isTool={true} slug={slug} features={features}>
+  {/* SEO: FAQPage schema */}
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
 
   <div class="max-w-6xl mx-auto px-4 py-12">
     <div class="mb-10 text-center">

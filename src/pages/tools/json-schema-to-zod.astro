@@ -2,20 +2,38 @@
 import Layout from '../../layouts/Layout.astro';
 import JsonSchemaToZodTool from '../../components/tools/JsonSchemaToZod.tsx';
 import RelatedTools from '../../components/ui/RelatedTools.astro';
+import { buildFAQPage } from '../../utils/schema';
 
-const metadata = {
-  title: "JSON Schema to Zod Converter | 100% Client-Side | SyntaxSnap",
-  description: "Convert JSON Schema (Draft 4-2020-12) to Zod schemas instantly. Perfect for TypeScript developers. No data ever leaves your browser.",
-  features: [
-    "Supports JSON Schema Draft 4, 6, 7, and 2020-12",
-    "Handles nested $refs and complex validations",
-    "Generates clean, readable TypeScript Zod code",
-    "Privacy-first: 100% local browser execution"
-  ]
-};
+const title = "JSON Schema to Zod Converter | 100% Client-Side | SyntaxSnap";
+const description = "Convert JSON Schema (Draft 4-2020-12) to Zod schemas instantly. Perfect for TypeScript developers. No data ever leaves your browser.";
+const slug = "json-schema-to-zod";
+const features = [
+  "Supports JSON Schema Draft 4, 6, 7, and 2020-12",
+  "Handles nested $refs and complex validations",
+  "Generates clean, readable TypeScript Zod code",
+  "Privacy-first: 100% local browser execution"
+];
+
+// SEO: FAQPage
+const faqSchema = buildFAQPage([
+  {
+    question: "Which JSON Schema drafts are supported?",
+    answer: "This converter supports JSON Schema Draft 4, Draft 6, Draft 7, and Draft 2020-12. It handles $ref references, nested objects, arrays, enums, and complex validation constraints."
+  },
+  {
+    question: "Is my schema data sent to a server?",
+    answer: "No. All conversion happens 100% client-side in your browser. Your JSON Schema definitions never leave your device."
+  },
+  {
+    question: "Can I use the generated Zod schemas in production?",
+    answer: "Yes. The generated schemas are clean, idiomatic TypeScript that imports directly from the zod package. They are ready for production use with runtime validation."
+  }
+]);
 ---
 
-<Layout title={metadata.title} description={metadata.description} isTool={true} features={metadata.features}>
+<Layout title={title} description={description} isTool={true} slug={slug} features={features}>
+  {/* SEO: FAQPage schema */}
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
   <div class="max-w-6xl mx-auto px-4 py-12">
     <header class="text-center mb-10">
       <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-4 tracking-tight">JSON Schema to Zod</h1>

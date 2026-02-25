@@ -2,81 +2,49 @@
 import Layout from '../../layouts/Layout.astro';
 import CronDescriptorTool from '../../components/tools/CronDescriptor';
 import RelatedTools from '../../components/ui/RelatedTools.astro';
+import { buildFAQPage } from '../../utils/schema';
 
 const title = "Cron Expression Translator & Scheduler | SyntaxSnap";
 const description = "Free crontab expression translator. Convert cron syntax to human-readable text and preview next run times. Supports Linux, Unix, and Quartz cron formats. 100% client-side.";
+const slug = "cron-descriptor";
+const features = [
+  "Human-readable cron translation",
+  "Next run time predictions with timezone",
+  "12 quick cron presets",
+  "Field-by-field breakdown",
+  "Real-time syntax validation",
+  "Copy translated output",
+  "100% client-side processing"
+];
 
-const schema = {
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "SoftwareApplication",
-      "name": "Cron Expression Descriptor & Scheduler",
-      "applicationCategory": "DeveloperApplication",
-      "operatingSystem": "Web",
-      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-      "description": description,
-      "featureList": [
-        "Human-readable cron translation",
-        "Next run time predictions with timezone",
-        "12 quick cron presets",
-        "Field-by-field breakdown",
-        "Real-time syntax validation",
-        "Copy translated output",
-        "100% client-side processing"
-      ]
-    },
-    {
-      "@type": "FAQPage",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "What is a cron expression?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "A cron expression is a string of 5 or 6 fields separated by spaces that represents a schedule for executing recurring tasks in Unix-like systems. The fields are: minute (0-59), hour (0-23), day of month (1-31), month (1-12), and day of week (0-7, where 0 and 7 are Sunday)."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "What does * mean in cron?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "The asterisk (*) in a cron expression means 'every' or 'any'. For example, '* * * * *' means 'every minute of every hour of every day'. '0 * * * *' means 'at minute 0 of every hour' (on the hour)."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "How do I schedule a cron job to run every day at midnight?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Use the cron expression '0 0 * * *'. This means: minute 0, hour 0 (midnight), every day of the month, every month, every day of the week."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "What timezone are the next run times shown in?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Next run times are displayed in your local system timezone as detected by your browser. The timezone is shown below the list of upcoming runs."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Does this tool support seconds in cron expressions?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "The standard Unix cron format uses 5 fields (minute through day of week). Some systems like Quartz scheduler support 6-field expressions with seconds as the first field. This tool supports the standard 5-field format."
-          }
-        }
-      ]
-    }
-  ]
-};
+// SEO: FAQPage — visible answers supported by page content
+const faqSchema = buildFAQPage([
+  {
+    question: "What is a cron expression?",
+    answer: "A cron expression is a string of 5 or 6 fields separated by spaces that represents a schedule for executing recurring tasks in Unix-like systems. The fields are: minute (0-59), hour (0-23), day of month (1-31), month (1-12), and day of week (0-7, where 0 and 7 are Sunday)."
+  },
+  {
+    question: "What does * mean in cron?",
+    answer: "The asterisk (*) in a cron expression means 'every' or 'any'. For example, '* * * * *' means 'every minute of every hour of every day'. '0 * * * *' means 'at minute 0 of every hour' (on the hour)."
+  },
+  {
+    question: "How do I schedule a cron job to run every day at midnight?",
+    answer: "Use the cron expression '0 0 * * *'. This means: minute 0, hour 0 (midnight), every day of the month, every month, every day of the week."
+  },
+  {
+    question: "What timezone are the next run times shown in?",
+    answer: "Next run times are displayed in your local system timezone as detected by your browser. The timezone is shown below the list of upcoming runs."
+  },
+  {
+    question: "Does this tool support seconds in cron expressions?",
+    answer: "The standard Unix cron format uses 5 fields (minute through day of week). Some systems like Quartz scheduler support 6-field expressions with seconds as the first field. This tool supports the standard 5-field format."
+  }
+]);
 ---
 
-<Layout title={title} description={description}>
-  <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+<Layout title={title} description={description} isTool={true} slug={slug} features={features}>
+  {/* SEO: FAQPage schema — questions answered by on-page educational content */}
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
 
   <div class="max-w-6xl mx-auto px-4 py-12">
 

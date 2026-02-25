@@ -1,13 +1,13 @@
 ---
-// src/pages/tools/svg-to-jsx.astro
 import Layout from '../../layouts/Layout.astro';
 import SvgTool from '../../components/tools/SvgToJsx';
 import RelatedTools from '../../components/ui/RelatedTools.astro';
+import { buildFAQPage } from '../../utils/schema';
 
 const title = "SVG to JSX Converter | SyntaxSnap";
 const description = "Instantly convert SVG code into clean React JSX. Automatically handles camelCase attributes, className updates, and style objects.";
+const slug = "svg-to-jsx";
 
-// Extract features for the Layout
 const features = [
   "Converts kebab-case attributes to camelCase",
   "Transforms style strings to objects",
@@ -15,49 +15,28 @@ const features = [
   "Local-first privacy (no server upload)"
 ];
 
-// Isolated FAQ Schema (4 Questions)
-const faqSchema = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "mainEntity": [
-    {
-      "@type": "Question",
-      "name": "Is my SVG data sent to a server?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "No. SyntaxSnap is a local-first platform. All processing happens locally in your browser using JavaScript. Your code never leaves your device."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Does this tool fix style attributes?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Yes. It automatically parses CSS strings in the style attribute and converts them into a React-compatible JavaScript object."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Is this tool free to use?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Yes, this SVG to JSX converter is 100% free and open for all developers."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "How does this tool prepare SVGs for React and Next.js?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "It automatically converts 'kebab-case' attributes to 'camelCase', transforms inline style strings into React objects, and renames the 'class' attribute to 'className' for immediate use in JSX components."
-      }
-    }
-  ]
-};
+// SEO: FAQPage — answers supported by on-page converter behavior
+const faqSchema = buildFAQPage([
+  {
+    question: "Is my SVG data sent to a server?",
+    answer: "No. SyntaxSnap is a local-first platform. All processing happens locally in your browser using JavaScript. Your code never leaves your device."
+  },
+  {
+    question: "Does this tool fix style attributes?",
+    answer: "Yes. It automatically parses CSS strings in the style attribute and converts them into a React-compatible JavaScript object."
+  },
+  {
+    question: "How does this tool prepare SVGs for React and Next.js?",
+    answer: "It automatically converts kebab-case attributes to camelCase, transforms inline style strings into React objects, and renames the class attribute to className for immediate use in JSX components."
+  },
+  {
+    question: "Is this tool free to use?",
+    answer: "Yes, this SVG to JSX converter is 100% free and open for all developers."
+  }
+]);
 ---
 
-{/* Pass features to Layout */}
-<Layout title={title} description={description} isTool={true} features={features}>
+<Layout title={title} description={description} isTool={true} slug={slug} features={features}>
   <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
 
   <div class="max-w-6xl mx-auto px-4">

@@ -1,13 +1,13 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-// 1. RENAME the import to "JsonConverter" to fix the conflict
 import JsonConverter from '../../components/tools/JsonToZod';
 import RelatedTools from '../../components/ui/RelatedTools.astro';
+import { buildFAQPage } from '../../utils/schema';
 
 const title = "JSON to Zod Converter (Instant Schema Generator) | SyntaxSnap";
 const description = "Convert raw JSON objects into Zod schemas instantly. Infers types, arrays, and objects for TypeScript validation.";
+const slug = "json-to-zod";
 
-// Extract features for the Layout
 const features = [
   "Infers TypeScript types from JSON",
   "Generates Zod validation schemas",
@@ -15,57 +15,28 @@ const features = [
   "Local-first processing (Privacy focused)"
 ];
 
-// Isolated FAQ Schema (5 Questions)
-const faqSchema = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "mainEntity": [
-    {
-      "@type": "Question",
-      "name": "Is my JSON data sent to a server?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "No. SyntaxSnap processes all data locally in your browser. Your sensitive JSON never leaves your device."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "What is Zod?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Zod is a TypeScript-first schema declaration and validation library. It allows you to create schemas that validate data at runtime."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Does this support nested arrays?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Yes, the tool recursively analyzes nested objects and arrays to generate a complete schema structure."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "How does the JSON to Zod converter handle nested objects?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "The tool recursively analyzes your JSON structure to generate nested 'z.object()' and 'z.array()' definitions, ensuring full TypeScript type safety for complex API responses."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Can I use this for runtime schema validation?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Absolutely. This tool generates standard Zod schemas that allow you to validate external data at runtime, preventing 'any' types from polluting your TypeScript codebase."
-      }
-    }
-  ]
-};
+// SEO: FAQPage — answers supported by on-page converter behavior
+const faqSchema = buildFAQPage([
+  {
+    question: "Is my JSON data sent to a server?",
+    answer: "No. SyntaxSnap processes all data locally in your browser. Your sensitive JSON never leaves your device."
+  },
+  {
+    question: "What is Zod?",
+    answer: "Zod is a TypeScript-first schema declaration and validation library. It allows you to create schemas that validate data at runtime."
+  },
+  {
+    question: "Does this support nested arrays and objects?",
+    answer: "Yes. The tool recursively analyzes your JSON structure to generate nested z.object() and z.array() definitions, ensuring full TypeScript type safety for complex API responses."
+  },
+  {
+    question: "Can I use this for runtime schema validation?",
+    answer: "Absolutely. This tool generates standard Zod schemas that allow you to validate external data at runtime, preventing 'any' types from polluting your TypeScript codebase."
+  }
+]);
 ---
 
-{/* Pass the features prop to Layout */}
-<Layout title={title} description={description} isTool={true} features={features}> 
+<Layout title={title} description={description} isTool={true} slug={slug} features={features}> 
   <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
 
   <div class="max-w-6xl mx-auto">

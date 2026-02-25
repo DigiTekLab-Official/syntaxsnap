@@ -2,27 +2,39 @@
 import Layout from '../../layouts/Layout.astro';
 import TsToZodTool from '../../components/tools/TsToZod.tsx';
 import RelatedTools from '../../components/ui/RelatedTools.astro';
+import { buildFAQPage } from '../../utils/schema';
 
-const metadata = {
-  title: "TypeScript to Zod Converter | Runtime-Safe Schema Generator | SyntaxSnap",
-  description: "Convert TypeScript interfaces and types into Zod validation schemas instantly. Supports complex types, unions, arrays, nested objects, and utility types. Zero server round-trips, 100% private client-side processing.",
-  features: [
-    "Auto-parses TypeScript interfaces, types, and enums from your codebase",
-    "Smart inference: primitives, arrays, tuples, unions, intersections, and nested objects",
-    "Preserves optional (?) properties, readonly modifiers, and literal types",
-    "Handles utility types: Partial, Required, Pick, Omit, Record",
-    "100% client-side AST processing—your proprietary types never leave your browser"
-  ],
-  keywords: "typescript to zod, ts to zod, interface to zod schema, type to zod converter, runtime validation"
-};
+const title = "TypeScript to Zod Converter | Runtime-Safe Schema Generator | SyntaxSnap";
+const description = "Convert TypeScript interfaces and types into Zod validation schemas instantly. Supports complex types, unions, arrays, nested objects, and utility types. Zero server round-trips, 100% private client-side processing.";
+const slug = "ts-to-zod";
+const features = [
+  "Auto-parses TypeScript interfaces, types, and enums from your codebase",
+  "Smart inference: primitives, arrays, tuples, unions, intersections, and nested objects",
+  "Preserves optional (?) properties, readonly modifiers, and literal types",
+  "Handles utility types: Partial, Required, Pick, Omit, Record",
+  "100% client-side AST processing—your proprietary types never leave your browser"
+];
+
+// SEO: FAQPage
+const faqSchema = buildFAQPage([
+  {
+    question: "Which TypeScript types are supported?",
+    answer: "The converter supports interfaces, type aliases, enums, unions, intersections, tuples, arrays, optional properties, utility types (Partial, Required, Pick, Omit, Record), and nested object types."
+  },
+  {
+    question: "Is my TypeScript code sent to a server?",
+    answer: "No. All AST parsing and Zod schema generation happens 100% client-side in your browser. Your code never leaves your device."
+  },
+  {
+    question: "Can I use this for runtime validation?",
+    answer: "Yes. Zod schemas validate data at runtime, bridging the gap between TypeScript's compile-time types and actual runtime safety. The generated schemas work out-of-the-box with tRPC, Next.js Server Actions, and API route handlers."
+  }
+]);
 ---
 
-<Layout 
-  title={metadata.title} 
-  description={metadata.description} 
-  isTool={true} 
-  features={metadata.features}  
->
+<Layout title={title} description={description} isTool={true} slug={slug} features={features}>
+  {/* SEO: FAQPage schema */}
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
   <div class="max-w-7xl mx-auto px-4 sm:px-6 py-12 lg:py-16">
     <header class="text-center mb-12">
       <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white mb-4 tracking-tight">

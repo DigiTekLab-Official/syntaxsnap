@@ -2,6 +2,7 @@
 import Layout from '../../layouts/Layout.astro';
 import TailwindToCssTool from '../../components/tools/TailwindToCss';
 import RelatedTools from '../../components/ui/RelatedTools.astro';
+import { buildFAQPage } from '../../utils/schema';
 
 const title = "Tailwind to CSS Converter | SyntaxSnap";
 const description = "Instantly convert Tailwind utility classes into standard Vanilla CSS rulesets and CSS variables. 100% offline parsing for migrating out of Tailwind.";
@@ -15,9 +16,27 @@ const features = [
   "Supports arbitrary values (e.g. w-[200px])",
   "100% offline — no data leaves your browser",
 ];
+
+// SEO: FAQPage
+const faqSchema = buildFAQPage([
+  {
+    question: "Is my code sent to a server?",
+    answer: "No. All Tailwind-to-CSS conversion happens 100% client-side in your browser using a local AST-lite parser. Your code never leaves your device."
+  },
+  {
+    question: "Which Tailwind utilities are supported?",
+    answer: "The converter supports spacing, colors, typography, flexbox, grid, borders, shadows, responsive breakpoints (sm:, md:, lg:, xl:), pseudo-class modifiers (hover:, focus:, active:), and arbitrary values like w-[200px]."
+  },
+  {
+    question: "Can I use this for migrating away from Tailwind?",
+    answer: "Yes. This is the primary use case. Paste your Tailwind className string and get clean, standards-compliant Vanilla CSS that you can drop directly into a non-Tailwind project."
+  }
+]);
 ---
 
 <Layout title={title} description={description} isTool={true} slug={slug} features={features}>
+  {/* SEO: FAQPage schema */}
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
   <div class="max-w-6xl mx-auto">
     <div class="mb-8">
       <h1 class="text-3xl md:text-4xl font-extrabold text-white mb-4">Tailwind to CSS Converter</h1>

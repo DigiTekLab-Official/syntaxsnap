@@ -3,13 +3,12 @@
 import Layout from '../../layouts/Layout.astro';
 import AiMockGeneratorTool from '../../components/tools/AiMockGenerator.tsx';
 import RelatedTools from '../../components/ui/RelatedTools.astro';
+import { buildFAQPage } from '../../utils/schema';
 
-// SEO Constants - 2026 Best Practices
 const title = "AI Mock Data Generator | SyntaxSnap";
 const description = "Generate realistic JSON mock data from OpenAPI schemas or natural language prompts using AI. Free tool for developers and QA engineers. Supports nested objects, UUIDs, and strict type safety.";
 const slug = "ai-mock-generator";
 
-// NEW: Tool-specific features for SoftwareApplication schema
 const features = [
   "Generates realistic JSON from natural language or OpenAPI specs",
   "Maintains strict type safety (Integers, Booleans, UUIDs)",
@@ -17,41 +16,25 @@ const features = [
   "Privacy-conscious: No database storage of prompts or generated data"
 ];
 
-const faqSchema = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "mainEntity": [
-    {
-      "@type": "Question",
-      "name": "Is my data sent to an AI provider?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Yes. When you click 'Generate', your prompt or schema is sent server-side to OpenAI to generate the mock data. However, SyntaxSnap does not store your inputs or the generated results in any database."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Can I use real personal data or API keys?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "No. We strongly advise against submitting real PII (Personally Identifiable Information), credentials, or proprietary business schemas. Always use dummy variables and generic field names for your prompts."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "How does the generator handle complex OpenAPI schemas?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Our AI logic parses the provided OpenAPI 3.0/3.1 spec, identifies data types, enums, and required fields, and produces a JSON object that adheres strictly to your defined API contract."
-      }
-    }
-  ]
-};
+// SEO: FAQPage — answers supported by on-page AI generation behavior
+const faqSchema = buildFAQPage([
+  {
+    question: "Is my data sent to an AI provider?",
+    answer: "Yes. When you click 'Generate', your prompt or schema is sent server-side to OpenAI to generate the mock data. However, SyntaxSnap does not store your inputs or the generated results in any database."
+  },
+  {
+    question: "Can I use real personal data or API keys?",
+    answer: "No. We strongly advise against submitting real PII (Personally Identifiable Information), credentials, or proprietary business schemas. Always use dummy variables and generic field names for your prompts."
+  },
+  {
+    question: "How does the generator handle complex OpenAPI schemas?",
+    answer: "Our AI logic parses the provided OpenAPI 3.0/3.1 spec, identifies data types, enums, and required fields, and produces a JSON object that adheres strictly to your defined API contract."
+  }
+]);
 ---
 
-{/* Pass features to Layout */}
 <Layout title={title} description={description} isTool={true} features={features} slug={slug}>
-  {/* Inject the FAQ Schema directly into the DOM */}
+  {/* SEO: FAQPage schema */}
   <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
 
   {/* Replaced <main> with standard div wrapper, as Layout.astro provides the <main> element */}

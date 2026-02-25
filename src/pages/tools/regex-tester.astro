@@ -1,14 +1,14 @@
 ---
 // src/pages/tools/regex-tester.astro
 import Layout from '../../layouts/Layout.astro';
-// 1. Alias import to "RegexTool"
 import RegexTool from '../../components/tools/RegexTester';
 import RelatedTools from '../../components/ui/RelatedTools.astro';
+import { buildFAQPage } from '../../utils/schema';
 
 const title = "Regex Tester & Debugger (Javascript) | SyntaxSnap";
 const description = "Test and debug JavaScript regular expressions in real-time. Highlight matches and validate patterns instantly.";
+const slug = "regex-tester";
 
-// Extract features for the Layout
 const features = [
   "Real-time Javascript regex testing",
   "Instant pattern matching",
@@ -16,49 +16,28 @@ const features = [
   "Privacy-focused (No server processing)"
 ];
 
-// Isolated FAQ Schema (Consolidated into 4 strong questions)
-const faqSchema = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "mainEntity": [
-    {
-      "@type": "Question",
-      "name": "Which Regex engine does this tester use?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "This tool uses your browser's native ECMAScript Regular Expression engine. This ensures 100% accuracy for JavaScript and TypeScript development."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Are my test strings saved?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "No. SyntaxSnap is a local-first platform. All testing happens in your browser's memory and is cleared when you refresh the page."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "How do I use flags?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "You can add flags like 'g' (global) or 'i' (insensitive) directly in the pattern input to control how the regex engine matches your text."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Does this tool protect against ReDoS attacks?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Yes. Our tester includes a built-in circuit breaker that stops execution if a pattern is too complex (catastrophic backtracking), preventing your browser from freezing."
-      }
-    }
-  ]
-};
+// SEO: FAQPage — answers supported by on-page tester behavior
+const faqSchema = buildFAQPage([
+  {
+    question: "Which Regex engine does this tester use?",
+    answer: "This tool uses your browser's native ECMAScript Regular Expression engine. This ensures 100% accuracy for JavaScript and TypeScript development."
+  },
+  {
+    question: "Are my test strings saved?",
+    answer: "No. SyntaxSnap is a local-first platform. All testing happens in your browser's memory and is cleared when you refresh the page."
+  },
+  {
+    question: "How do I use flags?",
+    answer: "You can add flags like g (global) or i (insensitive) directly in the pattern input to control how the regex engine matches your text."
+  },
+  {
+    question: "Does this tool protect against ReDoS attacks?",
+    answer: "Yes. Our tester includes a built-in circuit breaker that stops execution if a pattern is too complex (catastrophic backtracking), preventing your browser from freezing."
+  }
+]);
 ---
 
-{/* Pass features to Layout */}
-<Layout title={title} description={description} isTool={true} features={features}>
+<Layout title={title} description={description} isTool={true} slug={slug} features={features}>
   <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
 
   <div class="max-w-6xl mx-auto px-4">

@@ -2,26 +2,38 @@
 import Layout from '../../layouts/Layout.astro';
 import GraphqlToTrpcTool from '../../components/tools/GraphqlToTrpc';
 import RelatedTools from '../../components/ui/RelatedTools.astro';
+import { buildFAQPage } from '../../utils/schema';
 
-const metadata = {
-  title: "GraphQL Schema to tRPC Router Generator | SyntaxSnap",
-  description: "Instantly convert your GraphQL schemas (Queries and Mutations) into type-safe tRPC routers with automatic Zod input validation.",
-  url: "https://syntaxsnap.com/tools/graphql-to-trpc",
-  features: [
-    "Automatic Zod schema generation",
-    "Query and Mutation mapping",
-    "Zero-dependency client-side conversion",
-    "TypeScript strict types output"
-  ]
-};
+const title = "GraphQL Schema to tRPC Router Generator | SyntaxSnap";
+const description = "Instantly convert your GraphQL schemas (Queries and Mutations) into type-safe tRPC routers with automatic Zod input validation.";
+const slug = "graphql-to-trpc";
+const features = [
+  "Automatic Zod schema generation",
+  "Query and Mutation mapping",
+  "Zero-dependency client-side conversion",
+  "TypeScript strict types output"
+];
+
+// SEQ: FAQPage
+const faqSchema = buildFAQPage([
+  {
+    question: "Is this tool free to use?",
+    answer: "Yes. The GraphQL to tRPC converter is completely free with no accounts or usage limits."
+  },
+  {
+    question: "Does my GraphQL schema leave the browser?",
+    answer: "No. All conversion happens 100% client-side in your browser. Your GraphQL schemas are never sent to any server."
+  },
+  {
+    question: "Does it generate Zod validation schemas?",
+    answer: "Yes. The converter automatically generates Zod input validation schemas for each tRPC procedure, derived from the GraphQL type definitions for full type safety."
+  }
+]);
 ---
 
-<Layout
-  title={metadata.title}
-  description={metadata.description}
-  isTool={true}
-  features={metadata.features}
->
+<Layout title={title} description={description} isTool={true} slug={slug} features={features}>
+  {/* SEO: FAQPage schema */}
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
 
   <div class="max-w-6xl mx-auto px-4 py-12">
     <div class="mb-10 text-center">

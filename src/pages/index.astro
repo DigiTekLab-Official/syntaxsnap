@@ -4,13 +4,26 @@ import Layout from '../layouts/Layout.astro';
 import ToolCard from '../components/ui/ToolCard.astro';
 import { TOOLS } from '../config/tools';
 import { ShieldCheck, ArrowRight, Zap } from 'lucide-astro';
+import { buildWebApplication, buildItemList, SITE_URL } from '../utils/schema';
 
 const featuredIds = ['aurora-gradient', 'json-schema-to-zod', 'ai-mock-generator', 'pydantic-to-zod'];
 const featuredTools = TOOLS.filter(t => featuredIds.includes(t.id))
   .sort((a, b) => featuredIds.indexOf(a.id) - featuredIds.indexOf(b.id));
+
+// SEO: WebApplication — establishes SyntaxSnap as a platform, not just pages
+const webAppSchema = buildWebApplication();
+
+// SEO: ItemList — helps Google understand the full tool inventory
+const itemListSchema = buildItemList(
+  TOOLS.map(t => ({ name: t.title, url: `${SITE_URL}${t.href}` }))
+);
 ---
 
 <Layout title="SyntaxSnap – Privacy-First Developer Tools">
+  {/* SEO: WebApplication schema — platform-level identity */}
+  <script type="application/ld+json" set:html={JSON.stringify(webAppSchema)} />
+  {/* SEO: ItemList schema — full tool directory for search engines */}
+  <script type="application/ld+json" set:html={JSON.stringify(itemListSchema)} />
   <div class="pt-16 pb-12 px-4 max-w-6xl mx-auto text-center md:text-left">
     <div class="flex flex-col md:flex-row items-center justify-between gap-12">
       <div class="flex-1 max-w-2xl">

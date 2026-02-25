@@ -2,27 +2,43 @@
 import Layout from '../../layouts/Layout.astro';
 import OpenapiToZodTool from '../../components/tools/OpenapiToZod.tsx';
 import RelatedTools from '../../components/ui/RelatedTools.astro';
+import { buildFAQPage } from '../../utils/schema';
 
-const metadata = {
-  title: "OpenAPI to Zod Converter | Runtime-Safe API Validation | SyntaxSnap",
-  description: "Convert OpenAPI 3.x and Swagger JSON specifications into TypeScript Zod validation schemas instantly. Supports complex schemas, discriminated unions, and format constraints. Zero server round-trips, 100% private.",
-  features: [
-    "Full OpenAPI 3.x schema extraction with nested object support",
-    "Smart type inference: strings, numbers, arrays, enums, unions, and allOf/oneOf",
-    "Format validators: .email(), .uuid(), .datetime(), .url() with constraint mapping",
-    "Discriminated unions, nullable fields, and description preservation",
-    "100% client-side processing—your API specs never leave your browser"
-  ],
-  keywords: "openapi to zod, swagger to zod, api schema validation, typescript zod generator, openapi converter"
-};
+const title = "OpenAPI to Zod Converter | Runtime-Safe API Validation | SyntaxSnap";
+const description = "Convert OpenAPI 3.x and Swagger JSON specifications into TypeScript Zod validation schemas instantly. Supports complex schemas, discriminated unions, and format constraints. Zero server round-trips, 100% private.";
+const slug = "openapi-to-zod";
+const features = [
+  "Full OpenAPI 3.x schema extraction with nested object support",
+  "Smart type inference: strings, numbers, arrays, enums, unions, and allOf/oneOf",
+  "Format validators: .email(), .uuid(), .datetime(), .url() with constraint mapping",
+  "Discriminated unions, nullable fields, and description preservation",
+  "100% client-side processing—your API specs never leave your browser"
+];
+
+// SEO: FAQPage
+const faqSchema = buildFAQPage([
+  {
+    question: "Which OpenAPI versions are supported?",
+    answer: "This converter supports OpenAPI 3.0.x and 3.1.x specifications, as well as Swagger 2.0 JSON format. It handles components/schemas, nested objects, arrays, and discriminated unions."
+  },
+  {
+    question: "Is my API specification sent to a server?",
+    answer: "No. All parsing and Zod schema generation happens 100% client-side in your browser. Your API specs never leave your device."
+  },
+  {
+    question: "Does it handle nested objects and allOf/oneOf?",
+    answer: "Yes. The converter resolves allOf (intersection), oneOf (discriminated unions), and anyOf compositions. It produces clean z.object(), z.union(), and z.intersection() calls."
+  },
+  {
+    question: "Can I use the output in production?",
+    answer: "Yes. The generated Zod schemas are production-ready TypeScript code that imports directly from the zod package. Use them for API response validation, form inputs, or type-safe data pipelines."
+  }
+]);
 ---
 
-<Layout 
-  title={metadata.title} 
-  description={metadata.description} 
-  isTool={true} 
-  features={metadata.features}
->
+<Layout title={title} description={description} isTool={true} slug={slug} features={features}>
+  {/* SEO: FAQPage schema */}
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
   <div class="max-w-7xl mx-auto px-4 sm:px-6 py-12 lg:py-16">
     <header class="text-center mb-12">
       <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white mb-4 tracking-tight">

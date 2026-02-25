@@ -2,11 +2,12 @@
 import Layout from '../../layouts/Layout.astro';
 import GlassTool from '../../components/tools/GlassGenerator';
 import RelatedTools from '../../components/ui/RelatedTools.astro';
+import { buildFAQPage } from '../../utils/schema';
 
 const title = "CSS Glassmorphism Generator | SyntaxSnap";
 const description = "Create beautiful frosted glass effects for your UI with real-time backdrop-filter preview. Adjust blur, transparency, saturation and border radius — then export clean, cross-browser CSS instantly.";
+const slug = "glass-generator";
 
-// Extract features for the Layout
 const features = [
   "Real-time backdrop-filter + saturate preview",
   "Adjustable blur, transparency, saturation, shadow and border radius",
@@ -14,65 +15,28 @@ const features = [
   "Cross-browser -webkit-backdrop-filter output"
 ];
 
-// Isolated FAQ Schema
-const faqSchema = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "mainEntity": [
-    {
-      "@type": "Question",
-      "name": "What is Glassmorphism?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Glassmorphism is a UI design style that uses backdrop-filter: blur() and semi-transparent backgrounds to create a frosted-glass effect. It became mainstream with iOS 13 and Windows 11 Fluent Design."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Does this work on all browsers?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "The generated CSS includes both the standard backdrop-filter and the -webkit-backdrop-filter prefix required by Safari. It works in Chrome 76+, Safari 9+, Firefox 103+, and Edge 17+, covering over 97% of global users."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "What does the saturation slider do?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "The backdrop-filter property accepts multiple functions. Adding saturate() alongside blur() makes the colours behind the glass element more vivid — this is the technique used by macOS and iOS to give their UI panels a distinctive look."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Is this tool free?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Yes. SyntaxSnap Glassmorphism Generator is 100% free for personal and commercial projects, with no attribution required."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "How do I implement Glassmorphism in modern CSS?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "The glass effect is achieved using 'backdrop-filter: blur()' combined with a semi-transparent background color. This tool generates the exact CSS values needed for frost, transparency, and saturation."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Is backdrop-filter compatible with Safari and Chrome?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Yes. This generator provides both the standard syntax and the '-webkit-' prefix required for Safari compatibility, ensuring your glass effect works for over 97% of global web users."
-      }
-    }
-  ]
-};
+// SEO: FAQPage — de-duplicated (was 6 Qs with near-duplicate pairs, now 4 unique)
+const faqSchema = buildFAQPage([
+  {
+    question: "What is Glassmorphism?",
+    answer: "Glassmorphism is a UI design style that uses backdrop-filter: blur() and semi-transparent backgrounds to create a frosted-glass effect. It became mainstream with iOS 13 and Windows 11 Fluent Design."
+  },
+  {
+    question: "Does this work on all browsers?",
+    answer: "The generated CSS includes both the standard backdrop-filter and the -webkit-backdrop-filter prefix required by Safari. It works in Chrome 76+, Safari 9+, Firefox 103+, and Edge 17+, covering over 97% of global users."
+  },
+  {
+    question: "What does the saturation slider do?",
+    answer: "The backdrop-filter property accepts multiple functions. Adding saturate() alongside blur() makes the colours behind the glass element more vivid — this is the technique used by macOS and iOS to give their UI panels a distinctive look."
+  },
+  {
+    question: "Is this tool free?",
+    answer: "Yes. SyntaxSnap Glassmorphism Generator is 100% free for personal and commercial projects, with no attribution required."
+  }
+]);
 ---
 
-{/* Pass the features prop to Layout */}
-<Layout title={title} description={description} isTool={true} features={features}>
+<Layout title={title} description={description} isTool={true} slug={slug} features={features}>
   <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
 
   <div class="max-w-6xl mx-auto px-4 sm:px-6">

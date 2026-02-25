@@ -2,75 +2,47 @@
 import Layout from '../../layouts/Layout.astro';
 import SqlToJsonTool from '../../components/tools/SqlToJson';
 import RelatedTools from '../../components/ui/RelatedTools.astro';
+import { buildFAQPage } from '../../utils/schema';
 
 const title = "SQL to JSON Schema & Zod Converter | SyntaxSnap";
 const description = "Convert SQL CREATE TABLE statements into JSON Schema and Zod TypeScript validation instantly. Supports VARCHAR lengths, ENUM values, NOT NULL, DEFAULT, and more. 100% client-side.";
+const slug = "sql-to-json";
+const features = [
+  "SQL CREATE TABLE parsing",
+  "JSON Schema generation (Draft 07)",
+  "Zod TypeScript schema generation",
+  "VARCHAR length → maxLength mapping",
+  "ENUM values extraction",
+  "NOT NULL → required array",
+  "DEFAULT value capture",
+  "PRIMARY KEY, UNIQUE, AUTO_INCREMENT metadata",
+  "100% client-side privacy"
+];
 
-const schema = {
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "SoftwareApplication",
-      "name": "SQL to JSON Schema & Zod Converter",
-      "applicationCategory": "DeveloperApplication",
-      "operatingSystem": "Web",
-      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-      "description": description,
-      "featureList": [
-        "SQL CREATE TABLE parsing",
-        "JSON Schema generation (Draft 07)",
-        "Zod TypeScript schema generation",
-        "VARCHAR length → maxLength mapping",
-        "ENUM values extraction",
-        "NOT NULL → required array",
-        "DEFAULT value capture",
-        "PRIMARY KEY, UNIQUE, AUTO_INCREMENT metadata",
-        "100% client-side privacy"
-      ]
-    },
-    {
-      "@type": "FAQPage",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "Does this tool support all SQL types?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Yes. Supports INT, VARCHAR, CHAR, TEXT, DECIMAL, FLOAT, DOUBLE, BOOLEAN, DATE, DATETIME, TIMESTAMP, ENUM, JSON, BLOB, and more. Automatically maps SQL types to correct JSON Schema and Zod types."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Are constraints like NOT NULL and DEFAULT preserved?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Yes. NOT NULL columns are added to the 'required' array in JSON Schema and use non-optional types in Zod. DEFAULT values are captured in both schemas."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Is my SQL data sent to a server?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "No. This tool runs 100% client-side in your browser. Your SQL statements never leave your device."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Can I use this for database migration tools?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Yes. The generated JSON Schema and Zod schemas are production-ready and can be used with Prisma, Drizzle, TypeORM, or custom migration scripts."
-          }
-        }
-      ]
-    }
-  ]
-};
+// SEO: FAQPage — answers supported by on-page conversion examples
+const faqSchema = buildFAQPage([
+  {
+    question: "Does this tool support all SQL types?",
+    answer: "Yes. Supports INT, VARCHAR, CHAR, TEXT, DECIMAL, FLOAT, DOUBLE, BOOLEAN, DATE, DATETIME, TIMESTAMP, ENUM, JSON, BLOB, and more. Automatically maps SQL types to correct JSON Schema and Zod types."
+  },
+  {
+    question: "Are constraints like NOT NULL and DEFAULT preserved?",
+    answer: "Yes. NOT NULL columns are added to the 'required' array in JSON Schema and use non-optional types in Zod. DEFAULT values are captured in both schemas."
+  },
+  {
+    question: "Is my SQL data sent to a server?",
+    answer: "No. This tool runs 100% client-side in your browser. Your SQL statements never leave your device."
+  },
+  {
+    question: "Can I use this for database migration tools?",
+    answer: "Yes. The generated JSON Schema and Zod schemas are production-ready and can be used with Prisma, Drizzle, TypeORM, or custom migration scripts."
+  }
+]);
 ---
 
-<Layout title={title} description={description}>
-  <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+<Layout title={title} description={description} isTool={true} slug={slug} features={features}>
+  {/* SEO: FAQPage schema — questions answered by on-page examples */}
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
 
   <div class="max-w-6xl mx-auto px-4 py-12">
 
