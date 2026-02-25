@@ -1,0 +1,66 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import MetaTagGeneratorTool from '../../components/tools/MetaTagGenerator';
+import { buildFAQPage } from '../../utils/schema';
+import RelatedTools from '../../components/ui/RelatedTools.astro';
+
+const title = "Open Graph & Meta Tag Generator | SyntaxSnap";
+const description = "Visually preview how your website looks on Twitter, LinkedIn, and Google. Instantly generate HTML meta tags and Next.js App Router metadata code.";
+const slug = "meta-tag-generator";
+
+const features = [
+  "Real-time Twitter/X and LinkedIn card previews",
+  "Generates raw HTML meta tags and Next.js App Router metadata",
+  "100% client-side — no data leaves your browser",
+  "Supports Open Graph, Twitter Card, and standard SEO tags"
+];
+
+// SEO: FAQPage — answers supported by on-page meta tag generator
+const faqSchema = buildFAQPage([
+  {
+    question: "What are Open Graph meta tags?",
+    answer: "Open Graph (OG) tags determine the image, title, and description that appear when your link is shared on social platforms like Twitter, LinkedIn, Facebook, iMessage, and Slack."
+  },
+  {
+    question: "Does this tool support Next.js App Router metadata?",
+    answer: "Yes. In addition to raw HTML meta tags, the generator outputs a TypeScript Metadata object you can export directly from your Next.js page.tsx or layout.tsx file."
+  },
+  {
+    question: "Is any data sent to a server?",
+    answer: "No. All previews and code generation happen entirely in your browser. Your titles, descriptions, and image URLs never leave your machine."
+  }
+]);
+---
+
+<Layout title={title} description={description} isTool={true} features={features} slug={slug}>
+  {/* SEO: FAQPage schema */}
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+
+  <main class="container mx-auto px-4 py-12">
+    <div class="max-w-4xl mx-auto text-center mb-10">
+      <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">Meta Tag Previewer</h1>
+      <p class="text-lg text-slate-400">
+        Stop guessing how your links will look when shared. Preview your Open Graph and Twitter cards in real-time, and instantly grab the production-ready code.
+      </p>
+    </div>
+
+    <MetaTagGeneratorTool client:load />
+
+    <div class="mt-20 max-w-3xl mx-auto">
+      <div class="p-6 bg-slate-900/50 rounded-xl border border-slate-800">
+        <h3 class="text-xl font-semibold text-slate-200 mb-3">Why are Meta Tags important?</h3>
+        <p class="text-slate-400 text-sm leading-relaxed mb-4">
+          Open Graph (OG) tags determine what image, title, and description appear when someone shares your website link on social media platforms like Twitter (X), LinkedIn, Facebook, or inside messaging apps like iMessage and Slack.
+        </p>
+        <p class="text-slate-400 text-sm leading-relaxed">
+          For modern web development (specifically Next.js App Router), you no longer write raw HTML tags in a <code>&lt;head&gt;</code> element. Instead, you export a <code>Metadata</code> object from your <code>page.tsx</code> or <code>layout.tsx</code>. This tool generates both the raw HTML fallback and the modern Next.js TypeScript object.
+        </p>
+      </div>
+    </div>
+
+    <div class="mt-16">
+      <RelatedTools currentTool="meta-tag-generator" />
+    </div>
+
+  </main>
+</Layout>
