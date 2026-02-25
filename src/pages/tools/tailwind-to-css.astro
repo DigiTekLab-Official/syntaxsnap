@@ -1,32 +1,50 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import TailwindToCssTool from '../../components/tools/TailwindToCss';
+import RelatedTools from '../../components/ui/RelatedTools.astro';
 
 const title = "Tailwind to CSS Converter | SyntaxSnap";
 const description = "Instantly convert Tailwind utility classes into standard Vanilla CSS rulesets and CSS variables. 100% offline parsing for migrating out of Tailwind.";
+const slug = "tailwind-to-css";
+
+const features = [
+  "Converts Tailwind utilities to standard Vanilla CSS",
+  "Supports responsive breakpoints (sm:, md:, lg:, xl:)",
+  "Handles pseudo-class modifiers (hover:, focus:, active:)",
+  "Maps colors to CSS custom properties",
+  "Supports arbitrary values (e.g. w-[200px])",
+  "100% offline — no data leaves your browser",
+];
 ---
 
-<Layout title={title} description={description}>
-  <main class="container mx-auto px-4 py-12">
-    <div class="max-w-4xl mx-auto text-center mb-10">
-      <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">Tailwind to CSS Converter</h1>
-      <p class="text-lg text-slate-400">
-        Migrating a component out of Tailwind? Paste your <code>className</code> string below and instantly generate clean, production-ready Vanilla CSS using a 100% offline AST-lite parser.
+<Layout title={title} description={description} isTool={true} slug={slug} features={features}>
+  <div class="max-w-6xl mx-auto">
+    <div class="mb-8">
+      <h1 class="text-3xl md:text-4xl font-extrabold text-white mb-4">Tailwind to CSS Converter</h1>
+      <p class="text-slate-400 text-lg max-w-2xl">
+        Migrating a component out of Tailwind? Paste your <code class="text-indigo-400">className</code> string below and instantly generate clean, production-ready Vanilla CSS using a 100% offline AST-lite parser.
       </p>
     </div>
 
     <TailwindToCssTool client:load />
 
-    <div class="mt-20 max-w-3xl mx-auto">
-      <div class="p-6 bg-slate-900/50 rounded-xl border border-slate-800">
-        <h3 class="text-xl font-semibold text-slate-200 mb-3">How does this work?</h3>
+    <div class="mt-16 grid grid-cols-1 md:grid-cols-2 gap-12 border-t border-slate-800 pt-12">
+      <div>
+        <h3 class="text-xl font-bold text-white mb-3">How does this work?</h3>
         <p class="text-slate-400 text-sm leading-relaxed mb-4">
-          This tool uses a client-side tokenizer to map standard Tailwind utilities (like <code>p-4</code>, <code>flex</code>, and <code>items-center</code>) directly to their standard CSS equivalents. 
+          This tool uses a client-side tokenizer to map standard Tailwind utilities (like <code class="bg-slate-800 px-1 py-0.5 rounded text-slate-300">p-4</code>, <code class="bg-slate-800 px-1 py-0.5 rounded text-slate-300">flex</code>, and <code class="bg-slate-800 px-1 py-0.5 rounded text-slate-300">items-center</code>) directly to their standard CSS equivalents.
         </p>
         <p class="text-slate-400 text-sm leading-relaxed">
-          For colors (e.g., <code>bg-blue-500</code>), it automatically maps to modern CSS variables (<code>var(--color-blue-500)</code>) making it perfectly suited for teams building their own design systems or web component libraries. Your data never leaves your browser.
+          Modifier prefixes like <code class="bg-slate-800 px-1 py-0.5 rounded text-slate-300">hover:</code> and <code class="bg-slate-800 px-1 py-0.5 rounded text-slate-300">md:</code> are automatically extracted and output as pseudo-selectors and media queries.
+        </p>
+      </div>
+      <div>
+        <h3 class="text-xl font-bold text-white mb-3">Why CSS variables for colors?</h3>
+        <p class="text-slate-400 text-sm leading-relaxed">
+          For colors (e.g., <code class="bg-slate-800 px-1 py-0.5 rounded text-slate-300">bg-blue-500</code>), the output maps to modern CSS variables (<code class="bg-slate-800 px-1 py-0.5 rounded text-slate-300">var(--color-blue-500)</code>), making it perfectly suited for teams building their own design systems or web component libraries. Your data never leaves your browser.
         </p>
       </div>
     </div>
-  </main>
+    <RelatedTools currentTool="tailwind-to-css" />
+  </div>
 </Layout>
