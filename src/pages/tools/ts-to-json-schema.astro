@@ -1,0 +1,134 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import TsToJsonSchema from '../../components/tools/TsToJsonSchema.tsx';
+import RelatedTools from '../../components/ui/RelatedTools.astro';
+import { buildFAQPage } from '../../utils/schema';
+
+const title = "TypeScript to JSON Schema Converter | SyntaxSnap";
+const description = "Convert TypeScript interfaces and type aliases into standard JSON Schema (Draft 7) definitions instantly. Supports primitives, optional fields, unions, arrays, nested objects, and Record types. 100% client-side, zero data transmission.";
+const slug = "ts-to-json-schema";
+const features = [
+  "Converts TypeScript interfaces and type aliases to JSON Schema Draft 7",
+  "Handles primitives, optionals, unions, intersections, arrays, and nested objects",
+  "Supports Record, Partial, Required, Array<T>, and tuple types",
+  "Generates $ref and $defs for multi-type inputs automatically",
+  "100% client-side parsing — your code never leaves your browser"
+];
+
+// SEO: FAQPage
+const faqSchema = buildFAQPage([
+  {
+    question: "What JSON Schema draft does this tool output?",
+    answer: "The converter outputs JSON Schema Draft 7 (http://json-schema.org/draft-07/schema#). This is the most widely supported draft across validators, code generators, and API tools."
+  },
+  {
+    question: "Which TypeScript types are supported?",
+    answer: "The converter supports interfaces, type aliases, string/number/boolean unions (mapped to enum), optional properties (?), arrays (T[] and Array<T>), nested objects, Record<K,V>, Partial<T>, Required<T>, tuples, intersections, and literal types."
+  },
+  {
+    question: "Is my code sent to a server?",
+    answer: "No. All TypeScript parsing and JSON Schema generation happens 100% client-side in your browser. Your source code never leaves your device."
+  },
+  {
+    question: "How does it handle multiple types in one input?",
+    answer: "When you paste multiple interfaces or type aliases, the first type becomes the root schema and all subsequent types are placed in a $defs block with $ref references linking them together."
+  }
+]);
+---
+
+<Layout title={title} description={description} isTool={true} slug={slug} features={features}>
+  {/* SEO: FAQPage schema */}
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-12 lg:py-16">
+    <header class="text-center mb-12">
+      <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white mb-4 tracking-tight">
+        TypeScript &rarr; JSON Schema
+      </h1>
+      <p class="text-slate-400 text-lg md:text-xl max-w-3xl mx-auto leading-relaxed">
+        Paste your TypeScript interfaces and instantly generate standards-compliant
+        <strong class="text-blue-400">JSON Schema (Draft 7)</strong> definitions.
+        Perfect for API contracts, form validation, and code generation.
+      </p>
+    </header>
+
+    <TsToJsonSchema client:idle />
+
+    <!-- SEO-Enhanced Content Section -->
+    <section class="mt-20 border-t border-slate-800 pt-12" aria-labelledby="why-json-schema-heading">
+      <h2 id="why-json-schema-heading" class="text-3xl font-bold text-white mb-8">
+        Why Convert TypeScript to JSON Schema?
+      </h2>
+      <div class="grid md:grid-cols-2 gap-8 text-slate-300 leading-relaxed">
+        <div>
+          <h3 class="text-xl font-semibold text-slate-200 mb-3">Cross-Language Contracts</h3>
+          <p class="text-slate-400">
+            TypeScript types only exist at compile time and are exclusive to the JavaScript ecosystem.
+            JSON Schema is a <strong>language-agnostic</strong> standard for describing data structures.
+            By converting your interfaces to JSON Schema, you create contracts that can be consumed by
+            Python, Go, Java, Rust, and any other language with a JSON Schema validator.
+          </p>
+        </div>
+        <div>
+          <h3 class="text-xl font-semibold text-slate-200 mb-3">API Documentation &amp; Validation</h3>
+          <p class="text-slate-400">
+            JSON Schema is the foundation of OpenAPI specifications. Convert your TypeScript request/response
+            types to JSON Schema and drop them directly into your
+            <code class="text-blue-300 bg-slate-800 px-1.5 py-0.5 rounded">openapi.yaml</code> components section.
+            Validators like Ajv can then enforce these schemas at runtime on both client and server.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Use Cases Section -->
+    <section class="mt-16" aria-labelledby="use-cases-heading">
+      <h2 id="use-cases-heading" class="text-2xl font-bold text-white mb-6">Common Use Cases</h2>
+      <ul class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {[
+          "Generate OpenAPI component schemas from TypeScript interfaces",
+          "Validate API payloads at runtime with Ajv or similar validators",
+          "Create cross-language data contracts for microservices",
+          "Feed JSON Schema into code generators for Python, Go, or Rust",
+          "Define form validation rules from existing TypeScript models",
+          "Publish schema registries for event-driven architectures",
+          "Generate database migration schemas from application types",
+          "Build configuration file validators from TypeScript configs",
+          "Auto-generate documentation from type definitions"
+        ].map(useCase => (
+          <li class="bg-slate-800/30 border border-slate-700/50 rounded-lg px-4 py-3 text-slate-300 text-sm flex items-start gap-2">
+            <svg class="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+            <span>{useCase}</span>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <!-- Technical Details -->
+    <section class="mt-16 bg-slate-800/20 border border-slate-700/50 rounded-2xl p-8" aria-labelledby="how-it-works">
+      <h2 id="how-it-works" class="text-2xl font-bold text-white mb-4">How It Works</h2>
+      <div class="text-slate-400 space-y-3 leading-relaxed">
+        <p>
+          This tool performs lightweight AST-style tokenization and parsing of your TypeScript source code
+          entirely in the browser. It extracts interface and type alias declarations, then recursively maps
+          each property type to its JSON Schema equivalent:
+        </p>
+        <ul class="list-disc list-inside space-y-1 ml-4 text-slate-300">
+          <li>Primitives (<code class="text-blue-300">string</code>, <code class="text-blue-300">number</code>, <code class="text-blue-300">boolean</code>) &rarr; <code class="text-emerald-300">{"{ \"type\": \"string\" }"}</code></li>
+          <li>Optional properties (<code class="text-blue-300">name?</code>) &rarr; omitted from <code class="text-emerald-300">required</code> array</li>
+          <li>String literal unions (<code class="text-blue-300">"a" | "b"</code>) &rarr; <code class="text-emerald-300">{"{ \"enum\": [\"a\", \"b\"] }"}</code></li>
+          <li>Arrays (<code class="text-blue-300">string[]</code>) &rarr; <code class="text-emerald-300">{"{ \"type\": \"array\", \"items\": ... }"}</code></li>
+          <li>Nested objects &rarr; Recursive <code class="text-emerald-300">{"{ \"type\": \"object\", \"properties\": ... }"}</code></li>
+          <li>Multiple types &rarr; <code class="text-emerald-300">$defs</code> + <code class="text-emerald-300">$ref</code> cross-references</li>
+        </ul>
+        <p class="mt-4">
+          All processing happens <strong>locally in your browser</strong> &mdash; no code is uploaded to any server,
+          ensuring your proprietary type definitions remain completely private.
+        </p>
+      </div>
+    </section>
+
+    <RelatedTools currentTool="ts-to-json-schema" />
+  </div>
+</Layout>
