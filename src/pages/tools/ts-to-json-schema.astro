@@ -1,6 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import TsToJsonSchema from '../../components/tools/TsToJsonSchema.tsx';
+import TsToJsonSchemaTool from '../../components/tools/TsToJsonSchema.tsx';
 import RelatedTools from '../../components/ui/RelatedTools.astro';
 import { buildFAQPage } from '../../utils/schema';
 
@@ -51,7 +51,7 @@ const faqSchema = buildFAQPage([
       </p>
     </header>
 
-    <TsToJsonSchema client:idle />
+    <TsToJsonSchemaTool client:idle />
 
     <!-- SEO-Enhanced Content Section -->
     <section class="mt-20 border-t border-slate-800 pt-12" aria-labelledby="why-json-schema-heading">
