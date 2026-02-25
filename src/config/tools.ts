@@ -32,6 +32,7 @@ import {
   GlassWater,
   Layers,
   Palette,
+  Share2,
   Search,
   Server,
   ShieldCheck,
@@ -376,6 +377,17 @@ export const TOOLS: Tool[] = [
     color: 'text-teal-400',
     bg: 'bg-teal-500/10',
     category: 'css',
-  }
+  },
+  {
+    id: 'meta-tag-generator',
+    title: 'Meta Tag Previewer',
+    desc: 'Visually preview and generate Open Graph, Twitter, and standard HTML meta tags. Instantly copy raw HTML or Next.js metadata objects.',
+    href: '/tools/meta-tag-generator',
+    icon: Share2, 
+    status: 'New',
+    color: 'text-emerald-400',
+    bg: 'bg-emerald-500/10',
+    category: 'dev',
+  },
   
 ];
