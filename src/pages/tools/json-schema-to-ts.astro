@@ -1,0 +1,134 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import JsonSchemaToTsTool from '../../components/tools/JsonSchemaToTs.tsx';
+import RelatedTools from '../../components/ui/RelatedTools.astro';
+import { buildFAQPage } from '../../utils/schema';
+
+const title = "JSON Schema to TypeScript Converter | SyntaxSnap";
+const description = "Convert JSON Schema definitions into clean TypeScript interfaces and types instantly. Handles objects, arrays, enums, required/optional fields, $ref, and $defs. 100% client-side, zero data transmission.";
+const slug = "json-schema-to-ts";
+const features = [
+  "Converts JSON Schema Draft 7 to idiomatic TypeScript interfaces",
+  "Maps required arrays to optional (?) TypeScript properties automatically",
+  "Handles nested objects, arrays, tuples, enums, oneOf, anyOf, allOf",
+  "Resolves $ref and $defs into named TypeScript interfaces",
+  "100% client-side parsing — your schema never leaves your browser"
+];
+
+// SEO: FAQPage
+const faqSchema = buildFAQPage([
+  {
+    question: "Which JSON Schema drafts are supported?",
+    answer: "The converter is optimized for JSON Schema Draft 7 but also handles common Draft 4/6 patterns including 'definitions' (mapped to '$defs'). It supports type, properties, required, enum, oneOf, anyOf, allOf, $ref, items, and additionalProperties."
+  },
+  {
+    question: "How does it handle required vs optional fields?",
+    answer: "Properties listed in the 'required' array become mandatory TypeScript properties. All other properties get the optional modifier (?). This matches TypeScript's strict null-checking behavior."
+  },
+  {
+    question: "Is my JSON Schema sent to a server?",
+    answer: "No. All parsing and TypeScript generation happens 100% client-side in your browser. Your schemas never leave your device."
+  },
+  {
+    question: "Can it handle $ref references?",
+    answer: "Yes. The converter resolves $ref paths (e.g. '#/$defs/Address') to their corresponding TypeScript interface names. All definitions in $defs or definitions blocks are emitted as separate named interfaces or type aliases."
+  }
+]);
+---
+
+<Layout title={title} description={description} isTool={true} slug={slug} features={features}>
+  {/* SEO: FAQPage schema */}
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-12 lg:py-16">
+    <header class="text-center mb-12">
+      <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white mb-4 tracking-tight">
+        JSON Schema &rarr; TypeScript
+      </h1>
+      <p class="text-slate-400 text-lg md:text-xl max-w-3xl mx-auto leading-relaxed">
+        Paste your JSON Schema and instantly generate clean, idiomatic
+        <strong class="text-blue-400">TypeScript interfaces</strong>.
+        Perfect for consuming OpenAPI specs, validating API contracts, and accelerating type-safe development.
+      </p>
+    </header>
+
+    <JsonSchemaToTsTool client:idle />
+
+    <!-- SEO-Enhanced Content Section -->
+    <section class="mt-20 border-t border-slate-800 pt-12" aria-labelledby="why-heading">
+      <h2 id="why-heading" class="text-3xl font-bold text-white mb-8">
+        Why Convert JSON Schema to TypeScript?
+      </h2>
+      <div class="grid md:grid-cols-2 gap-8 text-slate-300 leading-relaxed">
+        <div>
+          <h3 class="text-xl font-semibold text-slate-200 mb-3">From API Contracts to Type Safety</h3>
+          <p class="text-slate-400">
+            JSON Schema is the universal language for describing data structures in OpenAPI, AsyncAPI,
+            and configuration files. By converting schemas to TypeScript interfaces, you get
+            <strong>compile-time safety</strong> when consuming external APIs, eliminating an entire class
+            of runtime errors caused by shape mismatches.
+          </p>
+        </div>
+        <div>
+          <h3 class="text-xl font-semibold text-slate-200 mb-3">Accelerate Development</h3>
+          <p class="text-slate-400">
+            Instead of manually writing TypeScript types that mirror your JSON Schema definitions,
+            paste the schema and get production-ready interfaces in milliseconds. The converter
+            handles nested objects, optional fields, enums, and even
+            <code class="text-blue-300 bg-slate-800 px-1.5 py-0.5 rounded">$ref</code> resolution automatically.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Use Cases Section -->
+    <section class="mt-16" aria-labelledby="use-cases-heading">
+      <h2 id="use-cases-heading" class="text-2xl font-bold text-white mb-6">Common Use Cases</h2>
+      <ul class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {[
+          "Generate types from OpenAPI component schemas",
+          "Type API responses from third-party services",
+          "Convert database JSON Schema validators to interfaces",
+          "Create TypeScript types from event-driven schema registries",
+          "Build type-safe SDK clients from API specifications",
+          "Validate configuration files with generated types",
+          "Bridge Python/Go JSON Schemas into TypeScript frontends",
+          "Type form data matching backend validation schemas",
+          "Generate interfaces for GraphQL JSON scalar types"
+        ].map(useCase => (
+          <li class="bg-slate-800/30 border border-slate-700/50 rounded-lg px-4 py-3 text-slate-300 text-sm flex items-start gap-2">
+            <svg class="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+            <span>{useCase}</span>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <!-- Technical Details -->
+    <section class="mt-16 bg-slate-800/20 border border-slate-700/50 rounded-2xl p-8" aria-labelledby="how-it-works">
+      <h2 id="how-it-works" class="text-2xl font-bold text-white mb-4">How It Works</h2>
+      <div class="text-slate-400 space-y-3 leading-relaxed">
+        <p>
+          This tool parses your JSON Schema entirely in the browser and recursively maps
+          each schema node to its TypeScript equivalent:
+        </p>
+        <ul class="list-disc list-inside space-y-1 ml-4 text-slate-300">
+          <li><code class="text-blue-300">type: "string"</code> &rarr; <code class="text-emerald-300">string</code></li>
+          <li><code class="text-blue-300">type: "object"</code> with <code class="text-blue-300">properties</code> &rarr; <code class="text-emerald-300">export interface</code></li>
+          <li><code class="text-blue-300">required: [...]</code> &rarr; non-optional fields; others get <code class="text-emerald-300">?</code></li>
+          <li><code class="text-blue-300">enum: ["a", "b"]</code> &rarr; <code class="text-emerald-300">"a" | "b"</code></li>
+          <li><code class="text-blue-300">type: "array"</code> &rarr; <code class="text-emerald-300">T[]</code></li>
+          <li><code class="text-blue-300">$ref</code> &rarr; named interface reference</li>
+          <li><code class="text-blue-300">$defs</code> / <code class="text-blue-300">definitions</code> &rarr; separate <code class="text-emerald-300">export interface</code> blocks</li>
+        </ul>
+        <p class="mt-4">
+          All processing happens <strong>locally in your browser</strong> &mdash; no schemas are uploaded to any server,
+          ensuring your API contracts remain completely private.
+        </p>
+      </div>
+    </section>
+
+    <RelatedTools currentTool="json-schema-to-ts" />
+  </div>
+</Layout>
