@@ -26,6 +26,7 @@ import {
   Container,
   Database,
   FileType,
+  FileText,
   FileCode2,
   GitCompare,
   GlassWater,
@@ -43,7 +44,7 @@ import {
   Bot,
   Network,
   FileKey,
-  Blend
+  Blend,  
 } from 'lucide-astro';
 
 // ─── CATEGORY REGISTRY ───────────────────────────────────────────────────────
@@ -363,6 +364,18 @@ export const TOOLS: Tool[] = [
     status: 'New',
     color: 'text-violet-400',
     bg: 'bg-violet-500/10',
+    category: 'css',    
+  },
+  {
+    id: 'tailwind-to-css',
+    title: 'Tailwind to CSS',
+    desc: 'Convert Tailwind utility classes into standard Vanilla CSS rulesets and variables. Perfect for migrating components out of Tailwind.',
+    href: '/tools/tailwind-to-css',
+    icon: FileCode2,
+    status: 'New',
+    color: 'text-teal-400',
+    bg: 'bg-teal-500/10',
     category: 'css',
   }
+  
 ];

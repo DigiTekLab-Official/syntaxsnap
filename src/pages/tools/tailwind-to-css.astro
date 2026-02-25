@@ -1,0 +1,32 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import TailwindToCssTool from '../../components/tools/TailwindToCss';
+
+const title = "Tailwind to CSS Converter | SyntaxSnap";
+const description = "Instantly convert Tailwind utility classes into standard Vanilla CSS rulesets and CSS variables. 100% offline parsing for migrating out of Tailwind.";
+---
+
+<Layout title={title} description={description}>
+  <main class="container mx-auto px-4 py-12">
+    <div class="max-w-4xl mx-auto text-center mb-10">
+      <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">Tailwind to CSS Converter</h1>
+      <p class="text-lg text-slate-400">
+        Migrating a component out of Tailwind? Paste your <code>className</code> string below and instantly generate clean, production-ready Vanilla CSS using a 100% offline AST-lite parser.
+      </p>
+    </div>
+
+    <TailwindToCssTool client:load />
+
+    <div class="mt-20 max-w-3xl mx-auto">
+      <div class="p-6 bg-slate-900/50 rounded-xl border border-slate-800">
+        <h3 class="text-xl font-semibold text-slate-200 mb-3">How does this work?</h3>
+        <p class="text-slate-400 text-sm leading-relaxed mb-4">
+          This tool uses a client-side tokenizer to map standard Tailwind utilities (like <code>p-4</code>, <code>flex</code>, and <code>items-center</code>) directly to their standard CSS equivalents. 
+        </p>
+        <p class="text-slate-400 text-sm leading-relaxed">
+          For colors (e.g., <code>bg-blue-500</code>), it automatically maps to modern CSS variables (<code>var(--color-blue-500)</code>) making it perfectly suited for teams building their own design systems or web component libraries. Your data never leaves your browser.
+        </p>
+      </div>
+    </div>
+  </main>
+</Layout>
