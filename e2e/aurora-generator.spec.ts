@@ -15,8 +15,8 @@ test.describe('Aurora Gradient Generator E2E', () => {
     await expect(page.getByText('Color Palette')).toBeVisible();
     await expect(page.getByLabel('Blur Intensity')).toBeVisible();
     await expect(page.getByLabel('Opacity')).toBeVisible();
-    await expect(page.getByText('Live Preview')).toBeVisible();
-    await expect(page.getByText('CSS Output')).toBeVisible();
+    await expect(page.getByText('Live Preview', { exact: true })).toBeVisible();
+    await expect(page.getByText('CSS Output', { exact: true })).toBeVisible();
     
     // Fix: Use { exact: true } to prevent matching the FAQ text lower on the page
     await expect(page.getByText('Tailwind HTML', { exact: true })).toBeVisible();
