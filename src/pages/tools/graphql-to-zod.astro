@@ -1,0 +1,139 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import GraphqlToZodTool from '../../components/tools/GraphqlToZod.tsx';
+import RelatedTools from '../../components/ui/RelatedTools.astro';
+import { buildFAQPage } from '../../utils/schema';
+
+const title = "GraphQL to Zod Schema Converter | SyntaxSnap";
+const description = "Convert GraphQL type, input, and enum definitions into type-safe Zod validation schemas instantly. 100% offline client-side parsing — your schema never leaves your browser.";
+const slug = "graphql-to-zod";
+const features = [
+  "Converts GraphQL type, input, and enum definitions to Zod schemas",
+  "Maps GraphQL scalars (String, Int, Float, Boolean, ID) to Zod types",
+  "Handles required (!) vs optional fields and array types ([Type!]!)",
+  "Generates z.enum() for GraphQL enums with proper string unions",
+  "100% client-side parsing — your GraphQL schema never leaves your browser"
+];
+
+// SEO: FAQPage
+const faqSchema = buildFAQPage([
+  {
+    question: "How does the converter handle GraphQL nullability (!)?",
+    answer: "In GraphQL, a trailing exclamation mark (!) means the field is non-null (required). Fields without ! are nullable. This converter maps required fields directly to Zod types (e.g. String! → z.string()) and nullable fields to optional Zod types (e.g. String → z.string().optional()). The same logic applies inside arrays: [String!]! becomes z.array(z.string()) while [String!] becomes z.array(z.string()).optional()."
+  },
+  {
+    question: "Which GraphQL types are supported?",
+    answer: "The converter supports all standard GraphQL definition types: object types (type User { ... }), input types (input CreateUserInput { ... }), and enums (enum Role { ADMIN USER }). It maps built-in scalars — String, Int, Float, Boolean, and ID — to their Zod equivalents. Custom type references are converted to schema references (e.g. User → UserSchema)."
+  },
+  {
+    question: "Is my GraphQL schema sent to a server?",
+    answer: "No. All parsing and Zod schema generation happens 100% client-side in your browser using a custom tokenizer and recursive type parser. Your GraphQL type definitions, API schemas, and data models never leave your device."
+  },
+  {
+    question: "Can I use the generated Zod schemas for runtime validation?",
+    answer: "Yes. The output is valid TypeScript that imports from the 'zod' library. You can paste the generated schemas directly into your project to get compile-time type inference via z.infer<typeof UserSchema> and runtime validation via UserSchema.parse(data) or UserSchema.safeParse(data). This is especially useful for validating API responses, form data, and GraphQL resolver inputs."
+  }
+]);
+---
+
+<Layout title={title} description={description} isTool={true} slug={slug} features={features}>
+  {/* SEO: FAQPage schema */}
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-12 lg:py-16">
+    <header class="text-center mb-12">
+      <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white mb-4 tracking-tight">
+        GraphQL &rarr; Zod Schema
+      </h1>
+      <p class="text-slate-400 text-lg md:text-xl max-w-3xl mx-auto leading-relaxed">
+        Paste your GraphQL <code class="text-pink-400 bg-slate-800 px-1.5 py-0.5 rounded">type</code>,
+        <code class="text-pink-400 bg-slate-800 px-1.5 py-0.5 rounded">input</code>, and
+        <code class="text-pink-400 bg-slate-800 px-1.5 py-0.5 rounded">enum</code>
+        definitions and instantly generate
+        <strong class="text-pink-400">type-safe Zod schemas</strong>.
+      </p>
+    </header>
+
+    <GraphqlToZodTool client:idle />
+
+    <!-- SEO-Enhanced Content Section -->
+    <section class="mt-20 border-t border-slate-800 pt-12" aria-labelledby="why-heading">
+      <h2 id="why-heading" class="text-3xl font-bold text-white mb-8">
+        Why Convert GraphQL to Zod?
+      </h2>
+      <div class="grid md:grid-cols-2 gap-8 text-slate-300 leading-relaxed">
+        <div>
+          <h3 class="text-xl font-semibold text-slate-200 mb-3">Runtime Validation for GraphQL</h3>
+          <p class="text-slate-400">
+            GraphQL provides compile-time type safety, but it doesn't validate data at runtime in
+            your TypeScript code. Zod bridges this gap by letting you validate API responses, form
+            inputs, and resolver arguments against the same type structure defined in your GraphQL
+            schema — catching bugs before they reach production.
+          </p>
+        </div>
+        <div>
+          <h3 class="text-xl font-semibold text-slate-200 mb-3">Type Inference with Zero Duplication</h3>
+          <p class="text-slate-400">
+            With Zod's <code class="text-pink-300">z.infer&lt;typeof Schema&gt;</code>, you get
+            full TypeScript types derived directly from your validation schemas. Convert your
+            GraphQL types once and get both <strong>runtime validation</strong> and
+            <strong>compile-time type checking</strong> without maintaining duplicate type
+            definitions.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Use Cases Section -->
+    <section class="mt-16" aria-labelledby="use-cases-heading">
+      <h2 id="use-cases-heading" class="text-2xl font-bold text-white mb-6">Common Use Cases</h2>
+      <ul class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {[
+          "Validate GraphQL API responses at runtime",
+          "Generate Zod schemas from existing GraphQL SDL",
+          "Type-safe form validation matching your API types",
+          "Validate webhook payloads against GraphQL types",
+          "Bridge GraphQL enums to Zod string unions",
+          "Create shared validation between frontend and backend",
+          "Validate resolver inputs in GraphQL servers",
+          "Generate TypeScript types from GraphQL via Zod inference",
+          "Enforce data contracts across microservices"
+        ].map(useCase => (
+          <li class="bg-slate-800/30 border border-slate-700/50 rounded-lg px-4 py-3 text-slate-300 text-sm flex items-start gap-2">
+            <svg class="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+            <span>{useCase}</span>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <!-- Technical Details -->
+    <section class="mt-16 bg-slate-800/20 border border-slate-700/50 rounded-2xl p-8" aria-labelledby="how-it-works">
+      <h2 id="how-it-works" class="text-2xl font-bold text-white mb-4">How It Works</h2>
+      <div class="text-slate-400 space-y-3 leading-relaxed">
+        <p>
+          This tool parses your GraphQL schema entirely in the browser and converts each
+          definition into a Zod validation schema:
+        </p>
+        <ul class="list-disc list-inside space-y-1 ml-4 text-slate-300">
+          <li><code class="text-blue-300">String / ID</code> &rarr; <code class="text-emerald-300">z.string()</code></li>
+          <li><code class="text-blue-300">Int / Float</code> &rarr; <code class="text-emerald-300">z.number()</code></li>
+          <li><code class="text-blue-300">Boolean</code> &rarr; <code class="text-emerald-300">z.boolean()</code></li>
+          <li><code class="text-blue-300">enum Role &#123; ADMIN USER &#125;</code> &rarr; <code class="text-emerald-300">z.enum(["ADMIN", "USER"])</code></li>
+          <li><code class="text-blue-300">[String!]!</code> &rarr; <code class="text-emerald-300">z.array(z.string())</code></li>
+          <li><code class="text-blue-300">[String!]</code> &rarr; <code class="text-emerald-300">z.array(z.string()).optional()</code></li>
+          <li><code class="text-blue-300">String!</code> (required) &rarr; <code class="text-emerald-300">z.string()</code></li>
+          <li><code class="text-blue-300">String</code> (nullable) &rarr; <code class="text-emerald-300">z.string().optional()</code></li>
+        </ul>
+        <p class="mt-4">
+          Enums are output first so they can be referenced by subsequent type and input schemas.
+          Custom type references (e.g. <code class="text-pink-300">User</code>) are converted to
+          schema references (<code class="text-pink-300">UserSchema</code>).
+        </p>
+      </div>
+    </section>
+
+    <RelatedTools currentTool="graphql-to-zod" />
+  </div>
+</Layout>

@@ -423,4 +423,15 @@ export const TOOLS: Tool[] = [
     bg: 'bg-indigo-500/10',
     category: 'dev',
   },
+  {
+    id: 'graphql-to-zod',
+    title: 'GraphQL to Zod',
+    desc: 'Convert GraphQL type definitions into type-safe Zod validation schemas. 100% offline client-side parsing.',
+    href: '/tools/graphql-to-zod',
+    icon: FileJson,
+    status: 'New',
+    color: 'text-pink-400',
+    bg: 'bg-pink-500/10',
+    category: 'dev',
+  },
 ];

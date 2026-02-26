@@ -1,76 +1,95 @@
 ---
 // src/components/ui/Footer.astro
-import { ShieldCheck, Mail, Info } from 'lucide-astro';
-import { TOOLS, type Tool } from '../../config/tools';
+import { ShieldCheck } from 'lucide-astro';
+import { TOOLS } from '../../config/tools';
 
-const categoryLabels: Record<string, string> = {
-  json: "Data & JSON",
-  dev: "Development",
-  ai: "AI Powered",
-  css: "Design & CSS",
-  data: "Data Conversion"
-};
+// 1. Extract and sort tools alphabetically
+const devTools = TOOLS.filter(t => t.category === 'dev').sort((a,b) => a.title.localeCompare(b.title));
+const cssTools = TOOLS.filter(t => t.category === 'css').sort((a,b) => a.title.localeCompare(b.title));
+const jsonTools = TOOLS.filter(t => t.category === 'json').sort((a,b) => a.title.localeCompare(b.title));
+const dataTools = TOOLS.filter(t => t.category === 'data').sort((a,b) => a.title.localeCompare(b.title));
+const aiTools = TOOLS.filter(t => t.category === 'ai').sort((a,b) => a.title.localeCompare(b.title));
 
-const groupedTools = TOOLS.reduce((acc, tool) => {
-  if (!acc[tool.category]) acc[tool.category] = [];
-  acc[tool.category].push(tool);
-  return acc;
-}, {} as Record<string, Tool[]>);
-
-const categories = Object.keys(groupedTools);
+// 2. Split the massive "Development" category in half to balance the grid
+const devHalf = Math.ceil(devTools.length / 2);
+const devPart1 = devTools.slice(0, devHalf);
+const devPart2 = devTools.slice(devHalf);
 ---
 
-<footer class="border-t border-slate-800 bg-slate-950 mt-auto">
-  <div class="max-w-6xl mx-auto px-4 py-10 md:py-16">
-      <div class="grid grid-cols-1 lg:grid-cols-6 gap-10 md:gap-12 mb-12">
-          <div class="col-span-1 lg:col-span-2">
-              <a href="/" class="flex items-center gap-2 mb-4 group w-fit no-underline">
-                  <span class="text-xl font-bold text-white tracking-tight">Syntax<span class="text-[#27b4f2]">Snap</span></span>
-              </a>
-              <p class="text-base text-slate-300 max-w-sm leading-relaxed mt-2">
-                  High-performance, local-first utilities for modern developers. Built with privacy as a priority and speed as a requirement.
-              </p>
-          </div>
+<footer class="border-t border-slate-800 bg-[#020617] mt-auto">
+  <div class="max-w-7xl mx-auto px-4 py-12 lg:py-16">
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 lg:gap-12 mb-12">
 
-          <div class="col-span-1 lg:col-span-3 columns-1 sm:columns-2 gap-8">
-            {categories.map((cat) => (
-              <div class="break-inside-avoid mb-10">
-                <h2 class="text-xs font-bold text-slate-300 uppercase tracking-widest mb-4">
-                  {categoryLabels[cat] || cat}
-                </h2>
-                <ul class="space-y-4 sm:space-y-3 text-sm text-slate-400 font-mono">
-                  {groupedTools[cat].sort((a, b) => a.title.localeCompare(b.title)).map((tool) => (
-                    <li>
-                      <a href={tool.href} class={`transition-colors hover:text-white block sm:inline ${tool.category === 'ai' ? 'text-emerald-400/90' : 'text-slate-300'}`}>
-                        {tool.title}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
+      <div class="col-span-2 md:col-span-3 lg:col-span-2">
+        <a href="/" class="flex items-center gap-2 mb-4 group w-fit no-underline">
+          <span class="text-2xl font-bold text-white tracking-tight">Syntax<span class="text-blue-500">Snap</span></span>
+        </a>
+        <p class="text-sm text-slate-400 max-w-sm leading-relaxed mb-8">
+          Local-first developer utilities.<br />
+          Built for speed, engineered for privacy.
+        </p>
+        
+        <h3 class="text-xs font-bold text-slate-200 uppercase tracking-widest mb-4">SyntaxSnap</h3>
+        <div class="flex flex-col gap-3 text-[13px] font-medium text-slate-400">
+           <a href="/about" class="hover:text-blue-400 transition-colors w-fit">Our Story</a>
+           <a href="/contact" class="hover:text-blue-400 transition-colors w-fit">Contact Support</a>
+           <a href="/offline" class="hover:text-blue-400 transition-colors flex items-center gap-2 w-fit">
+             Self-Host CLI <span class="text-[10px] bg-blue-500/20 text-blue-400 border border-blue-500/30 px-1.5 py-0.5 rounded font-bold uppercase">New</span>
+           </a>
+        </div>
+      </div>
 
-          <div class="col-span-1">
-            <h3 class="text-sm font-bold text-slate-300 uppercase tracking-widest mb-4">Support</h3>
-            <ul class="space-y-4 sm:space-y-3 text-sm text-slate-300">
-                <li><a href="/about" class="hover:text-[#27b4f2] transition-colors flex items-center gap-2"><Info class="w-4 h-4"/> Our Story</a></li>
-                <li><a href="/contact" class="hover:text-[#27b4f2] transition-colors flex items-center gap-2"><Mail class="w-4 h-4"/> Contact</a></li>
-                <li><a href="/offline" class="hover:text-[#27b4f2] transition-colors flex items-center gap-2">Self-Host <span class="text-[12px] bg-slate-800 px-2 py-0.5 rounded text-slate-300 border border-slate-700 font-bold uppercase">NEW</span></a></li>
-                <li><a href="/privacy" class="hover:text-[#27b4f2] transition-colors">Privacy</a></li>
-                <li><a href="/terms" class="hover:text-[#27b4f2] transition-colors">Terms</a></li>
-            </ul>
-          </div>
+      <div class="col-span-1">
+        <h3 class="text-xs font-bold text-slate-200 uppercase tracking-widest mb-4">Dev Tools (A-M)</h3>
+        <ul class="space-y-2.5 text-[13px] text-slate-400">
+          {devPart1.map(t => <li><a href={t.href} class="hover:text-white transition-colors block truncate">{t.title}</a></li>)}
+        </ul>
       </div>
-      
-      <div class="border-t border-slate-900 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-slate-400 text-center md:text-left">
-          <div class="flex items-center gap-2">
-            <ShieldCheck class="w-5 h-5 text-green-600" />
-            <p>&copy; {new Date().getFullYear()} SyntaxSnap. All rights reserved.</p>
-          </div>
-          <p class="flex items-center justify-center gap-1.5">
-            Built with ❤️ in <span class="text-slate-200 font-medium">Cuddalore</span> for the global community.
-          </p>
+
+      <div class="col-span-1">
+        <h3 class="text-xs font-bold text-slate-200 uppercase tracking-widest mb-4">Dev Tools (N-Z)</h3>
+        <ul class="space-y-2.5 text-[13px] text-slate-400">
+          {devPart2.map(t => <li><a href={t.href} class="hover:text-white transition-colors block truncate">{t.title}</a></li>)}
+        </ul>
       </div>
+
+      <div class="col-span-1">
+        <h3 class="text-xs font-bold text-slate-200 uppercase tracking-widest mb-4">Design & CSS</h3>
+        <ul class="space-y-2.5 text-[13px] text-slate-400 mb-8">
+          {cssTools.map(t => <li><a href={t.href} class="hover:text-white transition-colors block truncate">{t.title}</a></li>)}
+        </ul>
+        
+        <h3 class="text-xs font-bold text-slate-200 uppercase tracking-widest mb-4">AI Powered</h3>
+        <ul class="space-y-2.5 text-[13px] text-emerald-400/80">
+          {aiTools.map(t => <li><a href={t.href} class="hover:text-emerald-300 transition-colors block truncate">{t.title}</a></li>)}
+        </ul>
+      </div>
+
+      <div class="col-span-1">
+        <h3 class="text-xs font-bold text-slate-200 uppercase tracking-widest mb-4">JSON & Schema</h3>
+        <ul class="space-y-2.5 text-[13px] text-slate-400 mb-8">
+          {jsonTools.map(t => <li><a href={t.href} class="hover:text-white transition-colors block truncate">{t.title}</a></li>)}
+        </ul>
+
+        <h3 class="text-xs font-bold text-slate-200 uppercase tracking-widest mb-4">Data Conversion</h3>
+        <ul class="space-y-2.5 text-[13px] text-slate-400">
+          {dataTools.map(t => <li><a href={t.href} class="hover:text-white transition-colors block truncate">{t.title}</a></li>)}
+        </ul>
+      </div>
+
+    </div>
+    
+    <div class="border-t border-slate-800/60 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-slate-500">
+        <div class="flex flex-wrap items-center justify-center gap-4">
+          <span class="flex items-center gap-1.5"><ShieldCheck class="w-4 h-4 text-emerald-500" /> &copy; {new Date().getFullYear()} SyntaxSnap.</span>
+          <span class="hidden md:inline text-slate-700">|</span>
+          <a href="/privacy" class="hover:text-slate-300 transition-colors">Privacy Policy</a>
+          <span class="hidden md:inline text-slate-700">|</span>
+          <a href="/terms" class="hover:text-slate-300 transition-colors">Terms of Service</a>
+        </div>
+        <p class="flex items-center gap-1.5">
+          Built with ❤️ in <span class="text-slate-300 font-medium">Cuddalore</span>
+        </p>
+    </div>
   </div>
 </footer>
