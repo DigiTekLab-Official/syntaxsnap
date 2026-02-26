@@ -46,8 +46,8 @@ export default function AiMockGenerator() {
 
       // Format the successful JSON response
       setResult(JSON.stringify(data, null, 2));
-    } catch (err: any) {
-      setError(err.message || 'An unexpected error occurred.');
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'An unexpected error occurred.');
     } finally {
       setLoading(false);
     }

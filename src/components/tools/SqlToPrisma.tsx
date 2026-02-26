@@ -130,7 +130,7 @@ function stripComments(sql: string): string {
 }
 
 function stripQuotes(name: string): string {
-  return name.replace(/^[`"'\[\]]+|[`"'\[\]]+$/g, '');
+  return name.replace(/^[`"'[\]]+|[`"'[\]]+$/g, '');
 }
 
 // ─── PARSER TYPES ───────────────────────────────────────────────────────────
@@ -223,7 +223,7 @@ function parseColumnLine(line: string): ParsedColumn | null {
 
   // Match: column_name TYPE[(size)] [constraints...]
   const colMatch = trimmed.match(
-    /^[`"'\[\]]?(\w+)[`"'\[\]]?\s+(\w+(?:\s*\([^)]*\))?(?:\s+(?:without|with)\s+time\s+zone)?)/i
+    /^[`"'[\]]?(\w+)[`"'[\]]?\s+(\w+(?:\s*\([^)]*\))?(?:\s+(?:without|with)\s+time\s+zone)?)/i
   );
   if (!colMatch) return null;
 
@@ -266,7 +266,7 @@ function extractTables(sql: string): ParsedTable[] {
   const tables: ParsedTable[] = [];
 
   // Find each CREATE TABLE header; then use depth-counting to find the matching ')'
-  const headerRegex = /CREATE\s+TABLE\s+(?:IF\s+NOT\s+EXISTS\s+)?[`"'\[\]]?(\w+)[`"'\[\]]?\s*\(/gi;
+  const headerRegex = /CREATE\s+TABLE\s+(?:IF\s+NOT\s+EXISTS\s+)?[`"'[\]]?(\w+)[`"'[\]]?\s*\(/gi;
   let match: RegExpExecArray | null;
 
   while ((match = headerRegex.exec(clean)) !== null) {

@@ -4,14 +4,9 @@ import {
   Split,
   Files,
   Trash2,
-  Copy,
-  Check,
   Maximize2,
   Minimize2,
   Lock,
-  FileText,
-  AlertCircle,
-  ArrowRightLeft
 } from 'lucide-react';
 import CopyButton from '../ui/CopyButton';
 import { useDebounce } from '../../hooks/useDebounce';

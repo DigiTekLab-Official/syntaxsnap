@@ -1,5 +1,5 @@
-import React, { useState, useCallback } from 'react';
-import { Copy, Check, RotateCcw, Layers, Image as ImageIcon, Sparkles, Box } from 'lucide-react';
+import React, { useState } from 'react';
+import { RotateCcw, Image as ImageIcon, Sparkles, Box } from 'lucide-react';
 import CopyButton from '../ui/CopyButton';
 
 // ─── Types & Defaults ────────────────────────────────────────────────────────
