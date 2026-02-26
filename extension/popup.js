@@ -1,8 +1,30 @@
 document.addEventListener('DOMContentLoaded', () => {
+  // ─── QUICK SEARCH LOGIC ─────────────────────────────────────────────────
+  const searchInput = document.getElementById('search-input');
+  const toolCards = document.querySelectorAll('.tool-card');
+
+  if (searchInput) {
+    searchInput.addEventListener('input', (e) => {
+      const query = e.target.value.toLowerCase();
+      toolCards.forEach(card => {
+        const text = card.textContent.toLowerCase();
+        // Toggle display based on search match
+        if (text.includes(query)) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    });
+    // Auto-focus the search bar when popup opens for instant typing
+    setTimeout(() => searchInput.focus(), 10);
+  }
+
+  // ─── SVG EXTRACTOR LOGIC ────────────────────────────────────────────────
   const extractBtn = document.getElementById('extract-svg-btn');
   const resultsDiv = document.getElementById('svg-results');
 
-  // ─── CONSTANTS ──────────────────────────────────────────────────────────
+  // CONSTANTS
   const MAX_SVG_COUNT = 50;
   const MAX_SVG_BYTES = 100_000; // 100 KB per SVG
 
@@ -75,7 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
         item.onmouseover = () => item.style.borderColor = '#8b5cf6';
         item.onmouseout = () => item.style.borderColor = '#334155';
 
-        // ─── NEW: INJECT SVG HIGHLIGHT ON HOVER ──────────────────────────
+        // ─── INJECT SVG HIGHLIGHT ON HOVER ──────────────────────────
         item.addEventListener('mouseenter', async () => {
           await chrome.scripting.executeScript({
             target: { tabId: tab.id },

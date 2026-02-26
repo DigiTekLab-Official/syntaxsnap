@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "SyntaxSnap - Developer Tools",
-  "version": "1.2.0",
-  "description": "Privacy-first developer tools: TypeScript/JSON to Zod, OpenAPI converters, Regex Tester, and SVG Extractor. 100% private.",
+  "version": "1.2.1",
+  "description": "Privacy-first developer tools: GraphQL/TypeScript/JSON to Zod, OpenAPI converters, Regex Tester, and SVG Extractor. 100% private.",
   "permissions": [
     "contextMenus", 
     "activeTab", 

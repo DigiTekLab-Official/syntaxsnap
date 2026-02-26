@@ -153,7 +153,7 @@ export default function CommandPalette() {
                 <span className="font-semibold text-sm truncate text-white">{tool.title}</span>
                 <span className="text-xs text-slate-500 truncate">{tool.desc}</span>
               </div>
-              <span className="shrink-0 text-[10px] font-bold uppercase tracking-wider bg-slate-800 px-2 py-1 rounded text-slate-400 ml-4 hidden sm:inline-block">
+              <span className="shrink-0 text-xs font-bold uppercase tracking-wider bg-slate-800 px-2 py-1 rounded text-slate-400 ml-4 hidden sm:inline-block">
                 {tool.category}
               </span>
             </li>
@@ -172,7 +172,7 @@ export default function CommandPalette() {
             to select
           </span>
           <span className="flex items-center gap-1.5 ml-auto">
-            <kbd className="px-1.5 py-0.5 bg-slate-800 rounded text-slate-300 border border-slate-700 font-sans shadow-sm text-[10px]">ESC</kbd>
+            <kbd className="px-1.5 py-0.5 bg-slate-800 rounded text-slate-300 border border-slate-700 font-sans shadow-sm text-xs">ESC</kbd>
             to close
           </span>
         </div>

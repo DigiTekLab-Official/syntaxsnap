@@ -3,11 +3,12 @@
 const MAX_SELECTION_CHARS = 10_000;
 
 const TOOLS = [
-  { id: 'tool-ts-zod',      title: '📘 Convert TS to Zod',      path: '/tools/ts-to-zod' },
-  { id: 'tool-openapi-zod', title: '⚙️ Convert OpenAPI to Zod', path: '/tools/openapi-to-zod' },
-  { id: 'tool-json',        title: '📄 Convert JSON to Zod',    path: '/tools/json-to-zod' },
-  { id: 'tool-regex',       title: '🔍 Test Regex Pattern',     path: '/tools/regex-tester' },
-  { id: 'tool-diff',        title: '⚖️ Compare Text (Diff)',    path: '/tools/diff-viewer' },
+  { id: 'tool-ts-zod',      title: 'Convert TS to Zod',      path: '/tools/ts-to-zod' },
+  { id: 'tool-openapi-zod', title: 'Convert OpenAPI to Zod', path: '/tools/openapi-to-zod' },
+  { id: 'tool-json',        title: 'Convert JSON to Zod',    path: '/tools/json-to-zod' },
+  { id: 'tool-graphql-zod', title: 'Convert GraphQL to Zod', path: '/tools/graphql-to-zod' },
+  { id: 'tool-regex',       title: 'Test Regex Pattern',     path: '/tools/regex-tester' },
+  { id: 'tool-diff',        title: 'Compare Text (Diff)',    path: '/tools/diff-viewer' },
 ];
 
 // ─── SERVICE WORKER LIFECYCLE ───────────────────────────────────────────────

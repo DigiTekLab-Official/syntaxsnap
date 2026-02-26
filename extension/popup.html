@@ -66,11 +66,13 @@
       width: 18px;
       height: 18px;
       stroke-width: 2px;
+      color: #27b4f2;
       transition: stroke 0.2s;
     }
 
     .tool-card:hover .tool-icon {
-      color: var(--accent);
+      color: #ffffff;
+      transform: scale(1.1);
     }
 
     footer {
@@ -136,30 +138,36 @@
     <img src="logo.png" alt="SyntaxSnap Logo" class="header-logo">
   </header>
 
+  <div style="margin-bottom: 16px;">
+    <input type="text" id="search-input" placeholder="Search tools... (e.g. Zod, SVG)" 
+           style="width: 100%; box-sizing: border-box; padding: 10px 14px; background: #1e293b; border: 1px solid #334155; border-radius: 8px; color: #f8fafc; font-size: 13px; outline: none;">
+  </div>
+
   <nav class="menu">
     <a href="https://syntaxsnap.com/tools/ts-to-zod" target="_blank" rel="noopener noreferrer" class="tool-card">
       <svg class="tool-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-        <polyline points="14 2 14 8 20 8"></polyline>
-        <path d="M9 15h6"></path>
-        <path d="M12 12v6"></path>
+        <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><path d="m10 13-2 2 2 2"/><path d="m14 17 2-2-2-2"/>
       </svg>
       TS to Zod
     </a>
 
+    <a href="https://syntaxsnap.com/tools/graphql-to-zod" target="_blank" rel="noopener noreferrer" class="tool-card">
+      <svg class="tool-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+        <ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5V19A9 3 0 0 0 21 19V5"/><path d="M3 12A9 3 0 0 0 21 12"/>
+      </svg>
+      GraphQL to Zod
+    </a>
+
     <a href="https://syntaxsnap.com/tools/regex-tester" target="_blank" rel="noopener noreferrer" class="tool-card">
       <svg class="tool-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="11" cy="11" r="8"></circle>
-        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/><path d="M7 11l2-2 4 4"/><path d="M11 7l4 4"/>
       </svg>
       Regex Tester
     </a>
     
     <a href="https://syntaxsnap.com/tools/json-to-zod" target="_blank" rel="noopener noreferrer" class="tool-card">
       <svg class="tool-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-        <polyline points="14 2 14 8 20 8"></polyline>
-        <path d="M10 13l-2 2 2 2"/><path d="M14 17l2-2-2-2"/>
+        <path d="M8 3H7a2 2 0 0 0-2 2v5a2 2 0 0 1-2 2 2 2 0 0 1 2 2v5c0 1.1.9 2 2 2h1"/><path d="M16 21h1a2 2 0 0 0 2-2v-5c0-1.1.9-2 2-2a2 2 0 0 1-2-2V5a2 2 0 0 0-2-2h-1"/>
       </svg>
       JSON to Zod
     </a>
@@ -178,7 +186,7 @@
 
   <footer>
     <span class="status-dot"></span>
-    System Operational • v1.2.0
+    System Operational • v1.2.1
   </footer>
 
   <script src="popup.js"></script>

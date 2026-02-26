@@ -211,13 +211,13 @@ export default function CronDescriptor() {
           <div className="grid grid-cols-5 gap-3">
             {fields.map((field) => (
               <div key={field.name} className="bg-slate-950 border border-slate-800 rounded-lg p-3">
-                <div className="text-[10px] text-slate-400 mb-1 uppercase tracking-wide">
+                <div className="text-xs text-slate-400 mb-1 uppercase tracking-wide">
                   {field.name}
                 </div>
                 <div className="text-lg font-mono font-bold text-indigo-300 mb-1">
                   {field.value}
                 </div>
-                <div className="text-[10px] text-slate-600 leading-relaxed">
+                <div className="text-xs text-slate-600 leading-relaxed">
                   {field.description}
                 </div>
               </div>
@@ -306,12 +306,12 @@ export default function CronDescriptor() {
                     key={index}
                     className="flex items-start gap-2 text-xs font-mono text-slate-300 bg-slate-950/50 px-3 py-2 rounded-lg border border-slate-800/50"
                   >
-                    <span className="text-slate-600 text-[10px] shrink-0 mt-0.5">#{index + 1}</span>
+                    <span className="text-slate-600 text-xs shrink-0 mt-0.5">#{index + 1}</span>
                     <span className="leading-relaxed">{run}</span>
                   </li>
                 ))}
               </ul>
-              <p className="text-[10px] text-slate-600 flex items-center gap-1">
+              <p className="text-xs text-slate-600 flex items-center gap-1">
                 <Clock className="w-3 h-3" aria-hidden />
                 Timezone: {timezone}
               </p>
