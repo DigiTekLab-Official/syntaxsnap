@@ -63,9 +63,10 @@ const itemListSchema = buildItemList(
                     <Icon class="w-5 h-5" />
                   </div>
                   <div>
-                    <h3 class="text-white font-bold text-sm group-hover:text-indigo-400 transition-colors flex items-center gap-2">
-                      {tool.title}
-                      {tool.status === 'New' && <span class="text-sm bg-indigo-500 text-white px-1.5 py-0.5 rounded font-bold uppercase tracking-wider">New</span>}
+                    {/* FIX: Added flex-wrap and unified badge styling for consistency */}
+                    <h3 class="text-white font-bold text-sm group-hover:text-indigo-400 transition-colors flex items-center flex-wrap gap-2">
+                      <span>{tool.title}</span>
+                      {tool.status === 'New' && <span class="text-xs bg-indigo-500/10 text-indigo-300 border border-indigo-500/20 px-1.5 py-0.5 rounded font-bold uppercase tracking-wider shrink-0">New</span>}
                     </h3>
                     <p class="text-slate-300 text-xs mt-1 leading-snug line-clamp-2">{tool.desc}</p>
                   </div>
