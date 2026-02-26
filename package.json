@@ -52,6 +52,7 @@
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.56.0"
   },
+  "packageManager": "pnpm@10.28.1",
   "pnpm": {
     "onlyBuiltDependencies": [
       "esbuild",
