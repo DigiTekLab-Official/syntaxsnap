@@ -1,6 +1,6 @@
 ---
 // src/components/ui/Header.astro
-import { Wrench, Sparkles, Menu, X } from 'lucide-astro';
+import { Wrench, Sparkles, Menu, X, Search } from 'lucide-astro';
 import { TOOLS } from '../../config/tools';
 
 const aiTool = TOOLS.find(t => t.category === 'ai') || TOOLS[0];
@@ -8,6 +8,8 @@ const aiTool = TOOLS.find(t => t.category === 'ai') || TOOLS[0];
 
 <header class="border-b border-slate-800 bg-slate-950/80 backdrop-blur-md sticky top-0 z-50">
   <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+    
+    {/* Left: Logo */}
     <a href="/" class="flex items-center gap-3 group no-underline" aria-label="SyntaxSnap home">
       <div class="group-hover:rotate-12 transition-transform duration-300">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2000 2000" class="w-8 h-8 object-contain" aria-hidden="true" role="img">
@@ -20,32 +22,61 @@ const aiTool = TOOLS.find(t => t.category === 'ai') || TOOLS[0];
       <span class="text-xl font-bold tracking-tight text-white">Syntax<span class="text-[#27b4f2]">Snap</span></span>
     </a>
 
-    <nav aria-label="Main navigation" class="hidden md:flex">
-      <ul class="flex gap-4 md:gap-8 text-base font-medium text-slate-400 list-none m-0 p-0">
-        <li>
-          <a href={aiTool.href} class="text-emerald-400 hover:text-emerald-300 transition-colors flex items-center gap-1.5 py-2">
-            <Sparkles class="w-4 h-4"/> <span class="hidden lg:inline">AI Tools</span>
-          </a>
-        </li>
-        <li>
-          <a href="/#all-tools" class="hover:text-white transition-colors flex items-center gap-1.5 py-2">
-            <Wrench class="w-4 h-4"/> <span class="hidden lg:inline">Tools Library</span>
-          </a>
-        </li>
-      </ul>
-    </nav>
+    {/* Right: Search, Nav & Mobile Toggle */}
+    <div class="flex items-center gap-3 md:gap-6">
+      
+      {/* Search Button (Desktop) */}
+      <button
+        type="button"
+        class="cmd-palette-trigger hidden md:flex items-center justify-between gap-4 px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 hover:border-slate-700 hover:bg-slate-800 text-slate-400 text-sm font-medium transition-colors w-56 group"
+        aria-label="Search tools"
+      >
+        <div class="flex items-center gap-2">
+          <Search class="w-4 h-4 text-slate-500 group-hover:text-blue-400 transition-colors" />
+          <span>Search tools...</span>
+        </div>
+        <kbd class="px-1.5 py-0.5 text-[10px] font-bold tracking-widest text-slate-500 bg-slate-800 border border-slate-700 rounded shadow-sm">⌘K</kbd>
+      </button>
 
-    <button 
-      id="mobile-menu-btn" 
-      class="md:hidden p-2 -mr-2 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800/50 transition-colors focus:outline-none focus:ring-2 focus:ring-[#27b4f2]"
-      aria-label="Toggle mobile menu"
-      aria-expanded="false"
-    >
-      <Menu class="w-6 h-6" id="menu-icon-open" />
-      <X class="w-6 h-6 hidden" id="menu-icon-close" />
-    </button>
+      {/* Search Icon (Mobile) */}
+      <button 
+        type="button"
+        class="cmd-palette-trigger md:hidden p-2 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800/50 transition-colors focus:outline-none focus:ring-2 focus:ring-[#27b4f2]"
+        aria-label="Search tools"
+      >
+        <Search class="w-5 h-5" />
+      </button>
+
+      {/* Desktop Nav */}
+      <nav aria-label="Main navigation" class="hidden md:flex">
+        <ul class="flex gap-4 md:gap-6 text-sm font-medium text-slate-400 list-none m-0 p-0">
+          <li>
+            <a href={aiTool.href} class="text-emerald-400 hover:text-emerald-300 transition-colors flex items-center gap-1.5 py-2">
+              <Sparkles class="w-4 h-4"/> <span class="hidden lg:inline">AI Tools</span>
+            </a>
+          </li>
+          <li>
+            <a href="/#all-tools" class="hover:text-white transition-colors flex items-center gap-1.5 py-2">
+              <Wrench class="w-4 h-4"/> <span class="hidden lg:inline">Tools Library</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      {/* Mobile Menu Toggle */}
+      <button 
+        id="mobile-menu-btn" 
+        class="md:hidden p-2 -mr-2 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800/50 transition-colors focus:outline-none focus:ring-2 focus:ring-[#27b4f2]"
+        aria-label="Toggle mobile menu"
+        aria-expanded="false"
+      >
+        <Menu class="w-6 h-6" id="menu-icon-open" />
+        <X class="w-6 h-6 hidden" id="menu-icon-close" />
+      </button>
+    </div>
   </div>
 
+  {/* Mobile Dropdown Menu */}
   <div id="mobile-menu" class="hidden absolute top-16 left-0 w-full border-b border-slate-800 bg-slate-950/95 backdrop-blur-xl shadow-2xl md:hidden">
     <div class="max-w-6xl mx-auto px-4 py-4">
       <ul class="space-y-2 text-base font-medium text-slate-300">
@@ -65,6 +96,7 @@ const aiTool = TOOLS.find(t => t.category === 'ai') || TOOLS[0];
 </header>
 
 <script is:inline>
+  // Mobile Menu Logic
   const btn = document.getElementById('mobile-menu-btn');
   const menu = document.getElementById('mobile-menu');
   const iconOpen = document.getElementById('menu-icon-open');
@@ -90,4 +122,16 @@ const aiTool = TOOLS.find(t => t.category === 'ai') || TOOLS[0];
 
   btn?.addEventListener('click', () => toggleMenu());
   mobileLinks.forEach(link => link.addEventListener('click', () => toggleMenu(false)));
+
+  // Command Palette Trigger Logic
+  const searchTriggers = document.querySelectorAll('.cmd-palette-trigger');
+  searchTriggers.forEach(trigger => {
+    trigger.addEventListener('click', () => {
+      window.dispatchEvent(new Event('open-command-palette'));
+      // Close mobile menu if open
+      if (menu && !menu.classList.contains('hidden')) {
+        toggleMenu(false);
+      }
+    });
+  });
 </script>

@@ -4,6 +4,7 @@ import '../styles/global.css';
 import Header from '../components/ui/Header.astro';
 import Footer from '../components/ui/Footer.astro';
 import JsonLd from '../components/seo/JsonLd.astro'; 
+import CommandPalette from '../components/ui/CommandPalette.tsx';
 
 interface Props {
   title?: string;
@@ -99,5 +100,6 @@ const socialImageURL = new URL(ogImagePath, siteUrl).toString();
             y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
         })(window, document, "clarity", "script", "viplajyvf3");
     </script>
+    <CommandPalette client:load />
   </body>
 </html>
