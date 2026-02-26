@@ -1,0 +1,138 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import SqlToPrismaTool from '../../components/tools/SqlToPrisma.tsx';
+import RelatedTools from '../../components/ui/RelatedTools.astro';
+import { buildFAQPage } from '../../utils/schema';
+
+const title = "SQL to Prisma Schema Converter | SyntaxSnap";
+const description = "Convert SQL CREATE TABLE statements into Prisma schema models instantly. Supports PostgreSQL, MySQL, and SQLite DDL. 100% client-side, zero data transmission.";
+const slug = "sql-to-prisma";
+const features = [
+  "Converts SQL CREATE TABLE to Prisma model syntax automatically",
+  "Maps SQL types (VARCHAR, INT, BOOLEAN, TIMESTAMP) to Prisma types",
+  "Handles NOT NULL, DEFAULT values, PRIMARY KEY, UNIQUE, and AUTO_INCREMENT",
+  "Converts snake_case columns to camelCase fields with @map annotations",
+  "100% client-side parsing — your SQL never leaves your browser"
+];
+
+// SEO: FAQPage
+const faqSchema = buildFAQPage([
+  {
+    question: "Which SQL dialects are supported?",
+    answer: "The converter supports standard SQL DDL from PostgreSQL, MySQL, MariaDB, and SQLite. It handles CREATE TABLE statements with common data types including VARCHAR, TEXT, INT, BIGINT, BOOLEAN, TIMESTAMP, DATETIME, JSON, JSONB, SERIAL, and more."
+  },
+  {
+    question: "How does it handle nullable fields?",
+    answer: "Columns without the NOT NULL constraint are converted to optional Prisma fields using the ? modifier (e.g. String?). Columns marked NOT NULL or PRIMARY KEY become required fields in the Prisma schema."
+  },
+  {
+    question: "Is my SQL sent to a server?",
+    answer: "No. All parsing and Prisma schema generation happens 100% client-side in your browser using a custom regex/tokenization parser. Your SQL statements and database schemas never leave your device."
+  },
+  {
+    question: "Does it handle DEFAULT values and auto-increment?",
+    answer: "Yes. DEFAULT CURRENT_TIMESTAMP maps to @default(now()), DEFAULT false maps to @default(false), AUTO_INCREMENT and SERIAL types map to @default(autoincrement()), and string/number defaults are preserved with @default(...)."
+  }
+]);
+---
+
+<Layout title={title} description={description} isTool={true} slug={slug} features={features}>
+  {/* SEO: FAQPage schema */}
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-12 lg:py-16">
+    <header class="text-center mb-12">
+      <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white mb-4 tracking-tight">
+        SQL &rarr; Prisma Schema
+      </h1>
+      <p class="text-slate-400 text-lg md:text-xl max-w-3xl mx-auto leading-relaxed">
+        Paste your SQL <code class="text-indigo-400 bg-slate-800 px-1.5 py-0.5 rounded">CREATE TABLE</code>
+        statements and instantly generate clean
+        <strong class="text-indigo-400">Prisma schema models</strong>.
+        Perfect for migrating existing databases to Prisma ORM.
+      </p>
+    </header>
+
+    <SqlToPrismaTool client:idle />
+
+    <!-- SEO-Enhanced Content Section -->
+    <section class="mt-20 border-t border-slate-800 pt-12" aria-labelledby="why-heading">
+      <h2 id="why-heading" class="text-3xl font-bold text-white mb-8">
+        Why Convert SQL to Prisma Schema?
+      </h2>
+      <div class="grid md:grid-cols-2 gap-8 text-slate-300 leading-relaxed">
+        <div>
+          <h3 class="text-xl font-semibold text-slate-200 mb-3">Migrate Existing Databases to Prisma</h3>
+          <p class="text-slate-400">
+            If you have existing SQL tables and want to adopt Prisma ORM, manually rewriting every
+            table definition as a Prisma model is tedious and error-prone. This converter automates
+            the process, mapping SQL types to Prisma types, handling nullable fields, defaults,
+            primary keys, and unique constraints automatically.
+          </p>
+        </div>
+        <div>
+          <h3 class="text-xl font-semibold text-slate-200 mb-3">Type-Safe Database Access</h3>
+          <p class="text-slate-400">
+            Prisma generates a fully type-safe client from your schema. By converting SQL DDL to
+            Prisma models, you instantly get <strong>autocomplete</strong>, <strong>compile-time checks</strong>,
+            and <strong>runtime validation</strong> for every database query — eliminating common bugs
+            caused by schema mismatches between SQL and application code.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Use Cases Section -->
+    <section class="mt-16" aria-labelledby="use-cases-heading">
+      <h2 id="use-cases-heading" class="text-2xl font-bold text-white mb-6">Common Use Cases</h2>
+      <ul class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {[
+          "Migrate legacy MySQL databases to Prisma ORM",
+          "Convert PostgreSQL schemas for new TypeScript projects",
+          "Bootstrap Prisma schema from existing SQL dumps",
+          "Generate type-safe models from database documentation",
+          "Convert SQLite schemas for edge/serverless deployments",
+          "Create Prisma models from database migration files",
+          "Port Django/Rails SQL to Node.js with Prisma",
+          "Convert stored procedure table definitions to models",
+          "Generate Prisma schema from database reverse-engineering"
+        ].map(useCase => (
+          <li class="bg-slate-800/30 border border-slate-700/50 rounded-lg px-4 py-3 text-slate-300 text-sm flex items-start gap-2">
+            <svg class="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+            <span>{useCase}</span>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <!-- Technical Details -->
+    <section class="mt-16 bg-slate-800/20 border border-slate-700/50 rounded-2xl p-8" aria-labelledby="how-it-works">
+      <h2 id="how-it-works" class="text-2xl font-bold text-white mb-4">How It Works</h2>
+      <div class="text-slate-400 space-y-3 leading-relaxed">
+        <p>
+          This tool parses your SQL entirely in the browser and converts each CREATE TABLE
+          statement into a Prisma model:
+        </p>
+        <ul class="list-disc list-inside space-y-1 ml-4 text-slate-300">
+          <li><code class="text-blue-300">VARCHAR / TEXT</code> &rarr; <code class="text-emerald-300">String</code></li>
+          <li><code class="text-blue-300">INT / INTEGER</code> &rarr; <code class="text-emerald-300">Int</code></li>
+          <li><code class="text-blue-300">BIGINT / BIGSERIAL</code> &rarr; <code class="text-emerald-300">BigInt</code></li>
+          <li><code class="text-blue-300">BOOLEAN</code> &rarr; <code class="text-emerald-300">Boolean</code></li>
+          <li><code class="text-blue-300">TIMESTAMP / DATETIME</code> &rarr; <code class="text-emerald-300">DateTime</code></li>
+          <li><code class="text-blue-300">JSON / JSONB</code> &rarr; <code class="text-emerald-300">Json</code></li>
+          <li><code class="text-blue-300">PRIMARY KEY</code> &rarr; <code class="text-emerald-300">@id</code></li>
+          <li><code class="text-blue-300">AUTO_INCREMENT / SERIAL</code> &rarr; <code class="text-emerald-300">@default(autoincrement())</code></li>
+          <li><code class="text-blue-300">DEFAULT CURRENT_TIMESTAMP</code> &rarr; <code class="text-emerald-300">@default(now())</code></li>
+          <li><code class="text-blue-300">NOT NULL omitted</code> &rarr; <code class="text-emerald-300">Type?</code> (optional)</li>
+        </ul>
+        <p class="mt-4">
+          All processing happens <strong>locally in your browser</strong> &mdash; no SQL is uploaded to any server,
+          ensuring your database schemas remain completely private.
+        </p>
+      </div>
+    </section>
+
+    <RelatedTools currentTool="sql-to-prisma" />
+  </div>
+</Layout>
