@@ -295,7 +295,7 @@ export default function GraphqlToZod() {
         <div className="flex gap-2">
           <button
             onClick={handleLoadExample}
-            className="px-3 py-1.5 text-xs font-medium text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-lg transition-colors"
+            className="px-3 py-1.5 text-xs font-medium text-slate-200 hover:text-white bg-slate-700 hover:bg-slate-600 rounded-lg transition-colors"
             aria-label="Load example GraphQL"
           >
             Load Example
