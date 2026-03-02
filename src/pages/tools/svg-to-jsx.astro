@@ -5,18 +5,23 @@ import RelatedTools from '../../components/ui/RelatedTools.astro';
 import { buildFAQPage } from '../../utils/schema';
 
 const title = "SVG to JSX Converter | SyntaxSnap";
-const description = "Instantly convert SVG code into clean React JSX. Automatically handles camelCase attributes, className updates, and style objects.";
+const description = "Instantly convert SVG code into clean React JSX. Automatically handles camelCase attributes, className updates, style objects, and functional component wrapping.";
 const slug = "svg-to-jsx";
 
 const features = [
   "Converts kebab-case attributes to camelCase",
-  "Transforms style strings to objects",
-  "Fixes class to className",
+  "Transforms style strings to JSON objects",
+  "Optionally wraps in a React Functional Component",
+  "Optionally injects {...props} into the root SVG tag",
   "Local-first privacy (no server upload)"
 ];
 
 // SEO: FAQPage — answers supported by on-page converter behavior
 const faqSchema = buildFAQPage([
+  {
+    question: "Can this tool generate a full React functional component?",
+    answer: "Yes! By checking the 'Wrap in Functional Component' toggle, the tool will automatically wrap your SVG in an exportable React function and can inject {...props} directly into the root tag."
+  },
   {
     question: "Is my SVG data sent to a server?",
     answer: "No. SyntaxSnap is a local-first platform. All processing happens locally in your browser using JavaScript. Your code never leaves your device."
@@ -28,10 +33,6 @@ const faqSchema = buildFAQPage([
   {
     question: "How does this tool prepare SVGs for React and Next.js?",
     answer: "It automatically converts kebab-case attributes to camelCase, transforms inline style strings into React objects, and renames the class attribute to className for immediate use in JSX components."
-  },
-  {
-    question: "Is this tool free to use?",
-    answer: "Yes, this SVG to JSX converter is 100% free and open for all developers."
   }
 ]);
 ---
@@ -61,7 +62,7 @@ const faqSchema = buildFAQPage([
           <li>Changes <code class="text-slate-300">stroke-width</code> to <code class="text-indigo-300">strokeWidth</code></li>
           <li>Changes <code class="text-slate-300">class</code> to <code class="text-indigo-300">className</code></li>
           <li>Converts style strings to JSON objects</li>
-          <li>Removes XML headers and comments</li>
+          <li>Wraps code in an exportable React Component</li>
         </ul>
       </div>
 
@@ -71,6 +72,13 @@ const faqSchema = buildFAQPage([
         {/* Visible FAQ Section matching Schema exactly */}
         <div class="space-y-6">
           
+          <div>
+            <h3 class="font-medium text-slate-200 mb-2">Can this tool generate a full React component?</h3>
+            <p class="text-sm text-slate-400 leading-relaxed">
+              Yes! By checking the 'Wrap in Functional Component' toggle, the tool will automatically wrap your SVG in an exportable React function and can inject {'{...props}'} directly into the root tag.
+            </p>
+          </div>
+
           <div>
             <h3 class="font-medium text-slate-200 mb-2">Is my SVG data sent to a server?</h3>
             <p class="text-sm text-slate-400 leading-relaxed">
@@ -86,16 +94,9 @@ const faqSchema = buildFAQPage([
           </div>
 
           <div>
-            <h3 class="font-medium text-slate-200 mb-2">Is this tool free to use?</h3>
-            <p class="text-sm text-slate-400 leading-relaxed">
-              Yes, this SVG to JSX converter is 100% free and open for all developers.
-            </p>
-          </div>
-
-          <div>
             <h3 class="font-medium text-slate-200 mb-2">How does this tool prepare SVGs for React and Next.js?</h3>
             <p class="text-sm text-slate-400 leading-relaxed">
-              It automatically converts 'kebab-case' attributes to 'camelCase', transforms inline style strings into React objects, and renames the 'class' attribute to 'className' for immediate use in JSX components.
+              It automatically converts kebab-case attributes to camelCase, transforms inline style strings into React objects, and renames the class attribute to className for immediate use in JSX components.
             </p>
           </div>
 
