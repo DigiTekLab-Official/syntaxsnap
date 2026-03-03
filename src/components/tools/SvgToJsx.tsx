@@ -173,7 +173,7 @@ function sanitizeSvg(svg: string): string {
 function svgToJsx(raw: string, wrapComponent: boolean, addProps: boolean): string {
   const safeRaw = sanitizeSvg(raw);
 
-  let stripped = safeRaw
+  const stripped = safeRaw
     .replace(/<\?xml[^>]*\?>/gi, '')   
     .replace(/<!DOCTYPE[^>]*>/gi, '')   
     .replace(new RegExp('<!--[\\s\\S]*?-->', 'g'), '')
