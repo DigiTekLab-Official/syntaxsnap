@@ -60,6 +60,79 @@ const faqSchema = buildFAQPage([
         </p>
       </div>
     </div>
+
+    <article class="mt-16 border-t border-slate-800 pt-12">
+      <h2 class="text-2xl font-bold text-white mb-4">The Complete Guide to Tailwind CSS Shadows</h2>
+      <p class="text-slate-400 leading-relaxed">
+        Tailwind CSS ships with a handful of utility shadows — <code class="text-slate-300 bg-slate-800 px-1 rounded">shadow-sm</code>,
+        <code class="text-slate-300 bg-slate-800 px-1 rounded">shadow-md</code>,
+        <code class="text-slate-300 bg-slate-800 px-1 rounded">shadow-lg</code>, and
+        <code class="text-slate-300 bg-slate-800 px-1 rounded">shadow-xl</code> — which cover most basic use cases.
+        But real-world UI design constantly demands more: colored shadows that match your brand palette, multi-layered depth effects
+        for card elevations, inner shadows for pressed-button states, and neon glows for dark-mode hero sections.
+        That's where <strong>arbitrary value shadows</strong> come in.
+      </p>
+      <p class="text-slate-400 leading-relaxed mt-4">
+        With Tailwind v4's arbitrary value syntax, you can write classes like
+        <code class="text-slate-300 bg-slate-800 px-1 rounded">shadow-[0_4px_20px_rgba(99,102,241,0.4)]</code>
+        directly in your markup. The compiler generates exactly the CSS you need with zero config file changes.
+        This generator lets you <strong>visually design</strong> those values instead of guessing hex codes and pixel offsets,
+        then copies the exact class string to your clipboard.
+      </p>
+
+      <h2 class="text-2xl font-bold text-white mb-4 mt-10">Multi-Layer Shadows for Realistic Depth</h2>
+      <p class="text-slate-400 leading-relaxed">
+        A single box-shadow rarely looks natural. Real-world objects cast multiple shadow layers at different distances and intensities.
+        This tool lets you <strong>stack unlimited shadow layers</strong> — for example, a tight 2px shadow for the contact edge
+        combined with a soft 30px ambient shadow for the surrounding glow. Each layer has independent controls for
+        X/Y offset, blur radius, spread, color, and opacity. The result exports as a single Tailwind arbitrary class
+        with comma-separated shadow values.
+      </p>
+
+      <h2 class="text-2xl font-bold text-white mb-4 mt-10">Neon Glow Effects for Dark Mode</h2>
+      <p class="text-slate-400 leading-relaxed">
+        Neon glows have become a signature element of modern dark-theme UI. To create one, you set the shadow offsets to zero
+        and crank up the blur radius with a vibrant color — cyan, fuchsia, emerald, or electric blue. Stacking two layers
+        (a wide soft glow at 40–60px blur with a concentrated inner glow at 10–15px) produces the characteristic neon tube effect.
+        This generator includes <strong>one-click presets</strong> for popular glow styles so you can start from a polished baseline
+        and fine-tune from there.
+      </p>
+
+      <h2 class="text-2xl font-bold text-white mb-4 mt-10">When to Use This Tool</h2>
+      <p class="text-slate-400 leading-relaxed">
+        <strong>Card components:</strong> Design elevation hierarchies where primary cards have stronger shadows than secondary ones.
+        <strong>Call-to-action buttons:</strong> Add colored glow effects that pulse attention toward sign-up or purchase actions.
+        <strong>Modal overlays:</strong> Create deep ambient shadows that separate the modal from the background content.
+        <strong>Dark mode hero sections:</strong> Build dramatic neon accent glows behind headings and feature showcases.
+        All generated classes are framework-agnostic — they work in React, Vue, Svelte, or plain HTML with Tailwind installed.
+      </p>
+    </article>
+
+    {/* Visible FAQ Section to match Schema */}
+    <section class="mt-16 border-t border-slate-800 pt-12 mb-16">
+      <h2 class="text-2xl font-bold text-white mb-8">Frequently Asked Questions</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div>
+          <h3 class="font-medium text-slate-200 mb-2">Is this shadow generator free?</h3>
+          <p class="text-sm text-slate-400 leading-relaxed">
+            Yes. SyntaxSnap's Tailwind Shadow Generator is completely free with no accounts, ads, or usage limits.
+          </p>
+        </div>
+        <div>
+          <h3 class="font-medium text-slate-200 mb-2">Does it support Tailwind CSS v4?</h3>
+          <p class="text-sm text-slate-400 leading-relaxed">
+            Yes. The generator outputs Tailwind CSS v4 arbitrary value classes like <code class="text-slate-300 bg-slate-800 px-1 rounded">shadow-[...]</code> that work with the latest Tailwind version.
+          </p>
+        </div>
+        <div>
+          <h3 class="font-medium text-slate-200 mb-2">Can I create neon glow effects?</h3>
+          <p class="text-sm text-slate-400 leading-relaxed">
+            Yes. Stack multiple shadow layers with bright colors and wide blur radii to create vibrant neon glow effects for buttons, cards, and other UI elements.
+          </p>
+        </div>
+      </div>
+    </section>
+
     <RelatedTools currentTool="tailwind-shadow-generator" />
   </div>
 </Layout>

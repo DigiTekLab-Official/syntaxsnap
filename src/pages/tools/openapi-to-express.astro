@@ -66,6 +66,33 @@ const howToSchema = buildHowTo(
         By generating a local server based on your <strong>OpenAPI v3</strong> spec, you can begin frontend development before the backend is even built. 
         This generator handles path parameter conversion (e.g., <code>{"{id}"}</code> to <code>:id</code>) and sets up CORS automatically.
       </p>
+      <p class="text-slate-400 leading-relaxed mt-4">
+        Traditional API-first development often stalls when the frontend team has to wait for backend endpoints.
+        With this <strong>OpenAPI to Express.js converter</strong>, you paste your specification and receive a fully runnable Express server
+        with route handlers, middleware configuration, and proper HTTP method mapping — all generated in milliseconds, entirely in your browser.
+      </p>
+
+      <h2 class="text-2xl font-bold text-white mb-4 mt-10">How the Generator Works</h2>
+      <p class="text-slate-400 leading-relaxed">
+        The tool parses your <strong>OpenAPI 3.x JSON specification</strong> and extracts every path, HTTP method, and parameter definition.
+        It then generates idiomatic Express.js code using <code>express.Router()</code>, converting OpenAPI curly brace parameters like
+        <code>{"{userId}"}</code> into Express colon syntax <code>:userId</code>. Each handler includes a <code>res.json()</code>
+        stub with the operation summary as a comment, so the output is immediately readable and runnable.
+      </p>
+      <p class="text-slate-400 leading-relaxed mt-4">
+        The generated server includes <code>express.json()</code> body parsing and CORS headers out of the box.
+        Simply save the output as <code>server.js</code>, run <code>npm install express cors</code>, and start your mock API
+        with <code>node server.js</code>. Your frontend can immediately consume real HTTP endpoints matching your API contract
+        — no third-party mock services, no cloud dependencies, and zero configuration files.
+      </p>
+
+      <h2 class="text-2xl font-bold text-white mb-4 mt-10">Use Cases for Frontend Teams</h2>
+      <p class="text-slate-400 leading-relaxed">
+        <strong>Parallel development:</strong> Frontend and backend teams can work simultaneously — the frontend consumes the mock server
+        while the real API is under development. <strong>Integration testing:</strong> QA engineers can verify API contract compliance
+        by comparing mock responses against the specification. <strong>Prototyping:</strong> Product teams can demo interactive flows
+        with realistic API behavior before committing to a backend implementation.
+      </p>
     </article>
 
     {/* Visible FAQ Section to match Schema */}

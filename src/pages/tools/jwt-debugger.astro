@@ -78,6 +78,40 @@ const faqSchema = buildFAQPage([
       </div>
     </div>
 
+    <article class="mt-16 border-t border-slate-800 pt-12">
+      <h2 class="text-2xl font-bold text-white mb-4">What is a JSON Web Token (JWT)?</h2>
+      <p class="text-slate-400 leading-relaxed">
+        A <strong>JSON Web Token</strong> is a compact, URL-safe token format defined by <strong>RFC 7519</strong>.
+        It consists of three Base64Url-encoded parts separated by dots: a <strong>header</strong> specifying the signing algorithm,
+        a <strong>payload</strong> containing claims like user identity and expiration, and a <strong>signature</strong> that
+        verifies the token hasn't been tampered with. JWTs are widely used for authentication in REST APIs,
+        single sign-on (SSO) systems, and microservice architectures.
+      </p>
+
+      <h2 class="text-2xl font-bold text-white mb-4 mt-10">Why Decode JWTs Locally?</h2>
+      <p class="text-slate-400 leading-relaxed">
+        Most popular JWT debugging tools — including jwt.io — send your token to a remote server for processing.
+        For development tokens this may be acceptable, but <strong>production JWTs often contain sensitive claims</strong>
+        like user IDs, email addresses, roles, and organization identifiers. Pasting these into a third-party website
+        creates an unnecessary data exposure risk.
+      </p>
+      <p class="text-slate-400 leading-relaxed mt-4">
+        This <strong>local JWT debugger</strong> uses your browser's native <code class="text-slate-300 bg-slate-800 px-1 rounded">atob()</code> API
+        to decode the token entirely on your machine. No network requests are made, no tokens are logged,
+        and no data leaves your browser tab. It's the safest way to inspect JWTs containing production credentials.
+      </p>
+
+      <h2 class="text-2xl font-bold text-white mb-4 mt-10">Security Analysis Features</h2>
+      <p class="text-slate-400 leading-relaxed">
+        Beyond basic decoding, this debugger performs real-time <strong>security analysis</strong> on every token you inspect.
+        It detects the dangerous <code class="text-slate-300 bg-slate-800 px-1 rounded">alg: "none"</code> vulnerability,
+        which allows unsigned tokens to bypass signature verification — a common attack vector in misconfigured OAuth implementations.
+        The tool also checks <code class="text-slate-300 bg-slate-800 px-1 rounded">exp</code> (Expiration) and
+        <code class="text-slate-300 bg-slate-800 px-1 rounded">nbf</code> (Not Before) claims to flag expired or not-yet-valid tokens,
+        helping you debug authentication failures in your API integrations without guessing at timestamps.
+      </p>
+    </article>
+
     {/* Visible FAQ Section matching the 3 Schema questions perfectly */}
     <div class="mt-16 border-t border-slate-800 pt-12">
       <h2 class="text-2xl font-bold text-white mb-8">Frequently Asked Questions</h2>

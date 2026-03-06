@@ -64,6 +64,34 @@ const faqSchema = buildFAQPage([
       </div>
     </section>
 
+    <article class="mt-16 border-t border-slate-800 pt-12">
+      <h2 class="text-2xl font-bold text-white mb-4">Why Manual Mock Data Slows You Down</h2>
+      <p class="text-slate-400 leading-relaxed">
+        Writing realistic test data by hand is one of the most tedious parts of frontend and API development.
+        You end up copying the same objects, tweaking field names, and hoping the types match your schema.
+        This <strong>AI mock data generator</strong> eliminates that bottleneck — describe what you need in plain English
+        or paste your OpenAPI specification, and receive production-quality JSON in seconds.
+      </p>
+      <p class="text-slate-400 leading-relaxed mt-4">
+        The generator understands complex nested structures including arrays of objects, optional fields, UUIDs, ISO dates,
+        email addresses, and enum constraints. Unlike generic LLM outputs that wrap numbers in strings or invent non-existent fields,
+        our system enforces <strong>strict type safety</strong> to ensure the mock data actually validates against your schema.
+      </p>
+
+      <h2 class="text-2xl font-bold text-white mb-4 mt-10">Built for Real Developer Workflows</h2>
+      <p class="text-slate-400 leading-relaxed">
+        <strong>Frontend prototyping:</strong> Populate your React, Vue, or Svelte components with realistic data before the backend ships.
+        <strong>API contract testing:</strong> Generate payloads that match your OpenAPI spec to verify serialization and deserialization logic.
+        <strong>Database seeding:</strong> Create bulk records for local development databases with realistic names, addresses, and timestamps.
+        <strong>Demo environments:</strong> Build convincing product demos filled with lifelike data instead of "Test User 1" placeholders.
+      </p>
+      <p class="text-slate-400 leading-relaxed mt-4">
+        While your prompt is sent to an AI provider for generation, SyntaxSnap never stores your inputs or outputs in any database.
+        Your schema definitions and generated data are discarded immediately after delivery — making this tool suitable for
+        sensitive development workflows where data privacy matters.
+      </p>
+    </article>
+
     {/* Visible FAQ Section to match Schema */}
     <section class="mt-16 border-t border-slate-800 pt-12 mb-16">
       <h2 class="text-2xl font-bold text-white mb-8">Frequently Asked Questions</h2>

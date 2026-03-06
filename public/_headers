@@ -20,3 +20,21 @@
   # - font-src: jsdelivr for Monaco Editor codicon font
   # - frame-ancestors: blocks embedding in any cross-origin frame
   Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://www.clarity.ms https://scripts.clarity.ms https://static.cloudflareinsights.com https://cdn.jsdelivr.net; connect-src 'self' https://*.clarity.ms https://dc.services.visualstudio.com https://cloudflareinsights.com; img-src 'self' data: https:; style-src 'self' 'unsafe-inline'; font-src 'self' https://cdn.jsdelivr.net; worker-src 'self' blob:; frame-ancestors 'none'; base-uri 'self'; form-action 'self'
+
+# ── Browser Caching Rules for Maximum Performance ────────────
+
+# 1. Astro's bundled JS/CSS (Safely cache for 1 year because filenames are hashed)
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# 2. Brand Assets and Favicons (Cache for 1 month)
+/*.png
+  Cache-Control: public, max-age=2592000, stale-while-revalidate=86400
+/*.svg
+  Cache-Control: public, max-age=2592000, stale-while-revalidate=86400
+/*.ico
+  Cache-Control: public, max-age=2592000, stale-while-revalidate=86400
+
+# 3. Web Manifest (Cache for 1 week to allow theme color updates)
+/*.webmanifest
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
