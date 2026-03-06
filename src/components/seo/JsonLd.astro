@@ -1,14 +1,5 @@
 ---
 // src/components/seo/JsonLd.astro
-// ─────────────────────────────────────────────────────────────────
-// Central JSON-LD graph emitted on every page.
-//
-// Includes:
-//   • WebSite + Organization  — always
-//   • SoftwareApplication     — when type='tool'
-//   • BreadcrumbList          — when type='tool' (Home → Tools → {Tool})
-// ─────────────────────────────────────────────────────────────────
-
 import { buildToolBreadcrumbs, extractToolName } from '../../utils/schema';
 
 interface Props {
@@ -18,6 +9,8 @@ interface Props {
   url: string;
   imageUrl?: string;
   features?: string[];
+  /** New prop: skip base schema on homepage to prevent duplication */
+  isHomepage?: boolean; 
 }
 
 const { 
@@ -26,77 +19,51 @@ const {
   description, 
   url, 
   imageUrl = 'https://syntaxsnap.com/og-preview.jpg',
-  features
+  features,
+  isHomepage = false
 } = Astro.props;
 
-// ── Base schemas (every page) ────────────────────────────────────
-const baseSchema = [
+// ── Base schemas (skip if isHomepage is true) ─────────────────────
+const baseSchema = !isHomepage ? [
   {
+    "@context": "https://schema.org",
     "@type": "WebSite",
-    "@id": "https://syntaxsnap.com/#website",
     "url": "https://syntaxsnap.com",
     "name": "SyntaxSnap",
     "alternateName": ["Syntax Snap", "DigiTekLab SyntaxSnap"],
-    "description": "Privacy-first suite of developer tools.",
     "publisher": { "@id": "https://syntaxsnap.com/#organization" }
   },
   {
+    "@context": "https://schema.org",
     "@type": "Organization",
     "@id": "https://syntaxsnap.com/#organization",
     "name": "SyntaxSnap",
     "url": "https://syntaxsnap.com",
-    "logo": {
-      "@type": "ImageObject",
-      "url": "https://syntaxsnap.com/logo.png",
-      "width": 512,
-      "height": 512
-    },
-    "sameAs": ["https://github.com/DigiTekLab-Official"],
-    "contactPoint": {
-      "@type": "ContactPoint",
-      "email": "contact@syntaxsnap.com",
-      "contactType": "customer support"
-    }
+    "logo": "https://syntaxsnap.com/logo.png"
   }
-];
+] : [];
 
 // ── SoftwareApplication (tool pages only) ────────────────────────
 const toolSchema = type === 'tool' ? {
+  "@context": "https://schema.org",
   "@type": "SoftwareApplication",
   "name": title,
   "description": description,
   "url": url,
   "applicationCategory": "DeveloperApplication",
   "operatingSystem": "Web Browser",
-  "offers": {
-    "@type": "Offer",
-    "price": "0",
-    "priceCurrency": "USD"
-  },
-  "image": imageUrl,
-  "author": { "@id": "https://syntaxsnap.com/#organization" },
-  ...(features && features.length > 0 ? { "featureList": features } : {})
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "image": imageUrl
 } : null;
 
-// ── BreadcrumbList (tool pages only) ─────────────────────────────
-// Automatic: Home → Developer Tools → {Tool Name}
-// Tool name is extracted from the page title; slug from the URL path.
+// ── BreadcrumbList ─────────────────────────────────────────────
 const breadcrumbSchema = type === 'tool' ? (() => {
   const toolName = extractToolName(title);
   const slug = new URL(url).pathname.split('/').filter(Boolean).pop() || '';
   return buildToolBreadcrumbs(toolName, slug);
 })() : null;
-
-// ── Assemble @graph ──────────────────────────────────────────────
-const graph: Record<string, unknown>[] = [...baseSchema];
-if (toolSchema) graph.push(toolSchema);
-if (breadcrumbSchema) graph.push(breadcrumbSchema);
-
-const schemaGraph = {
-  "@context": "https://schema.org",
-  "@graph": graph
-};
 ---
 
-{/* SEO: Single JSON-LD graph — WebSite + Org + (SoftwareApp + Breadcrumbs when tool) */}
-<script type="application/ld+json" set:html={JSON.stringify(schemaGraph)} />
+{baseSchema.map(s => <script type="application/ld+json" set:html={JSON.stringify(s)} />)}
+{toolSchema && <script type="application/ld+json" set:html={JSON.stringify(toolSchema)} />}
+{breadcrumbSchema && <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />}

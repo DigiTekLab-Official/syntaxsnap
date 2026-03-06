@@ -129,6 +129,51 @@
       max-height: 200px;
       overflow-y: auto;
     }
+
+    /* ─── Explore CTA ──────────────────────────────────── */
+    .cta-wrapper {
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+    }
+
+    .cta-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      box-sizing: border-box;
+      padding: 12px 16px;
+      border-radius: 10px;
+      border: 1px solid rgba(99, 102, 241, 0.4);
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(139, 92, 246, 0.15) 100%);
+      color: #c7d2fe;
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      letter-spacing: 0.2px;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .cta-btn:hover {
+      background: linear-gradient(135deg, var(--accent) 0%, #8b5cf6 100%);
+      border-color: #8b5cf6;
+      color: #fff;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4), 0 0 40px rgba(139, 92, 246, 0.15);
+    }
+
+    .cta-btn:active {
+      transform: translateY(0);
+    }
+
+    .cta-icon {
+      width: 16px;
+      height: 16px;
+      stroke-width: 2px;
+      flex-shrink: 0;
+    }
   </style>
 </head>
 <body>
@@ -184,9 +229,21 @@
     <div id="svg-results" class="svg-results"></div>
   </nav>
 
+  <div class="cta-wrapper">
+    <a href="https://syntaxsnap.com/tools" target="_blank" rel="noopener noreferrer" class="cta-btn">
+      <svg class="cta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+      </svg>
+      Explore All Web Tools
+      <svg class="cta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M7 17l9.2-9.2M17 17V7H7"/>
+      </svg>
+    </a>
+  </div>
+
   <footer>
     <span class="status-dot"></span>
-    System Operational • v1.2.1
+    System Operational • v1.2.2
   </footer>
 
   <script src="popup.js"></script>

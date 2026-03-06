@@ -53,11 +53,31 @@ import {
 // Add new categories here — ToolCategory is derived automatically.
 
 const CATEGORY_META = {
-  json: { label: 'JSON & Schema' },
-  css:  { label: 'CSS & Design' },
-  dev:  { label: 'Developer Tools' },
-  ai:   { label: 'AI-Powered' },
-  data: { label: 'Data Conversion' },
+  ai: {
+    title: 'AI & Prompt Engineering Tools',
+    subtitle: 'Streamline your LLM workflows.',
+    description: 'Optimize your AI development with our suite of privacy-first tools. From generating mock data with local LLMs to optimizing prompts for Claude and GPT, these utilities help you build smarter applications without leaking sensitive data to the cloud.',
+  },
+  json: {
+    title: 'JSON & Schema Utilities',
+    subtitle: 'Validate, convert, and type-safe your data.',
+    description: 'Handle complex data structures with ease. Our JSON tools allow you to convert raw objects to Zod schemas, TypeScript interfaces, or JSON Schema instantly. Perfect for frontend developers building robust API integrations with 100% client-side processing.',
+  },
+  css: {
+    title: 'CSS & Design Tools',
+    subtitle: 'Prototype stunning UI in seconds.',
+    description: 'Generate production-ready CSS effects, gradients, and visual styles directly in your browser. From glassmorphism panels to aurora gradients and Tailwind shadow builders, these tools let you prototype stunning UI without leaving your workflow — and copy clean, framework-agnostic code in one click.',
+  },
+  dev: {
+    title: 'Developer Utilities',
+    subtitle: 'Everyday tools that respect your privacy.',
+    description: 'A curated set of everyday developer utilities that run entirely client-side. Debug JWTs, compare text diffs, convert SQL to Prisma schemas, describe cron expressions in plain English, generate Dockerfiles, and more — all without sending a single byte to a server.',
+  },
+  data: {
+    title: 'Data Conversion Tools',
+    subtitle: 'Bridge formats across your stack.',
+    description: 'Quickly convert between popular data formats used across the modern stack. Whether you need to turn SQL query results into JSON, transform GraphQL types into Zod validators, or bridge Pydantic models to TypeScript — these converters handle the grunt work so you can ship faster.',
+  },
 } as const;
 
 export type ToolCategory = keyof typeof CATEGORY_META;

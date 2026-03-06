@@ -12,6 +12,7 @@ interface Props {
   isTool?: boolean; 
   features?: string[]; 
   slug?: string; // <-- Added slug prop for dynamic OG images
+  isHomepage?: boolean;
 }
 
 const { 
@@ -19,7 +20,8 @@ const {
   description = "A privacy-first suite of developer tools that run entirely in your browser. No servers. No tracking.",
   isTool = false,
   features,
-  slug // <-- Destructured slug
+  slug, // <-- Destructured slug
+  isHomepage = false,
 } = Astro.props;
 
 // Use Astro.site if available, fallback to hardcoded URL

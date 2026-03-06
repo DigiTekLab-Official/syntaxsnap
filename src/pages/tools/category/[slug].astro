@@ -19,13 +19,13 @@ const { categoryKey } = Astro.props as { categoryKey: ToolCategory };
 const meta = TOOL_CATEGORIES[categoryKey];
 const categoryTools = TOOLS.filter(t => t.category === categoryKey);
 
-const title = `${meta.label} | ${SITE_NAME}`;
-const description = `Browse ${categoryTools.length} free, privacy-first ${meta.label.toLowerCase()} that run entirely in your browser. No servers, no tracking.`;
+const title = `${meta.title} | ${SITE_NAME}`;
+const description = meta.description;
 const pageUrl = `${SITE_URL}/tools/category/${categoryKey}`;
 
 // SEO: CollectionPage — clusters tools by topic for search engines
 const collectionSchema = buildCollectionPage(
-  meta.label,
+  meta.title,
   description,
   pageUrl,
   categoryTools.map(t => ({ name: t.title, url: `${SITE_URL}${t.href}` })),
@@ -35,7 +35,7 @@ const collectionSchema = buildCollectionPage(
 const breadcrumbSchema = buildBreadcrumbList([
   { name: 'Home', url: SITE_URL },
   { name: 'Developer Tools', url: `${SITE_URL}/tools` },
-  { name: meta.label, url: pageUrl },
+  { name: meta.title, url: pageUrl },
 ]);
 ---
 
@@ -52,10 +52,16 @@ const breadcrumbSchema = buildBreadcrumbList([
 
     <div class="mb-10">
       <h1 class="text-3xl md:text-4xl font-extrabold text-white tracking-tight mb-3">
-        {meta.label}
+        {meta.title}
       </h1>
-      <p class="text-slate-300 text-lg max-w-2xl">
-        {categoryTools.length} free, privacy-first {meta.label.toLowerCase()} that run entirely in your browser.
+      <p class="text-indigo-400 font-medium mb-4">
+        {meta.subtitle}
+      </p>
+      <p class="text-slate-400 text-base leading-relaxed max-w-3xl">
+        {meta.description}
+      </p>
+      <p class="text-slate-500 text-sm mt-3">
+        {categoryTools.length} free tools available — all run 100% in your browser.
       </p>
     </div>
 
