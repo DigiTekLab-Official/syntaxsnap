@@ -11,7 +11,9 @@ interface Props {
   description?: string;
   isTool?: boolean; 
   features?: string[]; 
-  slug?: string; // <-- Added slug prop for dynamic OG images
+  faqs?: { question: string; answer: string }[]; 
+  howTo?: { name: string; steps: { name: string; text: string }[] }; 
+  slug?: string; 
   isHomepage?: boolean;
 }
 
@@ -20,16 +22,26 @@ const {
   description = "A privacy-first suite of developer tools that run entirely in your browser. No servers. No tracking.",
   isTool = false,
   features,
-  slug, // <-- Destructured slug
+  faqs,
+  howTo,
+  slug, 
   isHomepage = false,
 } = Astro.props;
 
-// Use Astro.site if available, fallback to hardcoded URL
-const siteUrl = Astro.site?.toString() || "https://syntaxsnap.com";
-const canonicalURL = new URL(Astro.url.pathname, siteUrl).toString();
+// ── 1. STRICT CANONICAL URL LOGIC (Cloudflare Pages Safe) ─────────
+const siteUrl = Astro.site ? new URL(Astro.site).origin : "https://syntaxsnap.com";
+let pathname = Astro.url.pathname;
 
-// Determine the OG Image URL dynamically
-// If a slug is provided, point to the dynamic PNG endpoint. Otherwise, fallback to the default image.
+if (pathname !== '/' && pathname.endsWith('/')) {
+  pathname = pathname.slice(0, -1);
+}
+if (pathname.endsWith('.html')) {
+  pathname = pathname.slice(0, -5);
+}
+
+const canonicalURL = new URL(pathname, siteUrl).toString();
+
+// ── 2. DYNAMIC OG IMAGE ───────────────────────────────────────────
 const ogImagePath = slug ? `/og/${slug}.png` : '/og-preview.jpg';
 const socialImageURL = new URL(ogImagePath, siteUrl).toString();
 ---
@@ -48,7 +60,6 @@ const socialImageURL = new URL(ogImagePath, siteUrl).toString();
     <link rel="dns-prefetch" href="https://c.bing.com" />
     
     <link rel="icon" type="image/svg+xml" href="/icon.svg" />
-    
     <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
     <link rel="shortcut icon" href="/favicon.ico" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
@@ -79,24 +90,100 @@ const socialImageURL = new URL(ogImagePath, siteUrl).toString();
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={socialImageURL} />
 
-    {/* SEO Schema: Global (Org/WebSite) + Conditional (Tool) */}
+    {/* SEO Schema: Now properly passing all rich snippet data */}
     <JsonLd 
       type={isTool ? 'tool' : 'website'} 
       title={title} 
       description={description} 
       url={canonicalURL} 
       features={features}
+      faqs={faqs}
+      howTo={howTo}      
     />
   </head>
   
   <body class="bg-slate-950 text-slate-200 min-h-screen font-sans antialiased flex flex-col selection:bg-indigo-500/30">
     <Header />
+    
     <main class="w-full max-w-6xl mx-auto px-4 py-8 md:py-12 flex-1 animate-in fade-in duration-700">
+      
+      {/* ── BREADCRUMB HOOK ──────────────────────────────────── */}
+      {/* Allows individual pages to inject breadcrumb links here */}
+      {Astro.slots.has('breadcrumb') && (
+        <nav class="text-sm text-slate-400 mb-6 flex items-center gap-2">
+          <slot name="breadcrumb" />
+        </nav>
+      )}
+
+      {/* Main Page Content */}
       <slot />
+
+      {/* ── EXPLORE MORE TOOLS (Only on Tool Pages) ──────────── */}
+      {isTool && (
+        <section class="mt-16 border-t border-slate-800 pt-8">
+          <h2 class="text-lg font-semibold text-slate-100 mb-2">Explore More Tools</h2>
+          <p class="text-sm text-slate-400 mb-6">
+            Discover related developer tools to speed up your workflow.
+          </p>
+
+          <div class="flex flex-wrap gap-3 text-sm">
+            <a href="/tools/json-schema-to-zod" class="px-3 py-1.5 bg-slate-900 border border-slate-800 rounded-md hover:border-indigo-500 hover:text-indigo-400 transition-colors">JSON Schema → Zod</a>
+            <a href="/tools/ts-to-zod" class="px-3 py-1.5 bg-slate-900 border border-slate-800 rounded-md hover:border-indigo-500 hover:text-indigo-400 transition-colors">TypeScript → Zod</a>
+            <a href="/tools/openapi-to-zod" class="px-3 py-1.5 bg-slate-900 border border-slate-800 rounded-md hover:border-indigo-500 hover:text-indigo-400 transition-colors">OpenAPI → Zod</a>
+            <a href="/tools/graphql-to-trpc" class="px-3 py-1.5 bg-slate-900 border border-slate-800 rounded-md hover:border-indigo-500 hover:text-indigo-400 transition-colors">GraphQL → tRPC</a>
+          </div>
+        </section>
+      )}
     </main>
+
+    {/* ── GLOBAL TOOL CLUSTERS (Passes PageRank across site) ─ */}
+    <div class="w-full border-t border-slate-800 bg-slate-900/30">
+      <div class="max-w-6xl mx-auto px-4 py-10">
+        <h2 class="text-lg font-semibold text-slate-100 mb-6">Popular Developer Tools</h2>
+        
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-sm">
+          <div>
+            <p class="font-medium text-slate-300 mb-3">JSON & Zod</p>
+            <ul class="space-y-2 text-slate-400">
+              <li><a href="/tools/json-to-zod" class="hover:text-indigo-400 transition-colors">JSON to Zod</a></li>
+              <li><a href="/tools/json-schema-to-zod" class="hover:text-indigo-400 transition-colors">JSON Schema to Zod</a></li>
+              <li><a href="/tools/zod-to-prompt" class="hover:text-indigo-400 transition-colors">Zod to Prompt</a></li>
+            </ul>
+          </div>
+
+          <div>
+            <p class="font-medium text-slate-300 mb-3">API Tools</p>
+            <ul class="space-y-2 text-slate-400">
+              <li><a href="/tools/openapi-to-zod" class="hover:text-indigo-400 transition-colors">OpenAPI to Zod</a></li>
+              <li><a href="/tools/graphql-to-trpc" class="hover:text-indigo-400 transition-colors">GraphQL to tRPC</a></li>
+              <li><a href="/tools/trpc-to-openapi" class="hover:text-indigo-400 transition-colors">tRPC to OpenAPI</a></li>
+            </ul>
+          </div>
+
+          <div>
+            <p class="font-medium text-slate-300 mb-3">Format & Conversion</p>
+            <ul class="space-y-2 text-slate-400">
+              <li><a href="/tools/sql-to-json" class="hover:text-indigo-400 transition-colors">SQL to JSON</a></li>
+              <li><a href="/tools/sql-to-prisma" class="hover:text-indigo-400 transition-colors">SQL to Prisma</a></li>
+              <li><a href="/tools/ts-to-json-schema" class="hover:text-indigo-400 transition-colors">TS to JSON Schema</a></li>
+            </ul>
+          </div>
+
+          <div>
+            <p class="font-medium text-slate-300 mb-3">Utilities</p>
+            <ul class="space-y-2 text-slate-400">
+              <li><a href="/tools/regex-tester" class="hover:text-indigo-400 transition-colors">Regex Tester</a></li>
+              <li><a href="/tools/jwt-debugger" class="hover:text-indigo-400 transition-colors">JWT Debugger</a></li>
+              <li><a href="/tools/meta-tag-generator" class="hover:text-indigo-400 transition-colors">Meta Tag Generator</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <Footer />
 
-    {/* Analytics: Loaded at end of body to avoid competing with LCP */}
+    {/* Analytics */}
     <script is:inline>
         (function(c,l,a,r,i,t,y){
             c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};

@@ -1,7 +1,15 @@
 ---
 // src/components/seo/JsonLd.astro
-import { buildToolBreadcrumbs, extractToolName } from '../../utils/schema';
+import {
+  SITE_URL,
+  SITE_NAME,
+  buildFAQPage,
+  buildHowTo,
+  buildToolBreadcrumbs,
+  extractToolName
+} from '../../utils/schema';
 
+// ── Strict TypeScript Props (Do not remove these!) ────────────
 interface Props {
   type?: 'website' | 'tool';
   title: string;
@@ -9,61 +17,100 @@ interface Props {
   url: string;
   imageUrl?: string;
   features?: string[];
-  /** New prop: skip base schema on homepage to prevent duplication */
-  isHomepage?: boolean; 
+  faqs?: { question: string; answer: string }[];
+  howTo?: { name: string; steps: { name: string; text: string }[] };
 }
 
-const { 
-  type = 'website', 
-  title, 
-  description, 
-  url, 
-  imageUrl = 'https://syntaxsnap.com/og-preview.jpg',
+const {
+  type = 'website',
+  title,
+  description,
+  url,
+  imageUrl,
   features,
-  isHomepage = false
+  faqs,
+  howTo
 } = Astro.props;
 
-// ── Base schemas (skip if isHomepage is true) ─────────────────────
-const baseSchema = !isHomepage ? [
-  {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    "url": "https://syntaxsnap.com",
-    "name": "SyntaxSnap",
-    "alternateName": ["Syntax Snap", "DigiTekLab SyntaxSnap"],
-    "publisher": { "@id": "https://syntaxsnap.com/#organization" }
-  },
-  {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    "@id": "https://syntaxsnap.com/#organization",
-    "name": "SyntaxSnap",
-    "url": "https://syntaxsnap.com",
-    "logo": "https://syntaxsnap.com/logo.png"
-  }
-] : [];
+const graph = [];
 
-// ── SoftwareApplication (tool pages only) ────────────────────────
-const toolSchema = type === 'tool' ? {
-  "@context": "https://schema.org",
-  "@type": "SoftwareApplication",
+// ── 1. Base Entities (Always required for reference integrity) ─
+graph.push({
+  "@type": "Organization",
+  "@id": `${SITE_URL}/#organization`,
+  "name": SITE_NAME,
+  "url": SITE_URL,
+  "logo": {
+    "@type": "ImageObject",
+    "url": `${SITE_URL}/logo.png`
+  }
+});
+
+graph.push({
+  "@type": "WebSite",
+  "@id": `${SITE_URL}/#website`,
+  "url": SITE_URL,
+  "name": SITE_NAME,
+  "publisher": { "@id": `${SITE_URL}/#organization` }
+});
+
+// ── 2. The Current Page ────────────────────────────────────────
+graph.push({
+  "@type": "WebPage",
+  "@id": `${url}#webpage`,
+  "url": url,
   "name": title,
   "description": description,
-  "url": url,
-  "applicationCategory": "DeveloperApplication",
-  "operatingSystem": "Web Browser",
-  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-  "image": imageUrl
-} : null;
+  "isPartOf": { "@id": `${SITE_URL}/#website` }
+});
 
-// ── BreadcrumbList ─────────────────────────────────────────────
-const breadcrumbSchema = type === 'tool' ? (() => {
+// ── 3. Tool Specific Data ──────────────────────────────────────
+if (type === 'tool') {
+  // Build the base tool object
+  const toolSchema: Record<string, any> = {
+    "@type": "SoftwareApplication",
+    "@id": `${url}#tool`,
+    "name": title,
+    "description": description,
+    "url": url,
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "Web Browser",
+    "creator": { "@id": `${SITE_URL}/#organization` },
+    "isPartOf": { "@id": `${SITE_URL}/#website` },
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  };
+
+  // Safely inject optional fields without causing "undefined" errors
+  if (imageUrl) toolSchema["image"] = imageUrl;
+  if (features && features.length > 0) toolSchema["featureList"] = features.join(', ');
+
+  graph.push(toolSchema);
+
+  // Safely generate Breadcrumbs
   const toolName = extractToolName(title);
-  const slug = new URL(url).pathname.split('/').filter(Boolean).pop() || '';
-  return buildToolBreadcrumbs(toolName, slug);
-})() : null;
+  // Strip trailing slashes before extracting the slug
+  const pathname = new URL(url).pathname.replace(/\/$/, '');
+  const slug = pathname.split('/').filter(Boolean).pop() || '';
+  
+  graph.push(buildToolBreadcrumbs(toolName, slug, url));
+}
+
+// ── 4. Rich Snippet Extensions ─────────────────────────────────
+if (faqs && faqs.length > 0) {
+  graph.push(buildFAQPage(faqs, url));
+}
+
+if (howTo && howTo.steps && howTo.steps.length > 0) {
+  graph.push(buildHowTo(howTo.name, description, howTo.steps, url));
+}
 ---
 
-{baseSchema.map(s => <script type="application/ld+json" set:html={JSON.stringify(s)} />)}
-{toolSchema && <script type="application/ld+json" set:html={JSON.stringify(toolSchema)} />}
-{breadcrumbSchema && <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />}
+{/* ── is:inline is MANDATORY so Astro doesn't break the JSON ─ */}
+<script type="application/ld+json" is:inline set:html={JSON.stringify({
+  "@context": "https://schema.org",
+  "@graph": graph
+})} />
