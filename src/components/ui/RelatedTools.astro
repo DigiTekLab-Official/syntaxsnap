@@ -1,6 +1,7 @@
 ---
 // src/components/ui/RelatedTools.astro
 import { TOOLS, type Tool } from '../../config/tools';
+import ToolCard from './ToolCard.astro'; // <-- Import your shared card component!
 
 interface Props {
   currentTool: string;
@@ -19,30 +20,38 @@ const sameCategory = relatedTools.filter((t: Tool) => t.category === currentTool
 const displayTools = sameCategory.length >= 3 
   ? sameCategory.slice(0, 3) 
   : relatedTools.slice(0, 3);
+
+// Helper to format category names for the "View all" link
+const categoryMap: Record<string, string> = {
+  json: 'JSON & Schema',
+  dev: 'Developer',
+  css: 'Design & CSS',
+  ai: 'AI Powered',
+  data: 'Data Conversion'
+};
+
+const categoryLabel = currentToolData?.category 
+  ? categoryMap[currentToolData.category] || 'Related' 
+  : 'Related';
 ---
 
 <section class="border-t border-slate-800 mt-20 pt-16 mb-12">
-  <div class="text-center mb-12 px-4">
-    <h2 class="text-2xl font-bold text-white mb-3 tracking-tight">Explore More Developer Tools</h2>
-    <p class="text-slate-400">Boost your productivity with our other privacy-first utilities.</p>
+  <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10 px-4">
+    <div>
+      <h2 class="text-2xl font-bold text-white mb-2 tracking-tight">Explore More Developer Tools</h2>
+      <p class="text-slate-400">Boost your productivity with our other privacy-first utilities.</p>
+    </div>
+    
+    {currentToolData?.category && (
+      <a href={`/tools/category/${currentToolData.category}`} class="text-indigo-400 hover:text-indigo-300 text-sm font-medium transition-colors mb-1 md:mb-0">
+        View all {categoryLabel} tools &rarr;
+      </a>
+    )}
   </div>
 
   <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto px-4">
     {displayTools.map((tool) => (
-      <a 
-        href={tool.href}
-        class="group p-6 rounded-2xl bg-slate-900/50 border border-slate-800 hover:border-indigo-500/50 hover:bg-slate-900 transition-all duration-300 flex flex-col items-start shadow-sm"
-      >
-        <div class={`p-3 rounded-xl ${tool.bg} ${tool.color} mb-4 group-hover:scale-110 transition-transform`}>
-          <tool.icon class="w-6 h-6" />
-        </div>
-        <h3 class="text-lg font-bold text-white mb-2 group-hover:text-indigo-400 transition-colors">
-          {tool.title}
-        </h3>
-        <p class="text-sm text-slate-400 leading-relaxed">
-          {tool.desc}
-        </p>
-      </a>
+      <ToolCard tool={tool} /> 
     ))}
   </div>
 </section>

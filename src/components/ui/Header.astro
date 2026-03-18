@@ -23,17 +23,17 @@ const aiTool = TOOLS.find(t => t.category === 'ai') || TOOLS[0];
     </a>
 
     {/* Right: Search, Nav & Mobile Toggle */}
-    <div class="flex items-center gap-3 md:gap-6">
+    <div class="flex items-center gap-3 md:gap-5">
       
       {/* Search Button (Desktop) */}
       <button
         type="button"
-        class="cmd-palette-trigger hidden md:flex items-center justify-between gap-4 px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 hover:border-slate-700 hover:bg-slate-800 text-slate-400 text-sm font-medium transition-colors w-56 group"
+        class="cmd-palette-trigger hidden md:flex items-center justify-between gap-4 px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 hover:border-slate-700 hover:bg-slate-800 text-slate-400 text-sm font-medium transition-colors w-48 lg:w-56 group"
         aria-label="Search tools"
       >
         <div class="flex items-center gap-2">
-          <Search class="w-4 h-4 text-slate-500 group-hover:text-blue-400 transition-colors" />
-          <span>Search tools...</span>
+          <Search class="w-4 h-4 text-slate-500 group-hover:text-[#27b4f2] transition-colors" />
+          <span>Search...</span>
         </div>
         <kbd class="px-1.5 py-0.5 text-xs font-bold tracking-widest text-slate-400 bg-slate-800 border border-slate-700 rounded shadow-sm">⌘K</kbd>
       </button>
@@ -48,8 +48,8 @@ const aiTool = TOOLS.find(t => t.category === 'ai') || TOOLS[0];
       </button>
 
       {/* Desktop Nav */}
-      <nav aria-label="Main navigation" class="hidden md:flex">
-        <ul class="flex gap-4 md:gap-6 text-sm font-medium text-slate-400 list-none m-0 p-0">
+      <nav aria-label="Main navigation" class="hidden md:flex items-center gap-5">
+        <ul class="flex gap-4 lg:gap-6 text-sm font-medium text-slate-400 list-none m-0 p-0">
           <li>
             <a href={aiTool.href} class="text-emerald-400 hover:text-emerald-300 transition-colors flex items-center gap-1.5 py-2">
               <Sparkles class="w-4 h-4"/> <span class="hidden lg:inline">AI Tools</span>
@@ -61,6 +61,27 @@ const aiTool = TOOLS.find(t => t.category === 'ai') || TOOLS[0];
             </a>
           </li>
         </ul>
+
+        {/* ── NEW: CHROME EXTENSION GLOBAL CTA ── */}
+        <div class="h-6 w-px bg-slate-800 hidden lg:block"></div> {/* Subtle divider */}
+        
+        <a 
+          href="https://chromewebstore.google.com/detail/syntaxsnap-developer-tool/klglanlaodgndhpcaldmoeenjepiocfi" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          class="flex items-center gap-2 px-3 py-1.5 bg-[#27b4f2]/10 hover:bg-[#27b4f2]/20 text-slate-200 text-sm font-semibold rounded-lg border border-[#27b4f2]/20 hover:border-[#27b4f2]/40 transition-all group"
+        >
+          <svg class="w-4 h-4 text-[#27b4f2]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <circle cx="12" cy="12" r="4"></circle>
+            <line x1="21.17" y1="8" x2="12" y2="8"></line>
+            <line x1="3.95" y1="6.06" x2="8.54" y2="14"></line>
+            <line x1="10.88" y1="21.94" x2="15.46" y2="14"></line>
+          </svg>
+          <span class="hidden xl:inline">Add to Chrome</span>
+          <span class="inline xl:hidden">Extension</span>
+        </a>
+
       </nav>
 
       {/* Mobile Menu Toggle */}

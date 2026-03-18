@@ -108,7 +108,6 @@ const socialImageURL = new URL(ogImagePath, siteUrl).toString();
     <main class="w-full max-w-6xl mx-auto px-4 py-8 md:py-12 flex-1 animate-in fade-in duration-700">
       
       {/* ── BREADCRUMB HOOK ──────────────────────────────────── */}
-      {/* Allows individual pages to inject breadcrumb links here */}
       {Astro.slots.has('breadcrumb') && (
         <nav class="text-sm text-slate-400 mb-6 flex items-center gap-2">
           <slot name="breadcrumb" />
@@ -118,22 +117,6 @@ const socialImageURL = new URL(ogImagePath, siteUrl).toString();
       {/* Main Page Content */}
       <slot />
 
-      {/* ── EXPLORE MORE TOOLS (Only on Tool Pages) ──────────── */}
-      {isTool && (
-        <section class="mt-16 border-t border-slate-800 pt-8">
-          <h2 class="text-lg font-semibold text-slate-100 mb-2">Explore More Tools</h2>
-          <p class="text-sm text-slate-400 mb-6">
-            Discover related developer tools to speed up your workflow.
-          </p>
-
-          <div class="flex flex-wrap gap-3 text-sm">
-            <a href="/tools/json-schema-to-zod" class="px-3 py-1.5 bg-slate-900 border border-slate-800 rounded-md hover:border-indigo-500 hover:text-indigo-400 transition-colors">JSON Schema → Zod</a>
-            <a href="/tools/ts-to-zod" class="px-3 py-1.5 bg-slate-900 border border-slate-800 rounded-md hover:border-indigo-500 hover:text-indigo-400 transition-colors">TypeScript → Zod</a>
-            <a href="/tools/openapi-to-zod" class="px-3 py-1.5 bg-slate-900 border border-slate-800 rounded-md hover:border-indigo-500 hover:text-indigo-400 transition-colors">OpenAPI → Zod</a>
-            <a href="/tools/graphql-to-trpc" class="px-3 py-1.5 bg-slate-900 border border-slate-800 rounded-md hover:border-indigo-500 hover:text-indigo-400 transition-colors">GraphQL → tRPC</a>
-          </div>
-        </section>
-      )}
     </main>
 
     {/* ── GLOBAL TOOL CLUSTERS (Passes PageRank across site) ─ */}
