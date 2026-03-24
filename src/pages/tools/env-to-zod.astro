@@ -2,7 +2,6 @@
 import Layout from '../../layouts/Layout.astro';
 import EnvToZodClient from '../../components/tools/EnvToZod';
 import RelatedTools from '../../components/ui/RelatedTools.astro';
-import { buildFAQPage } from '../../utils/schema';
 
 const title = "Env to Zod Converter | SyntaxSnap";
 const description = "Instantly convert your .env files into strict, type-safe Zod validation schemas for Next.js and Node.js. 100% offline and secure.";
@@ -14,8 +13,8 @@ const features = [
   "100% offline — your .env secrets never leave your browser"
 ];
 
-// SEO: FAQPage
-const faqSchema = buildFAQPage([
+// Define a RAW array of objects matching the type { question: string, answer: string }
+const rawFaqs = [
   {
     question: "Is my .env data sent to a server?",
     answer: "No. All conversion happens 100% client-side in your browser. Your environment variables and secrets never leave your device."
@@ -28,13 +27,14 @@ const faqSchema = buildFAQPage([
     question: "Can I use this with Next.js?",
     answer: "Yes. The converter handles NEXT_PUBLIC_ prefixed variables and generates schemas suitable for both server-side and client-side environment validation in Next.js."
   }
-]);
+];
 ---
 
-<Layout title={title} description={description} isTool={true} slug={slug} features={features}>
-  {/* SEO: FAQPage schema */}
-  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
-  <div class="max-w-6xl mx-auto">
+{/* Pass rawFaqs to the Layout component */}
+<Layout title={title} description={description} isTool={true} slug={slug} features={features} faqs={rawFaqs}>
+  
+  <div class="max-w-6xl mx-auto px-4 md:px-0">
+    {/* Tool Header */}
     <div class="mb-8">
       <h1 class="text-3xl md:text-4xl font-extrabold text-white mb-4 flex items-center gap-3">
         Env to Zod Validator
@@ -44,24 +44,65 @@ const faqSchema = buildFAQPage([
       </p>
     </div>
 
-    <!-- Mount the interactive React component -->
     <EnvToZodClient client:idle />
 
-    <!-- SEO & FAQ Content -->
-    <div class="mt-16 grid grid-cols-1 md:grid-cols-2 gap-12 border-t border-slate-800 pt-12">
-      <div>
-        <h3 class="text-xl font-bold text-white mb-3">Why validate environment variables?</h3>
-        <p class="text-slate-400 text-sm leading-relaxed">
-          Relying on raw <code class="bg-slate-800 px-1 py-0.5 rounded text-slate-300">process.env</code> strings in Next.js or Node.js is an anti-pattern. If a developer forgets to add an API key locally, or a deployment misses a database URL, the app will crash unpredictably at runtime. Using Zod ensures your app fails fast at startup if configuration is missing or malformed.
-        </p>
+    {/* --- MASSIVE SEO & EDUCATIONAL CONTENT SECTION --- */}
+    <article class="max-w-4xl mx-auto py-16 mt-16 border-t border-slate-800/60">
+      
+      <h2 class="text-2xl font-bold text-white mb-4">Why validate Environment Variables with Zod?</h2>
+      <p class="text-slate-300 leading-relaxed mb-6">
+        Relying on raw <code class="bg-slate-800 px-1 py-0.5 rounded text-slate-300">process.env</code> strings in modern web frameworks (like Next.js or Node.js) is an anti-pattern. If a developer forgets to add an API key locally, or a deployment misses a database URL, the application will crash unpredictably at runtime. By converting your <code>.env</code> files into a <strong>Zod schema</strong>, you guarantee type safety and ensure your app "fails fast" at startup if the configuration is missing or malformed.
+      </p>
+
+      <h3 class="text-xl font-bold text-white mb-3 mt-10">How this local-first converter works</h3>
+      <p class="text-slate-300 leading-relaxed mb-4">
+        Pasting sensitive production secrets into online formatters is a massive security risk. This tool was built with a <strong>privacy-first architecture</strong>. When you paste your <code>.env</code> file into SyntaxSnap:
+      </p>
+      <ul class="list-disc pl-6 text-slate-300 mb-8 space-y-2 marker:text-indigo-500">
+        <li>The parsing happens entirely in your browser's JavaScript engine.</li>
+        <li>No API calls are made. No data is saved to any database or local storage.</li>
+        <li>We automatically infer types (string, number, boolean, URL) based on your values.</li>
+      </ul>
+
+      <h3 class="text-xl font-bold text-white mb-3 mt-10">How does this handle Booleans?</h3>
+      <p class="text-slate-300 leading-relaxed mb-8">
+        Standard <code class="bg-slate-800 px-1 py-0.5 rounded text-slate-300">z.coerce.boolean()</code> is dangerous for env files, because in JavaScript, <code>Boolean("false")</code> evaluates to true. Our engine specifically maps <code>true/false</code> strings to strict literal enums (or custom refinements) to prevent critical configuration bugs.
+      </p>
+
+      <h3 class="text-xl font-bold text-white mb-4 mt-10">Example Transformation</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-12">
+        <div class="bg-slate-900 rounded-xl p-5 border border-slate-800 shadow-inner">
+          <div class="text-xs text-slate-500 uppercase tracking-wider font-bold mb-3">Input (.env)</div>
+          <pre class="text-cyan-300 text-sm font-mono m-0 bg-transparent p-0 overflow-x-auto"><code>DATABASE_URL="postgresql://..."
+PORT=3000
+ENABLE_FEATURE_X=true</code></pre>
+        </div>
+        <div class="bg-slate-900 rounded-xl p-5 border border-slate-800 shadow-inner">
+          <div class="text-xs text-slate-500 uppercase tracking-wider font-bold mb-3">Output (Zod)</div>
+          <pre class="text-emerald-300 text-sm font-mono m-0 bg-transparent p-0 overflow-x-auto"><code>{"const envSchema = z.object({\n  DATABASE_URL: z.string().url(),\n  PORT: z.number(),\n  ENABLE_FEATURE_X: z.boolean()\n});"}</code></pre>
+        </div>
       </div>
-      <div>
-        <h3 class="text-xl font-bold text-white mb-3">How does this handle Booleans?</h3>
-        <p class="text-slate-400 text-sm leading-relaxed">
-          Standard <code class="bg-slate-800 px-1 py-0.5 rounded text-slate-300">z.coerce.boolean()</code> is dangerous for env files, because in JavaScript, <code class="bg-slate-800 px-1 py-0.5 rounded text-slate-300">Boolean("false")</code> evaluates to true. Our engine specifically maps true/false strings to strict literal enums to prevent critical configuration bugs.
-        </p>
+
+      <h3 class="text-xl font-bold text-white mb-4 mt-10">Frequently Asked Questions</h3>
+      <div class="space-y-3">
+        <details class="group bg-slate-900/40 border border-slate-800 hover:border-slate-700 rounded-xl p-4 cursor-pointer transition-colors">
+          <summary class="font-semibold text-slate-200 group-open:text-indigo-400 transition-colors flex justify-between items-center">
+            Does this tool store my API keys?
+            <span class="text-slate-500 group-open:rotate-180 transition-transform">↓</span>
+          </summary>
+          <p class="text-slate-400 text-sm mt-3 leading-relaxed border-t border-slate-800 pt-3">Absolutely not. SyntaxSnap is a static site. The conversion logic runs locally on your machine. You can disconnect your internet and the tool will still work perfectly.</p>
+        </details>
+        <details class="group bg-slate-900/40 border border-slate-800 hover:border-slate-700 rounded-xl p-4 cursor-pointer transition-colors">
+          <summary class="font-semibold text-slate-200 group-open:text-indigo-400 transition-colors flex justify-between items-center">
+            How do I use this with Next.js?
+            <span class="text-slate-500 group-open:rotate-180 transition-transform">↓</span>
+          </summary>
+          <p class="text-slate-400 text-sm mt-3 leading-relaxed border-t border-slate-800 pt-3">Copy the generated Zod schema into an <code>env.ts</code> file. Use <code>envSchema.parse(process.env)</code> to validate your variables at runtime. If a variable is missing, Zod will throw a descriptive error instantly.</p>
+        </details>
       </div>
-    </div>
+    </article>
+
     <RelatedTools currentTool="env-to-zod" />
+    
   </div>
 </Layout>
