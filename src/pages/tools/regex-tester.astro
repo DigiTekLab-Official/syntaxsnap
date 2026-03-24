@@ -5,6 +5,7 @@ import RegexTool from '../../components/tools/RegexTester';
 import RelatedTools from '../../components/ui/RelatedTools.astro';
 import { buildFAQPage } from '../../utils/schema';
 
+const currentUrl = Astro.url.href;
 const title = "Regex Tester & Debugger (Javascript) | SyntaxSnap";
 const description = "Test and debug JavaScript regular expressions in real-time. Highlight matches and validate patterns instantly.";
 const slug = "regex-tester";
@@ -34,7 +35,7 @@ const faqSchema = buildFAQPage([
     question: "Does this tool protect against ReDoS attacks?",
     answer: "Yes. Our tester includes a built-in circuit breaker that stops execution if a pattern is too complex (catastrophic backtracking), preventing your browser from freezing."
   }
-]);
+], currentUrl);
 ---
 
 <Layout title={title} description={description} isTool={true} slug={slug} features={features}>

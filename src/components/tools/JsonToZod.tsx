@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useDebounce } from '../../hooks/useDebounce';
-import { Copy, Check, Trash2, FileJson, AlertCircle, Braces, AlertTriangle } from 'lucide-react';
-import CopyButton from '../ui/CopyButton';
+import { Trash2, FileJson, AlertCircle, Braces, AlertTriangle } from 'lucide-react';
+// Import the new Viral Loop button instead of CopyButton
+import ShareButtonGroup from '../ui/ShareButtonGroup'; 
 
 // ─── Type Inference Engine ───────────────────────────────────────────────────
 
@@ -112,6 +113,9 @@ export default function JsonToZod() {
 
     try {
       const parsed = JSON.parse(debouncedInput);
+      
+      // We pass the parsed object to the recursive engine. 
+      // It returns the inner string for the Zod schema.
       const { typeString, hitDepthLimit } = inferZodType(parsed);
       
       if (hitDepthLimit) {
@@ -126,8 +130,6 @@ export default function JsonToZod() {
       setError('Invalid JSON');
     }
   }, [debouncedInput]);
-
-  // Copy handled by shared `CopyButton` component
 
   // Format Handler
   const handleFormat = () => {
@@ -217,7 +219,9 @@ export default function JsonToZod() {
             <span className="text-xs font-semibold uppercase tracking-wider">Zod Schema</span>
           </div>
 
-          <CopyButton text={output} label="Copy Code" />
+          {/* ── NEW VIRAL LOOP COMPONENT ── */}
+          {output && <ShareButtonGroup text={output} toolSlug="json-to-zod" />}
+          
         </div>
 
         <div className="flex-1 relative overflow-auto bg-[#0B1120]">

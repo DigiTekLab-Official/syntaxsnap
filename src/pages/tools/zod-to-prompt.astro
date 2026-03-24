@@ -4,6 +4,7 @@ import ZodToPromptTool from '../../components/tools/ZodToPrompt.tsx';
 import RelatedTools from '../../components/ui/RelatedTools.astro';
 import { buildFAQPage } from '../../utils/schema';
 
+const currentUrl = Astro.url.href;
 const title = "Zod to LLM System Prompt Generator | SyntaxSnap";
 const description = "Convert TypeScript Zod schemas into highly optimized system prompts. Force LLMs to return strict, predictable JSON without hallucinated fields.";
 const slug = "zod-to-prompt";
@@ -28,7 +29,7 @@ const faqSchema = buildFAQPage([
     question: "Which LLMs does this work with?",
     answer: "Any LLM that accepts system prompts, including Claude, GPT-4, Gemini, Llama, and Mistral. The generated prompts use zero-shot strict JSON formatting instructions compatible with all major models."
   }
-]);
+], currentUrl);
 ---
 
 <Layout title={title} description={description} isTool={true} slug={slug} features={features}>

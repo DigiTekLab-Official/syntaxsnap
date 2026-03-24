@@ -4,6 +4,7 @@ import GraphqlToTrpcTool from '../../components/tools/GraphqlToTrpc';
 import RelatedTools from '../../components/ui/RelatedTools.astro';
 import { buildFAQPage } from '../../utils/schema';
 
+const currentUrl = Astro.url.href;
 const title = "GraphQL Schema to tRPC Router Generator | SyntaxSnap";
 const description = "Instantly convert your GraphQL schemas (Queries and Mutations) into type-safe tRPC routers with automatic Zod input validation.";
 const slug = "graphql-to-trpc";
@@ -14,7 +15,7 @@ const features = [
   "TypeScript strict types output"
 ];
 
-// SEQ: FAQPage
+// SEO: FAQPage
 const faqSchema = buildFAQPage([
   {
     question: "Is this tool free to use?",
@@ -28,7 +29,8 @@ const faqSchema = buildFAQPage([
     question: "Does it generate Zod validation schemas?",
     answer: "Yes. The converter automatically generates Zod input validation schemas for each tRPC procedure, derived from the GraphQL type definitions for full type safety."
   }
-]);
+], currentUrl);
+
 ---
 
 <Layout title={title} description={description} isTool={true} slug={slug} features={features}>

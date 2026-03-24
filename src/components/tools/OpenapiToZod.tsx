@@ -1,6 +1,6 @@
 // src/components/tools/OpenapiToZod.tsx
 import { useState, useMemo, useEffect, useRef, useCallback } from 'react';
-import { CopyButton } from '../ui/CopyButton';
+import ShareButtonGroup from '../ui/ShareButtonGroup';
 import { useDebounce } from '../../hooks/useDebounce';
 
 // ─── CONSTANTS ──────────────────────────────────────────────────────────────
@@ -425,14 +425,7 @@ export default function OpenapiToZodTool() {
               <div className="w-2 h-2 rounded-full bg-indigo-400" />
               <span className="text-sm font-semibold text-slate-300">Zod Schema Output</span>
             </div>
-            <CopyButton
-              text={zodCode}
-              label="Copy"
-              copiedLabel="Copied!"
-              variant="primary"
-              size="sm"
-              className="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold px-3 py-1.5 rounded-lg transition-colors text-xs"
-            />
+            <ShareButtonGroup text={zodCode} toolSlug="openapi-to-zod" />
           </div>
           <pre className="flex-1 overflow-auto p-4 bg-slate-950/30">
             <code className="text-emerald-300 font-mono text-sm whitespace-pre-wrap leading-relaxed">

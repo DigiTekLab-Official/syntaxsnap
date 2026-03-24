@@ -4,6 +4,7 @@ import GlassTool from '../../components/tools/GlassGenerator';
 import RelatedTools from '../../components/ui/RelatedTools.astro';
 import { buildFAQPage } from '../../utils/schema';
 
+const currentUrl = Astro.url.href;
 const title = "CSS Glassmorphism Generator | SyntaxSnap";
 const description = "Create beautiful frosted glass effects for your UI with real-time backdrop-filter preview. Adjust blur, transparency, saturation and border radius — then export clean, cross-browser CSS instantly.";
 const slug = "glass-generator";
@@ -33,7 +34,7 @@ const faqSchema = buildFAQPage([
     question: "Is this tool free?",
     answer: "Yes. SyntaxSnap Glassmorphism Generator is 100% free for personal and commercial projects, with no attribution required."
   }
-]);
+], currentUrl);
 ---
 
 <Layout title={title} description={description} isTool={true} slug={slug} features={features}>

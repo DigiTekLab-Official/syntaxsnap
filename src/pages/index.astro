@@ -3,12 +3,8 @@
 import Layout from '../layouts/Layout.astro';
 import ToolCard from '../components/ui/ToolCard.astro';
 import { TOOLS } from '../config/tools';
-import { ShieldCheck, ArrowRight, Zap } from 'lucide-astro';
+import { ShieldCheck, ArrowRight, Zap, Code2, Play, CheckCircle2 } from 'lucide-astro';
 import { buildWebApplication, buildItemList, SITE_URL } from '../utils/schema';
-
-const featuredIds = ['aurora-gradient', 'json-schema-to-zod', 'ai-mock-generator', 'pydantic-to-zod'];
-const featuredTools = TOOLS.filter(t => featuredIds.includes(t.id))
-  .sort((a, b) => featuredIds.indexOf(a.id) - featuredIds.indexOf(b.id));
 
 // SEO: WebApplication — establishes SyntaxSnap as a platform
 const webAppSchema = buildWebApplication();
@@ -42,10 +38,10 @@ const organizationSchema = {
 ---
 
 <Layout 
-  title="SyntaxSnap – Privacy-First Developer Tools"
+  title="SyntaxSnap – Privacy-First Developer Tools to Generate Code Instantly"
   isHomepage={true}
 >
-  {/* 1. Site Name & Identity (The Fix) */}
+  {/* 1. Site Name & Identity */}
   <script type="application/ld+json" set:html={JSON.stringify(websiteSchema)} />
   <script type="application/ld+json" set:html={JSON.stringify(organizationSchema)} />
   
@@ -53,69 +49,131 @@ const organizationSchema = {
   <script type="application/ld+json" set:html={JSON.stringify(webAppSchema)} />
   <script type="application/ld+json" set:html={JSON.stringify(itemListSchema)} />
 
-  <div class="pt-16 pb-12 px-4 max-w-6xl mx-auto text-center md:text-left">
-    <div class="flex flex-col md:flex-row items-center justify-between gap-12">
-      <div class="flex-1 max-w-2xl">
+  {/* Hero Section */}
+  <div class="pt-16 pb-12 px-4 max-w-7xl mx-auto">
+    <div class="flex flex-col lg:flex-row items-center justify-between gap-12">
+      
+      {/* Left Column: The Pitch */}
+      <div class="flex-1 max-w-2xl text-center lg:text-left">
         <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-900/50 border border-slate-700 text-slate-300 text-sm font-medium mb-6 animate-fade-in">
           <span class="relative flex h-2.5 w-2.5">
             <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
             <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
           </span>
-          v1.2 Live: Performance Update
+          100% Client-Side Processing
         </div>
 
-        <h1 class="text-4xl md:text-6xl font-extrabold text-white tracking-tight mb-6 leading-tight">
-          Developer tools that <br class="hidden md:block" />
-          <span class="text-transparent bg-clip-text bg-linear-to-r from-indigo-400 to-cyan-400">respect your privacy.</span>
+        <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white tracking-tight mb-6 leading-tight">
+          Free Developer Tools to <br class="hidden md:block" />
+          <span class="text-transparent bg-clip-text bg-linear-to-r from-indigo-400 to-cyan-400">Generate Code Instantly.</span>
         </h1>
 
-        <p class="text-lg text-slate-300 mb-8 leading-relaxed max-w-lg mx-auto md:mx-0">
-          A local-first workbench for modern web development. <br />
-          <strong>No servers. No tracking. Just instant utilities.</strong>
+        <p class="text-lg text-slate-300 mb-8 leading-relaxed max-w-lg mx-auto lg:mx-0">
+          Convert JSON to Zod, generate mock APIs, and build Tailwind v4 gradients in seconds. <strong>No servers. No tracking. Your data never leaves the browser.</strong>
         </p>
 
-        <div class="flex flex-wrap items-center justify-center md:justify-start gap-4 text-sm text-slate-400 font-medium">
-          <span class="flex items-center gap-2"><Zap class="w-4 h-4 text-yellow-400" /> Zero Latency</span>
-          <span class="hidden md:inline text-slate-600">•</span>
-          <span class="flex items-center gap-2"><ShieldCheck class="w-4 h-4 text-emerald-400" /> 100% Client-Side</span>
+        <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 mb-8">
+          <a href="/tools/json-schema-to-zod" class="flex items-center gap-2 px-6 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold transition-all shadow-[0_0_20px_rgba(79,70,229,0.3)] hover:shadow-[0_0_30px_rgba(79,70,229,0.5)]">
+            <Play class="w-5 h-5 fill-current" />
+            Try the Zod Generator
+          </a>
+          <a href="#all-tools" class="flex items-center gap-2 px-6 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-medium border border-slate-700 transition-all">
+            View All {TOOLS.length} Tools
+          </a>
+        </div>
+
+        {/* The "Use Case Hooks" (NEW) */}
+        <div class="pt-4 border-t border-slate-800/60 max-w-lg mx-auto lg:mx-0">
+          <p class="text-xs text-slate-500 uppercase tracking-wider font-semibold mb-3">Built specifically for:</p>
+          <div class="flex flex-wrap items-center justify-center lg:justify-start gap-3 text-sm text-slate-300 font-medium">
+            <span class="flex items-center gap-1.5 bg-slate-900/50 px-3 py-1.5 rounded-lg border border-slate-800"><CheckCircle2 class="w-4 h-4 text-indigo-400" /> TypeScript Engineers</span>
+            <span class="flex items-center gap-1.5 bg-slate-900/50 px-3 py-1.5 rounded-lg border border-slate-800"><CheckCircle2 class="w-4 h-4 text-cyan-400" /> API Developers</span>
+            <span class="flex items-center gap-1.5 bg-slate-900/50 px-3 py-1.5 rounded-lg border border-slate-800"><CheckCircle2 class="w-4 h-4 text-emerald-400" /> Frontend Teams</span>
+          </div>
         </div>
       </div>
 
-      <div class="flex-1 w-full max-w-lg">
-         <h2 class="sr-only">Quick Access Tools</h2>
-         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            {featuredTools.map((tool) => {
-              const Icon = tool.icon;
-              return (
-                <a href={tool.href} class="flex items-start gap-3 p-4 rounded-xl bg-slate-900/40 border border-slate-800 hover:border-indigo-500/40 hover:bg-slate-900 transition-all group">
-                  <div class={`p-2 rounded-lg ${tool.bg} ${tool.color} shrink-0`}>
-                    <Icon class="w-5 h-5" />
-                  </div>
-                  <div>
-                    <h3 class="text-white font-bold text-sm group-hover:text-indigo-400 transition-colors flex items-center flex-wrap gap-2">
-                      <span>{tool.title}</span>
-                      {tool.status === 'New' && <span class="text-xs bg-indigo-500/10 text-indigo-300 border border-indigo-500/20 px-1.5 py-0.5 rounded font-bold uppercase tracking-wider shrink-0">New</span>}
-                    </h3>
-                    <p class="text-slate-300 text-xs mt-1 leading-snug line-clamp-2">{tool.desc}</p>
-                  </div>
-                </a>
-              );
-            })}
-            <a href="#all-tools" class="sm:col-span-2 p-3 rounded-xl border border-dashed border-slate-700 text-slate-300 text-sm font-medium hover:text-white hover:border-slate-500 hover:bg-slate-900/30 transition-all flex items-center justify-center gap-2">
-              View All {TOOLS.length} Utilities <ArrowRight class="w-4 h-4" />
-            </a>
-         </div>
+      {/* Right Column: The "Aha!" Moment Visual */}
+      <div class="flex-1 w-full max-w-2xl relative group perspective mt-8 lg:mt-0">
+        <div class="absolute -inset-1 bg-linear-to-r from-indigo-500 to-cyan-500 rounded-2xl blur opacity-20 group-hover:opacity-40 transition duration-1000 group-hover:duration-200"></div>
+        <div class="relative rounded-xl bg-slate-900 border border-slate-800 shadow-2xl overflow-hidden transform transition-transform duration-500 group-hover:scale-[1.02]">
+          
+          {/* Mock Browser Header */}
+          <div class="flex items-center px-4 py-3 border-b border-slate-800 bg-slate-950">
+            <div class="flex space-x-2">
+              <div class="w-3 h-3 rounded-full bg-red-500/80"></div>
+              <div class="w-3 h-3 rounded-full bg-yellow-500/80"></div>
+              <div class="w-3 h-3 rounded-full bg-green-500/80"></div>
+            </div>
+            <div class="mx-auto text-xs text-slate-500 font-mono flex items-center gap-2">
+              <ShieldCheck class="w-3 h-3 text-emerald-500" /> local-environment
+            </div>
+          </div>
+
+          {/* Mock Editor Content */}
+          <div class="grid grid-cols-2 divide-x divide-slate-800 bg-[#0d1117] font-mono text-xs sm:text-sm">
+            {/* Input Side */}
+            <div class="p-4 h-64 overflow-hidden">
+              <div class="text-slate-500 mb-2 text-xs uppercase tracking-wider">Input: JSON</div>
+              <pre class="text-cyan-300"><code>{`{
+  "user": {
+    "id": 1,
+    "name": "Alice",
+    "email": "alice@example.com",
+    "isActive": true
+  }
+}`}</code></pre>
+            </div>
+            {/* Output Side */}
+            <div class="p-4 h-64 overflow-hidden bg-[#0a0d12]">
+              <div class="text-indigo-400 mb-2 text-xs uppercase tracking-wider flex items-center justify-between">
+                <span>Output: Zod Schema</span>
+                <span class="flex h-2 w-2 relative">
+                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
+                  <span class="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
+                </span>
+              </div>
+              <pre class="text-emerald-300"><code>{`const userSchema = z.object({
+  user: z.object({
+    id: z.number(),
+    name: z.string(),
+    email: z.string().email(),
+    isActive: z.boolean()
+  })
+});`}</code></pre>
+            </div>
+          </div>
+          
+          {/* Mock Footer Action */}
+          <div class="p-3 bg-slate-950 border-t border-slate-800 text-center">
+             <a href="/tools/json-schema-to-zod" class="text-sm text-indigo-400 hover:text-indigo-300 font-medium inline-flex items-center gap-1 transition-colors">
+               Run this generator live <ArrowRight class="w-4 h-4" />
+             </a>
+          </div>
+
+        </div>
       </div>
+
     </div>
   </div>
 
-  <div class="w-full h-px bg-linear-to-r from-transparent via-slate-800 to-transparent my-8"></div>
+  <div class="w-full h-px bg-linear-to-r from-transparent via-slate-800 to-transparent my-12"></div>
 
-  <div id="all-tools" class="max-w-6xl mx-auto px-4 py-12">
-    <div class="flex items-center justify-between mb-8">
-      <h2 class="text-2xl font-bold text-white">All Utilities</h2>
-      <span class="text-sm text-slate-300">{TOOLS.length} tools available</span>
+  {/* SEO Content Block (Moved UP for Better Crawling) */}
+  <article class="max-w-4xl mx-auto px-4 text-center mb-16">
+    <h2 class="text-3xl font-bold text-white mb-4">A Complete Suite of Local Developer Utilities</h2>
+    <p class="text-slate-400 text-lg leading-relaxed">
+      Stop pasting sensitive production data into random online formatters. SyntaxSnap provides a robust collection of utilities that run entirely in your browser's JavaScript engine. From <strong>TypeScript interface generation</strong> to <strong>JWT debugging</strong> and <strong>Tailwind CSS tools</strong>, your code stays strictly on your machine.
+    </p>
+  </article>
+
+  {/* Tools Grid */}
+  <div id="all-tools" class="max-w-6xl mx-auto px-4 pb-12">
+    <div class="flex items-center justify-between mb-8 border-b border-slate-800 pb-4">
+      <h2 class="text-2xl font-bold text-white flex items-center gap-2"><Code2 class="w-6 h-6 text-indigo-400" /> All Available Tools</h2>
+      <span class="hidden sm:inline-block px-3 py-1 rounded-full bg-slate-900 border border-slate-800 text-sm text-slate-400 font-medium">{TOOLS.length} tools available locally</span>
     </div>
+    
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
       {TOOLS.map((tool) => (
         <ToolCard tool={tool} />
@@ -125,45 +183,21 @@ const organizationSchema = {
 
   <div class="w-full h-px bg-linear-to-r from-transparent via-slate-800 to-transparent my-8"></div>
 
+  {/* Bottom Info / Tool Categories */}
   <article class="max-w-6xl mx-auto px-4 py-12">
-    <h2 class="text-2xl font-bold text-white mb-6">What is SyntaxSnap?</h2>
-    <p class="text-slate-400 leading-relaxed">
-      <strong>SyntaxSnap</strong> is a privacy-first developer workbench offering {TOOLS.length}+ free utilities that run entirely in your browser.
-      Every tool processes data locally using client-side JavaScript — no servers, no uploads, no telemetry.
-      Whether you're converting JSON to Zod schemas, debugging JWT tokens, generating Dockerfiles, or designing CSS gradients,
-      your code and data never leave your machine.
-    </p>
-    <p class="text-slate-400 leading-relaxed mt-4">
-      Built with <strong>Astro</strong> and deployed on <strong>Cloudflare Pages</strong>, SyntaxSnap delivers instant page loads
-      and zero-latency tool execution. The entire platform is open to use with no sign-ups, no paywalls, and no feature gates.
-      We believe developer tools should be fast, free, and private by default.
-    </p>
-
-    <h2 class="text-2xl font-bold text-white mb-6 mt-10">Tool Categories</h2>
+    <h2 class="text-2xl font-bold text-white mb-6">Explore by Category</h2>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      <div>
-        <h3 class="font-semibold mb-2"><a href="/tools/category/json" class="text-indigo-400 hover:text-indigo-300 transition-colors">JSON & Schema</a></h3>
+      <div class="p-5 rounded-xl bg-slate-900/30 border border-slate-800 hover:bg-slate-900/50 transition-colors">
+        <h3 class="font-semibold mb-2"><a href="/tools/category/json" class="text-indigo-400 hover:text-indigo-300 transition-colors flex items-center gap-2">JSON & Schema <ArrowRight class="w-4 h-4" /></a></h3>
         <p class="text-slate-400 text-sm leading-relaxed">Convert between JSON, Zod, TypeScript interfaces, JSON Schema, and OpenAPI specs. Perfect for building type-safe API integrations.</p>
       </div>
-      <div>
-        <h3 class="font-semibold mb-2"><a href="/tools/category/css" class="text-indigo-400 hover:text-indigo-300 transition-colors">CSS & Design</a></h3>
+      <div class="p-5 rounded-xl bg-slate-900/30 border border-slate-800 hover:bg-slate-900/50 transition-colors">
+        <h3 class="font-semibold mb-2"><a href="/tools/category/css" class="text-indigo-400 hover:text-indigo-300 transition-colors flex items-center gap-2">CSS & Design <ArrowRight class="w-4 h-4" /></a></h3>
         <p class="text-slate-400 text-sm leading-relaxed">Generate aurora gradients, glassmorphism effects, mesh gradients, and Tailwind shadows — then copy production-ready CSS in one click.</p>
       </div>
-      <div>
-        <h3 class="font-semibold mb-2"><a href="/tools/category/dev" class="text-indigo-400 hover:text-indigo-300 transition-colors">Developer Utilities</a></h3>
+      <div class="p-5 rounded-xl bg-slate-900/30 border border-slate-800 hover:bg-slate-900/50 transition-colors">
+        <h3 class="font-semibold mb-2"><a href="/tools/category/dev" class="text-indigo-400 hover:text-indigo-300 transition-colors flex items-center gap-2">Developer Utilities <ArrowRight class="w-4 h-4" /></a></h3>
         <p class="text-slate-400 text-sm leading-relaxed">Debug JWTs, compare diffs, test regex, describe cron schedules, convert SVG to JSX, and generate Dockerfiles — all offline.</p>
-      </div>
-      <div>
-        <h3 class="font-semibold mb-2"><a href="/tools/category/ai" class="text-indigo-400 hover:text-indigo-300 transition-colors">AI-Powered</a></h3>
-        <p class="text-slate-400 text-sm leading-relaxed">Generate mock data from natural language, convert Zod schemas to LLM prompts, and scaffold AI-ready boilerplate code.</p>
-      </div>
-      <div>
-        <h3 class="font-semibold mb-2"><a href="/tools/category/data" class="text-indigo-400 hover:text-indigo-300 transition-colors">Data Conversion</a></h3>
-        <p class="text-slate-400 text-sm leading-relaxed">Transform SQL to JSON Schema, Prisma to Zod, GraphQL to tRPC, and Pydantic to TypeScript — bridging formats across your stack.</p>
-      </div>
-      <div>
-        <h3 class="text-indigo-400 font-semibold mb-2">100% Client-Side</h3>
-        <p class="text-slate-400 text-sm leading-relaxed">Every utility runs in your browser's JavaScript engine. No data is transmitted to any server, ever. Your code stays on your machine.</p>
       </div>
     </div>
   </article>

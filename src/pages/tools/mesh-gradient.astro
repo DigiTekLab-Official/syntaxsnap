@@ -4,6 +4,7 @@ import MeshTool from '../../components/tools/MeshGradient';
 import RelatedTools from '../../components/ui/RelatedTools.astro';
 import { buildFAQPage } from '../../utils/schema';
 
+const currentUrl = Astro.url.href;
 const title = "CSS Mesh Gradient Generator (Aurora Backgrounds) | SyntaxSnap";
 const description = "Create trendy, multi-color mesh gradients for your website backgrounds. Export pure CSS radial gradients instantly.";
 const slug = "mesh-gradient";
@@ -33,7 +34,7 @@ const faqSchema = buildFAQPage([
     question: "Does my data leave the browser?",
     answer: "No. All gradient generation and CSS export happens entirely in your browser. SyntaxSnap never sends any data to external servers."
   }
-]);
+], currentUrl);
 ---
 
 <Layout title={title} description={description} isTool={true} slug={slug} features={features}>

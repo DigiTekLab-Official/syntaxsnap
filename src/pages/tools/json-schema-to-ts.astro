@@ -4,6 +4,7 @@ import JsonSchemaToTsTool from '../../components/tools/JsonSchemaToTs.tsx';
 import RelatedTools from '../../components/ui/RelatedTools.astro';
 import { buildFAQPage } from '../../utils/schema';
 
+const currentUrl = Astro.url.href;
 const title = "JSON Schema to TypeScript Converter | SyntaxSnap";
 const description = "Convert JSON Schema definitions into clean TypeScript interfaces and types instantly. Handles objects, arrays, enums, required/optional fields, $ref, and $defs. 100% client-side, zero data transmission.";
 const slug = "json-schema-to-ts";
@@ -33,7 +34,7 @@ const faqSchema = buildFAQPage([
     question: "Can it handle $ref references?",
     answer: "Yes. The converter resolves $ref paths (e.g. '#/$defs/Address') to their corresponding TypeScript interface names. All definitions in $defs or definitions blocks are emitted as separate named interfaces or type aliases."
   }
-]);
+], currentUrl);
 ---
 
 <Layout title={title} description={description} isTool={true} slug={slug} features={features}>

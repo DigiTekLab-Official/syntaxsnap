@@ -4,6 +4,7 @@ import GraphqlToZodTool from '../../components/tools/GraphqlToZod.tsx';
 import RelatedTools from '../../components/ui/RelatedTools.astro';
 import { buildFAQPage } from '../../utils/schema';
 
+const currentUrl = Astro.url.href;
 const title = "GraphQL to Zod Schema Converter | SyntaxSnap";
 const description = "Convert GraphQL type, input, and enum definitions into type-safe Zod validation schemas instantly. 100% offline client-side parsing — your schema never leaves your browser.";
 const slug = "graphql-to-zod";
@@ -33,7 +34,7 @@ const faqSchema = buildFAQPage([
     question: "Can I use the generated Zod schemas for runtime validation?",
     answer: "Yes. The output is valid TypeScript that imports from the 'zod' library. You can paste the generated schemas directly into your project to get compile-time type inference via z.infer<typeof UserSchema> and runtime validation via UserSchema.parse(data) or UserSchema.safeParse(data). This is especially useful for validating API responses, form data, and GraphQL resolver inputs."
   }
-]);
+], currentUrl);
 ---
 
 <Layout title={title} description={description} isTool={true} slug={slug} features={features}>

@@ -4,6 +4,7 @@ import SqlToPrismaTool from '../../components/tools/SqlToPrisma.tsx';
 import RelatedTools from '../../components/ui/RelatedTools.astro';
 import { buildFAQPage } from '../../utils/schema';
 
+const currentUrl = Astro.url.href;
 const title = "SQL to Prisma Schema Converter | SyntaxSnap";
 const description = "Convert SQL CREATE TABLE statements into Prisma schema models instantly. Supports PostgreSQL, MySQL, and SQLite DDL. 100% client-side, zero data transmission.";
 const slug = "sql-to-prisma";
@@ -33,7 +34,7 @@ const faqSchema = buildFAQPage([
     question: "Does it handle DEFAULT values and auto-increment?",
     answer: "Yes. DEFAULT CURRENT_TIMESTAMP maps to @default(now()), DEFAULT false maps to @default(false), AUTO_INCREMENT and SERIAL types map to @default(autoincrement()), and string/number defaults are preserved with @default(...)."
   }
-]);
+], currentUrl);
 ---
 
 <Layout title={title} description={description} isTool={true} slug={slug} features={features}>

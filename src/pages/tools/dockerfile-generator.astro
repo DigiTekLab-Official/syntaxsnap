@@ -4,6 +4,9 @@ import DockerfileGeneratorTool from '../../components/tools/DockerfileGenerator'
 import RelatedTools from '../../components/ui/RelatedTools.astro';
 import { buildFAQPage, buildHowTo } from '../../utils/schema';
 
+// Grab the current absolute URL for strict schema validation
+const currentUrl = Astro.url.href;
+
 const title = "Dockerfile Generator for Next.js, Node & Astro | SyntaxSnap";
 const description = "Instantly generate optimized, multi-stage Dockerfiles and .dockerignore files for Node.js, Next.js, and Astro. Supports npm, yarn, pnpm, and bun.";
 const slug = "dockerfile-generator";
@@ -15,7 +18,7 @@ const features = [
   "Node 18, 20, and 22 alpine base images"
 ];
 
-// SEO: FAQPage
+// SEO: FAQPage (Now passing currentUrl)
 const faqSchema = buildFAQPage([
   {
     question: "Is this Dockerfile generator free?",
@@ -33,9 +36,9 @@ const faqSchema = buildFAQPage([
     question: "Does it follow Docker security best practices?",
     answer: "Yes. Generated Dockerfiles use multi-stage builds, non-root users, minimal alpine base images, and health checks to follow container security best practices."
   }
-]);
+], currentUrl);
 
-// SEO: HowTo — tool has clear sequential steps matching the UI workflow
+// SEO: HowTo (Now passing currentUrl)
 const howToSchema = buildHowTo(
   "How to Generate an Optimized Dockerfile",
   "Use SyntaxSnap's visual generator to create production-ready Dockerfiles.",
@@ -44,7 +47,8 @@ const howToSchema = buildHowTo(
     { name: "Select package manager and Node version", text: "Pick your package manager (npm/yarn/pnpm/bun) and Node.js version (18/20/22)." },
     { name: "Configure options", text: "Toggle multi-stage builds, health checks, and non-root user settings." },
     { name: "Copy the Dockerfile", text: "Click the copy button to get the optimized Dockerfile and .dockerignore ready for your project." }
-  ]
+  ], 
+  currentUrl
 );
 ---
 
@@ -76,7 +80,7 @@ const howToSchema = buildHowTo(
             <strong>Multi-stage builds</strong> solve this by using separate environments: one for installing dependencies and building the application (the <code>builder</code> stage), and a completely fresh, lightweight image that only receives the compiled artifacts (the <code>runner</code> stage). This often reduces the final image size to under 150MB.
           </p>
         </div>
-        <div class="bg-slate-900/40 border border-slate-800 p-6 rounded-2xl">
+        <div class="bg-slate-900/40 border border-slate-800 p-6 rounded-2xl shadow-inner">
           <h2 class="text-xl font-bold text-white mb-4">Best Practices Included</h2>
           <ul class="space-y-3 text-sm text-slate-400">
             <li class="flex items-start gap-3 border-b border-slate-800 pb-3">
@@ -100,6 +104,7 @@ const howToSchema = buildHowTo(
       </div>
     </div>
 
+    {/* The Sticky Hook / Cross Pollination */}
     <RelatedTools currentTool="dockerfile-generator" />
   </div>
 </Layout>

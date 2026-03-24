@@ -5,6 +5,7 @@ import AuroraGenerator from '../../components/tools/AuroraGenerator.tsx';
 import RelatedTools from '../../components/ui/RelatedTools.astro';
 import { buildFAQPage } from '../../utils/schema';
 
+const currentUrl = Astro.url.href;
 const title = "Aurora Gradient Generator | Pure CSS & Tailwind | SyntaxSnap";
 const description = "Create beautiful, animated aurora mesh backgrounds. Export to pure CSS or Tailwind CSS instantly. A free, local-first design tool for modern developers.";
 const slug = "aurora-gradient";
@@ -30,7 +31,7 @@ const faqSchema = buildFAQPage([
     question: "Is this tool free to use?",
     answer: "Yes. SyntaxSnap's Aurora Gradient Generator is completely free with no accounts, no ads, and no usage limits. All processing happens locally in your browser."
   }
-]);
+], currentUrl);
 ---
 
 <Layout title={title} description={description} isTool={true} slug={slug} features={features}>

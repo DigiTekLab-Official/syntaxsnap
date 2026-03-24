@@ -4,6 +4,7 @@ import DiffViewerTool from '../../components/tools/DiffViewer';
 import RelatedTools from '../../components/ui/RelatedTools.astro';
 import { buildFAQPage } from '../../utils/schema';
 
+const currentUrl = Astro.url.href;
 const title = "Text Diff Viewer & File Compare Tool | SyntaxSnap";
 const description = "Compare text, code, JSON, config files, and API responses locally in your browser. Visualize changes with side-by-side or unified diff view. Zero server uploads — 100% private.";
 const slug = "diff-viewer";
@@ -39,7 +40,7 @@ const faqSchema = buildFAQPage([
     question: "Is my code secure when using the SyntaxSnap Diff Viewer?",
     answer: "Yes. Unlike other online diff tools, SyntaxSnap calculates text differences entirely client-side. Your code, API keys, or sensitive logs never leave your browser and are never transmitted to a server."
   }
-]);
+], currentUrl);
 ---
 
 <Layout title={title} description={description} isTool={true} slug={slug} features={features}>

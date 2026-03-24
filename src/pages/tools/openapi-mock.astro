@@ -4,6 +4,7 @@ import Layout from '../../layouts/Layout.astro';
 import RelatedTools from '../../components/ui/RelatedTools.astro';
 import { buildFAQPage } from '../../utils/schema';
 
+const currentUrl = Astro.url.href;
 const title = "Zero-Dependency OpenAPI Mock Server Generator | SyntaxSnap";
 const description = "Generate a vanilla Node.js mock server from any OpenAPI 3.x or FastAPI JSON spec — no Express, no Fastify, no npm install. Paste your spec and get copy-ready Node.js http.createServer() code instantly.";
 const slug = "openapi-mock";
@@ -31,7 +32,7 @@ const faqSchema = buildFAQPage([
     question: "Can I generate a mock server from a FastAPI or Django Ninja schema?",
     answer: "Yes. FastAPI and Django Ninja both export standard OpenAPI 3.0 JSON at /openapi.json. Paste that JSON directly into the input field and the generator will produce a matching mock server reflecting all your Python API routes and response shapes."
   }
-]);
+], currentUrl);
 ---
 
 <Layout title={title} description={description} isTool={true} features={features} slug={slug}>

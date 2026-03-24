@@ -4,6 +4,7 @@ import PydanticConverter from '../../components/tools/PydanticConverter';
 import RelatedTools from '../../components/ui/RelatedTools.astro';
 import { buildFAQPage } from '../../utils/schema';
 
+const currentUrl = Astro.url.href;
 const title = "Pydantic to Zod Converter (Offline) | SyntaxSnap";
 const description = "Convert FastAPI Pydantic JSON schemas to TypeScript Zod schemas instantly. Supports $defs, enums, unions, constraints and nested models. 100% offline and privacy-safe.";
 const slug = "pydantic-to-zod";
@@ -30,7 +31,7 @@ const faqSchema = buildFAQPage([
     question: "Does this support $ref references and nested models?",
     answer: "Yes. The converter resolves $ref pointers and handles $defs by creating separate named Zod schemas, preserving the relationship between your complex Python models."
   }
-]);
+] , currentUrl);
 ---
 
 <Layout title={title} description={description} isTool={true} slug={slug} features={features}>

@@ -4,6 +4,7 @@ import PrismaToZodTool from '../../components/tools/PrismaToZod';
 import RelatedTools from '../../components/ui/RelatedTools.astro';
 import { buildFAQPage } from '../../utils/schema';
 
+const currentUrl = Astro.url.href;
 const title = "Prisma to Zod Schema Converter | SyntaxSnap";
 const description = "Convert Prisma ORM models and enums into type-safe Zod validation schemas with auto-generated CreateInput types. 100% client-side, zero data transmission.";
 const slug = "prisma-to-zod";
@@ -40,7 +41,7 @@ const faqData = [
 ];
 
 // SEO: FAQPage — answers supported by on-page Prisma converter
-const faqSchema = buildFAQPage(faqData);
+const faqSchema = buildFAQPage(faqData, currentUrl);
 ---
 
 <Layout title={title} description={description} isTool={true} slug={slug} features={features}>

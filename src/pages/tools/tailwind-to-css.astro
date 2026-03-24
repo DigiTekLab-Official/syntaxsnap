@@ -4,6 +4,7 @@ import TailwindToCssTool from '../../components/tools/TailwindToCss';
 import RelatedTools from '../../components/ui/RelatedTools.astro';
 import { buildFAQPage } from '../../utils/schema';
 
+const currentUrl = Astro.url.href;
 const title = "Tailwind to CSS Converter | SyntaxSnap";
 const description = "Instantly convert Tailwind utility classes into standard Vanilla CSS rulesets and CSS variables. 100% offline parsing for migrating out of Tailwind.";
 const slug = "tailwind-to-css";
@@ -31,7 +32,7 @@ const faqSchema = buildFAQPage([
     question: "Can I use this for migrating away from Tailwind?",
     answer: "Yes. This is the primary use case. Paste your Tailwind className string and get clean, standards-compliant Vanilla CSS that you can drop directly into a non-Tailwind project."
   }
-]);
+], currentUrl);
 ---
 
 <Layout title={title} description={description} isTool={true} slug={slug} features={features}>

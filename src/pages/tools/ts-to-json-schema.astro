@@ -4,6 +4,7 @@ import TsToJsonSchemaTool from '../../components/tools/TsToJsonSchema.tsx';
 import RelatedTools from '../../components/ui/RelatedTools.astro';
 import { buildFAQPage } from '../../utils/schema';
 
+const currentUrl = Astro.url.href;
 const title = "TypeScript to JSON Schema Converter | SyntaxSnap";
 const description = "Convert TypeScript interfaces and type aliases into standard JSON Schema (Draft 7) definitions instantly. Supports primitives, optional fields, unions, arrays, nested objects, and Record types. 100% client-side, zero data transmission.";
 const slug = "ts-to-json-schema";
@@ -33,7 +34,7 @@ const faqSchema = buildFAQPage([
     question: "How does it handle multiple types in one input?",
     answer: "When you paste multiple interfaces or type aliases, the first type becomes the root schema and all subsequent types are placed in a $defs block with $ref references linking them together."
   }
-]);
+], currentUrl);
 ---
 
 <Layout title={title} description={description} isTool={true} slug={slug} features={features}>

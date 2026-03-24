@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useDebounce } from '../../hooks/useDebounce';
 import { FileCode, Settings2, Trash2 } from 'lucide-react';
-import CopyButton from '../ui/CopyButton';
+import ShareButtonGroup from '../ui/ShareButtonGroup';
 
 // ─── Attribute rename map ─────────────────────────────────────────────────────
 const ATTR_RENAMES: Record<string, string> = {
@@ -314,7 +314,7 @@ export default function SvgToJsx() {
             <span className="text-xs font-semibold text-indigo-400 uppercase tracking-wider">
               React JSX
             </span>
-            <CopyButton text={output} />
+            <ShareButtonGroup text={output} toolSlug="svg-to-jsx" />
           </div>
 
           <pre

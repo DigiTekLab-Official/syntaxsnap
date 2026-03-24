@@ -3,7 +3,9 @@ import Layout from '../../layouts/Layout.astro';
 import MetaTagGeneratorTool from '../../components/tools/MetaTagGenerator';
 import { buildFAQPage } from '../../utils/schema';
 import RelatedTools from '../../components/ui/RelatedTools.astro';
+import { c } from 'playwright-report/trace/assets/defaultSettingsView-CJSZINFr';
 
+const currentUrl = Astro.url.href;
 const title = "Open Graph & Meta Tag Generator | SyntaxSnap";
 const description = "Visually preview how your website looks on Twitter, LinkedIn, and Google. Instantly generate HTML meta tags and Next.js App Router metadata code.";
 const slug = "meta-tag-generator";
@@ -29,7 +31,7 @@ const faqSchema = buildFAQPage([
     question: "Is any data sent to a server?",
     answer: "No. All previews and code generation happen entirely in your browser. Your titles, descriptions, and image URLs never leave your machine."
   }
-]);
+], currentUrl);
 ---
 
 <Layout title={title} description={description} isTool={true} features={features} slug={slug}>

@@ -4,6 +4,7 @@ import JsonSchemaToZodTool from '../../components/tools/JsonSchemaToZod.tsx';
 import RelatedTools from '../../components/ui/RelatedTools.astro';
 import { buildFAQPage } from '../../utils/schema';
 
+const currentUrl = Astro.url.href;
 const title = "JSON Schema to Zod Converter | 100% Client-Side | SyntaxSnap";
 const description = "Convert JSON Schema (Draft 4-2020-12) to Zod schemas instantly. Perfect for TypeScript developers. No data ever leaves your browser.";
 const slug = "json-schema-to-zod";
@@ -28,7 +29,7 @@ const faqSchema = buildFAQPage([
     question: "Can I use the generated Zod schemas in production?",
     answer: "Yes. The generated schemas are clean, idiomatic TypeScript that imports directly from the zod package. They are ready for production use with runtime validation."
   }
-]);
+], currentUrl);
 ---
 
 <Layout title={title} description={description} isTool={true} slug={slug} features={features}>

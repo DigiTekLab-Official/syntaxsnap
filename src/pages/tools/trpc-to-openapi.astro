@@ -4,6 +4,7 @@ import TrpcToOpenapiTool from '../../components/tools/TrpcToOpenapi.tsx';
 import RelatedTools from '../../components/ui/RelatedTools.astro';
 import { buildFAQPage } from '../../utils/schema';
 
+const currentUrl = Astro.url.href;
 const title = "tRPC to OpenAPI (Swagger) Converter | SyntaxSnap";
 const description = "Convert tRPC routers and Zod schemas into OpenAPI 3.1.0 JSON specifications instantly. Generate public API docs from your internal monorepo.";
 const slug = "trpc-to-openapi";
@@ -28,7 +29,7 @@ const faqSchema = buildFAQPage([
     question: "What OpenAPI version does it generate?",
     answer: "The converter generates strict OpenAPI 3.1.0 JSON specifications, compatible with Swagger UI, Redoc, and other API documentation tools."
   }
-]);
+], currentUrl);
 ---
 
 <Layout title={title} description={description} isTool={true} slug={slug} features={features}>

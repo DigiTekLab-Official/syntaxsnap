@@ -4,6 +4,7 @@ import OpenapiToZodTool from '../../components/tools/OpenapiToZod.tsx';
 import RelatedTools from '../../components/ui/RelatedTools.astro';
 import { buildFAQPage } from '../../utils/schema';
 
+const currentUrl = Astro.url.href;
 const title = "OpenAPI to Zod Converter | Runtime-Safe API Validation | SyntaxSnap";
 const description = "Convert OpenAPI 3.x and Swagger JSON specifications into TypeScript Zod validation schemas instantly. Supports complex schemas, discriminated unions, and format constraints. Zero server round-trips, 100% private.";
 const slug = "openapi-to-zod";
@@ -33,7 +34,7 @@ const faqSchema = buildFAQPage([
     question: "Can I use the output in production?",
     answer: "Yes. The generated Zod schemas are production-ready TypeScript code that imports directly from the zod package. Use them for API response validation, form inputs, or type-safe data pipelines."
   }
-]);
+], currentUrl);
 ---
 
 <Layout title={title} description={description} isTool={true} slug={slug} features={features}>

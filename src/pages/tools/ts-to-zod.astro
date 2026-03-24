@@ -4,6 +4,7 @@ import TsToZodTool from '../../components/tools/TsToZod.tsx';
 import RelatedTools from '../../components/ui/RelatedTools.astro';
 import { buildFAQPage } from '../../utils/schema';
 
+const currentUrl = Astro.url.href;
 const title = "TypeScript to Zod Converter | Runtime-Safe Schema Generator | SyntaxSnap";
 const description = "Convert TypeScript interfaces and types into Zod validation schemas instantly. Supports complex types, unions, arrays, nested objects, and utility types. Zero server round-trips, 100% private client-side processing.";
 const slug = "ts-to-zod";
@@ -29,7 +30,7 @@ const faqSchema = buildFAQPage([
     question: "Can I use this for runtime validation?",
     answer: "Yes. Zod schemas validate data at runtime, bridging the gap between TypeScript's compile-time types and actual runtime safety. The generated schemas work out-of-the-box with tRPC, Next.js Server Actions, and API route handlers."
   }
-]);
+], currentUrl);
 ---
 
 <Layout title={title} description={description} isTool={true} slug={slug} features={features}>

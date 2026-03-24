@@ -4,6 +4,7 @@ import CronDescriptorTool from '../../components/tools/CronDescriptor';
 import RelatedTools from '../../components/ui/RelatedTools.astro';
 import { buildFAQPage } from '../../utils/schema';
 
+const currentUrl = Astro.url.href;
 const title = "Cron Expression Translator & Scheduler | SyntaxSnap";
 const description = "Free crontab expression translator. Convert cron syntax to human-readable text and preview next run times. Supports Linux, Unix, and Quartz cron formats. 100% client-side.";
 const slug = "cron-descriptor";
@@ -39,7 +40,7 @@ const faqSchema = buildFAQPage([
     question: "Does this tool support seconds in cron expressions?",
     answer: "The standard Unix cron format uses 5 fields (minute through day of week). Some systems like Quartz scheduler support 6-field expressions with seconds as the first field. This tool supports the standard 5-field format."
   }
-]);
+], currentUrl);
 ---
 
 <Layout title={title} description={description} isTool={true} slug={slug} features={features}>

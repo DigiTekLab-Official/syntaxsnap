@@ -4,6 +4,7 @@ import SvgTool from '../../components/tools/SvgToJsx';
 import RelatedTools from '../../components/ui/RelatedTools.astro';
 import { buildFAQPage } from '../../utils/schema';
 
+const currentUrl = Astro.url.href;
 const title = "SVG to JSX Converter | SyntaxSnap";
 const description = "Instantly convert SVG code into clean React JSX. Automatically handles camelCase attributes, className updates, style objects, and functional component wrapping.";
 const slug = "svg-to-jsx";
@@ -34,7 +35,7 @@ const faqSchema = buildFAQPage([
     question: "How does this tool prepare SVGs for React and Next.js?",
     answer: "It automatically converts kebab-case attributes to camelCase, transforms inline style strings into React objects, and renames the class attribute to className for immediate use in JSX components."
   }
-]);
+], currentUrl);
 ---
 
 <Layout title={title} description={description} isTool={true} slug={slug} features={features}>

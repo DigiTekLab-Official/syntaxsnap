@@ -4,6 +4,7 @@ import TailwindShadowGeneratorClient from '../../components/tools/TailwindShadow
 import RelatedTools from '../../components/ui/RelatedTools.astro';
 import { buildFAQPage } from '../../utils/schema';
 
+const currentUrl = Astro.url.href;
 const title = "Tailwind Shadow & Glow Generator | SyntaxSnap";
 const description = "Visually design multi-layered box shadows and neon glows, and instantly copy the Tailwind CSS v4 arbitrary classes. 100% free and offline.";
 const slug = "tailwind-shadow-generator";
@@ -28,7 +29,7 @@ const faqSchema = buildFAQPage([
     question: "Can I create neon glow effects?",
     answer: "Yes. Stack multiple shadow layers with bright colors and wide blur radii to create vibrant neon glow effects for buttons, cards, and other UI elements."
   }
-]);
+], currentUrl);
 ---
 
 <Layout title={title} description={description} isTool={true} slug={slug} features={features}>

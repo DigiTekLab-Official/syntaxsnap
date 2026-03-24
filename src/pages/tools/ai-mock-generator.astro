@@ -5,6 +5,7 @@ import AiMockGeneratorTool from '../../components/tools/AiMockGenerator.tsx';
 import RelatedTools from '../../components/ui/RelatedTools.astro';
 import { buildFAQPage } from '../../utils/schema';
 
+const currentUrl = Astro.url.href;
 const title = "AI Mock Data Generator | SyntaxSnap";
 const description = "Generate realistic JSON mock data from OpenAPI schemas or natural language prompts using AI. Free tool for developers and QA engineers. Supports nested objects, UUIDs, and strict type safety.";
 const slug = "ai-mock-generator";
@@ -30,7 +31,7 @@ const faqSchema = buildFAQPage([
     question: "How does the generator handle complex OpenAPI schemas?",
     answer: "Our AI logic parses the provided OpenAPI 3.0/3.1 spec, identifies data types, enums, and required fields, and produces a JSON object that adheres strictly to your defined API contract."
   }
-]);
+], currentUrl);
 ---
 
 <Layout title={title} description={description} isTool={true} features={features} slug={slug}>

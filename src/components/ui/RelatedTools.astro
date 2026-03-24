@@ -9,17 +9,32 @@ interface Props {
 
 const { currentTool } = Astro.props;
 
-// Filter out the current tool
+// Filter out the current tool so we don't suggest the tool they are already using
 const relatedTools = TOOLS.filter((tool: Tool) => tool.id !== currentTool);
-
-// Logic to find tools in the same category
 const currentToolData = TOOLS.find((t: Tool) => t.id === currentTool);
-const sameCategory = relatedTools.filter((t: Tool) => t.category === currentToolData?.category);
 
-// Determine which 3 tools to display
-const displayTools = sameCategory.length >= 3 
-  ? sameCategory.slice(0, 3) 
-  : relatedTools.slice(0, 3);
+// --- NEW LOGIC: Prioritize Hero Tools for Cross-Pollination ---
+// These are your highest-converting tools based on data
+const heroToolIds = ['aurora-gradient', 'json-schema-to-zod', 'ai-mock-generator', 'jwt-debugger'];
+
+// 1. Grab Hero tools first
+let crossPollinated = relatedTools.filter((t: Tool) => heroToolIds.includes(t.id));
+
+// 2. If we have less than 3 hero tools available (e.g. they are currently ON a hero tool), 
+// fill the remaining slots with tools from the same category.
+if (crossPollinated.length < 3) {
+  const sameCategory = relatedTools.filter((t: Tool) => t.category === currentToolData?.category && !heroToolIds.includes(t.id));
+  crossPollinated = [...crossPollinated, ...sameCategory];
+}
+
+// 3. Fallback: If STILL less than 3, just grab any remaining tools so the UI doesn't break
+if (crossPollinated.length < 3) {
+  const remainingTools = relatedTools.filter((t: Tool) => !crossPollinated.some(cp => cp.id === t.id));
+  crossPollinated = [...crossPollinated, ...remainingTools];
+}
+
+// 4. Lock it to exactly 3 tools for perfect UI grid alignment
+const displayTools = crossPollinated.slice(0, 3);
 
 // Helper to format category names for the "View all" link
 const categoryMap: Record<string, string> = {

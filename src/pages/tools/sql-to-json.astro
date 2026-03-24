@@ -4,6 +4,7 @@ import SqlToJsonTool from '../../components/tools/SqlToJson';
 import RelatedTools from '../../components/ui/RelatedTools.astro';
 import { buildFAQPage } from '../../utils/schema';
 
+const currentUrl = Astro.url.href;
 const title = "SQL to JSON Schema & Zod Converter | SyntaxSnap";
 const description = "Convert SQL CREATE TABLE statements into JSON Schema and Zod TypeScript validation instantly. Supports VARCHAR lengths, ENUM values, NOT NULL, DEFAULT, and more. 100% client-side.";
 const slug = "sql-to-json";
@@ -37,7 +38,7 @@ const faqSchema = buildFAQPage([
     question: "Can I use this for database migration tools?",
     answer: "Yes. The generated JSON Schema and Zod schemas are production-ready and can be used with Prisma, Drizzle, TypeORM, or custom migration scripts."
   }
-]);
+], currentUrl);
 ---
 
 <Layout title={title} description={description} isTool={true} slug={slug} features={features}>
