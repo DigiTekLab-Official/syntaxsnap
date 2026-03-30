@@ -167,6 +167,14 @@ const socialImageURL = new URL(ogImagePath, siteUrl).toString();
     <Footer />
 
     {/* Analytics */}
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-QCZWS74HCP" is:inline></script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-QCZWS74HCP');
+    </script>
     <script is:inline>
         (function(c,l,a,r,i,t,y){
             c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
