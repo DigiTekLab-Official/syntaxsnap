@@ -1,0 +1,17 @@
+﻿"Project name","SyntaxSnap"
+"Date range","04/19/2026 00:00 - 04/25/2026 23:59"
+
+
+"Total sessions","10"
+
+"Date","Time","Session duration","Entry URL","Exit URL","Referrer:","Clarity user ID","Browser","Device","OS","Country","Page count","Session clicks","Favourite","Recording link"
+"04/25/2026","10:41","00:01","https://syntaxsnap.com/","https://syntaxsnap.com/","","119hunb","ChromeMobile","Mobile","iOS","United States","1","0","FALSE","https://clarity.microsoft.com/player/viplajyvf3/119hunb/i1slf2/?ss=1777093895000&sd=1"
+"04/24/2026","22:13","05:25","https://syntaxsnap.com/tools/aurora-gradient","https://syntaxsnap.com/tools/aurora-gradient","https://claude.ai/","dxhvrf","Chrome","PC","Windows","India","2","2","FALSE","https://clarity.microsoft.com/player/viplajyvf3/dxhvrf/8yifdp/?ss=1777048991000&sd=325"
+"04/23/2026","18:51","13:57","https://syntaxsnap.com/tools/aurora-gradient","https://syntaxsnap.com/tools/mesh-gradient","","15rqvx6","MobileSafari","Tablet","iOS","Algeria","3","22","FALSE","https://clarity.microsoft.com/player/viplajyvf3/15rqvx6/hqoi7v/?ss=1776950501000&sd=837"
+"04/23/2026","00:33","02:28","https://syntaxsnap.com/contact","https://syntaxsnap.com/contact","","t3boke","Chrome","PC","Windows","India","1","0","FALSE","https://clarity.microsoft.com/player/viplajyvf3/t3boke/airljj/?ss=1776884596000&sd=148"
+"04/21/2026","19:10","00:33","https://syntaxsnap.com/","https://syntaxsnap.com/","","t7ssy5","Chrome","PC","MacOS","India","1","0","FALSE","https://clarity.microsoft.com/player/viplajyvf3/t7ssy5/ndhmdg/?ss=1776778817000&sd=33"
+"04/21/2026","13:04","05:26","https://syntaxsnap.com/","https://syntaxsnap.com/","","t7ssy5","Chrome","PC","MacOS","India","2","0","FALSE","https://clarity.microsoft.com/player/viplajyvf3/t7ssy5/1aks34j/?ss=1776756875000&sd=326"
+"04/20/2026","17:48","00:06","https://syntaxsnap.com/tools/pydantic-to-zod","https://syntaxsnap.com/tools/pydantic-to-zod","https://www.google.com/","3e8hfh","Safari","PC","MacOS","Netherlands","1","0","FALSE","https://clarity.microsoft.com/player/viplajyvf3/3e8hfh/1dxinel/?ss=1776687510000&sd=6"
+"04/20/2026","12:27","00:08","https://syntaxsnap.com/","https://syntaxsnap.com/","","tx2v6j","Chrome","PC","Windows","United States","1","0","FALSE","https://clarity.microsoft.com/player/viplajyvf3/tx2v6j/1i4zlrs/?ss=1776668274000&sd=8"
+"04/20/2026","11:37","00:35","https://syntaxsnap.com/","https://syntaxsnap.com/","","c3mvad","Chrome","PC","Linux","United States","1","1","FALSE","https://clarity.microsoft.com/player/viplajyvf3/c3mvad/1lxq869/?ss=1776665277000&sd=35"
+"04/20/2026","01:50","00:16","https://syntaxsnap.com/tools/aurora-gradient","https://syntaxsnap.com/tools/aurora-gradient","https://www.google.com/","1p65f9t","ChromeMobile","Mobile","Android","India","1","0","FALSE","https://clarity.microsoft.com/player/viplajyvf3/1p65f9t/rbpguu/?ss=1776630008000&sd=16"
