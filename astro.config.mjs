@@ -1,58 +1,37 @@
 // astro.config.mjs
 import { defineConfig } from 'astro/config';
-import react      from '@astrojs/react';
+import react       from '@astrojs/react';
 import tailwindcss from '@tailwindcss/vite';
 import sitemap     from '@astrojs/sitemap';
-
-import cloudflare from '@astrojs/cloudflare';
+import cloudflare  from '@astrojs/cloudflare';
 
 export default defineConfig({
-  // ── Site URL ───────────────────────────────────────────────────────────────
   site: 'https://syntaxsnap.com',
-
-  // ── Output mode ───────────────────────────────────────────────────────────
   output: 'static',
+  trailingSlash: 'never',
 
-  // ── Build Format (CRITICAL FIX) ───────────────────────────────────────────
-  // This MUST be at the root level, not inside vite.
-  // 'file' = dist/tools/json-to-zod.html (Cloudflare serves without slash)
-  // 'directory' = dist/tools/json-to-zod/index.html (Cloudflare forces slash)
   build: {
     format: 'file',
-    // Inline CSS into <style> tags in the HTML to eliminate render-blocking requests.
-    // 'auto' inlines sheets below Vite's assetsInlineLimit (default 4 KB).
-    // 'always' inlines all stylesheets — removes the blocking /_astro/*.css request entirely.
     inlineStylesheets: 'always',
   },
 
-  // ── Trailing slash ────────────────────────────────────────────────────────
-  // Works together with build.format: 'file' to ensure no slashes ever appear.
-  trailingSlash: 'never',
-
-  // ── Integrations ──────────────────────────────────────────────────────────
   integrations: [
     react({
-      // Scope React transforms to component files only.
       include: ['**/components/**', '**/src/components/**'],
     }),
 
     sitemap({
-      // Exclude non-content pages
       filter: (page) =>
-        !page.includes('/404')    &&
-        !page.includes('/api/')   &&
+        !page.includes('/404')   &&
+        !page.includes('/api/')  &&
         !page.includes('/draft/'),
 
-      // CORRECTED: Use 'serialize' to customize priorities.
-      // Claude was right: 'chunks' is not the standard way to do this logic.
       serialize(item) {
-        // High priority for tools
         if (item.url.includes('/tools/')) {
           item.changefreq = 'daily';
           item.priority   = 0.9;
           return item;
         }
-        // Standard priority for everything else
         item.changefreq = 'weekly';
         item.priority   = 0.7;
         return item;
@@ -62,20 +41,24 @@ export default defineConfig({
     }),
   ],
 
-  // ── Vite ──────────────────────────────────────────────────────────────────
+  // FIX 1: Tell the Cloudflare adapter to run sharp at BUILD TIME only
+  // (for prerendered/static pages). This stops sharp and its Node.js
+  // built-ins (child_process, fs) from being bundled into _worker.js.
+  adapter: cloudflare({
+    imageService: 'compile',
+  }),
+
   vite: {
     plugins: [tailwindcss()],
     ssr: {
-      // @resvg/resvg-js ships a native .node addon that Rollup cannot parse.
-      // node:fs and node:path are used by the OG image generator at build time.
-      // Externalize them so Node.js loads them directly during static pre-render.
-      external: ['@resvg/resvg-js', 'node:fs', 'node:path'],
+      // FIX 2: Explicitly exclude sharp from the SSR/worker bundle.
+      // This is the safety net — even if imageService:'compile' doesn't
+      // fully tree-shake every sharp import path, Rollup won't bundle it.
+      // @resvg/resvg-js, node:fs, node:path are build-time only (OG images).
+      external: ['sharp', '@resvg/resvg-js', 'node:fs', 'node:path'],
     },
     build: {
-      // Target Cloudflare Workers' V8 engine directly.
       target: 'es2022',
     },
   },
-
-  adapter: cloudflare(),
 });
