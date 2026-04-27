@@ -5,7 +5,8 @@ import RelatedTools from '../../components/ui/RelatedTools.astro';
 import { buildFAQPage } from '../../utils/schema';
 
 const currentUrl = Astro.url.href;
-const title = "Pydantic to Zod Converter (Offline) | SyntaxSnap";
+// SEO Update: Changed to clarify this is an online web tool
+const title = "Online Pydantic to Zod Converter (Free Web Tool) | SyntaxSnap";
 const description = "Convert FastAPI Pydantic JSON schemas to TypeScript Zod schemas instantly. Supports $defs, enums, unions, constraints and nested models. 100% offline and privacy-safe.";
 const slug = "pydantic-to-zod";
 
@@ -48,7 +49,27 @@ const faqSchema = buildFAQPage([
       </p>
     </div>
 
-    <PydanticConverter client:idle />
+    {/* --- NEW CLI WAITLIST BANNER --- */}
+    <div class="bg-indigo-500/10 border border-indigo-500/20 rounded-xl p-5 mb-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+      <div>
+        <h3 class="text-indigo-300 font-bold text-lg flex items-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m8 3 4 8 5-5 5 15H2L8 3z"/></svg>
+          Need to automate this in CI/CD?
+        </h3>
+        <p class="text-slate-300 text-sm mt-1 leading-relaxed max-w-2xl">
+          Don't copy-paste manually. Run this conversion natively in your terminal to keep your Python backend and Next.js frontend perfectly synced.
+        </p>
+      </div>
+      <a 
+        href="/cli-waitlist" 
+        class="bg-indigo-500 hover:bg-indigo-600 text-white px-5 py-2.5 rounded-lg text-sm font-bold transition-colors whitespace-nowrap shadow-lg shadow-indigo-500/20"
+      >
+        Join CLI Waitlist →
+      </a>
+    </div>
+
+    {/* CRITICAL FIX: Changed client:idle to client:load */}
+    <PydanticConverter client:load />
 
     <div class="mt-16 grid grid-cols-1 md:grid-cols-2 gap-12 border-t border-slate-800 pt-12">
 

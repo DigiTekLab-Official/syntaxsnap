@@ -1,0 +1,54 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const title = "SyntaxSnap CLI & Desktop | Automate your workflow offline";
+const description = "Join the waitlist for the SyntaxSnap CLI. Automate Pydantic-to-Zod and 30+ other developer tools directly in your CI/CD pipeline. 100% offline.";
+---
+
+<Layout title={title} description={description}>
+  <main class="max-w-4xl mx-auto px-4 py-24 md:py-32 flex flex-col items-center text-center relative">
+    
+    {/* Decorative Background Glow */}
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-indigo-500/20 blur-[120px] rounded-full pointer-events-none -z-10"></div>
+
+    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-sm font-medium mb-8">
+      <span class="flex h-2 w-2 rounded-full bg-indigo-500 animate-pulse"></span>
+      In Development
+    </div>
+
+    <h1 class="text-4xl md:text-6xl font-extrabold text-white mb-6 leading-tight">
+      Stop Copy-Pasting. <br/>
+      <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-400">
+        Automate Everything.
+      </span>
+    </h1>
+
+    <p class="text-lg md:text-xl text-slate-300 mb-10 max-w-2xl leading-relaxed">
+      You asked for it. We are building the <strong>SyntaxSnap CLI & Native App</strong>. 
+      Run our Pydantic-to-Zod converter, Env validators, and 30+ other tools natively in your terminal or CI/CD pipeline. <span class="text-white font-semibold">100% offline. Zero latency.</span>
+    </p>
+
+    <div class="bg-slate-900/50 border border-slate-800 p-8 rounded-2xl w-full max-w-md shadow-2xl backdrop-blur-sm">
+      <h2 class="text-white font-semibold text-lg mb-4">Get 50% off the launch price</h2>
+      
+      {/* Replace 'YOUR_FORMSPREE_ENDPOINT' with a free formspree.io URL */}
+      <form action="https://formspree.io/f/YOUR_FORMSPREE_ENDPOINT" method="POST" class="flex flex-col gap-3">
+        <input 
+          type="email" 
+          name="email"
+          placeholder="developer@company.com" 
+          required
+          class="w-full bg-slate-800 border border-slate-700 text-white px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all placeholder:text-slate-500"
+        />
+        <button 
+          type="submit" 
+          class="w-full bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-3 px-4 rounded-lg transition-colors flex items-center justify-center gap-2"
+        >
+          Join the Waitlist
+        </button>
+      </form>
+      <p class="text-slate-500 text-xs mt-4">We respect your privacy. No spam, ever. Unsubscribe at any time.</p>
+    </div>
+
+  </main>
+</Layout>
