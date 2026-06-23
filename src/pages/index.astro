@@ -55,34 +55,43 @@ const organizationSchema = {
       
       {/* Left Column: The Pitch */}
       <div class="flex-1 max-w-2xl text-center lg:text-left">
-        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-900/50 border border-slate-700 text-slate-300 text-sm font-medium mb-6 animate-fade-in">
-          <span class="relative flex h-2.5 w-2.5">
-            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-            <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
-          </span>
-          100% Client-Side Processing
+        
+        {/* NEW: Side-by-side Trust Badges */}
+        <div class="flex flex-wrap items-center justify-center lg:justify-start gap-3 mb-6 animate-fade-in">
+          <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-900/50 border border-slate-700 text-slate-300 text-sm font-medium">
+            <span class="relative flex h-2.5 w-2.5">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+            </span>
+            100% Client-Side
+          </div>
+          <a href="https://chromewebstore.google.com/detail/YOUR_EXTENSION_ID_HERE" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-400 hover:bg-blue-500/20 text-sm font-medium transition-colors">
+            <ShieldCheck class="w-4 h-4" />
+            Verified Chrome Publisher
+          </a>
         </div>
 
         <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white tracking-tight mb-6 leading-tight">
           Free Developer Tools to <br class="hidden md:block" />
-          <span class="text-transparent bg-clip-text bg-linear-to-r from-indigo-400 to-cyan-400">Generate Code Instantly.</span>
+          <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-400">Generate Code Instantly.</span>
         </h1>
 
         <p class="text-lg text-slate-300 mb-8 leading-relaxed max-w-lg mx-auto lg:mx-0">
-          Convert JSON to Zod, generate mock APIs, and build Tailwind v4 gradients in seconds. <strong>No servers. No tracking. Your data never leaves the browser.</strong>
+          Convert JSON to Zod, generate mock APIs, and build Tailwind v4 gradients in seconds. <strong>No servers. No tracking. Available instantly in your browser.</strong>
         </p>
 
+        {/* NEW: Extension-First CTAs */}
         <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 mb-8">
-          <a href="/tools/json-schema-to-zod" class="flex items-center gap-2 px-6 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold transition-all shadow-[0_0_20px_rgba(79,70,229,0.3)] hover:shadow-[0_0_30px_rgba(79,70,229,0.5)]">
-            <Play class="w-5 h-5 fill-current" />
-            Try the Zod Generator
+          <a href="https://chromewebstore.google.com/detail/YOUR_EXTENSION_ID_HERE" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold transition-all shadow-[0_0_20px_rgba(37,99,235,0.3)] hover:shadow-[0_0_30px_rgba(37,99,235,0.5)]">
+            <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 0C8.07 0 4.58 1.88 2.37 4.81L7.09 13C7.75 11.83 9.02 11 10.5 11H20.08C18.66 4.75 15.65 0 12 0ZM12 16C10.62 16 9.38 15.35 8.59 14.31L3.92 6.22C1.49 8.05 0 10.96 0 14C0 20.63 5.37 26 12 26C12.83 26 13.63 25.9 14.4 25.74L9.68 17.58C10.3 17.85 11.12 18 12 18C13.5 18 14.83 17.15 15.5 15.86L20.15 23.95C22.48 22.12 24 19.22 24 16C24 14.9 23.85 13.85 23.57 12.86L18.85 21C18.23 22.17 16.96 23 15.5 23H12V16Z"/></svg>
+            Add to Chrome (Free)
           </a>
           <a href="#all-tools" class="flex items-center gap-2 px-6 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-medium border border-slate-700 transition-all">
-            View All {TOOLS.length} Tools
+            Use Web Version
           </a>
         </div>
 
-        {/* The "Use Case Hooks" (NEW) */}
+        {/* The "Use Case Hooks" */}
         <div class="pt-4 border-t border-slate-800/60 max-w-lg mx-auto lg:mx-0">
           <p class="text-xs text-slate-500 uppercase tracking-wider font-semibold mb-3">Built specifically for:</p>
           <div class="flex flex-wrap items-center justify-center lg:justify-start gap-3 text-sm text-slate-300 font-medium">
@@ -95,7 +104,7 @@ const organizationSchema = {
 
       {/* Right Column: The "Aha!" Moment Visual */}
       <div class="flex-1 w-full max-w-2xl relative group perspective mt-8 lg:mt-0">
-        <div class="absolute -inset-1 bg-linear-to-r from-indigo-500 to-cyan-500 rounded-2xl blur opacity-20 group-hover:opacity-40 transition duration-1000 group-hover:duration-200"></div>
+        <div class="absolute -inset-1 bg-gradient-to-r from-indigo-500 to-cyan-500 rounded-2xl blur opacity-20 group-hover:opacity-40 transition duration-1000 group-hover:duration-200"></div>
         <div class="relative rounded-xl bg-slate-900 border border-slate-800 shadow-2xl overflow-hidden transform transition-transform duration-500 group-hover:scale-[1.02]">
           
           {/* Mock Browser Header */}
@@ -171,7 +180,7 @@ const organizationSchema = {
   </div>
 </div>
 
-  <div class="w-full h-px bg-linear-to-r from-transparent via-slate-800 to-transparent my-12"></div>
+  <div class="w-full h-px bg-gradient-to-r from-transparent via-slate-800 to-transparent my-12"></div>
 
   {/* SEO Content Block (Moved UP for Better Crawling) */}
   <article class="max-w-4xl mx-auto px-4 text-center mb-16">
@@ -195,7 +204,7 @@ const organizationSchema = {
     </div>
   </div>
 
-  <div class="w-full h-px bg-linear-to-r from-transparent via-slate-800 to-transparent my-8"></div>
+  <div class="w-full h-px bg-gradient-to-r from-transparent via-slate-800 to-transparent my-8"></div>
 
   {/* Bottom Info / Tool Categories */}
   <article class="max-w-6xl mx-auto px-4 py-12">

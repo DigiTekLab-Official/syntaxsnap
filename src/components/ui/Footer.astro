@@ -3,19 +3,16 @@
 import { ShieldCheck } from 'lucide-astro';
 import { TOOLS } from '../../config/tools';
 
-// 1. Extract and sort tools alphabetically
 const devTools = TOOLS.filter(t => t.category === 'dev').sort((a,b) => a.title.localeCompare(b.title));
 const cssTools = TOOLS.filter(t => t.category === 'css').sort((a,b) => a.title.localeCompare(b.title));
 const jsonTools = TOOLS.filter(t => t.category === 'json').sort((a,b) => a.title.localeCompare(b.title));
 const dataTools = TOOLS.filter(t => t.category === 'data').sort((a,b) => a.title.localeCompare(b.title));
 const aiTools = TOOLS.filter(t => t.category === 'ai').sort((a,b) => a.title.localeCompare(b.title));
 
-// 2. Split "Development" to balance the columns
 const devHalf = Math.ceil(devTools.length / 2);
 const devPart1 = devTools.slice(0, devHalf);
 const devPart2 = devTools.slice(devHalf);
 
-// 3. Category Links for SEO equity
 const categories = [
   { name: 'JSON & Schema', href: '/tools/category/json' },
   { name: 'Design & CSS', href: '/tools/category/css' },
@@ -87,20 +84,36 @@ const categories = [
       </div>
     </div>
     
-    <div class="border-t border-slate-800/60 pt-8 flex flex-col md:flex-row justify-between items-center gap-6 text-[12px] text-slate-500">
-        <div class="flex flex-wrap items-center justify-center gap-6">
-          <span class="flex items-center gap-2 text-slate-400">
-            <ShieldCheck class="w-4 h-4 text-emerald-500" /> 
-            &copy; {new Date().getFullYear()} SyntaxSnap
-          </span>
-          <div class="flex gap-6">
-            <a href="/privacy" class="hover:text-slate-300 transition-colors">Privacy</a>
-            <a href="/terms" class="hover:text-slate-300 transition-colors">Terms</a>
-          </div>
+    {/* Bottom Bar — only this block changed */}
+    <div class="border-t border-slate-800/60 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-[12px] text-slate-500">
+      <div class="flex flex-wrap items-center justify-center gap-6">
+        <span class="flex items-center gap-2 text-slate-400">
+          <ShieldCheck class="w-4 h-4 text-emerald-500" />
+          &copy; {new Date().getFullYear()} SyntaxSnap
+        </span>
+        <div class="flex gap-6">
+          <a href="/privacy" class="hover:text-slate-300 transition-colors">Privacy</a>
+          <a href="/terms" class="hover:text-slate-300 transition-colors">Terms</a>
         </div>
-        <p class="flex items-center gap-1.5 opacity-80 italic">
-          Built with ❤️ in <span class="text-slate-300 font-semibold not-italic">Cuddalore</span>
-        </p>
+      </div>
+
+      <p class="flex items-center gap-1.5 opacity-80 italic">
+        Built with ❤️ in <span class="text-slate-300 font-semibold not-italic">Cuddalore</span>
+      </p>
+
+      <p class="text-slate-600 text-[11px]">
+        Engineered by{" "}
+        <a
+          href="https://digiteklab.com"
+          target="_blank"
+          rel="noopener"
+          class="text-slate-500 hover:text-blue-400 transition-colors"
+        >
+          Digitek Lab
+        </a>
+      </p>
     </div>
+    {/* End Bottom Bar */}
+
   </div>
 </footer>
