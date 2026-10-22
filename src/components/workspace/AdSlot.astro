@@ -1,0 +1,46 @@
+---
+// src/components/workspace/AdSlot.astro
+// One quiet sponsor unit per page. Priority: a direct sponsor sold through
+// /sponsor, then Carbon (when configured), then a house ad selling the slot.
+import { ADS_ENABLED, CARBON_SERVE, CARBON_PLACEMENT, sponsorFor } from '../../config/site';
+
+interface Props { class?: string; toolId?: string; category?: string }
+const { class: cls = '', toolId, category } = Astro.props;
+const sponsor = sponsorFor(toolId, category);
+const carbonSrc = `https://cdn.carbonads.com/carbon.js?serve=${CARBON_SERVE}&placement=${CARBON_PLACEMENT}&format=cover`;
+const sponsorHref = sponsor
+  ? `${sponsor.url}${sponsor.url.includes('?') ? '&' : '?'}utm_source=syntaxsnap&utm_medium=sponsor&utm_campaign=${toolId ?? 'site'}`
+  : '';
+---
+
+<aside class={`ws-ad ${cls}`} aria-label="Sponsor">
+  {sponsor ? (
+    <a href={sponsorHref} target="_blank" rel="sponsored noopener" class="flex gap-3 rounded-lg border border-slate-800 bg-ws-panel p-3 hover:border-slate-700">
+      {sponsor.logo && <img src={sponsor.logo} alt="" width="36" height="36" class="h-9 w-9 shrink-0 rounded" loading="lazy" />}
+      <span>
+        <span class="block text-[13px] font-medium text-slate-200">{sponsor.name}</span>
+        <span class="mt-0.5 block text-xs leading-relaxed text-slate-400">{sponsor.line}</span>
+      </span>
+    </a>
+  ) : ADS_ENABLED ? (
+    <div class="ws-carbon">
+      <script async type="text/javascript" src={carbonSrc} id="_carbonads_js"></script>
+    </div>
+  ) : (
+    <a href="/sponsor" class="block rounded-lg border border-dashed border-slate-700 p-3 hover:border-indigo-500/60 hover:bg-slate-900">
+      <span class="block text-[13px] font-medium text-slate-200">Your developer tool here</span>
+      <span class="mt-1 block text-xs leading-relaxed text-slate-400">Reach engineers while they work. One sponsor per page.</span>
+      <span class="mt-2 block text-xs font-medium text-indigo-400">See sponsorship options</span>
+    </a>
+  )}
+  <p class="mt-1.5 text-[11px] text-slate-500">{sponsor || ADS_ENABLED ? 'Sponsor. Ads keep every tool free.' : 'Ads keep every tool free.'}</p>
+</aside>
+
+<style is:global>
+  #carbonads { font-family: var(--font-sans); font-size: 13px; line-height: 1.45; }
+  #carbonads a { color: var(--color-ws-text); text-decoration: none; }
+  #carbonads .carbon-wrap { display: flex; flex-direction: column; gap: 8px; }
+  #carbonads .carbon-img img { border-radius: 6px; width: 100%; height: auto; }
+  #carbonads .carbon-text { color: var(--color-ws-muted); }
+  #carbonads .carbon-poweredby { display: block; margin-top: 4px; font-size: 11px; color: var(--color-slate-500) !important; }
+</style>

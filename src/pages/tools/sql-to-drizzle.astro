@@ -1,0 +1,40 @@
+---
+// src/pages/tools/sql-to-drizzle.astro
+import Layout from '../../layouts/Layout.astro';
+import Tool from '../../components/tools/SqlToDrizzle';
+import RelatedTools from '../../components/ui/RelatedTools.astro';
+import FaqSection from '../../components/ui/FaqSection.astro';
+import HowToSection from '../../components/ui/HowToSection.astro';
+import { toolSeoData } from '../../data/seo';
+
+const slug = "sql-to-drizzle";
+const title = "SQL to Drizzle ORM Schema Converter (Postgres, MySQL, SQLite) | SyntaxSnap";
+const description = "Convert SQL CREATE TABLE statements into a Drizzle ORM schema for PostgreSQL, MySQL or SQLite, with foreign keys, composite primary keys and relations. Runs in your browser.";
+const features = ["PostgreSQL, MySQL and SQLite dialects with auto-detect", "Foreign keys with ON DELETE and ON UPDATE", "Composite primary keys and unique constraints", "Relations for the relational query API", "Notes for types that need manual review", "Runs 100% in your browser"];
+const seo = toolSeoData[slug];
+---
+
+<Layout title={title} description={description} isTool={true} slug={slug} features={features} howTo={seo?.howTo} faqs={seo?.faqs}>
+  <header class="mb-5 max-w-3xl">
+    <h1 class="text-[28px] font-semibold tracking-tight text-white md:text-[32px]">SQL to Drizzle ORM Schema</h1>
+    <p class="mt-2 text-[15px] leading-relaxed text-slate-400">Paste CREATE TABLE statements from PostgreSQL, MySQL or SQLite and get a Drizzle schema file: typed columns, defaults, foreign keys, composite primary keys and optional relations.</p>
+  </header>
+
+  <Tool client:load />
+
+  <HowToSection howTo={seo?.howTo} />
+
+  <section class="mt-14 border-t border-slate-800 pt-2">
+    <div class="prose-ws">
+      <h2>Moving from Prisma or raw SQL to Drizzle</h2>
+      <p>Drizzle schemas are plain TypeScript, so the quickest way to migrate an existing database is to start from its DDL. Export it with <code>pg_dump --schema-only</code>, <code>mysqldump --no-data</code> or <code>.schema</code> in SQLite, paste the CREATE TABLE statements here and save the result as <code>schema.ts</code>. If you are coming from Prisma, <a href="/tools/sql-to-prisma">SQL to Prisma</a> does the reverse trip.</p>
+      <h2>How columns are mapped</h2>
+      <p>Each column becomes the matching builder from <code>drizzle-orm/pg-core</code>, <code>mysql-core</code> or <code>sqlite-core</code>, keyed in camelCase with the original column name kept as the database name. <code>SERIAL</code> becomes <code>serial()</code>, <code>AUTO_INCREMENT</code> becomes <code>.autoincrement()</code>, <code>now()</code> and <code>CURRENT_TIMESTAMP</code> become <code>.defaultNow()</code> where the column type supports it, and <code>gen_random_uuid()</code> becomes <code>.defaultRandom()</code>. Numeric and decimal defaults are written as strings, because Drizzle returns those columns as strings to avoid precision loss.</p>
+      <h2>What to check by hand</h2>
+      <p>Indexes, CHECK constraints, triggers, views and generated columns are not converted. Types without a built-in Drizzle builder, such as PostgreSQL <code>bytea</code>, are mapped to text and listed in the notes under the output so you can swap in a <code>customType</code>. Relations are inferred from single-column foreign keys; rename them if the generated names do not read well.</p>
+    </div>
+  </section>
+
+  <FaqSection faqs={seo?.faqs} />
+  <RelatedTools currentTool={slug} />
+</Layout>

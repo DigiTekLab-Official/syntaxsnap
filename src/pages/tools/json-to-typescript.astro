@@ -1,0 +1,40 @@
+---
+// src/pages/tools/json-to-typescript.astro
+import Layout from '../../layouts/Layout.astro';
+import Tool from '../../components/tools/JsonToTypescript';
+import RelatedTools from '../../components/ui/RelatedTools.astro';
+import FaqSection from '../../components/ui/FaqSection.astro';
+import HowToSection from '../../components/ui/HowToSection.astro';
+import { toolSeoData } from '../../data/seo';
+
+const slug = "json-to-typescript";
+const title = "JSON to TypeScript Interface Converter (Free, Private) | SyntaxSnap";
+const description = "Convert JSON to TypeScript interfaces or types instantly. Nested objects get their own named types and missing keys become optional. Runs in your browser.";
+const features = ["Interfaces or type aliases", "Named types for nested objects", "Optional fields inferred from arrays", "Readonly and export options", "Download as types.ts", "Runs 100% in your browser"];
+const seo = toolSeoData[slug];
+---
+
+<Layout title={title} description={description} isTool={true} slug={slug} features={features} howTo={seo?.howTo} faqs={seo?.faqs}>
+  <header class="mb-5 max-w-3xl">
+    <h1 class="text-[28px] font-semibold tracking-tight text-white md:text-[32px]">JSON to TypeScript</h1>
+    <p class="mt-2 text-[15px] leading-relaxed text-slate-400">Paste an API response to generate TypeScript interfaces. Nested objects become named types, and fields that only some array items have are marked optional.</p>
+  </header>
+
+  <Tool client:load />
+
+  <HowToSection howTo={seo?.howTo} />
+
+  <section class="mt-14 border-t border-slate-800 pt-2">
+    <div class="prose-ws">
+      <h2>How types are inferred</h2>
+      <p>Each nested object becomes its own interface, named after its key, so <code>profile</code> becomes <code>Profile</code> and an array called <code>repos</code> holds <code>Repo</code> items. When array items have different keys, they are merged into one type and keys missing from some items are marked optional with <code>?</code>.</p>
+      <h2>Null values</h2>
+      <p>A field whose sample value is <code>null</code> is typed as <code>null</code>, because one sample cannot show what else it may hold. Replace it with the real type, for example <code>string | null</code>, once you know it.</p>
+      <h2>Types are not validation</h2>
+      <p>TypeScript types disappear at runtime, so they cannot catch an API that changes shape. If you need runtime checks, generate a schema with <a href="/tools/json-to-zod">JSON to Zod</a> and infer the type from it.</p>
+    </div>
+  </section>
+
+  <FaqSection faqs={seo?.faqs} />
+  <RelatedTools currentTool={slug} />
+</Layout>

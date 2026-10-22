@@ -2,6 +2,7 @@
 import { useState, useMemo, useEffect, useRef, useCallback } from 'react';
 import ShareButtonGroup from '../ui/ShareButtonGroup';
 import { useDebounce } from '../../hooks/useDebounce';
+import yaml from 'js-yaml';
 
 // ─── CONSTANTS ──────────────────────────────────────────────────────────────
 
@@ -226,7 +227,7 @@ function mapSchemaToZod(
         const isRequired = requiredKeys.includes(key);
 
         if (!isRequired) fieldZod += '.optional()';
-        if (val.nullable) fieldZod += '.nullable()';
+        // nullable is already applied inside mapSchemaToZod
         if (val.description) {
           const escaped = val.description.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
           fieldZod += `.describe("${escaped}")`;
@@ -276,7 +277,7 @@ function mapSchemaToZod(
 function convertOpenAPIToZod(input: string): ConversionResult {
   const trimmed = input.trim();
   if (!trimmed) {
-    return { code: '// Paste an OpenAPI 3.x JSON specification to begin…', error: null };
+    return { code: '// Paste an OpenAPI 3.x JSON or YAML specification to begin…', error: null };
   }
 
   if (trimmed.length > MAX_INPUT_LENGTH) {
@@ -286,13 +287,16 @@ function convertOpenAPIToZod(input: string): ConversionResult {
     };
   }
 
+  // JSON when it looks like JSON, otherwise YAML (most OpenAPI specs are YAML)
   let parsedSpec: OpenAPISpec;
+  const looksJson = trimmed.startsWith('{');
   try {
-    parsedSpec = JSON.parse(trimmed) as OpenAPISpec;
+    parsedSpec = (looksJson ? JSON.parse(trimmed) : yaml.load(trimmed)) as OpenAPISpec;
+    if (!parsedSpec || typeof parsedSpec !== 'object') throw new Error('Expected an object at the top level.');
   } catch (err) {
     return {
-      code: '// Invalid JSON — check the syntax and try again.',
-      error: `Invalid JSON: ${(err as Error).message}`,
+      code: looksJson ? '// Invalid JSON — check the syntax and try again.' : '// Invalid YAML — check the indentation and try again.',
+      error: `${looksJson ? 'Invalid JSON' : 'Invalid YAML'}: ${(err as Error).message.split('\n')[0]}`,
     };
   }
 

@@ -1,0 +1,36 @@
+---
+// src/components/workspace/StatusBar.astro
+// The workspace status bar: states plainly where your data goes.
+import { TOOLS, type Tool } from '../../config/tools';
+import { EXTENSION_URL } from '../../config/site';
+
+interface Props { tool?: Tool }
+const { tool } = Astro.props;
+const localCount = TOOLS.filter((t) => !t.network).length;
+---
+
+<footer class="ws-status fixed inset-x-0 bottom-0 z-40 flex h-7 items-center gap-4 border-t border-slate-800 bg-ws-rail px-3 font-mono text-[11.5px] text-slate-400" role="contentinfo" aria-label="Workspace status">
+  {tool ? (
+    tool.network ? (
+      <span class="flex items-center gap-1.5 text-ws-network">
+        <span class="h-1.5 w-1.5 rounded-full bg-ws-network" aria-hidden="true"></span>
+        Sends your prompt to OpenAI
+      </span>
+    ) : (
+      <span class="flex items-center gap-1.5 text-ws-local">
+        <span class="h-1.5 w-1.5 rounded-full bg-ws-local" aria-hidden="true"></span>
+        Runs locally, nothing uploaded
+      </span>
+    )
+  ) : (
+    <span class="flex items-center gap-1.5 text-ws-local">
+      <span class="h-1.5 w-1.5 rounded-full bg-ws-local" aria-hidden="true"></span>
+      {localCount} of {TOOLS.length} tools run fully in your browser
+    </span>
+  )}
+  {tool && <span class="hidden truncate text-slate-500 sm:inline">{tool.href}</span>}
+  <span class="ml-auto hidden items-center gap-4 md:flex">
+    <button type="button" class="cmd-palette-trigger hover:text-slate-200">⌘K search tools</button>
+    <a href={EXTENSION_URL} target="_blank" rel="noopener noreferrer" class="hover:text-slate-200">Chrome extension</a>
+  </span>
+</footer>

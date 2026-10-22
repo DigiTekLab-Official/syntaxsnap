@@ -1,0 +1,40 @@
+---
+// src/pages/tools/base64.astro
+import Layout from '../../layouts/Layout.astro';
+import Tool from '../../components/tools/Base64Tool';
+import RelatedTools from '../../components/ui/RelatedTools.astro';
+import FaqSection from '../../components/ui/FaqSection.astro';
+import HowToSection from '../../components/ui/HowToSection.astro';
+import { toolSeoData } from '../../data/seo';
+
+const slug = "base64";
+const title = "Base64 Encode & Decode Online (UTF-8, URL-Safe) | SyntaxSnap";
+const description = "Encode text to Base64 or decode Base64 to text with full UTF-8 support. URL-safe base64url option and data URI decoding. Runs locally in your browser.";
+const features = ["Encode and decode", "Full UTF-8 support", "URL-safe base64url output", "Decodes data: URIs", "Swap output back to input", "Runs 100% in your browser"];
+const seo = toolSeoData[slug];
+---
+
+<Layout title={title} description={description} isTool={true} slug={slug} features={features} howTo={seo?.howTo} faqs={seo?.faqs}>
+  <header class="mb-5 max-w-3xl">
+    <h1 class="text-[28px] font-semibold tracking-tight text-white md:text-[32px]">Base64 Encode and Decode</h1>
+    <p class="mt-2 text-[15px] leading-relaxed text-slate-400">Encode text to Base64 or decode it back. Emoji and non-English text work correctly, and a URL-safe option produces base64url for tokens and query strings.</p>
+  </header>
+
+  <Tool client:load />
+
+  <HowToSection howTo={seo?.howTo} />
+
+  <section class="mt-14 border-t border-slate-800 pt-2">
+    <div class="prose-ws">
+      <h2>What Base64 is for</h2>
+      <p>Base64 turns any bytes into 64 plain characters so they can travel through systems that expect text: HTTP Basic auth headers, JSON fields, email attachments and <code>data:</code> URIs. It is an encoding, not encryption, so anyone can decode it.</p>
+      <h2>Standard and URL-safe Base64</h2>
+      <p>Standard Base64 uses <code>+</code> and <code>/</code>, which have special meaning in URLs. The URL-safe variant, base64url, replaces them with <code>-</code> and <code>_</code> and drops the <code>=</code> padding. JWTs use base64url, so the decoder accepts both.</p>
+      <h2>Why UTF-8 matters</h2>
+      <p>The browser's <code>btoa</code> function fails on characters outside Latin-1, such as emoji or Tamil script. This tool converts text to UTF-8 bytes first, so every character round-trips correctly.</p>
+    </div>
+  </section>
+
+  <FaqSection faqs={seo?.faqs} />
+  <RelatedTools currentTool={slug} />
+</Layout>

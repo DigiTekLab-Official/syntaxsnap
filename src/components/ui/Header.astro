@@ -1,158 +1,67 @@
 ---
 // src/components/ui/Header.astro
-import { Wrench, Sparkles, Menu, X, Search } from 'lucide-astro';
-import { TOOLS } from '../../config/tools';
-
-const aiTool = TOOLS.find(t => t.category === 'ai') || TOOLS[0];
+import Logo from '../workspace/Logo.astro';
+import { CATEGORY_NAV, TOOLS } from '../../config/tools';
+import { EXTENSION_URL } from '../../config/site';
 ---
 
-<header class="border-b border-slate-800 bg-slate-950/80 backdrop-blur-md sticky top-0 z-50">
-  <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
-    
-    {/* Left: Logo */}
-    <a href="/" class="flex items-center gap-3 group no-underline" aria-label="SyntaxSnap home">
-      <div class="group-hover:rotate-12 transition-transform duration-300">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2000 2000" class="w-8 h-8 object-contain" aria-hidden="true" role="img">
-          <title>SyntaxSnap Icon</title>
-          <path class="fill-slate-950" d="M1000.52.15c159.74 0 319.48-.2 479.23.08 80.57.14 159.99 8.45 236.64 35.53 69.08 24.41 126.36 65.54 174.78 120.06 38.92 43.82 63.96 94.95 80.5 150.47 19.39 65.07 24.9 132.16 24.99 199.64.38 293.92.32 587.85.25 881.78-.01 46.73.89 93.56-1.86 140.16-2.31 39.06-7.99 78.07-14.52 116.71-18.37 108.62-70.9 197.39-159.23 263.73-54.94 41.26-118.45 63.45-185.16 76.74-26.74 5.33-53.93 11.78-80.94 11.9-346.29 1.49-692.59 1.92-1038.89 2.62-15.1.03-30.31 1.17-45.26-.33-31.17-3.12-62.32-6.91-93.26-11.79-57.72-9.12-112.44-27.76-163.15-56.84-89.18-51.15-151.54-125.16-185.19-222.54C9.41 1650.09.69 1589.8.49 1528.78c-.75-227.67-.39-455.35-.4-683.02 0-85.75-.12-171.51.33-257.26.28-53.12-1.41-106.48 2.97-159.3C12 325.4 40.56 227.82 112.91 148.95 167.67 89.26 234.34 47.59 313.08 25.23 378.04 6.76 444.27.51 511.2.29 674.3-.25 837.41.12 1000.51.12v.04ZM371.87 994.88c6.39-7.01 13.05-14.95 20.37-22.23 68.39-68.04 136.88-135.97 205.36-203.91 31.25-31.01 62.94-61.59 93.71-93.08 24.45-25.02 36.45-55.74 27.88-90.12-9.21-36.96-33.72-62.57-71.25-72.24-37.63-9.7-69.97 2.12-97.05 29.41-62.5 63-124.94 126.06-187.56 188.94-57.64 57.87-115.9 115.14-173.15 173.41-51.8 52.73-51.97 121.96-.34 174.66 72.67 74.18 146.11 147.62 219.29 221.31 35.04 35.28 70.25 70.39 105.33 105.63 17.77 17.85 34.37 37.03 53.36 53.45 24.18 20.9 53.34 26.12 83.96 17.19 69.94-20.38 92.5-107.05 40.77-160.42-54.96-56.7-111.95-111.42-167.73-167.33-50.79-50.91-101.15-102.25-152.96-154.67Zm1252.34.34c-59.03 59.84-118.17 120.01-177.56 179.92-47.81 48.23-95.97 96.1-143.89 144.22-23.08 23.18-31.91 51.32-24.42 82.93 8.84 37.32 33.04 63.07 69.02 74.87 34.3 11.25 64.71.03 90.11-24.75 10.58-10.32 20.19-21.63 30.63-32.09 47.74-47.81 95.75-95.36 143.42-143.23 67.14-67.42 134.26-134.85 200.97-202.68 21.3-21.66 31.52-48.65 32.53-79 1.21-36.21-13.77-65.68-38.67-90.72-61.63-61.98-123.35-123.87-185.11-185.71-59.86-59.94-119.5-120.1-179.83-179.56-36.69-36.16-85.66-39.75-123.88-9.5-23.62 18.7-40.94 42.11-41.37 73.79-.4 29.68 11.84 54.5 32.75 75.31 65.75 65.48 131.55 130.91 197.11 196.58 39.63 39.7 78.86 79.81 118.17 119.64ZM835.1 1750.67c.67.02 1.33.03 2 .05 129.49-271.09 258.98-542.17 388.64-813.62-76.54 1.28-152.97 2.57-231.28 3.88 59.49-242.47 105.17-486.07 151.12-729.49-128.98 264.4-257.96 528.8-387.52 794.4H994.6c-53.34 249.09-106.42 496.93-159.49 744.77Z" />
-          <path class="fill-white" d="M371.87 994.88c51.81 52.43 102.17 103.77 152.96 154.67 55.78 55.91 112.77 110.63 167.73 167.33 51.73 53.37 29.17 140.04-40.77 160.42-30.62 8.92-59.77 3.71-83.96-17.19-19-16.42-35.6-35.6-53.36-53.45-35.08-35.24-70.29-70.35-105.33-105.63-73.18-73.69-146.62-147.12-219.29-221.31-51.63-52.7-51.46-121.93.34-174.66 57.24-58.27 115.5-115.53 173.15-173.41 62.63-62.88 125.06-125.94 187.56-188.94 27.07-27.29 59.41-39.11 97.05-29.41 37.52 9.67 62.03 35.28 71.25 72.24 8.57 34.38-3.43 65.1-27.88 90.12-30.77 31.48-62.46 62.07-93.71 93.08-68.48 67.94-136.97 135.87-205.36 203.91-7.32 7.28-13.98 15.22-20.37 22.23Zm1252.34.34c-39.31-39.83-78.53-79.94-118.17-119.64-65.56-65.67-131.36-131.11-197.11-196.58-20.9-20.81-33.15-45.64-32.75-75.31.43-31.68 17.74-55.09 41.37-73.79 38.22-30.25 87.19-26.66 123.88 9.5 60.33 59.46 119.98 119.62 179.83 179.56 61.76 61.85 123.48 123.73 185.11 185.71 24.9 25.04 39.87 54.5 38.67 90.72-1.01 30.35-11.23 57.34-32.53 79-66.71 67.83-133.84 135.27-200.97 202.68-47.68 47.87-95.68 95.42-143.42 143.23-10.45 10.46-20.05 21.77-30.63 32.09-25.4 24.78-55.81 36-90.11 24.75-35.97-11.8-60.18-37.54-69.02-74.87-7.48-31.61 1.35-59.75 24.42-82.93 47.92-48.12 96.08-95.99 143.89-144.22 59.39-59.91 118.52-120.08 177.56-179.92Z" />
-          <path class="fill-[#27b4f2]" d="M835.1 1750.67c53.08-247.84 106.15-495.68 159.49-744.77H758.05c129.57-265.61 258.55-530.01 387.52-794.4-45.95 243.42-91.63 487.02-151.12 729.49 78.31-1.31 154.74-2.6 231.28-3.88-129.66 271.44-259.15 542.53-388.64 813.62-.67-.02-1.33-.03-2-.05Z" />
-        </svg>
-      </div>
-      <span class="text-xl font-bold tracking-tight text-white">Syntax<span class="text-[#27b4f2]">Snap</span></span>
+<header class="sticky top-0 z-50 h-14 border-b border-slate-800 bg-ws-bg/90 backdrop-blur-md">
+  <div class="flex h-full items-center gap-3 px-4">
+    <a href="/" class="flex shrink-0 items-center gap-2.5 no-underline lg:w-[248px]" aria-label="SyntaxSnap home">
+      <Logo />
+      <span class="text-[17px] font-semibold tracking-tight text-white">Syntax<span class="text-indigo-500">Snap</span></span>
     </a>
 
-    {/* Right: Search, Nav & Mobile Toggle */}
-    <div class="flex items-center gap-3 md:gap-5">
-      
-      {/* Search Button (Desktop) */}
-      <button
-        type="button"
-        class="cmd-palette-trigger hidden md:flex items-center justify-between gap-4 px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 hover:border-slate-700 hover:bg-slate-800 text-slate-400 text-sm font-medium transition-colors w-48 lg:w-56 group"
-        aria-label="Search tools"
-      >
-        <div class="flex items-center gap-2">
-          <Search class="w-4 h-4 text-slate-500 group-hover:text-[#27b4f2] transition-colors" />
-          <span>Search...</span>
-        </div>
-        <kbd class="px-1.5 py-0.5 text-xs font-bold tracking-widest text-slate-400 bg-slate-800 border border-slate-700 rounded shadow-sm">⌘K</kbd>
+    <button
+      type="button"
+      class="cmd-palette-trigger hidden h-9 w-full max-w-md items-center gap-2.5 rounded-md border border-slate-800 bg-slate-900 px-3 text-left text-sm text-slate-400 transition-colors hover:border-slate-700 hover:text-slate-300 md:flex"
+      aria-label="Search tools"
+    >
+      <svg class="h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5" stroke-linecap="round"/></svg>
+      <span class="flex-1 truncate">Search {TOOLS.length} tools</span>
+      <kbd class="rounded border border-slate-700 bg-slate-800 px-1.5 py-px font-mono text-[11px] text-slate-400">⌘K</kbd>
+    </button>
+
+    <nav aria-label="Main" class="ml-auto hidden items-center gap-1 text-sm md:flex">
+      <a href="/tools" class="rounded-md px-3 py-1.5 text-slate-400 hover:bg-slate-900 hover:text-white">All tools</a>
+      <a href="/sponsor" class="rounded-md px-3 py-1.5 text-slate-400 hover:bg-slate-900 hover:text-white">Sponsor</a>
+      <a href={EXTENSION_URL} target="_blank" rel="noopener noreferrer" class="rounded-md px-3 py-1.5 text-slate-400 hover:bg-slate-900 hover:text-white">Extension</a>
+    </nav>
+
+    <div class="ml-auto flex items-center gap-1 md:hidden">
+      <button type="button" class="cmd-palette-trigger rounded-md p-2 text-slate-400 hover:bg-slate-900 hover:text-white" aria-label="Search tools">
+        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5" stroke-linecap="round"/></svg>
       </button>
-
-      {/* Search Icon (Mobile) */}
-      <button 
-        type="button"
-        class="cmd-palette-trigger md:hidden p-2 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800/50 transition-colors focus:outline-none focus:ring-2 focus:ring-[#27b4f2]"
-        aria-label="Search tools"
-      >
-        <Search class="w-5 h-5" />
-      </button>
-
-      {/* Desktop Nav */}
-      <nav aria-label="Main navigation" class="hidden md:flex items-center gap-5">
-        <ul class="flex gap-4 lg:gap-6 text-sm font-medium text-slate-400 list-none m-0 p-0">
-          <li>
-            <a href={aiTool.href} class="text-emerald-400 hover:text-emerald-300 transition-colors flex items-center gap-1.5 py-2">
-              <Sparkles class="w-4 h-4"/> <span class="hidden lg:inline">AI Tools</span>
-            </a>
-          </li>
-          <li>
-            <a href="/#all-tools" class="hover:text-white transition-colors flex items-center gap-1.5 py-2">
-              <Wrench class="w-4 h-4"/> <span class="hidden lg:inline">Tools Library</span>
-            </a>
-          </li>
-        </ul>
-
-        {/* ── NEW: CHROME EXTENSION GLOBAL CTA ── */}
-        <div class="h-6 w-px bg-slate-800 hidden lg:block"></div> {/* Subtle divider */}
-        
-        <a 
-          href="https://chromewebstore.google.com/detail/syntaxsnap-developer-tool/klglanlaodgndhpcaldmoeenjepiocfi" 
-          target="_blank" 
-          rel="noopener noreferrer"
-          class="flex items-center gap-2 px-3 py-1.5 bg-[#27b4f2]/10 hover:bg-[#27b4f2]/20 text-slate-200 text-sm font-semibold rounded-lg border border-[#27b4f2]/20 hover:border-[#27b4f2]/40 transition-all group"
-        >
-          <svg class="w-4 h-4 text-[#27b4f2]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="10"></circle>
-            <circle cx="12" cy="12" r="4"></circle>
-            <line x1="21.17" y1="8" x2="12" y2="8"></line>
-            <line x1="3.95" y1="6.06" x2="8.54" y2="14"></line>
-            <line x1="10.88" y1="21.94" x2="15.46" y2="14"></line>
-          </svg>
-          <span class="hidden xl:inline">Add to Chrome</span>
-          <span class="inline xl:hidden">Extension</span>
-        </a>
-
-      </nav>
-
-      {/* Mobile Menu Toggle */}
-      <button 
-        id="mobile-menu-btn" 
-        class="md:hidden p-2 -mr-2 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800/50 transition-colors focus:outline-none focus:ring-2 focus:ring-[#27b4f2]"
-        aria-label="Toggle mobile menu"
-        aria-expanded="false"
-      >
-        <Menu class="w-6 h-6" id="menu-icon-open" />
-        <X class="w-6 h-6 hidden" id="menu-icon-close" />
+      <button id="mobile-menu-btn" type="button" class="rounded-md p-2 text-slate-400 hover:bg-slate-900 hover:text-white" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">
+        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
       </button>
     </div>
   </div>
 
-  {/* Mobile Dropdown Menu */}
-  <div id="mobile-menu" class="hidden absolute top-16 left-0 w-full border-b border-slate-800 bg-slate-950/95 backdrop-blur-xl shadow-2xl md:hidden">
-    <div class="max-w-6xl mx-auto px-4 py-4">
-      <ul class="space-y-2 text-base font-medium text-slate-300">
-        <li>
-          <a href={aiTool.href} class="mobile-link py-3 px-4 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center gap-3">
-            <Sparkles class="w-5 h-5"/> AI Tools
-          </a>
-        </li>
-        <li>
-          <a href="/#all-tools" class="mobile-link py-3 px-4 rounded-lg hover:bg-slate-800/80 flex items-center gap-3">
-            <Wrench class="w-5 h-5"/> Tools Library
-          </a>
-        </li>
-      </ul>
-    </div>
+  <div id="mobile-menu" class="hidden border-b border-slate-800 bg-ws-bg px-4 pb-4 md:hidden">
+    <ul class="divide-y divide-slate-800/70 text-[15px]">
+      <li><a href="/tools" class="block py-3 text-slate-200">All tools</a></li>
+      {CATEGORY_NAV.map((c) => <li><a href={`/tools/category/${c.key}`} class="block py-3 text-slate-400">{c.label}</a></li>)}
+      <li><a href="/sponsor" class="block py-3 text-slate-400">Sponsor</a></li>
+      <li><a href={EXTENSION_URL} target="_blank" rel="noopener noreferrer" class="block py-3 text-slate-400">Chrome extension</a></li>
+    </ul>
+    
   </div>
 </header>
 
 <script is:inline>
-  // Mobile Menu Logic
-  const btn = document.getElementById('mobile-menu-btn');
-  const menu = document.getElementById('mobile-menu');
-  const iconOpen = document.getElementById('menu-icon-open');
-  const iconClose = document.getElementById('menu-icon-close');
-  const mobileLinks = document.querySelectorAll('.mobile-link');
-
-  function toggleMenu(forceState = null) {
-    const isCurrentlyOpen = !menu.classList.contains('hidden');
-    const willBeOpen = forceState !== null ? forceState : !isCurrentlyOpen;
-
-    if (willBeOpen) {
-      menu.classList.remove('hidden');
-      iconOpen.classList.add('hidden');
-      iconClose.classList.remove('hidden');
-      btn.setAttribute('aria-expanded', 'true');
-    } else {
-      menu.classList.add('hidden');
-      iconOpen.classList.remove('hidden');
-      iconClose.classList.add('hidden');
-      btn.setAttribute('aria-expanded', 'false');
-    }
-  }
-
-  btn?.addEventListener('click', () => toggleMenu());
-  mobileLinks.forEach(link => link.addEventListener('click', () => toggleMenu(false)));
-
-  // Command Palette Trigger Logic
-  const searchTriggers = document.querySelectorAll('.cmd-palette-trigger');
-  searchTriggers.forEach(trigger => {
-    trigger.addEventListener('click', () => {
-      window.dispatchEvent(new Event('open-command-palette'));
-      // Close mobile menu if open
-      if (menu && !menu.classList.contains('hidden')) {
-        toggleMenu(false);
-      }
+  (() => {
+    const btn = document.getElementById('mobile-menu-btn');
+    const menu = document.getElementById('mobile-menu');
+    btn?.addEventListener('click', () => {
+      const open = menu.classList.toggle('hidden') === false;
+      btn.setAttribute('aria-expanded', String(open));
     });
-  });
+    // Delegated, so triggers rendered later in the page (status bar, homepage) work too.
+    document.addEventListener('click', (e) => {
+      if (!(e.target instanceof Element) || !e.target.closest('.cmd-palette-trigger')) return;
+      menu?.classList.add('hidden');
+      window.dispatchEvent(new Event('open-command-palette'));
+    });
+  })();
 </script>

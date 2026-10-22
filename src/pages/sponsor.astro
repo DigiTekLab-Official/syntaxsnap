@@ -1,0 +1,43 @@
+---
+// src/pages/sponsor.astro — sell sponsorship directly (house ads link here).
+// No fixed prices: quote from each page's real traffic (Clarity) until volume justifies a rate card.
+import Layout from '../layouts/Layout.astro';
+import { TOOLS } from '../config/tools';
+import { SPONSOR_EMAIL } from '../config/site';
+
+const PLANS = [
+  { name: 'One tool', body: 'Your logo and one line in the sidebar and end-of-page slot of one tool, such as OpenAPI to Zod or the Aurora Gradient Generator.' },
+  { name: 'One category', body: 'The same placement across every tool in a category, for example all CSS & Design tools or all JSON & Schema tools.' },
+  { name: 'Whole site', body: `Every tool page, all ${TOOLS.length} of them.` },
+];
+const mail = (plan: string) => `mailto:${SPONSOR_EMAIL}?subject=${encodeURIComponent(`SyntaxSnap sponsorship: ${plan}`)}`;
+---
+
+<Layout title="Sponsor SyntaxSnap – Reach Developers While They Work" description="Put your developer product in front of engineers using SyntaxSnap's JSON, TypeScript, API and CSS tools. One sponsor per page, no tracking scripts.">
+  <header class="max-w-2xl">
+    <h1 class="text-[32px] font-semibold tracking-tight text-white">Sponsor SyntaxSnap</h1>
+    <p class="mt-3 text-[16px] leading-relaxed text-slate-400">
+      People open SyntaxSnap in the middle of real work: debugging an API response, typing a payload, writing a Dockerfile. A sponsor slot puts your product next to that work, one sponsor per page.
+    </p>
+  </header>
+
+  <section class="mt-10 grid gap-3 md:grid-cols-3" aria-label="Sponsorship plans">
+    {PLANS.map((p) => (
+      <div class="flex flex-col rounded-lg border border-slate-800 bg-ws-panel p-5">
+        <h2 class="text-[15px] font-medium text-slate-200">{p.name}</h2>
+        <p class="mt-3 flex-1 text-sm leading-relaxed text-slate-400">{p.body}</p>
+        <a href={mail(p.name)} class="mt-5 inline-flex justify-center rounded-md bg-indigo-500 px-4 py-2 text-sm font-medium text-slate-950 hover:bg-indigo-400">Ask about {p.name.toLowerCase()}</a>
+      </div>
+    ))}
+  </section>
+  <p class="mt-3 text-sm text-slate-500">Priced from the real monthly traffic of the pages you choose, which we share before you commit. Billed monthly, cancel any time.</p>
+
+  <section class="prose-ws mt-14 border-t border-slate-800 pt-2">
+    <h2>What a sponsor gets</h2>
+    <p>A text-and-logo unit that matches the workspace, shown in the tool sidebar on desktop and below the tool on mobile. No pop-ups and no autoplay. Direct sponsor units are served from syntaxsnap.com with no third-party tracking, and link to your site with UTM tags so you see results in your own analytics.</p>
+    <h2>Who uses SyntaxSnap</h2>
+    <p>TypeScript, backend and frontend engineers working with JSON, APIs, schemas and CSS. Good fits are API platforms, databases and hosting, developer tooling, observability, auth, and AI developer products.</p>
+    <h2>Get in touch</h2>
+    <p>Email <a href={`mailto:${SPONSOR_EMAIL}`}>{SPONSOR_EMAIL}</a> with your product and the tools you would like to appear on. We will reply with last month's traffic for those pages, a price and an open start date.</p>
+  </section>
+</Layout>

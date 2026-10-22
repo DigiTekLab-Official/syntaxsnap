@@ -1,0 +1,40 @@
+---
+// src/pages/tools/json-formatter.astro
+import Layout from '../../layouts/Layout.astro';
+import Tool from '../../components/tools/JsonFormatter';
+import RelatedTools from '../../components/ui/RelatedTools.astro';
+import FaqSection from '../../components/ui/FaqSection.astro';
+import HowToSection from '../../components/ui/HowToSection.astro';
+import { toolSeoData } from '../../data/seo';
+
+const slug = "json-formatter";
+const title = "JSON Formatter & Validator Online (Private, No Upload) | SyntaxSnap";
+const description = "Format, beautify, validate and minify JSON in your browser. See the exact line and column of errors, sort keys, and fix almost-JSON from LLMs. Nothing is uploaded.";
+const features = ["Beautify with 2 spaces, 4 spaces or tabs", "Minify for payloads", "Exact error line and column", "Sort keys alphabetically", "Repair almost-JSON from LLMs and config files", "Runs 100% in your browser"];
+const seo = toolSeoData[slug];
+---
+
+<Layout title={title} description={description} isTool={true} slug={slug} features={features} howTo={seo?.howTo} faqs={seo?.faqs}>
+  <header class="mb-5 max-w-3xl">
+    <h1 class="text-[28px] font-semibold tracking-tight text-white md:text-[32px]">JSON Formatter and Validator</h1>
+    <p class="mt-2 text-[15px] leading-relaxed text-slate-400">Paste JSON to format and validate it as you type. Errors show the exact line and column, and almost-JSON (trailing commas, comments, single quotes) can be fixed in one click.</p>
+  </header>
+
+  <Tool client:load />
+
+  <HowToSection howTo={seo?.howTo} />
+
+  <section class="mt-14 border-t border-slate-800 pt-2">
+    <div class="prose-ws">
+      <h2>Why format JSON locally</h2>
+      <p>Most online formatters send what you paste to their server. API responses often contain tokens, emails and customer records, so SyntaxSnap parses everything with your browser's own <code>JSON.parse</code>. You can check this in your browser's network tab: formatting makes no requests.</p>
+      <h2>Reading validation errors</h2>
+      <p>When the JSON is invalid, the output panel shows the line and column where the parser stopped, and <strong>Show in input</strong> selects that character. The real mistake is usually just before that point: a missing comma, an unclosed quote or a stray bracket.</p>
+      <h2>Fixing almost-JSON</h2>
+      <p>LLM output and JavaScript config files often look like JSON but are not. If the input has comments, trailing commas, single-quoted strings, unquoted keys or Python literals such as <code>True</code> and <code>None</code>, the <strong>Fix common errors</strong> button rewrites it into strict JSON. It only appears when the fixed version parses.</p>
+    </div>
+  </section>
+
+  <FaqSection faqs={seo?.faqs} />
+  <RelatedTools currentTool={slug} />
+</Layout>

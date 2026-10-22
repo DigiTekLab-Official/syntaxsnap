@@ -20,7 +20,7 @@ const features = [
 const faqSchema = buildFAQPage([
   {
     question: "Which OpenAPI versions are supported?",
-    answer: "This converter supports OpenAPI 3.0.x and 3.1.x specifications, as well as Swagger 2.0 JSON format. It handles components/schemas, nested objects, arrays, and discriminated unions."
+    answer: "OpenAPI 3.0 and 3.1 documents in JSON or YAML. It converts the schemas under components.schemas. Swagger 2.0 documents, which keep schemas under definitions, are not supported yet, and 3.1 type arrays such as [\"string\", \"null\"] are not mapped."
   },
   {
     question: "Is my API specification sent to a server?",
@@ -28,11 +28,11 @@ const faqSchema = buildFAQPage([
   },
   {
     question: "Does it handle nested objects and allOf/oneOf?",
-    answer: "Yes. The converter resolves allOf (intersection), oneOf (discriminated unions), and anyOf compositions. It produces clean z.object(), z.union(), and z.intersection() calls."
+    answer: "Yes. allOf becomes an intersection with .and(), and oneOf and anyOf become z.union(). The discriminator keyword is ignored, so the result is a plain union rather than z.discriminatedUnion()."
   },
   {
     question: "Can I use the output in production?",
-    answer: "Yes. The generated Zod schemas are production-ready TypeScript code that imports directly from the zod package. Use them for API response validation, form inputs, or type-safe data pipelines."
+    answer: "Yes, after a review. The output is plain TypeScript that imports from zod. Check the list of unconverted keywords on this page, and remove .strict() from objects if your API may add fields."
   }
 ], currentUrl);
 ---
@@ -47,7 +47,7 @@ const faqSchema = buildFAQPage([
       </h1>
       <p class="text-slate-400 text-lg md:text-xl max-w-3xl mx-auto leading-relaxed">
         Transform third-party API specs into <strong class="text-indigo-400">runtime type safety</strong>. 
-        Parse OpenAPI 3.x JSON directly into production-ready <strong class="text-emerald-400">Zod schemas</strong> with full validation support.
+        Paste an OpenAPI 3.x spec in JSON or YAML and get a <strong class="text-emerald-400">Zod schema</strong> for every component.
       </p>
     </header>
 
@@ -71,8 +71,8 @@ const faqSchema = buildFAQPage([
           <h3 class="text-xl font-semibold text-slate-200 mb-3">How This Tool Works</h3>
           <p class="text-slate-400">
             This converter parses the <code class="text-indigo-300 bg-slate-800 px-1.5 py-0.5 rounded">components.schemas</code> block 
-            of OpenAPI 3.x documents and recursively maps properties, arrays, enums, discriminated unions, and format constraints 
-            (emails, UUIDs, datetimes) into production-ready Zod definitions. All processing happens locally—your proprietary 
+            of OpenAPI 3.x documents and recursively maps properties, arrays, enums, allOf/oneOf/anyOf, and format constraints 
+            (emails, UUIDs, datetimes) into Zod definitions. All processing happens locally—your proprietary 
             API specs remain 100% private.
           </p>
         </div>
@@ -99,6 +99,36 @@ const faqSchema = buildFAQPage([
           </li>
         ))}
       </ul>
+    </section>
+
+
+    <section class="mt-16" aria-labelledby="limits-heading">
+      <h2 id="limits-heading" class="text-2xl font-semibold text-white mb-4">What it converts, and what it does not</h2>
+      <div class="grid gap-4 md:grid-cols-2">
+        <div class="rounded-lg border border-slate-800 bg-ws-panel p-5">
+          <h3 class="text-[15px] font-medium text-slate-100">Converted</h3>
+          <ul class="mt-2 list-disc space-y-1.5 pl-5 text-sm leading-relaxed text-slate-400">
+            <li>Every schema under <code class="text-indigo-300">components.schemas</code>, from JSON or YAML</li>
+            <li>Objects, arrays, string, number, integer and boolean types, and <code class="text-indigo-300">required</code> fields</li>
+            <li>String and number enums, <code class="text-indigo-300">nullable</code>, and <code class="text-indigo-300">description</code></li>
+            <li>minLength, maxLength, minimum, maximum and pattern</li>
+            <li>email, uuid, date-time, uri and ip formats</li>
+            <li><code class="text-indigo-300">allOf</code> as intersections, <code class="text-indigo-300">oneOf</code> and <code class="text-indigo-300">anyOf</code> as unions</li>
+            <li><code class="text-indigo-300">$ref</code> to other components, with <code class="text-indigo-300">z.lazy()</code> for circular references</li>
+          </ul>
+        </div>
+        <div class="rounded-lg border border-slate-800 bg-ws-panel p-5">
+          <h3 class="text-[15px] font-medium text-slate-100">Not converted yet</h3>
+          <ul class="mt-2 list-disc space-y-1.5 pl-5 text-sm leading-relaxed text-slate-400">
+            <li><code class="text-indigo-300">paths</code>: parameters, request bodies and responses are skipped</li>
+            <li>OpenAPI 3.1 type arrays such as <code class="text-indigo-300">["string", "null"]</code> become <code class="text-indigo-300">z.unknown()</code></li>
+            <li><code class="text-indigo-300">discriminator</code> is ignored, so oneOf becomes a plain union</li>
+            <li>exclusiveMinimum, multipleOf, minItems, maxItems, uniqueItems, const and default</li>
+            <li>External <code class="text-indigo-300">$ref</code> files and URLs</li>
+          </ul>
+          <p class="mt-3 text-sm leading-relaxed text-slate-400">Objects without <code class="text-indigo-300">additionalProperties</code> get <code class="text-indigo-300">.strict()</code>, which rejects unknown keys. OpenAPI allows extra keys by default, so remove <code class="text-indigo-300">.strict()</code> if your API adds fields over time.</p>
+        </div>
+      </div>
     </section>
 
     <RelatedTools currentTool="openapi-to-zod" />
