@@ -125,7 +125,9 @@ const socialImageURL = new URL(ogImagePath, siteUrl).toString();
           <Explorer current={tool} />
         </aside>
 
-        <main id="main" class="min-w-0 flex-1 px-4 pb-16 pt-5 md:px-8">
+        {/* data-clarity-mask: Clarity session recordings and heatmaps must never capture what
+            people paste into a tool or the output it produces. Clicks and scrolls are still recorded. */}
+        <main id="main" class="min-w-0 flex-1 px-4 pb-16 pt-5 md:px-8" data-clarity-mask="True">
           <nav aria-label="Breadcrumb" class="mb-5 flex flex-wrap items-center gap-1.5 text-[13px] text-slate-500">
             <a href="/" class="hover:text-slate-200">Home</a>
             <span aria-hidden="true">/</span>
