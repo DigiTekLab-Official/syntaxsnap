@@ -1,0 +1,72 @@
+---
+// src/pages/tools/csv-to-json.astro
+import Layout from '../../layouts/Layout.astro';
+import Tool from '../../components/tools/CsvToJson';
+import RelatedTools from '../../components/ui/RelatedTools.astro';
+import FaqSection from '../../components/ui/FaqSection.astro';
+import HowToSection from '../../components/ui/HowToSection.astro';
+import WorkedExample from '../../components/ui/WorkedExample.astro';
+import { toolSeoData } from '../../data/seo';
+
+const slug = "csv-to-json";
+const title = "CSV to JSON Online – Free, Private, No Upload | SyntaxSnap";
+const description = "Convert CSV or TSV to a JSON array. Detects the delimiter, uses the header row as keys, infers numbers and booleans, and keeps ZIP codes as text. No upload.";
+const features = ["Detects comma, semicolon, tab and pipe", "Header row becomes object keys", "Type inference that keeps leading zeros", "Nest dot-path headers into objects", "Handles quoted cells and line breaks", "Warns about ragged rows", "Runs 100% in your browser"];
+const seo = toolSeoData[slug];
+
+const exampleIn = `id;name;zip;paid
+1;Müller GmbH;01067;true
+2;"Rossi; Figli";00184;false`;
+const exampleOut = `[
+  {
+    "id": 1,
+    "name": "Müller GmbH",
+    "zip": "01067",
+    "paid": true
+  },
+  {
+    "id": 2,
+    "name": "Rossi; Figli",
+    "zip": "00184",
+    "paid": false
+  }
+]`;
+---
+
+<Layout title={title} description={description} isTool={true} slug={slug} features={features} howTo={seo?.howTo} faqs={seo?.faqs}>
+  <header class="mb-5 max-w-3xl">
+    <h1 class="text-[28px] font-semibold tracking-tight text-white md:text-[32px]">CSV to JSON Converter</h1>
+    <p class="mt-2 text-[15px] leading-relaxed text-slate-400">Paste CSV or drop a spreadsheet export to get a JSON array of objects. The delimiter is detected for you, and numbers and booleans become real JSON values. One of our free <a href="/json" class="text-indigo-400 hover:text-indigo-300">JSON tools</a>.</p>
+  </header>
+
+  <Tool client:load />
+
+  <HowToSection howTo={seo?.howTo} />
+
+  <WorkedExample input={exampleIn} output={exampleOut} inputLabel="Input: semicolon CSV from Excel" outputLabel="Output: JSON (types inferred)">
+    The semicolon delimiter is detected, the quoted name keeps its semicolon, <code class="text-indigo-300">id</code> and <code class="text-indigo-300">paid</code> become a number and a boolean, and the ZIP codes stay strings so their leading zeros survive.
+  </WorkedExample>
+
+  <section class="mt-14 border-t border-slate-800 pt-2">
+    <div class="prose-ws">
+      <h2>Delimiter detection</h2>
+      <p>"CSV" files use different separators depending on where they came from. Excel in much of Europe writes semicolons, database exports often use tabs, and some systems use pipes. With the delimiter on <strong>Auto</strong>, the converter tries comma, semicolon, tab and pipe and picks the one that splits every row into the same number of fields. The footer shows which one it chose; pick one yourself if a file is ambiguous, for example a single-column list.</p>
+
+      <h2>Headers and keys</h2>
+      <p>With <strong>First row is header</strong> on, each later row becomes an object whose keys are the header names. Blank headers become <code>column_1</code>, <code>column_2</code> and so on, and repeated header names get a suffix (<code>name</code>, <code>name_2</code>) so no column overwrites another. Turn the option off to get an array of arrays instead, which suits files without a header or data you will process by position.</p>
+      <p>Rows with more or fewer cells than the header are kept: extra cells get <code>column_N</code> keys and missing cells are empty. A warning tells you how many rows were uneven, which usually points to an unquoted delimiter inside a value.</p>
+
+      <h2>Type inference</h2>
+      <p>CSV has no types; every cell is text. With <strong>Infer types</strong> on, cells that are written exactly like JSON numbers become numbers, <code>true</code> and <code>false</code> in any common capitalisation become booleans, and empty cells and <code>null</code> become <code>null</code>. Anything that would change if it were converted stays a string: values with leading zeros like ZIP codes, phone numbers and account numbers, and whole numbers too long to store exactly, such as 19-digit IDs. Dates stay strings too, because JSON has no date type. Turn inference off to keep every value as the exact text from the file.</p>
+
+      <h2>Quoted cells</h2>
+      <p>Cells are read following RFC 4180. A cell wrapped in double quotes can contain the delimiter and even line breaks, and two double quotes in a row stand for one quote character. If a quote is opened and never closed, the converter stops with an error that names the row, instead of quietly merging the rest of the file into one cell.</p>
+
+      <h2>Nested output</h2>
+      <p>Tick <strong>Nest dot paths</strong> to rebuild structure from flattened headers: <code>address.city</code> and <code>address.zip</code> become an <code>address</code> object, and <code>tags.0</code>, <code>tags.1</code> become an array. That makes this the reverse of <a href="/tools/json-to-csv">JSON to CSV</a>. A byte order mark at the start of the file, which Excel adds to UTF-8 exports, is removed automatically.</p>
+    </div>
+  </section>
+
+  <FaqSection faqs={seo?.faqs} />
+  <RelatedTools currentTool={slug} />
+</Layout>

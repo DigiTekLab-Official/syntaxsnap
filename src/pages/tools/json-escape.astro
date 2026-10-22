@@ -1,0 +1,57 @@
+---
+// src/pages/tools/json-escape.astro
+import Layout from '../../layouts/Layout.astro';
+import Tool from '../../components/tools/JsonEscape';
+import RelatedTools from '../../components/ui/RelatedTools.astro';
+import FaqSection from '../../components/ui/FaqSection.astro';
+import HowToSection from '../../components/ui/HowToSection.astro';
+import WorkedExample from '../../components/ui/WorkedExample.astro';
+import { toolSeoData } from '../../data/seo';
+
+const slug = "json-escape";
+const title = "JSON Escape Online – Free, Private, No Upload | SyntaxSnap";
+const description = "Escape text or JSON into a JSON string literal, or unescape a stringified JSON value back into readable JSON. Same result as JSON.stringify. Private, no upload.";
+const features = ["Escape and unescape in one tool", "Same output as JSON.stringify", "Minify JSON before escaping", "Unescape with or without outer quotes", "Formats unescaped JSON automatically", "Run again for double-escaped strings", "Runs 100% in your browser"];
+const seo = toolSeoData[slug];
+
+const exampleIn = String.raw`{"msg": "Hi \"Sam\"", "path": "C:\\temp"}`;
+const exampleOut = String.raw`"{\"msg\":\"Hi \\\"Sam\\\"\",\"path\":\"C:\\\\temp\"}"`;
+---
+
+<Layout title={title} description={description} isTool={true} slug={slug} features={features} howTo={seo?.howTo} faqs={seo?.faqs}>
+  <header class="mb-5 max-w-3xl">
+    <h1 class="text-[28px] font-semibold tracking-tight text-white md:text-[32px]">JSON Escape and Unescape</h1>
+    <p class="mt-2 text-[15px] leading-relaxed text-slate-400">Escape any text or JSON so it can sit inside a JSON string, or reverse it to turn a stringified value back into readable JSON. One of our free <a href="/json" class="text-indigo-400 hover:text-indigo-300">JSON tools</a>.</p>
+  </header>
+
+  <Tool client:load />
+
+  <HowToSection howTo={seo?.howTo} />
+
+  <WorkedExample input={exampleIn} output={exampleOut} inputLabel="Input: JSON" outputLabel="Output: escaped string literal">
+    The JSON is minified, then every quote gets a backslash, and backslashes that were already there are doubled. Unescaping the output gives back the original data.
+  </WorkedExample>
+
+  <section class="mt-14 border-t border-slate-800 pt-2">
+    <div class="prose-ws">
+      <h2>What escaping does</h2>
+      <p>A JSON string is wrapped in double quotes, so a double quote inside it has to be written as <code>\"</code>. The backslash itself is the escape character, so a literal backslash becomes <code>\\</code>. Characters that would break the line, such as line breaks, tabs and carriage returns, become <code>\n</code>, <code>\t</code> and <code>\r</code>, and other invisible control characters become <code>\u</code> followed by four hex digits. Nothing else needs escaping: accented letters, other scripts and emoji are valid inside JSON strings as they are, and so is the forward slash. The result is exactly what <code>JSON.stringify(text)</code> returns in JavaScript or <code>json.dumps(text, ensure_ascii=False)</code> returns in Python.</p>
+
+      <h2>Stringifying JSON</h2>
+      <p>Sometimes a whole JSON document has to travel as a string: a message body inside another JSON payload, a value in an environment variable, a field in a database column, or a test fixture in source code. Paste the JSON and leave <strong>Minify JSON first</strong> on: valid JSON is compacted to one line before it is escaped, which keeps the string short. Turn on <strong>Wrap in quotes</strong> for a complete literal you can paste straight into code, or off when the surrounding quotes already exist.</p>
+
+      <h2>Unescaping</h2>
+      <p>Switch to <strong>Unescape</strong> to go the other way. You can paste a full literal with its outer quotes, <code>{String.raw`"{\"a\":1}"`}</code>, or just the inside, <code>{String.raw`{\"a\":1}`}</code>, as it often appears in logs. Raw line breaks are read as <code>\n</code>, so text copied from a terminal still works. If the unescaped text is itself JSON and <strong>Format unescaped JSON</strong> is on, it is pretty-printed so you can read it at once.</p>
+      <p>Values that were escaped twice, for example JSON inside JSON inside a log line, still show backslashes after one pass. Click <strong>Use as input</strong> and unescape again; each pass removes one layer.</p>
+
+      <h2>Errors</h2>
+      <p>Unescaping fails when the text is not a valid JSON string. The common causes are a quote that was never escaped, which ends the string early; an invalid escape such as <code>\q</code> or a Windows path with single backslashes like <code>C:\data</code>; and a <code>\u</code> escape without exactly four hex digits. The error names the problem and its column.</p>
+
+      <h2>Related tools</h2>
+      <p>To make the JSON smaller without escaping it, use the <a href="/tools/json-minify">JSON minifier</a>. For Base64 rather than string escaping, use <a href="/tools/base64">Base64 Encode and Decode</a>, and for query strings use the <a href="/tools/url-encoder">URL encoder</a>.</p>
+    </div>
+  </section>
+
+  <FaqSection faqs={seo?.faqs} />
+  <RelatedTools currentTool={slug} />
+</Layout>

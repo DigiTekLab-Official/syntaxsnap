@@ -1,0 +1,75 @@
+---
+// src/pages/tools/json-viewer.astro
+import Layout from '../../layouts/Layout.astro';
+import Tool from '../../components/tools/JsonViewer';
+import RelatedTools from '../../components/ui/RelatedTools.astro';
+import FaqSection from '../../components/ui/FaqSection.astro';
+import HowToSection from '../../components/ui/HowToSection.astro';
+import WorkedExample from '../../components/ui/WorkedExample.astro';
+import { toolSeoData } from '../../data/seo';
+
+const slug = "json-viewer";
+const title = "JSON Viewer Online – Free, Private, No Upload | SyntaxSnap";
+const description = "View JSON as a collapsible tree: search keys and values, see types and child counts, and click any node to copy its JSONPath. Runs in your browser, no upload.";
+const features = ["Collapsible tree, two levels open on load", "Search keys and values with highlighted matches", "Click a node to copy its JSONPath", "Type badges and child counts", "Expand all and collapse all", "Virtualised rows for large files", "Runs 100% in your browser"];
+const seo = toolSeoData[slug];
+
+const exampleIn = `{
+  "user": { "id": 42, "name": "Ann" },
+  "orders": [
+    { "id": "A-1", "total": 18.5 },
+    { "id": "A-2", "total": 99 }
+  ],
+  "coupon": null
+}`;
+const exampleOut = `$ {3}                         obj
+├─ user {2}                   obj
+│  ├─ id: 42                  num
+│  └─ name: "Ann"             str
+├─ orders [2]                 arr
+│  ├─ 0 {2}                   obj
+│  └─ 1 {2}                   obj
+│     ├─ id: "A-2"            str
+│     └─ total: 99            num   ← click
+└─ coupon: null               null
+
+Copied: $.orders[1].total`;
+---
+
+<Layout title={title} description={description} isTool={true} slug={slug} features={features} howTo={seo?.howTo} faqs={seo?.faqs}>
+  <header class="mb-5 max-w-3xl">
+    <h1 class="text-[28px] font-semibold tracking-tight text-white md:text-[32px]">JSON Viewer: Explore JSON as a Tree</h1>
+    <p class="mt-2 text-[15px] leading-relaxed text-slate-400">Paste JSON or drop a file to browse it as a collapsible tree. Search for any key or value, see each node's type and size at a glance, and click a node to copy its path. One of our free <a href="/json" class="text-indigo-400 hover:text-indigo-300">JSON tools</a>.</p>
+  </header>
+
+  <Tool client:load />
+
+  <HowToSection howTo={seo?.howTo} />
+
+  <WorkedExample input={exampleIn} output={exampleOut} inputLabel="Input" outputLabel="Tree view (drawn as text)">
+    Objects show their key count in braces and arrays their length in brackets. Clicking the second order's <code class="text-indigo-300">total</code> copies the path you would use in code or in a JSONPath query.
+  </WorkedExample>
+
+  <section class="mt-14 border-t border-slate-800 pt-2">
+    <div class="prose-ws">
+      <h2>Reading the tree</h2>
+      <p>Every row is one node: its key (or its index, for array items), its value, and a small badge with its type: <code>obj</code>, <code>arr</code>, <code>str</code>, <code>num</code>, <code>bool</code> or <code>null</code>. Objects and arrays show how many children they hold, as <code>{'{4}'}</code> for an object with four keys or <code>[120]</code> for an array of 120 items, so you can spot an empty list or an unexpectedly large one without opening it. Strings keep their quotes, which makes <code>"42"</code> easy to tell apart from <code>42</code>.</p>
+      <p>The viewer opens the first two levels when the document loads. That is usually enough to see the shape of an API response: the top-level keys and what sits directly under each. Use the arrows to open or close a branch, <strong>Expand all</strong> to open everything, and <strong>Collapse all</strong> to start again from the root.</p>
+
+      <h2>Searching keys and values</h2>
+      <p>Type in the search box to find every key or value that contains your text, ignoring case. Each match's parents open automatically, matching text is highlighted, and the counter shows how many matches there are. Press <kbd>Enter</kbd> to move to the next match and <kbd>Shift</kbd>+<kbd>Enter</kbd> for the previous one. Search looks at the text of primitive values, so searching <code>true</code> finds booleans as well as strings containing the word. The first 500 matches are listed.</p>
+
+      <h2>Copying a JSONPath</h2>
+      <p>Click any node to copy its path, such as <code>$.orders[1].total</code>. Plain keys use dot notation; keys with spaces, dashes or other punctuation use brackets, as in <code>$.headers['content-type']</code>. The path works directly with JSONPath libraries. For <code>jq</code>, drop the leading <code>$</code>: <code>.orders[1].total</code>.</p>
+
+      <h2>Large documents</h2>
+      <p>The tree only draws the rows that are on screen, and a node's children are created when you open it. A 10 MB export with tens of thousands of records opens quickly because nothing below the second level exists until you ask for it. Files over 1 MB are parsed in a Web Worker so the page stays responsive. On very large files, <strong>Expand all</strong> stops after 20,000 containers; search is the fastest way to reach a specific node deeper down.</p>
+
+      <h2>When to switch to Code view</h2>
+      <p>The tree is for reading and navigating. To copy a formatted or minified version, or to sort keys, switch the view to <strong>Code</strong>. To see what changed between two versions of a document, use <a href="/tools/json-compare">JSON Compare</a>, and to turn the structure into types, send it to <a href="/tools/json-to-typescript">JSON to TypeScript</a>.</p>
+    </div>
+  </section>
+
+  <FaqSection faqs={seo?.faqs} />
+  <RelatedTools currentTool={slug} />
+</Layout>

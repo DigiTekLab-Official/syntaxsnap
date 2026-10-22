@@ -1,0 +1,81 @@
+---
+// src/pages/tools/yaml-to-json.astro
+import Layout from '../../layouts/Layout.astro';
+import Tool from '../../components/tools/YamlToJson';
+import RelatedTools from '../../components/ui/RelatedTools.astro';
+import FaqSection from '../../components/ui/FaqSection.astro';
+import HowToSection from '../../components/ui/HowToSection.astro';
+import WorkedExample from '../../components/ui/WorkedExample.astro';
+import { toolSeoData } from '../../data/seo';
+
+const slug = "yaml-to-json";
+const title = "YAML to JSON Online – Free, Private, No Upload | SyntaxSnap";
+const description = "Convert YAML to JSON with plain-English errors that point to the exact line: tabs, bad indentation, duplicate keys. Anchors and merge keys expanded. No upload.";
+const features = ["Plain-English error messages with line and column", "YAML 1.2 types, so on and yes stay strings", "Dates stay strings", "Anchors, aliases and merge keys expanded", "Multiple documents become an array", "2 or 4 space JSON output", "Runs 100% in your browser"];
+const seo = toolSeoData[slug];
+
+const exampleIn = `on:
+  push:
+    branches: [main]
+defaults: &d
+  timeout: 30
+job:
+  <<: *d
+  node: 22
+  date: 2026-10-22`;
+const exampleOut = `{
+  "on": {
+    "push": {
+      "branches": [
+        "main"
+      ]
+    }
+  },
+  "defaults": {
+    "timeout": 30
+  },
+  "job": {
+    "timeout": 30,
+    "node": 22,
+    "date": "2026-10-22"
+  }
+}`;
+---
+
+<Layout title={title} description={description} isTool={true} slug={slug} features={features} howTo={seo?.howTo} faqs={seo?.faqs}>
+  <header class="mb-5 max-w-3xl">
+    <h1 class="text-[28px] font-semibold tracking-tight text-white md:text-[32px]">YAML to JSON Converter</h1>
+    <p class="mt-2 text-[15px] leading-relaxed text-slate-400">Paste YAML or drop a .yml file to get JSON. When the YAML is broken, the error says what is wrong in plain words and highlights the line, so you can fix indentation problems quickly. One of our free <a href="/json" class="text-indigo-400 hover:text-indigo-300">JSON tools</a>.</p>
+  </header>
+
+  <Tool client:load />
+
+  <HowToSection howTo={seo?.howTo} />
+
+  <WorkedExample input={exampleIn} output={exampleOut} inputLabel="Input: YAML with an anchor and merge key" outputLabel="Output: JSON">
+    The <code class="text-indigo-300">&lt;&lt;: *d</code> merge copies <code class="text-indigo-300">timeout</code> into <code class="text-indigo-300">job</code>, the <code class="text-indigo-300">on</code> key stays the string "on", and the date stays text.
+  </WorkedExample>
+
+  <section class="mt-14 border-t border-slate-800 pt-2">
+    <div class="prose-ws">
+      <h2>Errors you can act on</h2>
+      <p>YAML depends on indentation, and parser errors are often cryptic. This converter turns the most common ones into plain advice and points to the line and column, which are also highlighted in the input. A tab used for indentation is reported as exactly that, because YAML only allows spaces. A key that does not line up with its neighbours is reported as bad indentation. A key used twice in the same mapping, a quoted string that is never closed, and a key that runs onto a second line each get their own message. Click <strong>Show in input</strong> to jump to the spot.</p>
+
+      <h2>Which values become which types</h2>
+      <p>The converter follows the YAML 1.2 core schema. <code>true</code> and <code>false</code> are booleans, <code>null</code>, <code>~</code> and empty values are <code>null</code>, and values written as numbers become numbers, including <code>0x1F</code> hex and <code>0o17</code> octal. Everything else is a string. That matters for words that YAML 1.1 treated as booleans: here <code>yes</code>, <code>no</code>, <code>on</code> and <code>off</code> stay strings. So the <code>on:</code> key at the top of a GitHub Actions workflow becomes <code>"on"</code>, as GitHub intends, not <code>true</code>.</p>
+      <p>Dates are kept as the text you wrote. JSON has no date type, and converting <code>2026-10-22</code> into a timestamp would add a time and time zone that were never in the file.</p>
+
+      <h2>Anchors, aliases and merge keys</h2>
+      <p>YAML lets you define a block once with <code>&amp;name</code> and reuse it with <code>*name</code>, and merge one mapping into another with <code>&lt;&lt;: *name</code>. Docker Compose files and CI configs use this to share settings between services or jobs. JSON has no references, so every alias is expanded into a full copy of the value, and merged keys appear directly in the target object. Keys written in the target win over merged ones.</p>
+
+      <h2>Several documents in one file</h2>
+      <p>A YAML file can hold several documents separated by <code>---</code>, as Kubernetes manifests often do. A single document becomes one JSON value; several become a JSON array with one item per document, in order. Comments are not part of the data and are dropped.</p>
+
+      <h2>After converting</h2>
+      <p>Send the JSON to <a href="/tools/json-to-typescript">JSON to TypeScript</a> to type a config, to <a href="/tools/json-to-zod">JSON to Zod</a> to validate it at runtime, or back through <a href="/tools/json-to-yaml">JSON to YAML</a> after editing it.</p>
+    </div>
+  </section>
+
+  <FaqSection faqs={seo?.faqs} />
+  <RelatedTools currentTool={slug} />
+</Layout>

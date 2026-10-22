@@ -22,7 +22,7 @@ test.describe('Site-Wide Tool Pages Smoke Test', () => {
     
     test(`Should load /tools/${route} with status 200 and an H1`, async ({ page }) => {
       // 1. Navigate to the page
-      const response = await page.goto(`http://localhost:4321/tools/${route}`);
+      const response = await page.goto(`/tools/${route}`);
       
       // 2. Assert the server returned a successful 200 OK status
       expect(response?.status()).toBe(200);

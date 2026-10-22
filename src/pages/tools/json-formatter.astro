@@ -5,33 +5,66 @@ import Tool from '../../components/tools/JsonFormatter';
 import RelatedTools from '../../components/ui/RelatedTools.astro';
 import FaqSection from '../../components/ui/FaqSection.astro';
 import HowToSection from '../../components/ui/HowToSection.astro';
+import WorkedExample from '../../components/ui/WorkedExample.astro';
 import { toolSeoData } from '../../data/seo';
 
 const slug = "json-formatter";
-const title = "JSON Formatter & Validator Online (Private, No Upload) | SyntaxSnap";
-const description = "Format, beautify, validate and minify JSON in your browser. See the exact line and column of errors, sort keys, and fix almost-JSON from LLMs. Nothing is uploaded.";
-const features = ["Beautify with 2 spaces, 4 spaces or tabs", "Minify for payloads", "Exact error line and column", "Sort keys alphabetically", "Repair almost-JSON from LLMs and config files", "Runs 100% in your browser"];
+const title = "JSON Formatter Online – Free, Private, No Upload | SyntaxSnap";
+const description = "Format and beautify JSON with 2-space, 4-space or tab indents, exact error lines, a tree view and one-click fixes. Runs in your browser; nothing is uploaded.";
+const features = ["Beautify with 2 spaces, 4 spaces or tabs", "Minify and sort keys", "Exact error line and column, highlighted in the input", "Tree view with search and JSONPath copy", "Repair almost-JSON from LLMs and configs", "Open files up to 50 MB, processed in a Web Worker", "Runs 100% in your browser"];
 const seo = toolSeoData[slug];
+
+const exampleIn = `{"id":"ord_8f2c","total":129.5,"customer":{"name":"Priya"},"items":[{"sku":"KB-01","qty":1}],"shipped":false}`;
+const exampleOut = `{
+  "id": "ord_8f2c",
+  "total": 129.5,
+  "customer": {
+    "name": "Priya"
+  },
+  "items": [
+    {
+      "sku": "KB-01",
+      "qty": 1
+    }
+  ],
+  "shipped": false
+}`;
 ---
 
 <Layout title={title} description={description} isTool={true} slug={slug} features={features} howTo={seo?.howTo} faqs={seo?.faqs}>
   <header class="mb-5 max-w-3xl">
-    <h1 class="text-[28px] font-semibold tracking-tight text-white md:text-[32px]">JSON Formatter and Validator</h1>
-    <p class="mt-2 text-[15px] leading-relaxed text-slate-400">Paste JSON to format and validate it as you type. Errors show the exact line and column, and almost-JSON (trailing commas, comments, single quotes) can be fixed in one click.</p>
+    <h1 class="text-[28px] font-semibold tracking-tight text-white md:text-[32px]">JSON Formatter and Beautifier</h1>
+    <p class="mt-2 text-[15px] leading-relaxed text-slate-400">Paste JSON, drop a file or load a URL, and get clean, indented JSON as you type. Errors point to the exact line and column, and almost-JSON from LLMs or config files can be fixed in one click. One of our free <a href="/json" class="text-indigo-400 hover:text-indigo-300">JSON tools</a>.</p>
   </header>
 
   <Tool client:load />
 
   <HowToSection howTo={seo?.howTo} />
 
+  <WorkedExample input={exampleIn} output={exampleOut} inputLabel="Input: minified API response" outputLabel="Output: Beautify, 2 spaces">
+    A one-line API response becomes readable once every key sits on its own line. Values and key order are unchanged; only whitespace is added.
+  </WorkedExample>
+
   <section class="mt-14 border-t border-slate-800 pt-2">
     <div class="prose-ws">
-      <h2>Why format JSON locally</h2>
-      <p>Most online formatters send what you paste to their server. API responses often contain tokens, emails and customer records, so SyntaxSnap parses everything with your browser's own <code>JSON.parse</code>. You can check this in your browser's network tab: formatting makes no requests.</p>
-      <h2>Reading validation errors</h2>
-      <p>When the JSON is invalid, the output panel shows the line and column where the parser stopped, and <strong>Show in input</strong> selects that character. The real mistake is usually just before that point: a missing comma, an unclosed quote or a stray bracket.</p>
+      <h2>What formatting changes, and what it doesn't</h2>
+      <p>The formatter parses your text into a value and prints it again with consistent whitespace. Strings, numbers, booleans and nulls come out exactly as they went in, and keys keep the order you wrote them in. Two things can look different afterwards, and both come from how JSON is read rather than from the formatter.</p>
+      <p>First, keys that look like whole numbers, such as <code>"2"</code> or <code>"10"</code>, move to the front of their object in numeric order, because that is how JavaScript stores object keys. Second, JSON numbers are read as 64-bit floating point, which is exact only up to 9,007,199,254,740,991. A 20-digit ID such as <code>12345678901234567890</code> comes back as <code>12345678901234567000</code>. If your data has 64-bit IDs, keep them as strings. Escape sequences are also printed in their plain form, so <code>"café"</code> becomes <code>"café"</code>, which is the same string.</p>
+
+      <h2>Choosing an indent</h2>
+      <p>Two spaces is the most common style and what <code>JSON.stringify(value, null, 2)</code> produces. Four spaces is common in Python projects, and tabs let each reader pick their own width. Tick <strong>Sort keys</strong> to order every object's keys alphabetically at every level. Sorted output is handy before committing fixtures or comparing two API responses, because the same data always prints the same way.</p>
+
+      <h2>Reading error messages</h2>
+      <p>When the JSON is invalid, the output panel names the problem in plain words and gives its line and column. The line is also highlighted in the input's line-number gutter, and <strong>Show in input</strong> puts your cursor on the exact character. The messages are the same in every browser because SyntaxSnap uses its own checker to locate the error instead of relying on each browser's wording. A missing comma is usually reported where the next key starts, so look at the end of the line before. For a full list of every problem at once, use the <a href="/tools/json-validator">JSON validator</a>.</p>
+
       <h2>Fixing almost-JSON</h2>
-      <p>LLM output and JavaScript config files often look like JSON but are not. If the input has comments, trailing commas, single-quoted strings, unquoted keys or Python literals such as <code>True</code> and <code>None</code>, the <strong>Fix common errors</strong> button rewrites it into strict JSON. It only appears when the fixed version parses.</p>
+      <p>Output from ChatGPT, Claude and other LLMs often arrives inside a markdown code fence with a sentence before it. JavaScript configs use comments, single quotes and unquoted keys, and Python prints <code>True</code>, <code>False</code> and <code>None</code>. <strong>Fix common errors</strong> handles all of these, adds missing commas, removes trailing ones, closes brackets left open by truncated output, and wraps several concatenated objects in an array. The button only appears when the repaired text is valid JSON. If you just need to read a <code>tsconfig.json</code> or VS Code settings file, tick <strong>Allow comments (JSONC)</strong> instead and the input is accepted as it is.</p>
+
+      <h2>Large files</h2>
+      <p>You can open files up to 50 MB. Anything over 1 MB is parsed in a Web Worker, a background thread in the same tab, so the editor keeps responding while it works. The output pane shows the first 400 KB of very large results to keep scrolling smooth; Copy and Download always give you the full text.</p>
+
+      <h2>Why format JSON locally</h2>
+      <p>API responses often contain access tokens, email addresses and customer records. Many online formatters send what you paste to their server. Here the work happens in your browser tab, and you can check it yourself: open the network tab in your browser's developer tools, then format something. No request is made.</p>
     </div>
   </section>
 

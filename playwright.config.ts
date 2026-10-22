@@ -1,5 +1,9 @@
 import { defineConfig, devices } from '@playwright/test';
 
+/** Dev server port. Override with PORT=4323 when 4321 is taken by another app. */
+const PORT = Number(process.env.PORT ?? 4321);
+const BASE_URL = `http://localhost:${PORT}`;
+
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
@@ -18,7 +22,7 @@ export default defineConfig({
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
-    baseURL: 'http://localhost:4321', // Updated to Astro's default port
+    baseURL: BASE_URL,
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
@@ -40,8 +44,8 @@ export default defineConfig({
 
   /* Run your local dev server before starting the tests */
   webServer: {
-    command: 'pnpm run dev', // Updated to use pnpm
-    url: 'http://localhost:4321', // Updated to match Astro dev port
+    command: `pnpm run dev --port ${PORT}`,
+    url: BASE_URL,
     reuseExistingServer: !process.env.CI,
     timeout: 120 * 1000, // Added timeout to allow server to boot in CI
   },

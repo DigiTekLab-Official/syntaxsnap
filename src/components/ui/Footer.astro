@@ -26,6 +26,7 @@ const featured = FEATURED_TOOL_IDS.map((id) => toolById(id)).filter(Boolean);
       <h2 class="mb-3 text-sm font-medium text-slate-200">Categories</h2>
       <ul class="space-y-2 text-sm text-slate-400">
         <li><a href="/tools" class="hover:text-white">All tools</a></li>
+        <li><a href="/json" class="hover:text-white">JSON tools</a></li>
         {CATEGORY_NAV.map((c) => <li><a href={`/tools/category/${c.key}`} class="hover:text-white">{c.label}</a></li>)}
         <li><a href="/cheatsheets/regex" class="hover:text-white">Regex cheatsheet</a></li>
       </ul>

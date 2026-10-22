@@ -1,0 +1,66 @@
+---
+// src/pages/tools/json-minify.astro
+import Layout from '../../layouts/Layout.astro';
+import Tool from '../../components/tools/JsonMinify';
+import RelatedTools from '../../components/ui/RelatedTools.astro';
+import FaqSection from '../../components/ui/FaqSection.astro';
+import HowToSection from '../../components/ui/HowToSection.astro';
+import WorkedExample from '../../components/ui/WorkedExample.astro';
+import { toolSeoData } from '../../data/seo';
+
+const slug = "json-minify";
+const title = "JSON Minify Online – Free, Private, No Upload | SyntaxSnap";
+const description = "Minify JSON by stripping every optional space and line break, and see exactly how many bytes and what percentage you saved. Runs in your browser, no upload.";
+const features = ["Removes all optional whitespace", "Shows bytes and percentage saved", "Never touches spaces inside strings", "Optional key sorting for stable output", "Strips comments from JSONC", "Handles large files in a Web Worker", "Runs 100% in your browser"];
+const seo = toolSeoData[slug];
+
+const exampleIn = `{
+    "flags": {
+        "dark_mode": {
+            "enabled": true,
+            "segments": []
+        }
+    },
+    "version": 42
+}`;
+const exampleOut = `{"flags":{"dark_mode":{"enabled":true,"segments":[]}},"version":42}
+
+132 B → 67 B · saved 65 B (49%)`;
+---
+
+<Layout title={title} description={description} isTool={true} slug={slug} features={features} howTo={seo?.howTo} faqs={seo?.faqs}>
+  <header class="mb-5 max-w-3xl">
+    <h1 class="text-[28px] font-semibold tracking-tight text-white md:text-[32px]">JSON Minifier</h1>
+    <p class="mt-2 text-[15px] leading-relaxed text-slate-400">Paste JSON to compress it to a single line with no extra whitespace. The footer shows the new size and exactly how many bytes you saved. One of our free <a href="/json" class="text-indigo-400 hover:text-indigo-300">JSON tools</a>.</p>
+  </header>
+
+  <Tool client:load />
+
+  <HowToSection howTo={seo?.howTo} />
+
+  <WorkedExample input={exampleIn} output={exampleOut} inputLabel="Input: 4-space indented, 132 bytes" outputLabel="Output: minified">
+    Nearly half of this small file was indentation. The deeper the nesting and the wider the indent, the bigger the saving.
+  </WorkedExample>
+
+  <section class="mt-14 border-t border-slate-800 pt-2">
+    <div class="prose-ws">
+      <h2>What minifying removes</h2>
+      <p>JSON allows spaces, tabs and line breaks between any two tokens, and none of them carry meaning. Minifying removes all of them: the indentation, the line breaks, and the space after each colon and comma. Whitespace inside strings is part of the data and is never touched, so <code>"New York"</code> keeps its space. Key order is preserved, and parsing the minified text gives exactly the same value as the original.</p>
+
+      <h2>How much you save</h2>
+      <p>The saving depends on how the file was formatted. Pretty-printed JSON with a 2-space indent usually shrinks by 15 to 35 percent; 4-space or tab indentation and deep nesting save more, as the example shows. JSON that is mostly long strings saves little, because there is little whitespace to remove. The figures in the footer compare UTF-8 bytes, which is what counts for storage, request bodies and size limits, so a character like é counts as two bytes on both sides.</p>
+
+      <h2>Minify or gzip?</h2>
+      <p>If you serve JSON over HTTP with gzip or Brotli, compression already removes most of the cost of whitespace on the wire, and minifying first makes only a small further difference. Minifying still pays off wherever the text is stored or handled uncompressed: in databases and caches, in browser <code>localStorage</code> with its roughly 5 MB limit, in log lines, in environment variables and Kubernetes secrets, and when you embed JSON in HTML or a JavaScript bundle.</p>
+
+      <h2>Stable output with sorted keys</h2>
+      <p>Tick <strong>Sort keys</strong> to order every object's keys alphabetically before minifying. Two documents with the same data then produce byte-for-byte identical output, which is what you want when the JSON is used as a cache key, hashed for an ETag, or signed.</p>
+
+      <h2>Comments and precision</h2>
+      <p>JSONC files with comments and trailing commas can be minified too: tick <strong>Allow comments (JSONC)</strong> and the comments are dropped along with the whitespace, leaving strict JSON. One thing to watch: numbers are read as 64-bit floating point, so integers longer than 15 or 16 digits can lose precision. Keep such IDs as strings. To go back the other way, use the <a href="/tools/json-formatter">JSON formatter</a>; to embed the minified JSON inside another string, use <a href="/tools/json-escape">JSON Escape</a>.</p>
+    </div>
+  </section>
+
+  <FaqSection faqs={seo?.faqs} />
+  <RelatedTools currentTool={slug} />
+</Layout>

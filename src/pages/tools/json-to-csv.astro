@@ -1,0 +1,61 @@
+---
+// src/pages/tools/json-to-csv.astro
+import Layout from '../../layouts/Layout.astro';
+import Tool from '../../components/tools/JsonToCsv';
+import RelatedTools from '../../components/ui/RelatedTools.astro';
+import FaqSection from '../../components/ui/FaqSection.astro';
+import HowToSection from '../../components/ui/HowToSection.astro';
+import WorkedExample from '../../components/ui/WorkedExample.astro';
+import { toolSeoData } from '../../data/seo';
+
+const slug = "json-to-csv";
+const title = "JSON to CSV Online – Free, Private, No Upload | SyntaxSnap";
+const description = "Convert JSON to CSV or an Excel-ready file. Nested objects flatten into dot-path columns, with a live table preview and a .csv download. Nothing is uploaded.";
+const features = ["Live table preview", "Flattens nested objects into dot-path columns", "Three ways to handle arrays", "Comma, semicolon or tab delimiter", "Excel-friendly UTF-8 download", "Formula escaping against CSV injection", "Runs 100% in your browser"];
+const seo = toolSeoData[slug];
+
+const exampleIn = `[
+  { "id": 1, "name": "Aisha", "address": { "city": "Pune" }, "tags": ["beta", "vip"] },
+  { "id": 2, "name": "Diego, Jr.", "address": { "city": "Austin" }, "tags": [] }
+]`;
+const exampleOut = `id,name,address.city,tags
+1,Aisha,Pune,beta; vip
+2,"Diego, Jr.",Austin,`;
+---
+
+<Layout title={title} description={description} isTool={true} slug={slug} features={features} howTo={seo?.howTo} faqs={seo?.faqs}>
+  <header class="mb-5 max-w-3xl">
+    <h1 class="text-[28px] font-semibold tracking-tight text-white md:text-[32px]">JSON to CSV Converter</h1>
+    <p class="mt-2 text-[15px] leading-relaxed text-slate-400">Turn a JSON array into a CSV file you can open in Excel, Google Sheets or Numbers. Nested fields become their own columns, and a table preview shows the result before you download it. One of our free <a href="/json" class="text-indigo-400 hover:text-indigo-300">JSON tools</a>.</p>
+  </header>
+
+  <Tool client:load />
+
+  <HowToSection howTo={seo?.howTo} />
+
+  <WorkedExample input={exampleIn} output={exampleOut} inputLabel="Input: JSON array" outputLabel="Output: CSV (flatten on, arrays joined)">
+    <code class="text-indigo-300">address</code> becomes an <code class="text-indigo-300">address.city</code> column, the tags join into one cell, and the name containing a comma is quoted so it stays in one column.
+  </WorkedExample>
+
+  <section class="mt-14 border-t border-slate-800 pt-2">
+    <div class="prose-ws">
+      <h2>Which JSON shapes work</h2>
+      <p>CSV is a table, so the converter looks for a list of records. An array of objects is the usual case: each object becomes a row. If the top level is an object with a single property holding an array of objects, as in a typical API response like <code>{'{"data": [...], "page": 2}'}</code>, that array is used and the footer says so. Any other object becomes a single row, and an array of plain values becomes one column called <code>value</code>.</p>
+      <p>The columns are every key found in any record, in the order they first appear. Records do not need the same keys: a missing key just leaves an empty cell, and a note above the output tells you how many rows had gaps. That is often the quickest way to spot inconsistent records in an export.</p>
+
+      <h2>Nested objects and arrays</h2>
+      <p>With <strong>Flatten nested objects</strong> on, each nested field gets its own column named by its path, so <code>{'{"address": {"city": "Pune"}}'}</code> becomes a column <code>address.city</code>. Turn it off to keep each nested object as JSON text in a single cell, which keeps the column count down for deeply nested data.</p>
+      <p>Arrays have three options. <strong>a; b</strong> joins simple lists like tags into one readable cell. <strong>Columns</strong> gives each item its own column, <code>tags.0</code>, <code>tags.1</code> and so on, which suits short fixed-length lists such as coordinates. <strong>JSON</strong> writes the array as JSON text. Arrays of objects cannot be joined, so they use columns, or JSON if you choose it.</p>
+
+      <h2>Opening the file in Excel</h2>
+      <p>Excel guesses the file's encoding, and without a hint it often shows <code>MÃ¼ller</code> instead of <code>Müller</code>. Tick <strong>Excel-friendly download</strong> to add a UTF-8 byte order mark that tells Excel which encoding to use. In countries where Excel uses a comma as the decimal separator, such as Germany, France or Brazil, it also expects semicolons between columns, so choose the semicolon delimiter. Google Sheets and Numbers read either.</p>
+
+      <h2>Quoting and formula safety</h2>
+      <p>Cells are quoted following RFC 4180: any value that contains the delimiter, a double quote or a line break is wrapped in double quotes, and quotes inside it are doubled. If the data came from users, tick <strong>Escape formulas</strong>. Cells starting with <code>=</code>, <code>+</code>, <code>-</code> or <code>@</code> are then prefixed so spreadsheet apps show them as text instead of running them as formulas, which protects against CSV injection.</p>
+      <p>The table preview shows the first 100 rows. Copy and Download always include every row. To go the other way, use <a href="/tools/csv-to-json">CSV to JSON</a>.</p>
+    </div>
+  </section>
+
+  <FaqSection faqs={seo?.faqs} />
+  <RelatedTools currentTool={slug} />
+</Layout>

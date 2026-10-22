@@ -1,0 +1,65 @@
+---
+// src/pages/tools/json-to-xml.astro
+import Layout from '../../layouts/Layout.astro';
+import Tool from '../../components/tools/JsonToXml';
+import RelatedTools from '../../components/ui/RelatedTools.astro';
+import FaqSection from '../../components/ui/FaqSection.astro';
+import HowToSection from '../../components/ui/HowToSection.astro';
+import WorkedExample from '../../components/ui/WorkedExample.astro';
+import { toolSeoData } from '../../data/seo';
+
+const slug = "json-to-xml";
+const title = "JSON to XML Online – Free, Private, No Upload | SyntaxSnap";
+const description = "Convert JSON to well-formed XML with your own root element name. Prefixed keys become attributes and arrays become repeated elements. Runs in your browser.";
+const features = ["Choose the root element name", "Attributes from prefixed keys", "Arrays become repeated elements", "Invalid element names fixed and reported", "Special characters escaped", "Optional XML declaration", "Runs 100% in your browser"];
+const seo = toolSeoData[slug];
+
+const exampleIn = `{"book":{"@_id":"bk101","title":"Dune","tags":["sci-fi","classic"],"price":9.99}}`;
+const exampleOut = `<?xml version="1.0" encoding="UTF-8"?>
+<catalog>
+  <book id="bk101">
+    <title>Dune</title>
+    <tags>sci-fi</tags>
+    <tags>classic</tags>
+    <price>9.99</price>
+  </book>
+</catalog>`;
+---
+
+<Layout title={title} description={description} isTool={true} slug={slug} features={features} howTo={seo?.howTo} faqs={seo?.faqs}>
+  <header class="mb-5 max-w-3xl">
+    <h1 class="text-[28px] font-semibold tracking-tight text-white md:text-[32px]">JSON to XML Converter</h1>
+    <p class="mt-2 text-[15px] leading-relaxed text-slate-400">Paste JSON to get indented, well-formed XML. Name the root element, mark attributes with a key prefix, and get a note for any key that had to be renamed. One of our free <a href="/json" class="text-indigo-400 hover:text-indigo-300">JSON tools</a>.</p>
+  </header>
+
+  <Tool client:load />
+
+  <HowToSection howTo={seo?.howTo} />
+
+  <WorkedExample input={exampleIn} output={exampleOut} inputLabel="Input: JSON" outputLabel="Output: XML, root element catalog">
+    <code class="text-indigo-300">@_id</code> becomes an attribute, the <code class="text-indigo-300">tags</code> array becomes two <code class="text-indigo-300">&lt;tags&gt;</code> elements, and everything is wrapped in the root you chose.
+  </WorkedExample>
+
+  <section class="mt-14 border-t border-slate-800 pt-2">
+    <div class="prose-ws">
+      <h2>How JSON maps to XML</h2>
+      <p>JSON and XML model data differently, so a converter has to follow conventions. Here each object key becomes a child element with the same name, and its value becomes the element's content. Numbers and booleans are written as text, since XML has no types. An array becomes the same element repeated once per item: <code>{'"tag": ["a", "b"]'}</code> gives <code>&lt;tag&gt;a&lt;/tag&gt;&lt;tag&gt;b&lt;/tag&gt;</code>. A JSON array at the top level, or an array directly inside another array, has no key to name its items, so the items use the <strong>Array item</strong> name, <code>item</code> by default.</p>
+      <p><code>null</code> becomes an empty self-closing element such as <code>&lt;notes/&gt;</code>, and an empty string or empty array becomes an empty element with an opening and closing tag.</p>
+
+      <h2>The root element</h2>
+      <p>An XML document must have exactly one top-level element. The converter wraps your data in the element named in <strong>Root element</strong>. If you clear the name and your JSON is an object with a single key, such as <code>{'{"rss": {...}}'}</code>, that key becomes the root instead, so a document that came from XML converts back without an extra wrapper.</p>
+
+      <h2>Attributes and text</h2>
+      <p>Keys that start with the attribute prefix, <code>@_</code> by default, become attributes of their parent element: <code>{'"@_id": "bk101"'}</code> becomes <code>id="bk101"</code>. A <code>#text</code> key becomes the element's text content alongside its attributes. These are the same conventions that <a href="/tools/xml-to-json">XML to JSON</a> produces, so data survives a round trip. If your JSON uses a different prefix, such as <code>@</code>, change it in the toolbar.</p>
+
+      <h2>Element names and escaping</h2>
+      <p>XML names are stricter than JSON keys. They cannot contain spaces or most punctuation, cannot start with a digit, and names starting with <code>xml</code> are reserved. Keys like <code>first name</code> or <code>2fa</code> are changed into valid names (<code>first_name</code>, <code>_2fa</code>) and a note above the output lists every change. Namespaced keys such as <code>atom:link</code> are kept as they are. In text and attribute values, <code>&amp;</code>, <code>&lt;</code> and <code>&gt;</code> are escaped as entities, so the output is always well-formed.</p>
+
+      <h2>Declaration and indentation</h2>
+      <p>The output starts with <code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;</code> unless you turn <strong>XML declaration</strong> off, which you may want when the XML will be embedded in another document. Elements are indented with two spaces.</p>
+    </div>
+  </section>
+
+  <FaqSection faqs={seo?.faqs} />
+  <RelatedTools currentTool={slug} />
+</Layout>

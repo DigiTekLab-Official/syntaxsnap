@@ -1,0 +1,75 @@
+---
+// src/pages/tools/xml-to-json.astro
+import Layout from '../../layouts/Layout.astro';
+import Tool from '../../components/tools/XmlToJson';
+import RelatedTools from '../../components/ui/RelatedTools.astro';
+import FaqSection from '../../components/ui/FaqSection.astro';
+import HowToSection from '../../components/ui/HowToSection.astro';
+import WorkedExample from '../../components/ui/WorkedExample.astro';
+import { toolSeoData } from '../../data/seo';
+
+const slug = "xml-to-json";
+const title = "XML to JSON Online – Free, Private, No Upload | SyntaxSnap";
+const description = "Convert XML to JSON with attributes kept under a prefix you choose. The XML is checked first and errors show their line. Works for RSS, SOAP and SVG. No upload.";
+const features = ["Choose the attribute prefix, or drop attributes", "Well-formedness check with line and column", "Repeated elements become arrays", "Numbers and booleans parsed, leading zeros kept", "CDATA merged into text", "Large files in a Web Worker", "Runs 100% in your browser"];
+const seo = toolSeoData[slug];
+
+const exampleIn = `<catalog>
+  <book id="bk101">
+    <title>Dune</title>
+    <price currency="USD">9.99</price>
+    <isbn>0441013597</isbn>
+  </book>
+</catalog>`;
+const exampleOut = `{
+  "catalog": {
+    "book": {
+      "title": "Dune",
+      "price": {
+        "#text": 9.99,
+        "@_currency": "USD"
+      },
+      "isbn": "0441013597",
+      "@_id": "bk101"
+    }
+  }
+}`;
+---
+
+<Layout title={title} description={description} isTool={true} slug={slug} features={features} howTo={seo?.howTo} faqs={seo?.faqs}>
+  <header class="mb-5 max-w-3xl">
+    <h1 class="text-[28px] font-semibold tracking-tight text-white md:text-[32px]">XML to JSON Converter</h1>
+    <p class="mt-2 text-[15px] leading-relaxed text-slate-400">Paste XML or drop an .xml file to get JSON. Attributes are kept under a prefix you choose, and malformed XML is reported with the line where it breaks. One of our free <a href="/json" class="text-indigo-400 hover:text-indigo-300">JSON tools</a>.</p>
+  </header>
+
+  <Tool client:load />
+
+  <HowToSection howTo={seo?.howTo} />
+
+  <WorkedExample input={exampleIn} output={exampleOut} inputLabel="Input: XML" outputLabel="Output: JSON, attribute prefix @_">
+    The price has an attribute and text, so its text goes under <code class="text-indigo-300">#text</code>. The price becomes a number, but the ISBN keeps its leading zero as a string.
+  </WorkedExample>
+
+  <section class="mt-14 border-t border-slate-800 pt-2">
+    <div class="prose-ws">
+      <h2>How XML maps to JSON</h2>
+      <p>Each element becomes a key named after its tag. An element that contains only text becomes a plain value; one with child elements becomes an object. When the same element appears more than once under one parent, its values are collected into an array in document order. An element that appears once stays a single value, not an array of one. That is the most common surprise in XML-to-JSON code: a feed with one <code>&lt;item&gt;</code> gives an object, while the same feed with two gives an array. Handle both shapes when you read the result.</p>
+
+      <h2>Attributes</h2>
+      <p>Attributes go into the element's object with a prefix in front of their names, <code>@_</code> by default, so they can never clash with a child element of the same name. Set the prefix to <code>@</code> to match other tools, or clear it for plain names if you know there are no clashes. Tick <strong>Drop attributes</strong> to ignore them entirely, which gives simpler JSON when attributes only hold formatting or IDs you do not need.</p>
+      <p>When an element has attributes and text, as in <code>&lt;price currency="USD"&gt;9.99&lt;/price&gt;</code>, the text goes under a <code>#text</code> key next to the attributes.</p>
+
+      <h2>Numbers, booleans and text</h2>
+      <p>XML has no types, so everything is text until you decide otherwise. With <strong>Parse numbers and booleans</strong> on, text and attribute values that look like decimal numbers become numbers and <code>true</code> and <code>false</code> become booleans. Values with leading zeros, such as ISBNs, ZIP codes and phone numbers, stay strings so no digits are lost, and hexadecimal-looking values are not converted. Turn the option off to keep every value as a string. Whitespace around text is trimmed, and CDATA sections are merged into the element's text.</p>
+
+      <h2>Well-formedness check</h2>
+      <p>Before converting, the XML is checked for structural errors: tags that do not match or are never closed, unquoted or repeated attributes, and text outside the root element. The error names the problem and gives its line and column, which are highlighted in the input. The check is for well-formedness only. The document is not validated against a DTD or XSD schema, and the XML declaration, processing instructions and comments are left out of the JSON.</p>
+
+      <h2>Typical inputs</h2>
+      <p>RSS and Atom feeds, SOAP responses, sitemap files, Android resource files, SVG images and configuration exports all convert the same way. Namespace prefixes are kept as part of the name, so a SOAP body appears under <code>soap:Envelope</code>. To shape the result further, send it to the <a href="/tools/json-formatter">JSON formatter</a> or <a href="/tools/json-to-typescript">JSON to TypeScript</a>.</p>
+    </div>
+  </section>
+
+  <FaqSection faqs={seo?.faqs} />
+  <RelatedTools currentTool={slug} />
+</Layout>
