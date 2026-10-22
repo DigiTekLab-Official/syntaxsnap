@@ -1,0 +1,63 @@
+---
+// src/pages/tools/json-to-yaml.astro
+import Layout from '../../layouts/Layout.astro';
+import Tool from '../../components/tools/JsonToYaml';
+import RelatedTools from '../../components/ui/RelatedTools.astro';
+import FaqSection from '../../components/ui/FaqSection.astro';
+import HowToSection from '../../components/ui/HowToSection.astro';
+import WorkedExample from '../../components/ui/WorkedExample.astro';
+import { toolSeoData } from '../../data/seo';
+
+const slug = "json-to-yaml";
+const title = "JSON to YAML Online – Free, Private, No Upload | SyntaxSnap";
+const description = "Convert JSON to clean YAML for Kubernetes, Docker Compose and CI configs. Ambiguous values are quoted so they stay strings. Runs in your browser, no upload.";
+const features = ["Clean block-style YAML", "2 or 4 space indentation", "Quotes values YAML would misread", "Optional key sorting", "Accepts JSON with comments", "No line wrapping of long strings", "Runs 100% in your browser"];
+const seo = toolSeoData[slug];
+
+const exampleIn = `{"service":"web","ports":[80,443],"env":{"MODE":"on","WORKERS":"4"},"since":"2026-10-22"}`;
+const exampleOut = `service: web
+ports:
+  - 80
+  - 443
+env:
+  MODE: 'on'
+  WORKERS: '4'
+since: '2026-10-22'`;
+---
+
+<Layout title={title} description={description} isTool={true} slug={slug} features={features} howTo={seo?.howTo} faqs={seo?.faqs}>
+  <header class="mb-5 max-w-3xl">
+    <h1 class="text-[28px] font-semibold tracking-tight text-white md:text-[32px]">JSON to YAML Converter</h1>
+    <p class="mt-2 text-[15px] leading-relaxed text-slate-400">Paste JSON to get readable YAML for config files, Kubernetes manifests and CI pipelines. Values that YAML could misread are quoted, so the data means the same thing after conversion. One of our free <a href="/json" class="text-indigo-400 hover:text-indigo-300">JSON tools</a>.</p>
+  </header>
+
+  <Tool client:load />
+
+  <HowToSection howTo={seo?.howTo} />
+
+  <WorkedExample input={exampleIn} output={exampleOut} inputLabel="Input: JSON" outputLabel="Output: YAML, 2-space indent">
+    <code class="text-indigo-300">"on"</code>, <code class="text-indigo-300">"4"</code> and the date are quoted because many YAML parsers would otherwise read them as a boolean, a number and a date. Real numbers like 80 stay unquoted.
+  </WorkedExample>
+
+  <section class="mt-14 border-t border-slate-800 pt-2">
+    <div class="prose-ws">
+      <h2>How JSON maps to YAML</h2>
+      <p>Every JSON value has a direct YAML equivalent. Objects become mappings, one <code>key: value</code> per line, with nesting shown by indentation instead of braces. Arrays become sequences, one item per line after a dash. Strings are written without quotes when that is safe, numbers, booleans and <code>null</code> are written as is, and empty objects and arrays appear as <code>{'{}'}</code> and <code>[]</code>. Strings with line breaks use YAML's literal block style (<code>|-</code>), so multi-line text stays readable.</p>
+
+      <h2>Why some strings get quotes</h2>
+      <p>YAML guesses the type of unquoted values, and older YAML 1.1 parsers, which many tools still use, guess aggressively. Unquoted <code>on</code>, <code>off</code>, <code>yes</code> and <code>no</code> are booleans there, <code>4</code> is a number, <code>2026-10-22</code> is a date, and <code>0755</code> is an octal number. The famous example is the country code for Norway, <code>NO</code>, turning into <code>false</code>. To keep your strings as strings in every parser, the converter wraps any value that could be misread in single quotes. Text containing <code>: </code> or starting with a character that has meaning in YAML, such as <code>*</code> or <code>&amp;</code>, is quoted for the same reason.</p>
+
+      <h2>Indentation and order</h2>
+      <p>YAML only allows spaces for indentation. Choose 2 spaces, which Kubernetes and most CI documentation use, or 4. Keys stay in the order of your JSON unless you tick <strong>Sort keys</strong>. Long strings are never folded onto several lines, so URLs, keys and certificates come out on one line exactly as they went in.</p>
+
+      <h2>What does not carry over</h2>
+      <p>The converter works from the parsed data, so comments in a JSONC input are accepted but not copied. YAML supports comments, so add <code># notes</code> afterwards where they help. Repeated objects are written out in full rather than as anchors and aliases, which keeps the output simple for tools that do not support them.</p>
+
+      <h2>Common uses</h2>
+      <p>Turn the JSON output of <code>kubectl get -o json</code> or a Terraform plan into YAML you can edit, convert a <code>package.json</code> section into a GitHub Actions step, or rewrite an OpenAPI document from JSON to YAML. Going the other way? Use <a href="/tools/yaml-to-json">YAML to JSON</a>.</p>
+    </div>
+  </section>
+
+  <FaqSection faqs={seo?.faqs} />
+  <RelatedTools currentTool={slug} />
+</Layout>

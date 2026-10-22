@@ -1,0 +1,68 @@
+---
+// src/pages/tools/json-validator.astro
+import Layout from '../../layouts/Layout.astro';
+import Tool from '../../components/tools/JsonValidator';
+import RelatedTools from '../../components/ui/RelatedTools.astro';
+import FaqSection from '../../components/ui/FaqSection.astro';
+import HowToSection from '../../components/ui/HowToSection.astro';
+import WorkedExample from '../../components/ui/WorkedExample.astro';
+import { toolSeoData } from '../../data/seo';
+
+const slug = "json-validator";
+const title = "JSON Validator Online – Free, Private, No Upload | SyntaxSnap";
+const description = "Validate JSON and see every error with its line and column: missing commas, trailing commas, single quotes, comments and duplicate keys. Private, no upload.";
+const features = ["Clear pass or fail result", "Lists every problem, not only the first", "Line and column for each error, click to jump", "Duplicate key warnings", "One-click fix for common mistakes", "Optional JSONC mode for config files", "Runs 100% in your browser"];
+const seo = toolSeoData[slug];
+
+const exampleIn = `{
+  "name": "billing-service",
+  'region': "eu-west-1",
+  "retries": 3
+  "features": { "refunds": false, },
+  "port": 8080,
+  "port": 9090
+}`;
+const exampleOut = `Invalid JSON · 3 problems found
+
+error    3:3   Strings must use double quotes, not single quotes.
+error    5:3   Missing comma between properties.
+error    5:33  Trailing comma before }. Remove the last comma.
+warning  7:3   Duplicate key "port". JSON.parse keeps only the last value.`;
+---
+
+<Layout title={title} description={description} isTool={true} slug={slug} features={features} howTo={seo?.howTo} faqs={seo?.faqs}>
+  <header class="mb-5 max-w-3xl">
+    <h1 class="text-[28px] font-semibold tracking-tight text-white md:text-[32px]">JSON Validator</h1>
+    <p class="mt-2 text-[15px] leading-relaxed text-slate-400">Check JSON against the standard and get a clear pass or fail. When it fails, you see every problem the validator can find, each with its line and column, instead of fixing one error at a time. One of our free <a href="/json" class="text-indigo-400 hover:text-indigo-300">JSON tools</a>.</p>
+  </header>
+
+  <Tool client:load />
+
+  <HowToSection howTo={seo?.howTo} />
+
+  <WorkedExample input={exampleIn} output={exampleOut} inputLabel="Input: a hand-edited config" outputLabel="Validator result">
+    Three errors and one warning are reported in one pass. The duplicate <code class="text-indigo-300">port</code> key is legal JSON, but a parser would silently keep 9090 and drop 8080.
+  </WorkedExample>
+
+  <section class="mt-14 border-t border-slate-800 pt-2">
+    <div class="prose-ws">
+      <h2>What makes JSON valid</h2>
+      <p>JSON is defined by RFC 8259, and it is stricter than the JavaScript it came from. Keys and strings need double quotes. Commas separate items but may not follow the last one. There are no comments. The only literals are <code>true</code>, <code>false</code> and <code>null</code>, all lower case, so <code>True</code>, <code>None</code>, <code>undefined</code>, <code>NaN</code> and <code>Infinity</code> are all errors. Numbers cannot have a leading plus sign, leading zeros such as <code>007</code>, a bare decimal point such as <code>.5</code> or <code>5.</code>, or hexadecimal digits. Inside strings, a line break or tab must be written as <code>\n</code> or <code>\t</code>, and a backslash may only start one of the defined escapes.</p>
+
+      <h2>Every problem, not just the first</h2>
+      <p>Most validators stop at the first error because that is where the parser gives up. This one uses its own checker that understands the common mistakes and steps over them: after a missing comma, a comment, a single-quoted string or a trailing comma it carries on and keeps looking. You get the whole list in one pass, and clicking a line number puts your cursor on the problem. When it meets something it cannot safely step over, such as a string that is never closed or a bracket where a value should be, it stops there rather than guessing and filling the list with follow-on errors.</p>
+
+      <h2>Warnings: duplicate keys</h2>
+      <p>An object with the same key twice is technically allowed, because the standard says names <em>should</em> be unique rather than <em>must</em>. In practice every common parser keeps the last value and silently drops the others, so a duplicate usually means lost data or a merge mistake. The validator lists each repeated key as a warning, and the banner stays green, because the document will parse.</p>
+
+      <h2>JSONC and JSON5 files</h2>
+      <p>Files such as <code>tsconfig.json</code>, <code>.eslintrc.json</code> and VS Code's <code>settings.json</code> are JSONC: JSON with comments and trailing commas. Tick <strong>Allow comments (JSONC)</strong> to validate them as such; comments, trailing commas and single-quoted strings are then accepted and everything else is still checked. Leave it off when the file will be read by a strict parser such as <code>JSON.parse</code> or Python's <code>json</code> module.</p>
+
+      <h2>Valid is not the same as correct</h2>
+      <p>A validator tells you the text is well-formed JSON. It cannot tell you that <code>price</code> should be a number or that <code>email</code> is required. To check the shape of the data, generate a schema from a good example with <a href="/tools/json-to-zod">JSON to Zod</a>, or convert an existing JSON Schema with <a href="/tools/json-schema-to-zod">JSON Schema to Zod</a> or <a href="/tools/json-schema-to-ts">JSON Schema to TypeScript</a>.</p>
+    </div>
+  </section>
+
+  <FaqSection faqs={seo?.faqs} />
+  <RelatedTools currentTool={slug} />
+</Layout>

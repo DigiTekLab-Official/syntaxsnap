@@ -11,6 +11,17 @@ import { urlEncoderSeo } from './url-encoder';
 import { uuidGeneratorSeo } from './uuid-generator';
 import { timestampConverterSeo } from './timestamp-converter';
 import { sqlToDrizzleSeo } from './sql-to-drizzle';
+import { jsonViewerSeo } from './json-viewer';
+import { jsonValidatorSeo } from './json-validator';
+import { jsonMinifySeo } from './json-minify';
+import { jsonToCsvSeo } from './json-to-csv';
+import { csvToJsonSeo } from './csv-to-json';
+import { jsonToYamlSeo } from './json-to-yaml';
+import { yamlToJsonSeo } from './yaml-to-json';
+import { jsonToXmlSeo } from './json-to-xml';
+import { xmlToJsonSeo } from './xml-to-json';
+import { jsonCompareSeo } from './json-compare';
+import { jsonEscapeSeo } from './json-escape';
 
 // 2. Export them as a single dictionary mapped to their URL slugs
 export const toolSeoData: Record<string, ToolSEOContent> = {
@@ -23,5 +34,16 @@ export const toolSeoData: Record<string, ToolSEOContent> = {
   "uuid-generator": uuidGeneratorSeo,
   "timestamp-converter": timestampConverterSeo,
   "sql-to-drizzle": sqlToDrizzleSeo,
+  "json-viewer": jsonViewerSeo,
+  "json-validator": jsonValidatorSeo,
+  "json-minify": jsonMinifySeo,
+  "json-to-csv": jsonToCsvSeo,
+  "csv-to-json": csvToJsonSeo,
+  "json-to-yaml": jsonToYamlSeo,
+  "yaml-to-json": yamlToJsonSeo,
+  "json-to-xml": jsonToXmlSeo,
+  "xml-to-json": xmlToJsonSeo,
+  "json-compare": jsonCompareSeo,
+  "json-escape": jsonEscapeSeo,
   // Just add one line here whenever you launch a new tool!
 };

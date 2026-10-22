@@ -1,0 +1,88 @@
+---
+// src/pages/tools/json-compare.astro
+import Layout from '../../layouts/Layout.astro';
+import Tool from '../../components/tools/JsonCompare';
+import RelatedTools from '../../components/ui/RelatedTools.astro';
+import FaqSection from '../../components/ui/FaqSection.astro';
+import HowToSection from '../../components/ui/HowToSection.astro';
+import WorkedExample from '../../components/ui/WorkedExample.astro';
+import { toolSeoData } from '../../data/seo';
+
+const slug = "json-compare";
+const title = "JSON Compare Online – Free, Private, No Upload | SyntaxSnap";
+const description = "Compare two JSON files and list every added, removed and changed path. Key order and whitespace are ignored, so only real changes show. Runs in your browser.";
+const features = ["Semantic diff that ignores key order", "Added, removed and changed paths as JSONPath", "Before and after values", "Optional order-insensitive array matching", "Sorted side-by-side text diff", "Export the change list as JSON", "Runs 100% in your browser"];
+const seo = toolSeoData[slug];
+
+const exampleA = `{
+  "id": 7,
+  "plan": { "name": "Starter", "price": 9 },
+  "tags": ["a", "b"],
+  "trial": true
+}`;
+const exampleB = `{
+  "plan": { "price": 12, "name": "Starter" },
+  "id": 7,
+  "tags": ["a", "b", "c"],
+  "billing": "monthly"
+}`;
+const exampleOut = `changed  $.plan.price   9 → 12
+added    $.tags[2]      "c"
+removed  $.trial        true
+added    $.billing      "monthly"
+
+(id and plan.name moved but are unchanged,
+ so they are not listed)`;
+---
+
+<Layout title={title} description={description} isTool={true} slug={slug} features={features} howTo={seo?.howTo} faqs={seo?.faqs}>
+  <header class="mb-5 max-w-3xl">
+    <h1 class="text-[28px] font-semibold tracking-tight text-white md:text-[32px]">JSON Compare: Find the Differences</h1>
+    <p class="mt-2 text-[15px] leading-relaxed text-slate-400">Paste two versions of a JSON document to see exactly what changed. They are compared by value, not as text, so reordered keys and different indentation do not show up as changes. One of our free <a href="/json" class="text-indigo-400 hover:text-indigo-300">JSON tools</a>.</p>
+  </header>
+
+  <Tool client:load />
+
+  <HowToSection howTo={seo?.howTo} />
+
+  <section class="mt-12" aria-labelledby="worked-example">
+    <h2 id="worked-example" class="text-[1.375rem] font-semibold tracking-tight text-white">Worked example</h2>
+    <p class="mt-2 max-w-[72ch] text-[15px] leading-relaxed text-slate-400">The second document reorders its keys, which a line-by-line diff would flag on almost every line. The semantic comparison lists only the four real changes.</p>
+    <div class="mt-4 grid gap-3 md:grid-cols-3">
+      <figure class="min-w-0 overflow-hidden rounded-lg border border-slate-800 bg-ws-panel">
+        <figcaption class="border-b border-slate-800 px-3 py-1.5 text-[12.5px] font-medium text-slate-400">Original</figcaption>
+        <pre class="overflow-x-auto p-3 font-mono text-[12.5px] leading-relaxed text-slate-200"><code>{exampleA}</code></pre>
+      </figure>
+      <figure class="min-w-0 overflow-hidden rounded-lg border border-slate-800 bg-ws-panel">
+        <figcaption class="border-b border-slate-800 px-3 py-1.5 text-[12.5px] font-medium text-slate-400">Changed</figcaption>
+        <pre class="overflow-x-auto p-3 font-mono text-[12.5px] leading-relaxed text-slate-200"><code>{exampleB}</code></pre>
+      </figure>
+      <figure class="min-w-0 overflow-hidden rounded-lg border border-slate-800 bg-ws-panel">
+        <figcaption class="border-b border-slate-800 px-3 py-1.5 text-[12.5px] font-medium text-slate-400">Changes found</figcaption>
+        <pre class="overflow-x-auto p-3 font-mono text-[12.5px] leading-relaxed text-slate-200"><code>{exampleOut}</code></pre>
+      </figure>
+    </div>
+  </section>
+
+  <section class="mt-14 border-t border-slate-800 pt-2">
+    <div class="prose-ws">
+      <h2>Comparing values, not lines</h2>
+      <p>A plain text diff compares two files line by line. For JSON that is noisy: if one side was formatted with four spaces and the other with two, or a serializer wrote the keys in a different order, nearly every line differs even though the data is identical. This tool parses both documents first and compares the resulting values. Object keys are matched by name wherever they appear, whitespace is irrelevant, and numbers are compared by value, so <code>1.0</code> and <code>1</code> are equal. What is left is a list of real differences.</p>
+
+      <h2>Reading the change list</h2>
+      <p>Each change has a kind, a path and the values on each side. <strong>Added</strong> means the path exists only in the changed document, <strong>removed</strong> means it exists only in the original, and <strong>changed</strong> means it exists in both with different values. A change of type, such as the string <code>"42"</code> becoming the number <code>42</code>, counts as changed, which is useful for catching serializer bugs. When a whole object is added or removed, it is listed once at its own path rather than once per field. Paths use JSONPath notation, such as <code>$.plan.price</code>, so you can find them with the <a href="/tools/json-viewer">JSON viewer</a> or in code.</p>
+
+      <h2>Arrays: by position or by value</h2>
+      <p>By default, array items are compared by position: item 0 with item 0, item 1 with item 1, and any extra items at the end are added or removed. That is right for ordered data such as steps, rankings or time series. When order does not matter, as with tags, permissions or a set of IDs, tick <strong>Ignore array order</strong>. Items are then matched by value wherever they are, and only items that have no equal on the other side are reported. Inserting one item at the start of a long list then shows as one addition instead of a change on every following index.</p>
+
+      <h2>Side-by-side text view</h2>
+      <p>Switch to <strong>Side by side text</strong> to see a line diff of both documents after they have been pretty-printed with keys sorted. Because both sides are normalised first, only lines whose content changed are highlighted, in green for added and red for removed. It is useful when you want to see a change in the shape of the document, for example a new nested block.</p>
+
+      <h2>Exporting and privacy</h2>
+      <p><strong>Copy changes</strong> and <strong>Download</strong> give you the change list as a JSON array, ready to attach to a ticket or feed into a test. Both documents are compared inside your browser. JSONC input with comments and trailing commas is accepted, so you can compare config files directly. For general text, use the <a href="/tools/diff-viewer">Diff Viewer</a>.</p>
+    </div>
+  </section>
+
+  <FaqSection faqs={seo?.faqs} />
+  <RelatedTools currentTool={slug} />
+</Layout>
