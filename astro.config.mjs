@@ -50,6 +50,16 @@ export default defineConfig({
 
   vite: {
     plugins: [tailwindcss()],
+    // @astrojs/react's dev renderer imports react-dom/client, which is CommonJS.
+    // Without pre-bundling it, a fresh dev server fails to hydrate any island
+    // ("does not provide an export named 'createRoot'").
+    optimizeDeps: {
+      include: ['react-dom/client'],
+    },
+    // The JSON engine's Web Worker lazy-loads each converter, which needs ES module output.
+    worker: {
+      format: 'es',
+    },
     ssr: {
       // FIX 2: Explicitly exclude sharp from the SSR/worker bundle.
       // This is the safety net — even if imageService:'compile' doesn't

@@ -16,7 +16,7 @@ export interface JsonToXmlOptions {
 }
 
 const NAME_START = /^[A-Za-z_]/;
-const NAME_BAD = /[^\w.-]/g;
+const NAME_BAD = /[^\w.:-]/g; // colons kept for namespaced names like atom:link
 
 /** Makes a string a valid XML element name. */
 export function xmlName(key: string): string {

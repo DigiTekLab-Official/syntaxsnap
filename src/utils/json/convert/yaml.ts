@@ -1,18 +1,29 @@
 // src/utils/json/convert/yaml.ts — JSON ↔ YAML via js-yaml.
-import { dump, loadAll, CORE_SCHEMA, type YAMLException } from 'js-yaml';
+import * as jsyaml from 'js-yaml';
+import type { Type, YAMLException } from 'js-yaml';
+
+const { dump, loadAll, CORE_SCHEMA } = jsyaml;
+// js-yaml exports its built-in types at runtime, but @types/js-yaml omits them.
+const { merge } = (jsyaml as unknown as { types: { merge: Type } }).types;
+
+// YAML 1.2 core types plus merge keys (<<: *defaults). Unlike js-yaml's default
+// schema there is no timestamp type, so dates stay strings.
+const LOAD_SCHEMA = CORE_SCHEMA.extend({ implicit: [merge] });
 import { parseJson } from '../parse';
 import type { ConvertResult } from '../types';
 
-export interface JsonToYamlOptions { indent?: number; sortKeys?: boolean; tolerant?: boolean }
+export interface JsonToYamlOptions { indent?: number | string; sortKeys?: boolean; tolerant?: boolean }
 
 export function jsonToYaml(input: string, opts: JsonToYamlOptions = {}): ConvertResult {
   const { value, error } = parseJson(input, { tolerant: opts.tolerant });
   if (error) return { output: '', error };
-  const output = dump(value, { indent: opts.indent ?? 2, sortKeys: !!opts.sortKeys, lineWidth: -1, noRefs: true, schema: CORE_SCHEMA });
+  // The default schema quotes strings that other YAML parsers would read as
+  // dates, booleans (yes/on) or numbers, so the round trip is safe.
+  const output = dump(value, { indent: Number(opts.indent ?? 2) || 2, sortKeys: !!opts.sortKeys, lineWidth: -1, noRefs: true });
   return { output, info: `${output.split('\n').length - 1} lines of YAML` };
 }
 
-export interface YamlToJsonOptions { indent?: number }
+export interface YamlToJsonOptions { indent?: number | string }
 
 /** Plain-English versions of js-yaml's most common error reasons. */
 function explain(reason: string): string {
@@ -31,10 +42,9 @@ function explain(reason: string): string {
 export function yamlToJson(input: string, opts: YamlToJsonOptions = {}): ConvertResult {
   if (!input.trim()) return { output: '', error: { message: 'The input is empty.' } };
   try {
-    // CORE_SCHEMA keeps dates as strings instead of turning them into Date objects.
-    const docs = loadAll(input, undefined, { schema: CORE_SCHEMA }).filter((d) => d !== undefined);
+    const docs = loadAll(input, undefined, { schema: LOAD_SCHEMA }).filter((d) => d !== undefined);
     const value = docs.length === 1 ? docs[0] : docs;
-    const output = JSON.stringify(value === undefined ? null : value, null, opts.indent ?? 2);
+    const output = JSON.stringify(value === undefined ? null : value, null, Number(opts.indent ?? 2) || 2);
     return { output, info: docs.length > 1 ? `${docs.length} YAML documents → JSON array` : 'One YAML document' };
   } catch (e) {
     const err = e as YAMLException;
