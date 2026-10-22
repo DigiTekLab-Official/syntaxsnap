@@ -229,7 +229,7 @@ function TableView({ table }: { table: NonNullable<ConvertResult['table']> }) {
       <table className="min-w-full border-collapse font-mono text-[12.5px]">
         <thead className="sticky top-0 z-[1] bg-ws-raised">
           <tr>
-            <th scope="col" className="border-b border-r border-slate-800 px-2 py-1.5 text-right font-normal text-slate-500">#</th>
+            <th scope="col" className="border-b border-r border-slate-800 px-2 py-1.5 text-right font-normal text-slate-400">#</th>
             {table.headers.map((h) => (
               <th key={h} scope="col" className="whitespace-nowrap border-b border-r border-slate-800 px-2.5 py-1.5 text-left font-medium text-sky-300">{h}</th>
             ))}
@@ -238,7 +238,7 @@ function TableView({ table }: { table: NonNullable<ConvertResult['table']> }) {
         <tbody>
           {table.rows.map((r, i) => (
             <tr key={i} className="odd:bg-slate-900/40">
-              <td className="border-r border-slate-800/70 px-2 py-1 text-right tabular-nums text-slate-600">{i + 1}</td>
+              <td className="border-r border-slate-800/70 px-2 py-1 text-right tabular-nums text-slate-400">{i + 1}</td>
               {r.map((c, j) => (
                 <td key={j} className="max-w-[28ch] truncate whitespace-nowrap border-r border-slate-800/70 px-2.5 py-1 text-slate-200" title={c}>{c}</td>
               ))}
@@ -247,7 +247,7 @@ function TableView({ table }: { table: NonNullable<ConvertResult['table']> }) {
         </tbody>
       </table>
       {table.total > table.rows.length && (
-        <p className="px-3 py-2 text-[12px] text-slate-500">Showing {table.rows.length} of {table.total.toLocaleString()} rows. Copy or download for all of them.</p>
+        <p className="px-3 py-2 text-[12px] text-slate-400">Showing {table.rows.length} of {table.total.toLocaleString()} rows. Copy or download for all of them.</p>
       )}
     </div>
   );

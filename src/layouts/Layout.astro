@@ -128,7 +128,7 @@ const socialImageURL = new URL(ogImagePath, siteUrl).toString();
         {/* data-clarity-mask: Clarity session recordings and heatmaps must never capture what
             people paste into a tool or the output it produces. Clicks and scrolls are still recorded. */}
         <main id="main" class="min-w-0 flex-1 px-4 pb-16 pt-5 md:px-8" data-clarity-mask="True">
-          <nav aria-label="Breadcrumb" class="mb-5 flex flex-wrap items-center gap-1.5 text-[13px] text-slate-500">
+          <nav aria-label="Breadcrumb" class="mb-5 flex flex-wrap items-center gap-1.5 text-[13px] text-slate-400">
             <a href="/" class="hover:text-slate-200">Home</a>
             <span aria-hidden="true">/</span>
             <a href={`/tools/category/${tool.category}`} class="hover:text-slate-200">{toolCategory?.label}</a>
@@ -144,7 +144,7 @@ const socialImageURL = new URL(ogImagePath, siteUrl).toString();
     ) : (
       <main id="main" class="mx-auto w-full max-w-6xl flex-1 px-4 pb-16 pt-8 md:pt-12">
         {Astro.slots.has('breadcrumb') && (
-          <nav aria-label="Breadcrumb" class="mb-6 flex items-center gap-2 text-sm text-slate-500">
+          <nav aria-label="Breadcrumb" class="mb-6 flex items-center gap-2 text-sm text-slate-400">
             <slot name="breadcrumb" />
           </nav>
         )}

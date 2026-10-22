@@ -122,7 +122,7 @@ export function UrlLoader({ onText, onClose }: { onText: (text: string) => void;
         <button type="submit" disabled={state.busy} className="h-7 rounded bg-indigo-500 px-2.5 text-[12.5px] font-medium text-slate-950 hover:bg-indigo-400 disabled:opacity-50">{state.busy ? 'Loading…' : 'Fetch'}</button>
         <Btn onClick={onClose}>Cancel</Btn>
       </div>
-      <p className="mt-1.5 text-[12px] leading-snug text-slate-500">
+      <p className="mt-1.5 text-[12px] leading-snug text-slate-400">
         Your browser fetches this URL directly. The site you enter sees the request; SyntaxSnap does not. The server must allow cross-origin requests.
       </p>
       {state.error && <p role="alert" className="mt-1 text-[12.5px] text-rose-300">{state.error}</p>}

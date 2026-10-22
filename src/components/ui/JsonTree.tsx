@@ -9,8 +9,8 @@ import { Btn } from './ws';
 const ROW = 24;
 
 const TYPE_STYLE: Record<JsonType, { badge: string; value: string }> = {
-  object: { badge: 'obj', value: 'text-slate-500' },
-  array: { badge: 'arr', value: 'text-slate-500' },
+  object: { badge: 'obj', value: 'text-slate-400' },
+  array: { badge: 'arr', value: 'text-slate-400' },
   string: { badge: 'str', value: 'text-emerald-300' },
   number: { badge: 'num', value: 'text-amber-300' },
   boolean: { badge: 'bool', value: 'text-fuchsia-300' },
@@ -165,7 +165,7 @@ export function JsonTree({ value, initialDepth = 1, onCopyPath }: JsonTreeProps)
                     onClick={() => toggle(row)}
                     aria-expanded={isOpen}
                     aria-label={`${isOpen ? 'Collapse' : 'Expand'} ${keyLabel}`}
-                    className="mr-1 flex h-5 w-5 shrink-0 items-center justify-center rounded text-slate-500 hover:bg-slate-700 hover:text-slate-200"
+                    className="mr-1 flex h-5 w-5 shrink-0 items-center justify-center rounded text-slate-400 hover:bg-slate-700 hover:text-slate-200"
                   >
                     <svg className={`h-3 w-3 transition-transform ${isOpen ? 'rotate-90' : ''}`} viewBox="0 0 12 12" aria-hidden="true"><path d="M4 2.5 7.5 6 4 9.5" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
                   </button>
@@ -176,11 +176,11 @@ export function JsonTree({ value, initialDepth = 1, onCopyPath }: JsonTreeProps)
                   title={`Copy path ${row.id}`}
                   className="flex min-w-0 items-center gap-1.5 rounded px-1 text-left hover:bg-slate-700/40"
                 >
-                  <span className={typeof row.key === 'number' ? 'text-slate-500' : 'text-sky-300'}>
-                    <Highlight text={keyLabel} q={debouncedQ} /><span className="text-slate-600">:</span>
+                  <span className={typeof row.key === 'number' ? 'text-slate-400' : 'text-sky-300'}>
+                    <Highlight text={keyLabel} q={debouncedQ} /><span className="text-slate-400">:</span>
                   </span>
                   {container ? (
-                    <span className="text-slate-500">{row.type === 'array' ? `[${row.childCount}]` : `{${row.childCount}}`}</span>
+                    <span className="text-slate-400">{row.type === 'array' ? `[${row.childCount}]` : `{${row.childCount}}`}</span>
                   ) : (
                     <span className={`${style.value} truncate`}><Highlight text={row.preview} q={debouncedQ} /></span>
                   )}
@@ -191,7 +191,7 @@ export function JsonTree({ value, initialDepth = 1, onCopyPath }: JsonTreeProps)
           })}
         </div>
       </div>
-      <div className="flex shrink-0 items-center justify-between border-t border-slate-800 px-3 py-1 text-[11.5px] text-slate-500">
+      <div className="flex shrink-0 items-center justify-between border-t border-slate-800 px-3 py-1 text-[11.5px] text-slate-400">
         <span>Click a node to copy its JSONPath</span>
         <span aria-live="polite" className="truncate pl-2 font-mono text-indigo-300" data-copied-path>{toast}</span>
       </div>
