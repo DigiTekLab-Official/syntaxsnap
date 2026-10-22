@@ -1,6 +1,7 @@
 // Homepage live demo: paste JSON, get Zod or TypeScript. Real code, not a mockup.
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { jsonToTs, jsonToZodLite } from '../../utils/jsonToTs';
+import { normalizeSpaces } from '../../utils/json/parse';
 import { Segmented, CopyBtn } from '../ui/ws';
 
 const SAMPLE = `{
@@ -22,7 +23,7 @@ export default function HeroDemo() {
 
   const result = useMemo(() => {
     try {
-      const v = JSON.parse(input);
+      const v = JSON.parse(normalizeSpaces(input));
       return out === 'zod'
         ? { code: `import { z } from "zod";\n\nexport const Account = ${jsonToZodLite(v)};\n\nexport type Account = z.infer<typeof Account>;`, ok: true }
         : { code: jsonToTs(v, { rootName: 'Account' }), ok: true };

@@ -43,7 +43,42 @@ export function offsetOf(text: string, line: number, column = 1) {
   return Math.min(text.length, pos + column - 1);
 }
 
-export function parseJson(text: string, opts: ParseOptions = {}): { value?: unknown; error?: ParseError } {
+// ─── Copy-paste whitespace ───────────────────────────────────────────────────
+
+// Spaces that web pages and editors put into copied code (w3schools, docs sites,
+// Word, Slack): non-breaking and other Unicode spaces, zero-width characters and
+// a byte-order mark. JSON only allows plain spaces, tabs and line breaks
+// between tokens, so these break JSON.parse even though the JSON looks fine.
+const ODD_SPACE = /[\u00A0\u1680\u2000-\u200B\u202F\u205F\u3000\uFEFF]/;
+const isOddSpace = (c: number) =>
+  c === 0x00a0 || c === 0x1680 || (c >= 0x2000 && c <= 0x200b) || c === 0x202f || c === 0x205f || c === 0x3000 || c === 0xfeff;
+
+/**
+ * Replaces Unicode spaces between tokens with plain spaces, one for one, so
+ * positions don't move. Characters inside strings are left exactly as they are.
+ */
+export function normalizeSpaces(text: string): string {
+  if (!ODD_SPACE.test(text)) return text;
+  let out = '';
+  let chunkStart = 0;
+  let i = 0;
+  const n = text.length;
+  while (i < n) {
+    const c = text.charCodeAt(i);
+    if (c === 34 /* " */ || c === 39 /* ' */) { i = skipString(text, i, c); continue; }
+    if (isOddSpace(c)) {
+      out += text.slice(chunkStart, i) + ' ';
+      i++;
+      chunkStart = i;
+      continue;
+    }
+    i++;
+  }
+  return out + text.slice(chunkStart);
+}
+
+export function parseJson(raw: string, opts: ParseOptions = {}): { value?: unknown; error?: ParseError } {
+  const text = normalizeSpaces(raw);
   const src = opts.tolerant ? toStrictJson(text) : text;
   try {
     return { value: JSON.parse(src) };
@@ -200,7 +235,8 @@ const MAX_DEPTH = 4000;
  * trailing commas, single quotes, unquoted keys, Python/JS literals, missing
  * commas, bad escapes and duplicate keys. Positions are 1-based.
  */
-export function lintJson(text: string, opts: LintOptions = {}): Issue[] {
+export function lintJson(raw: string, opts: LintOptions = {}): Issue[] {
+  const text = normalizeSpaces(raw);
   const limit = opts.limit ?? 100;
   const tolerant = !!opts.tolerant;
   const issues: Issue[] = [];

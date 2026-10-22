@@ -5,6 +5,7 @@
 // commas, single quotes, unquoted keys, Python/JS literals, raw line breaks in
 // strings, NDJSON / several concatenated documents, and output that was cut
 // off before its closing brackets. Text inside strings is never altered.
+import { normalizeSpaces } from './parse';
 
 const LITERALS: Record<string, string> = {
   true: 'true', false: 'false', null: 'null',
@@ -28,7 +29,7 @@ export function extractJsonBlock(input: string): string {
 }
 
 export function repairJson(input: string): string {
-  const s = extractJsonBlock(input);
+  const s = normalizeSpaces(extractJsonBlock(input));
   const out: string[] = [];
   const stack: ('{' | '[')[] = [];
   // What the last emitted token was, to decide on missing commas.

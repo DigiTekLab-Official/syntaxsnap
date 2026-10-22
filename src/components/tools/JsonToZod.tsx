@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { normalizeSpaces } from '../../utils/json/parse';
 import { readIncomingInput } from '../../utils/incomingInput';
 import { useDebounce } from '../../hooks/useDebounce';
 import { Trash2, FileJson, AlertCircle, Braces, AlertTriangle } from 'lucide-react';
@@ -112,7 +113,7 @@ export default function JsonToZod() {
     }
 
     try {
-      const parsed = JSON.parse(debouncedInput);
+      const parsed = JSON.parse(normalizeSpaces(debouncedInput));
       
       // We pass the parsed object to the recursive engine. 
       // It returns the inner string for the Zod schema.
@@ -134,7 +135,7 @@ export default function JsonToZod() {
   // Format Handler
   const handleFormat = () => {
     try {
-      const parsed = JSON.parse(input);
+      const parsed = JSON.parse(normalizeSpaces(input));
       setInput(JSON.stringify(parsed, null, 2));
     } catch {
       // Ignore format errors if JSON is invalid
