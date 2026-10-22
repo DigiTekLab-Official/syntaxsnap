@@ -23,6 +23,7 @@ import { EXTENSION_URL } from '../../config/site';
     </button>
 
     <nav aria-label="Main" class="ml-auto hidden items-center gap-1 text-sm md:flex">
+      <a href="/json" class="rounded-md px-3 py-1.5 text-slate-400 hover:bg-slate-900 hover:text-white">JSON tools</a>
       <a href="/tools" class="rounded-md px-3 py-1.5 text-slate-400 hover:bg-slate-900 hover:text-white">All tools</a>
       <a href="/sponsor" class="rounded-md px-3 py-1.5 text-slate-400 hover:bg-slate-900 hover:text-white">Sponsor</a>
       <a href={EXTENSION_URL} target="_blank" rel="noopener noreferrer" class="rounded-md px-3 py-1.5 text-slate-400 hover:bg-slate-900 hover:text-white">Extension</a>
@@ -40,6 +41,7 @@ import { EXTENSION_URL } from '../../config/site';
 
   <div id="mobile-menu" class="hidden border-b border-slate-800 bg-ws-bg px-4 pb-4 md:hidden">
     <ul class="divide-y divide-slate-800/70 text-[15px]">
+      <li><a href="/json" class="block py-3 text-slate-200">JSON tools</a></li>
       <li><a href="/tools" class="block py-3 text-slate-200">All tools</a></li>
       {CATEGORY_NAV.map((c) => <li><a href={`/tools/category/${c.key}`} class="block py-3 text-slate-400">{c.label}</a></li>)}
       <li><a href="/sponsor" class="block py-3 text-slate-400">Sponsor</a></li>

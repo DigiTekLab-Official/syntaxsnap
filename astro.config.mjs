@@ -27,7 +27,7 @@ export default defineConfig({
         !page.includes('/draft/'),
 
       serialize(item) {
-        if (item.url.includes('/tools/')) {
+        if (item.url.includes('/tools/') || item.url.endsWith('/json')) {
           item.changefreq = 'daily';
           item.priority   = 0.9;
           return item;
