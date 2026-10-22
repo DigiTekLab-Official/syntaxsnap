@@ -153,20 +153,26 @@ const socialImageURL = new URL(ogImagePath, siteUrl).toString();
     <Footer />
 
     {/* Analytics */}
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-QCZWS74HCP" is:inline></script>
+    <!-- Google Analytics + Microsoft Clarity: production hostname only, so local dev,
+         Playwright/Lighthouse runs and *.pages.dev previews don't pollute the data. -->
     <script is:inline>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-QCZWS74HCP');
-    </script>
-    <script is:inline>
-        (function(c,l,a,r,i,t,y){
-            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-        })(window, document, "clarity", "script", "viplajyvf3");
+      (function () {
+        var h = location.hostname;
+        if (h !== 'syntaxsnap.com' && h !== 'www.syntaxsnap.com') return;
+        var g = document.createElement('script');
+        g.async = true;
+        g.src = 'https://www.googletagmanager.com/gtag/js?id=G-QCZWS74HCP';
+        document.head.appendChild(g);
+        window.dataLayer = window.dataLayer || [];
+        window.gtag = function () { window.dataLayer.push(arguments); };
+        window.gtag('js', new Date());
+        window.gtag('config', 'G-QCZWS74HCP');
+        (function (c, l, a, r, i, t, y) {
+          c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments); };
+          t = l.createElement(r); t.async = 1; t.src = 'https://www.clarity.ms/tag/' + i;
+          y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y);
+        })(window, document, 'clarity', 'script', 'viplajyvf3');
+      })();
     </script>
     <StatusBar tool={tool} />
     <CommandPalette client:idle />
