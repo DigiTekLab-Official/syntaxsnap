@@ -32,7 +32,7 @@ export function Btn({
   );
 }
 
-export function CopyBtn({ text, label = 'Copy' }: { text: string; label?: string }) {
+export function CopyBtn({ text, label = 'Copy', onDone }: { text: string; label?: string; onDone?: () => void }) {
   const [done, setDone] = useState(false);
   const copy = useCallback(async () => {
     try { await navigator.clipboard.writeText(text); } catch {
@@ -40,15 +40,17 @@ export function CopyBtn({ text, label = 'Copy' }: { text: string; label?: string
       document.execCommand('copy'); ta.remove();
     }
     setDone(true); setTimeout(() => setDone(false), 1400);
-  }, [text]);
+    onDone?.();
+  }, [text, onDone]);
   return <Btn onClick={copy} disabled={!text} primary>{done ? 'Copied' : label}</Btn>;
 }
 
-export function DownloadBtn({ text, filename }: { text: string; filename: string }) {
+export function DownloadBtn({ text, filename, mime = 'text/plain', onDone }: { text: string; filename: string; mime?: string; onDone?: () => void }) {
   const dl = () => {
-    const url = URL.createObjectURL(new Blob([text], { type: 'text/plain' }));
+    const url = URL.createObjectURL(new Blob([text], { type: mime }));
     const a = document.createElement('a'); a.href = url; a.download = filename; a.click();
     setTimeout(() => URL.revokeObjectURL(url), 1000);
+    onDone?.();
   };
   return <Btn onClick={dl} disabled={!text} title={`Download ${filename}`}>Download</Btn>;
 }
