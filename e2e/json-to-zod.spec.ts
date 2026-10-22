@@ -5,7 +5,7 @@ test.describe('JSON to Zod Converter Tool', () => {
   
   test('should load the page, render the UI, and verify SEO title', async ({ page }) => {
     // 1. Navigate to your local dev server
-    await page.goto('http://localhost:4321/tools/json-to-zod');
+    await page.goto('/tools/json-to-zod');
 
     // 2. Verify the SEO title is correct
     await expect(page).toHaveTitle(/JSON to Zod Converter/i);
@@ -21,12 +21,15 @@ test.describe('JSON to Zod Converter Tool', () => {
 
   test('should instantly generate a Zod schema when valid JSON is typed', async ({ page }) => {
     // 1. Navigate to the tool
-    await page.goto('http://localhost:4321/tools/json-to-zod');
+    await page.goto('/tools/json-to-zod');
 
     // 2. Wait for React hydration + default schema render (client:idle defers hydration)
     // Checking for output text is the most reliable hydration signal — it proves
     // React mounted, state initialised, and the debounced effect ran.
     await expect(page.locator('pre')).toContainText('z.object(', { timeout: 15000 });
+    // The sample's schema is pre-rendered in the HTML, so also wait for React to hydrate
+    // before typing; otherwise hydration can overwrite the typed input.
+    await page.waitForSelector('[data-hydrated="true"]', { timeout: 15000 });
 
     // 3. Locate the JSON input textarea
     const inputArea = page.locator('textarea').first();
