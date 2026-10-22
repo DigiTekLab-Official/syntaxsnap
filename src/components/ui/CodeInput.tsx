@@ -7,6 +7,8 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 
 const LINE = 20; // px, must match leading-[20px]
 const PAD = 12; // px, must match py-3
+/** Above this many characters, keystrokes are reported after a pause instead of each time. */
+const LARGE_INPUT = 1024 * 1024;
 
 export function countLines(s: string) {
   let n = 1;
@@ -33,6 +35,29 @@ export function CodeInput({ id, label, value, onChange, placeholder, errorLine, 
   const [scrollTop, setScrollTop] = useState(0);
   const [height, setHeight] = useState(600);
   const lines = useMemo(() => countLines(value), [value]);
+
+  // The textarea is uncontrolled. A controlled one makes React rewrite its whole
+  // text on every keystroke, and reading .value copies the entire string out of
+  // the DOM, which adds up to seconds per key on multi-megabyte files.
+  // `known` remembers the text we already know about, so programmatic changes
+  // (sample, file, repair, clear) are written in without reading the DOM.
+  const known = useRef(value);
+  useEffect(() => {
+    const el = ref.current;
+    if (el && value !== known.current) { el.value = value; known.current = value; }
+  }, [value, ref]);
+
+  // Small inputs report every keystroke; large ones report once typing pauses.
+  const timer = useRef(0);
+  useEffect(() => () => clearTimeout(timer.current), []);
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    if (!onChange) return;
+    const el = e.currentTarget;
+    const flush = () => { known.current = el.value; onChange(known.current); };
+    clearTimeout(timer.current);
+    if (known.current.length < LARGE_INPUT) flush();
+    else timer.current = window.setTimeout(flush, 300);
+  };
   const digits = String(lines).length;
   const gutter = Math.max(2, digits) * 8 + 20;
 
@@ -84,8 +109,8 @@ export function CodeInput({ id, label, value, onChange, placeholder, errorLine, 
         <textarea
           id={id}
           ref={ref}
-          value={value}
-          onChange={onChange ? (e) => onChange(e.target.value) : undefined}
+          defaultValue={value}
+          onChange={handleChange}
           onScroll={onScroll}
           onPaste={onPaste}
           readOnly={readOnly}
