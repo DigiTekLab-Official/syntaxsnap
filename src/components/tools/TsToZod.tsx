@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect, useRef, useCallback } from 'react';
+import { readIncomingInput } from '../../utils/incomingInput';
 import ShareButtonGroup from '../ui/ShareButtonGroup';
 import { useDebounce } from '../../hooks/useDebounce';
 
@@ -417,15 +418,9 @@ export default function TsToZodTool() {
 
   useEffect(() => {
     rootRef.current?.setAttribute('data-hydrated', 'true');
-    // Types handed over by JSON to TypeScript (via sessionStorage, never the URL)
-    try {
-      const raw = sessionStorage.getItem('syntaxsnap:handoff');
-      if (raw) {
-        sessionStorage.removeItem('syntaxsnap:handoff');
-        const h = JSON.parse(raw) as { to: string; text: string };
-        if (h.to === window.location.pathname && h.text) setInput(h.text);
-      }
-    } catch { /* storage blocked */ }
+    // Text from another tool, the Chrome extension (#input=) or ?input=
+    const incoming = readIncomingInput();
+    if (incoming) setInput(incoming);
   }, []);
 
   const zodCode = useMemo(() => {

@@ -2,251 +2,78 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; frame-src 'none'; font-src 'none';">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'none'; frame-src 'none';">
+  <title>SyntaxSnap</title>
   <style>
+    @font-face { font-family: "IBM Plex Sans"; src: url("fonts/plex-sans-var.woff2") format("woff2-variations"); font-weight: 100 700; }
+    @font-face { font-family: "IBM Plex Mono"; src: url("fonts/plex-mono-400.woff2") format("woff2"); font-weight: 400; }
     :root {
-      --bg: #0f172a;       
-      --card-bg: #1e293b;  
-      --border: #334155;   
-      --text-main: #f8fafc;
-      --text-muted: #94a3b8;
-      --accent: #6366f1;   
+      --bg: #0c121d; --rail: #0f1623; --panel: #141c2b; --raised: #1a2335; --line: #212b3f;
+      --text: #d3dbe7; --muted: #8d9ab0; --faint: #66758e; --accent: #27b4f2; --local: #45d48a;
     }
-
-    body {
-      width: 280px;
-      margin: 0;
-      padding: 20px;
-      background-color: var(--bg);
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      color: var(--text-main);
-    }
-
-    header {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 24px;
-      padding-bottom: 16px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .menu {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .tool-card {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      padding: 12px 16px;
-      background-color: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      text-decoration: none;
-      color: var(--text-muted);
-      font-size: 13px;
-      font-weight: 500;
-      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .tool-card:hover {
-      background-color: #263346;
-      border-color: var(--accent);
-      color: #fff;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    }
-
-    .tool-icon {
-      width: 18px;
-      height: 18px;
-      stroke-width: 2px;
-      color: #27b4f2;
-      transition: stroke 0.2s;
-    }
-
-    .tool-card:hover .tool-icon {
-      color: #ffffff;
-      transform: scale(1.1);
-    }
-
-    footer {
-      margin-top: 24px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 6px;
-      font-size: 12.5px; 
-      color: #94a3b8;    
-      font-weight: 500;
-    }
-
-    .status-dot {
-      width: 6px;
-      height: 6px;
-      background-color: #10b981; 
-      border-radius: 50%;
-      box-shadow: 0 0 6px rgba(16, 185, 129, 0.4);
-    }
-
-    .status-message {
-      text-align: center;
-      font-size: 12px;
-      padding: 10px;
-    }
-    .status-message.error { color: #ef4444; }
-    .status-message.info  { color: #94a3b8; }
-
-    .header-icon {
-      width: 28px;
-      height: 28px;
-      border-radius: 6px;
-    }
-
-    .header-logo {
-      height: 20px;
-      width: auto;
-    }
-
-    .extract-btn {
-      width: 100%;
-      text-align: left;
-      cursor: pointer;
-      font-family: inherit;
-      background: none;
-    }
-
-    .svg-results {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      margin-top: 10px;
-      max-height: 200px;
-      overflow-y: auto;
-    }
-
-    /* ─── Explore CTA ──────────────────────────────────── */
-    .cta-wrapper {
-      margin-top: 16px;
-      padding-top: 16px;
-      border-top: 1px solid var(--border);
-    }
-
-    .cta-btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      width: 100%;
-      box-sizing: border-box;
-      padding: 12px 16px;
-      border-radius: 10px;
-      border: 1px solid rgba(99, 102, 241, 0.4);
-      background: linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(139, 92, 246, 0.15) 100%);
-      color: #c7d2fe;
-      font-size: 13px;
-      font-weight: 600;
-      text-decoration: none;
-      letter-spacing: 0.2px;
-      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    .cta-btn:hover {
-      background: linear-gradient(135deg, var(--accent) 0%, #8b5cf6 100%);
-      border-color: #8b5cf6;
-      color: #fff;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4), 0 0 40px rgba(139, 92, 246, 0.15);
-    }
-
-    .cta-btn:active {
-      transform: translateY(0);
-    }
-
-    .cta-icon {
-      width: 16px;
-      height: 16px;
-      stroke-width: 2px;
-      flex-shrink: 0;
-    }
+    * { box-sizing: border-box; }
+    body { width: 340px; margin: 0; background: var(--bg); color: var(--text); font: 13px/1.45 "IBM Plex Sans", system-ui, sans-serif; }
+    a { color: inherit; text-decoration: none; }
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; border-radius: 4px; }
+    header { display: flex; align-items: center; gap: 9px; padding: 14px 14px 10px; }
+    header img { width: 22px; height: 22px; }
+    .brand { font-size: 15px; font-weight: 600; color: #fff; letter-spacing: -0.01em; }
+    .brand span { color: var(--accent); }
+    .search { padding: 0 14px 10px; }
+    .search input { width: 100%; height: 34px; padding: 0 10px; border-radius: 6px; border: 1px solid var(--line); background: var(--panel); color: var(--text); font: inherit; outline: none; }
+    .search input:focus { border-color: var(--accent); }
+    h2 { margin: 6px 14px 4px; font-size: 11.5px; font-weight: 500; color: var(--faint); }
+    ul { list-style: none; margin: 0; padding: 0 6px; max-height: 300px; overflow-y: auto; }
+    li a { display: block; padding: 6px 8px; border-radius: 5px; }
+    li a:hover, li a:focus-visible { background: var(--raised); }
+    .name { display: block; color: var(--text); font-weight: 500; }
+    .desc { display: block; color: var(--muted); font-size: 12px; }
+    .empty { padding: 10px 14px; color: var(--muted); }
+    .tip { margin: 10px 14px 0; padding: 9px 10px; border-radius: 6px; background: var(--panel); border: 1px solid var(--line); color: var(--muted); font-size: 12px; }
+    .tip b { color: var(--text); font-weight: 500; }
+    .svg { margin: 10px 14px 0; }
+    .btn { width: 100%; height: 32px; border-radius: 6px; border: 1px solid var(--line); background: var(--panel); color: var(--text); font: inherit; font-weight: 500; cursor: pointer; }
+    .btn:hover { border-color: #2e3a52; background: var(--raised); }
+    .svg-results { margin-top: 8px; max-height: 220px; overflow-y: auto; }
+    .svg-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 6px 8px; border: 1px solid var(--line); border-radius: 6px; margin-bottom: 6px; background: var(--panel); }
+    .svg-row img { width: 22px; height: 22px; object-fit: contain; background: var(--raised); border-radius: 4px; padding: 3px; }
+    .svg-row .meta { display: flex; align-items: center; gap: 8px; min-width: 0; font: 11.5px "IBM Plex Mono", monospace; color: var(--muted); }
+    .svg-row button { height: 24px; padding: 0 8px; border: 0; border-radius: 4px; background: var(--accent); color: #0c121d; font: inherit; font-size: 11.5px; font-weight: 600; cursor: pointer; }
+    .status { font-size: 12px; color: var(--muted); }
+    .status.error { color: #fda4af; }
+    footer { display: flex; align-items: center; justify-content: space-between; margin-top: 12px; padding: 9px 14px; border-top: 1px solid var(--line); background: var(--rail); font: 11.5px "IBM Plex Mono", monospace; color: var(--faint); }
+    footer .local::before { content: ""; display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--local); margin-right: 6px; vertical-align: 1px; }
+    footer a { color: var(--accent); }
   </style>
 </head>
 <body>
-
   <header>
-    <img src="icon.svg" alt="Icon" class="header-icon">
-    <img src="logo.png" alt="SyntaxSnap Logo" class="header-logo">
+    <img src="icon.svg" alt="">
+    <div class="brand">Syntax<span>Snap</span></div>
   </header>
 
-  <div style="margin-bottom: 16px;">
-    <input type="text" id="search-input" placeholder="Search tools... (e.g. Zod, SVG)" 
-           style="width: 100%; box-sizing: border-box; padding: 10px 14px; background: #1e293b; border: 1px solid #334155; border-radius: 8px; color: #f8fafc; font-size: 13px; outline: none;">
+  <div class="search">
+    <label for="search-input" style="position:absolute;left:-9999px">Search tools</label>
+    <input type="text" id="search-input" placeholder="Search tools, like json or zod" autocomplete="off" spellcheck="false">
   </div>
 
-  <nav class="menu">
-    <a href="https://syntaxsnap.com/tools/ts-to-zod" target="_blank" rel="noopener noreferrer" class="tool-card">
-      <svg class="tool-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><path d="m10 13-2 2 2 2"/><path d="m14 17 2-2-2-2"/>
-      </svg>
-      TS to Zod
-    </a>
+  <h2 id="list-heading">Popular</h2>
+  <ul id="tool-list" aria-labelledby="list-heading"></ul>
+  <p id="empty" class="empty" hidden>No tool matches that. Try "json", "zod" or "sql".</p>
 
-    <a href="https://syntaxsnap.com/tools/graphql-to-zod" target="_blank" rel="noopener noreferrer" class="tool-card">
-      <svg class="tool-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-        <ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5V19A9 3 0 0 0 21 19V5"/><path d="M3 12A9 3 0 0 0 21 12"/>
-      </svg>
-      GraphQL to Zod
-    </a>
+  <p class="tip"><b>Tip:</b> select JSON, a JWT or a schema on any page, right-click and choose <b>SyntaxSnap</b> to open it in the right tool.</p>
 
-    <a href="https://syntaxsnap.com/tools/regex-tester" target="_blank" rel="noopener noreferrer" class="tool-card">
-      <svg class="tool-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/><path d="M7 11l2-2 4 4"/><path d="M11 7l4 4"/>
-      </svg>
-      Regex Tester
-    </a>
-    
-    <a href="https://syntaxsnap.com/tools/json-to-zod" target="_blank" rel="noopener noreferrer" class="tool-card">
-      <svg class="tool-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M8 3H7a2 2 0 0 0-2 2v5a2 2 0 0 1-2 2 2 2 0 0 1 2 2v5c0 1.1.9 2 2 2h1"/><path d="M16 21h1a2 2 0 0 0 2-2v-5c0-1.1.9-2 2-2a2 2 0 0 1-2-2V5a2 2 0 0 0-2-2h-1"/>
-      </svg>
-      JSON to Zod
-    </a>
-    
-    <button id="extract-svg-btn" class="tool-card extract-btn">
-      <svg class="tool-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-        <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
-        <polyline points="2 17 12 22 22 17"></polyline>
-        <polyline points="2 12 12 17 22 12"></polyline>
-      </svg>
-      Extract SVGs from Page
-    </button>
-
-    <div id="svg-results" class="svg-results"></div>
-  </nav>
-
-  <div class="cta-wrapper">
-    <a href="https://syntaxsnap.com/tools" target="_blank" rel="noopener noreferrer" class="cta-btn">
-      <svg class="cta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
-      </svg>
-      Explore All Web Tools
-      <svg class="cta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M7 17l9.2-9.2M17 17V7H7"/>
-      </svg>
-    </a>
+  <div class="svg">
+    <button id="extract-svg-btn" class="btn" type="button">Extract SVGs from this page</button>
+    <div id="svg-results" class="svg-results" aria-live="polite"></div>
   </div>
 
   <footer>
-    <span class="status-dot"></span>
-    System Operational • v1.2.2
+    <span class="local">Runs in your browser</span>
+    <a id="all-tools" href="https://syntaxsnap.com/tools?utm_source=extension&amp;utm_medium=popup" target="_blank" rel="noopener noreferrer">All tools</a>
   </footer>
 
+  <script src="tools.js"></script>
   <script src="popup.js"></script>
-
 </body>
 </html>

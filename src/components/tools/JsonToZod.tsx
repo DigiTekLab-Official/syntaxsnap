@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { readIncomingInput } from '../../utils/incomingInput';
 import { useDebounce } from '../../hooks/useDebounce';
 import { Trash2, FileJson, AlertCircle, Braces, AlertTriangle } from 'lucide-react';
 // Import the new Viral Loop button instead of CopyButton
@@ -90,23 +91,8 @@ export default function JsonToZod() {
 
   // ─── Chrome Extension Integration ──────────────────────────────────────────
   useEffect(() => {
-    // Text handed over by another SyntaxSnap tool (via sessionStorage, never the URL)
-    try {
-      const raw = sessionStorage.getItem('syntaxsnap:handoff');
-      if (raw) {
-        sessionStorage.removeItem('syntaxsnap:handoff');
-        const h = JSON.parse(raw) as { to: string; text: string };
-        if (h.to === window.location.pathname && h.text) { setInput(h.text); return; }
-      }
-    } catch { /* storage blocked */ }
-
-    const params = new URLSearchParams(window.location.search);
-    const incomingText = params.get('input');
-    
-    if (incomingText) {
-      setInput(incomingText);
-      window.history.replaceState({}, '', window.location.pathname);
-    }
+    const incomingText = readIncomingInput();
+    if (incomingText) setInput(incomingText);
   }, []);
   // ───────────────────────────────────────────────────────────────────────────
 

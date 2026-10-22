@@ -1,5 +1,6 @@
 // src/components/tools/RegexTester.tsx
 import React, { useState, useMemo, useEffect } from 'react';
+import { readIncomingInput } from '../../utils/incomingInput';
 import { useDebounce } from '../../hooks/useDebounce';
 import { Regex, Flag, Zap, AlertTriangle, CheckCircle2 } from 'lucide-react';
 import CopyButton from '../ui/CopyButton';
@@ -87,12 +88,10 @@ export default function RegexTester() {
 
   // ─── Chrome Extension Integration ──────────────────────────────────────────
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const incomingText = params.get('input');
+    const incomingText = readIncomingInput();
     
     if (incomingText) {
       setText(incomingText);
-      window.history.replaceState({}, '', window.location.pathname);
     }
   }, []);
   // ───────────────────────────────────────────────────────────────────────────

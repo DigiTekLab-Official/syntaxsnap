@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect, useRef, useCallback, lazy, Suspense } from 'react';
+import { readIncomingInput } from '../../utils/incomingInput';
 import type { Monaco } from '@monaco-editor/react';
 import { CopyButton } from '../ui/CopyButton';
 import { useDebounce } from '../../hooks/useDebounce';
@@ -64,11 +65,9 @@ export default function EnvToZod() {
 
   // Chrome Extension / URL param integration
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const incoming = params.get('input');
+    const incoming = readIncomingInput();
     if (incoming) {
       setInput(incoming);
-      window.history.replaceState({}, '', window.location.pathname);
     }
   }, []);
 

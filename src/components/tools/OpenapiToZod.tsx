@@ -1,5 +1,6 @@
 // src/components/tools/OpenapiToZod.tsx
 import { useState, useMemo, useEffect, useRef, useCallback } from 'react';
+import { readIncomingInput } from '../../utils/incomingInput';
 import ShareButtonGroup from '../ui/ShareButtonGroup';
 import { useDebounce } from '../../hooks/useDebounce';
 import yaml from 'js-yaml';
@@ -337,6 +338,12 @@ function convertOpenAPIToZod(input: string): ConversionResult {
 
 export default function OpenapiToZodTool() {
   const [input, setInput] = useState(DEFAULT_INPUT);
+
+  // Text from another tool, the Chrome extension (#input=) or ?input=
+  useEffect(() => {
+    const incoming = readIncomingInput();
+    if (incoming) setInput(incoming);
+  }, []);
   const [error, setError] = useState<string | null>(null);
   const debouncedInput = useDebounce(input, DEBOUNCE_MS);
 

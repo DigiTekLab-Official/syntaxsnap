@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { readIncomingInput } from '../../utils/incomingInput';
 import { 
   ShieldCheck, ShieldAlert, Clock, Key, Lock, 
   Copy, Check, AlertTriangle, Download, ClipboardList 
@@ -67,6 +68,12 @@ const ActionButton = ({ onClick, icon: Icon, label, success, primary, ariaLabel 
 export default function JwtDebugger() {
   const [token, setToken] = useState('');
   const [decoded, setDecoded] = useState<any>({ header: null, payload: null, signature: null, isAlgNone: false, error: null });
+
+  // Text from another tool, the Chrome extension (#input=) or ?input=
+  useEffect(() => {
+    const incoming = readIncomingInput();
+    if (incoming) setToken(incoming);
+  }, []);
 
   useEffect(() => {
     if (!token.trim()) { setDecoded({ header: null, payload: null, signature: null, isAlgNone: false, error: null }); return; }

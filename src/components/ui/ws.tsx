@@ -1,5 +1,6 @@
 // src/components/ui/ws.tsx — shared building blocks for workspace-style tools.
 import React, { useState, useEffect, useCallback } from 'react';
+import { readIncomingInput, HANDOFF_KEY } from '../../utils/incomingInput';
 
 export function Panel({
   title, actions, children, className = '', footer,
@@ -58,7 +59,6 @@ export function DownloadBtn({ text, filename, mime = 'text/plain', onDone }: { t
 export const editorCls =
   'absolute inset-0 h-full w-full resize-none bg-transparent p-4 font-mono text-[13px] leading-relaxed text-slate-200 outline-none placeholder:text-slate-600';
 
-const HANDOFF_KEY = 'syntaxsnap:handoff';
 
 /**
  * Opens another tool with this text as its input. The text travels through
@@ -69,20 +69,11 @@ export function sendTo(href: string, text: string) {
   window.location.href = href;
 }
 
-/** Reads text handed over by another tool, or ?input= from the Chrome extension, once on load. */
+/** Reads text handed over by another tool, the Chrome extension (#input=) or ?input=, once on load. */
 export function useIncomingInput(set: (v: string) => void) {
   useEffect(() => {
-    try {
-      const raw = sessionStorage.getItem(HANDOFF_KEY);
-      if (raw) {
-        sessionStorage.removeItem(HANDOFF_KEY);
-        const h = JSON.parse(raw) as { to: string; text: string };
-        if (h.to === window.location.pathname && h.text) { set(h.text); return; }
-      }
-    } catch { /* storage blocked */ }
-    const p = new URLSearchParams(window.location.search);
-    const v = p.get('input');
-    if (v) { set(v); window.history.replaceState({}, '', window.location.pathname); }
+    const v = readIncomingInput();
+    if (v) set(v);
   }, []);
 }
 

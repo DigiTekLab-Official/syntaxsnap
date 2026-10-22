@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { readIncomingInput } from '../../utils/incomingInput';
 import { useDebounce } from '../../hooks/useDebounce';
 import { FileCode, Settings2, Trash2 } from 'lucide-react';
 import ShareButtonGroup from '../ui/ShareButtonGroup';
@@ -229,6 +230,12 @@ export default function SvgToJsx() {
   // New Developer Options
   const [wrapComponent, setWrapComponent] = useState(false);
   const [addProps, setAddProps] = useState(false);
+
+  // Text from another tool, the Chrome extension (#input=) or ?input=
+  useEffect(() => {
+    const incoming = readIncomingInput();
+    if (incoming) setInput(incoming);
+  }, []);
 
   const debouncedInput = useDebounce(input, 300);
   const outputRef = useRef<HTMLPreElement>(null);
