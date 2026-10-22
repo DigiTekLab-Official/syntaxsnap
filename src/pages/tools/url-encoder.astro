@@ -1,0 +1,40 @@
+---
+// src/pages/tools/url-encoder.astro
+import Layout from '../../layouts/Layout.astro';
+import Tool from '../../components/tools/UrlEncoder';
+import RelatedTools from '../../components/ui/RelatedTools.astro';
+import FaqSection from '../../components/ui/FaqSection.astro';
+import HowToSection from '../../components/ui/HowToSection.astro';
+import { toolSeoData } from '../../data/seo';
+
+const slug = "url-encoder";
+const title = "URL Encode & Decode Online + Query String Parser | SyntaxSnap";
+const description = "Percent-encode or decode URLs and query parameters, and split any URL into its parts. Choose query-value or full-URL encoding. Runs in your browser.";
+const features = ["Encode query values or full URLs", "Decode percent-encoding and plus signs", "Query string parameter table", "Swap output back to input", "Runs 100% in your browser"];
+const seo = toolSeoData[slug];
+---
+
+<Layout title={title} description={description} isTool={true} slug={slug} features={features} howTo={seo?.howTo} faqs={seo?.faqs}>
+  <header class="mb-5 max-w-3xl">
+    <h1 class="text-[28px] font-semibold tracking-tight text-white md:text-[32px]">URL Encode and Decode</h1>
+    <p class="mt-2 text-[15px] leading-relaxed text-slate-400">Percent-encode text for use in a URL, decode encoded strings, and see any URL broken into its base, query parameters and hash.</p>
+  </header>
+
+  <Tool client:load />
+
+  <HowToSection howTo={seo?.howTo} />
+
+  <section class="mt-14 border-t border-slate-800 pt-2">
+    <div class="prose-ws">
+      <h2>Query value or full URL</h2>
+      <p>Use <strong>Query value</strong> (<code>encodeURIComponent</code>) for a single parameter value: it also encodes <code>&amp;</code>, <code>=</code>, <code>?</code> and <code>/</code>, so the value cannot break the URL around it. Use <strong>Full URL</strong> (<code>encodeURI</code>) when you have a complete address and only want spaces and non-ASCII characters escaped.</p>
+      <h2>Plus signs and spaces</h2>
+      <p>HTML forms encode spaces as <code>+</code>, while most APIs use <code>%20</code>. The decoder treats both as a space.</p>
+      <h2>Reading query strings</h2>
+      <p>When the input is a full URL, the parts table lists every query parameter already decoded, which is quicker than reading a long tracking link by eye.</p>
+    </div>
+  </section>
+
+  <FaqSection faqs={seo?.faqs} />
+  <RelatedTools currentTool={slug} />
+</Layout>

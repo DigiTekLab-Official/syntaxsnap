@@ -1,72 +1,30 @@
 ---
 // src/components/ui/RelatedTools.astro
-import { TOOLS, type Tool } from '../../config/tools';
-import ToolCard from './ToolCard.astro'; // <-- Import your shared card component!
+// Same-category tools first, then the most-used tools, so every page links
+// into its topic cluster and into the high-traffic pages.
+import { TOOLS, FEATURED_TOOL_IDS, CATEGORY_NAV, type Tool } from '../../config/tools';
+import ToolCard from './ToolCard.astro';
 
-interface Props {
-  currentTool: string;
-}
-
+interface Props { currentTool: string }
 const { currentTool } = Astro.props;
-
-// Filter out the current tool so we don't suggest the tool they are already using
-const relatedTools = TOOLS.filter((tool: Tool) => tool.id !== currentTool);
-const currentToolData = TOOLS.find((t: Tool) => t.id === currentTool);
-
-// --- NEW LOGIC: Prioritize Hero Tools for Cross-Pollination ---
-// These are your highest-converting tools based on data
-const heroToolIds = ['aurora-gradient', 'json-schema-to-zod', 'ai-mock-generator', 'jwt-debugger'];
-
-// 1. Grab Hero tools first
-let crossPollinated = relatedTools.filter((t: Tool) => heroToolIds.includes(t.id));
-
-// 2. If we have less than 3 hero tools available (e.g. they are currently ON a hero tool), 
-// fill the remaining slots with tools from the same category.
-if (crossPollinated.length < 3) {
-  const sameCategory = relatedTools.filter((t: Tool) => t.category === currentToolData?.category && !heroToolIds.includes(t.id));
-  crossPollinated = [...crossPollinated, ...sameCategory];
+const current = TOOLS.find((t) => t.id === currentTool);
+const others = TOOLS.filter((t) => t.id !== currentTool);
+const sameCat = others.filter((t) => t.category === current?.category);
+const featured = FEATURED_TOOL_IDS.map((id) => others.find((t) => t.id === id)).filter(Boolean) as Tool[];
+const picks: Tool[] = [];
+for (const t of [...sameCat.slice(0, 4), ...featured, ...others]) {
+  if (!picks.includes(t)) picks.push(t);
+  if (picks.length === 6) break;
 }
-
-// 3. Fallback: If STILL less than 3, just grab any remaining tools so the UI doesn't break
-if (crossPollinated.length < 3) {
-  const remainingTools = relatedTools.filter((t: Tool) => !crossPollinated.some(cp => cp.id === t.id));
-  crossPollinated = [...crossPollinated, ...remainingTools];
-}
-
-// 4. Lock it to exactly 3 tools for perfect UI grid alignment
-const displayTools = crossPollinated.slice(0, 3);
-
-// Helper to format category names for the "View all" link
-const categoryMap: Record<string, string> = {
-  json: 'JSON & Schema',
-  dev: 'Developer',
-  css: 'Design & CSS',
-  ai: 'AI Powered',
-  data: 'Data Conversion'
-};
-
-const categoryLabel = currentToolData?.category 
-  ? categoryMap[currentToolData.category] || 'Related' 
-  : 'Related';
+const label = CATEGORY_NAV.find((c) => c.key === current?.category)?.label;
 ---
 
-<section class="border-t border-slate-800 mt-20 pt-16 mb-12">
-  <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10 px-4">
-    <div>
-      <h2 class="text-2xl font-bold text-white mb-2 tracking-tight">Explore More Developer Tools</h2>
-      <p class="text-slate-400">Boost your productivity with our other privacy-first utilities.</p>
-    </div>
-    
-    {currentToolData?.category && (
-      <a href={`/tools/category/${currentToolData.category}`} class="text-indigo-400 hover:text-indigo-300 text-sm font-medium transition-colors mb-1 md:mb-0">
-        View all {categoryLabel} tools &rarr;
-      </a>
-    )}
+<section class="mt-16 border-t border-slate-800 pt-10">
+  <div class="mb-5 flex flex-wrap items-baseline justify-between gap-2">
+    <h2 class="text-xl font-semibold text-white">Related tools</h2>
+    {current && <a href={`/tools/category/${current.category}`} class="text-sm text-indigo-400 hover:text-indigo-300">All {label} tools</a>}
   </div>
-
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto px-4">
-    {displayTools.map((tool) => (
-      <ToolCard tool={tool} /> 
-    ))}
+  <div class="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3">
+    {picks.map((tool) => <ToolCard tool={tool} />)}
   </div>
 </section>

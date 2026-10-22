@@ -2,34 +2,22 @@
 // src/components/ui/ToolCard.astro
 import type { Tool } from '../../config/tools';
 
-interface Props {
-  tool: Tool;
-}
-
+interface Props { tool: Tool }
 const { tool } = Astro.props;
 const Icon = tool.icon;
 ---
 
-<a href={tool.href} class="group relative block bg-slate-900/20 border border-slate-800 hover:border-indigo-500/30 rounded-2xl p-5 transition-all hover:shadow-xl hover:shadow-indigo-900/10 hover:-translate-y-0.5">
-  <div class="absolute top-5 right-5">
-     {/* Contrast-safe: text-slate-300 passes WCAG AA against bg-slate-800 */}
-     <span class={`inline-flex items-center px-2 py-0.5 rounded text-xs font-bold uppercase tracking-wider border ${tool.status === 'New' ? 'bg-indigo-500/10 text-indigo-300 border-indigo-500/20' : 'bg-slate-800 text-slate-300 border-slate-700'}`}>
-       {tool.status}
-     </span>
-  </div>
-  
-  {/* FIX: Added pr-14 to create a safe zone for the absolute badge, preventing overlap */}
-  <div class="flex items-center gap-4 mb-3 pr-14">
-    {/* FIX: Added shrink-0 so the icon doesn't shrink when text is long */}
-    <div class={`p-2.5 rounded-xl shrink-0 ${tool.bg} ${tool.color}`}>
-       <Icon class="w-5 h-5" />
-    </div>
-    <h3 class="text-base font-bold text-white group-hover:text-indigo-400 transition-colors leading-snug">
-      {tool.title}
-    </h3>
-  </div>
-  
-  <p class="text-slate-300 text-sm leading-relaxed pl-13 line-clamp-3">
-    {tool.desc}
-  </p>
+<a href={tool.href} class="group flex gap-3 rounded-lg border border-slate-800 bg-ws-panel p-4 transition-colors hover:border-slate-700 hover:bg-ws-raised">
+  <span class={`mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-md ${tool.bg} ${tool.color}`}>
+    <Icon class="h-4 w-4" aria-hidden="true" />
+  </span>
+  <span class="min-w-0">
+    <span class="flex items-baseline gap-2">
+      <span class="text-[15px] font-medium text-white group-hover:text-indigo-300">{tool.title}</span>
+      {tool.status !== 'Live' && (
+        <span class={`text-[11px] font-medium ${tool.status === 'New' ? 'text-indigo-400' : 'text-slate-400'}`}>{tool.status.toLowerCase()}</span>
+      )}
+    </span>
+    <span class="mt-1 line-clamp-2 block text-[13px] leading-relaxed text-slate-400">{tool.desc}</span>
+  </span>
 </a>

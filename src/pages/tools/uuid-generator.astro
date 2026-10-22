@@ -1,0 +1,40 @@
+---
+// src/pages/tools/uuid-generator.astro
+import Layout from '../../layouts/Layout.astro';
+import Tool from '../../components/tools/UuidGenerator';
+import RelatedTools from '../../components/ui/RelatedTools.astro';
+import FaqSection from '../../components/ui/FaqSection.astro';
+import HowToSection from '../../components/ui/HowToSection.astro';
+import { toolSeoData } from '../../data/seo';
+
+const slug = "uuid-generator";
+const title = "UUID Generator v4 & v7 (Bulk, Secure) | SyntaxSnap";
+const description = "Generate random UUID v4 or time-ordered UUID v7 identifiers in bulk, up to 1,000 at once. Uses the browser's secure random source. Copy or download.";
+const features = ["UUID v4 and v7", "Bulk generation up to 1,000", "Uppercase and no-hyphen formats", "Copy one or all, or download", "Uses crypto.getRandomValues"];
+const seo = toolSeoData[slug];
+---
+
+<Layout title={title} description={description} isTool={true} slug={slug} features={features} howTo={seo?.howTo} faqs={seo?.faqs}>
+  <header class="mb-5 max-w-3xl">
+    <h1 class="text-[28px] font-semibold tracking-tight text-white md:text-[32px]">UUID Generator</h1>
+    <p class="mt-2 text-[15px] leading-relaxed text-slate-400">Generate UUID v4 or time-ordered v7 IDs, up to 1,000 at a time, using your browser's cryptographically secure random generator.</p>
+  </header>
+
+  <Tool client:load />
+
+  <HowToSection howTo={seo?.howTo} />
+
+  <section class="mt-14 border-t border-slate-800 pt-2">
+    <div class="prose-ws">
+      <h2>v4 or v7</h2>
+      <p>UUID v4 is 122 bits of randomness and the safe default for most IDs. UUID v7, standardised in RFC 9562, starts with a millisecond timestamp, so new IDs sort after older ones. That keeps B-tree indexes in PostgreSQL and MySQL compact and makes IDs roughly sortable by creation time.</p>
+      <h2>How random are they</h2>
+      <p>Both versions use <code>crypto.getRandomValues</code>, the same secure source browsers use for encryption keys. The chance of two v4 IDs colliding is negligible for any realistic number of records.</p>
+      <h2>When not to use v7</h2>
+      <p>Because v7 IDs reveal roughly when they were created, avoid them where creation time should stay private, such as public invite links.</p>
+    </div>
+  </section>
+
+  <FaqSection faqs={seo?.faqs} />
+  <RelatedTools currentTool={slug} />
+</Layout>

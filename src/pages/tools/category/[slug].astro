@@ -6,7 +6,6 @@ import Layout from '../../../layouts/Layout.astro';
 import ToolCard from '../../../components/ui/ToolCard.astro';
 import { TOOLS, TOOL_CATEGORIES, type ToolCategory } from '../../../config/tools';
 import { buildCollectionPage, buildBreadcrumbList, SITE_URL, SITE_NAME } from '../../../utils/schema';
-import { ArrowLeft } from 'lucide-astro';
 
 export function getStaticPaths() {
   return (Object.keys(TOOL_CATEGORIES) as ToolCategory[]).map((key) => ({
@@ -45,27 +44,20 @@ const breadcrumbSchema = buildBreadcrumbList([
   {/* SEO: BreadcrumbList schema */}
   <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
 
-  <div class="max-w-6xl mx-auto px-4 py-16">
-    <a href="/" class="inline-flex items-center gap-2 text-slate-400 hover:text-white text-sm mb-8 transition-colors">
-      <ArrowLeft class="w-4 h-4" /> Back to all tools
-    </a>
+  <div>
+    <nav aria-label="Breadcrumb" class="mb-6 flex items-center gap-1.5 text-[13px] text-slate-500">
+      <a href="/" class="hover:text-slate-200">Home</a><span aria-hidden="true">/</span>
+      <a href="/tools" class="hover:text-slate-200">All tools</a><span aria-hidden="true">/</span>
+      <span class="text-slate-300" aria-current="page">{meta.title}</span>
+    </nav>
 
-    <div class="mb-10">
-      <h1 class="text-3xl md:text-4xl font-extrabold text-white tracking-tight mb-3">
-        {meta.title}
-      </h1>
-      <p class="text-indigo-400 font-medium mb-4">
-        {meta.subtitle}
-      </p>
-      <p class="text-slate-400 text-base leading-relaxed max-w-3xl">
-        {meta.description}
-      </p>
-      <p class="text-slate-500 text-sm mt-3">
-        {categoryTools.length} free tools available — all run 100% in your browser.
-      </p>
-    </div>
+    <header class="mb-10 max-w-3xl">
+      <h1 class="text-[32px] font-semibold tracking-tight text-white">{meta.title}</h1>
+      <p class="mt-3 text-[15px] leading-relaxed text-slate-400">{meta.description}</p>
+      <p class="mt-3 text-sm text-slate-500">{categoryTools.length} free tools{categoryTools.every((t) => !t.network) ? ', all running in your browser.' : '.'}</p>
+    </header>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+    <div class="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3">
       {categoryTools.map((tool) => (
         <ToolCard tool={tool} />
       ))}

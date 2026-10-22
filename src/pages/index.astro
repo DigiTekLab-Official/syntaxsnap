@@ -2,8 +2,12 @@
 // src/pages/index.astro
 import Layout from '../layouts/Layout.astro';
 import ToolCard from '../components/ui/ToolCard.astro';
-import { TOOLS } from '../config/tools';
-import { ShieldCheck, ArrowRight, Zap, Code2, Play, CheckCircle2 } from 'lucide-astro';
+import HeroDemo from '../components/tools/HeroDemo';
+import { TOOLS, CATEGORY_NAV, FEATURED_TOOL_IDS, toolsIn, toolById, shortName } from '../config/tools';
+import { HIRE_URL } from '../config/site';
+
+const featured = FEATURED_TOOL_IDS.map((id) => toolById(id)).filter((t) => t !== undefined);
+const localCount = TOOLS.filter((t) => !t.network).length;
 import { buildWebApplication, buildItemList, SITE_URL } from '../utils/schema';
 
 // SEO: WebApplication — establishes SyntaxSnap as a platform
@@ -37,191 +41,120 @@ const organizationSchema = {
 };
 ---
 
-<Layout 
-  title="SyntaxSnap – Privacy-First Developer Tools to Generate Code Instantly"
+<Layout
+  title="SyntaxSnap – Free Private Developer Tools: CSS Gradients, OpenAPI to Zod, SQL to Prisma"
+  description={`Design CSS gradients and shadows visually, and turn OpenAPI, SQL and JSON into Zod, Prisma, Drizzle and TypeScript. ${TOOLS.length} free developer tools that run in your browser.`}
   isHomepage={true}
 >
-  {/* 1. Site Name & Identity */}
   <script type="application/ld+json" set:html={JSON.stringify(websiteSchema)} />
   <script type="application/ld+json" set:html={JSON.stringify(organizationSchema)} />
-  
-  {/* 2. Platform & Inventory Schemas */}
   <script type="application/ld+json" set:html={JSON.stringify(webAppSchema)} />
   <script type="application/ld+json" set:html={JSON.stringify(itemListSchema)} />
 
-  {/* Hero Section */}
-  <div class="pt-16 pb-12 px-4 max-w-7xl mx-auto">
-    <div class="flex flex-col lg:flex-row items-center justify-between gap-12">
-      
-      {/* Left Column: The Pitch */}
-      <div class="flex-1 max-w-2xl text-center lg:text-left">
-        
-        {/* NEW: Side-by-side Trust Badges */}
-        <div class="flex flex-wrap items-center justify-center lg:justify-start gap-3 mb-6 animate-fade-in">
-          <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-900/50 border border-slate-700 text-slate-300 text-sm font-medium">
-            <span class="relative flex h-2.5 w-2.5">
-              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-              <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
-            </span>
-            100% Client-Side
-          </div>
-          <a href="https://chromewebstore.google.com/detail/YOUR_EXTENSION_ID_HERE" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-400 hover:bg-blue-500/20 text-sm font-medium transition-colors">
-            <ShieldCheck class="w-4 h-4" />
-            Verified Chrome Publisher
-          </a>
-        </div>
+  <section class="grid items-center gap-10 pb-16 pt-2 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] lg:gap-14">
+    <div>
+      <h1 class="max-w-[16ch] text-[40px] font-semibold leading-[1.08] tracking-[-0.025em] text-white md:text-[52px]">
+        Developer tools that never see your data.
+      </h1>
+      <p class="mt-5 max-w-[46ch] text-[17px] leading-relaxed text-slate-400">
+        Turn OpenAPI specs, SQL tables and JSON into Zod, Prisma and TypeScript, and design gradients and shadows you can see. Everything runs in your browser tab, so production data stays on your machine.
+      </p>
 
-        <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white tracking-tight mb-6 leading-tight">
-          Free Developer Tools to <br class="hidden md:block" />
-          <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-400">Generate Code Instantly.</span>
-        </h1>
+      <button type="button" class="cmd-palette-trigger mt-8 flex h-12 w-full max-w-md items-center gap-3 rounded-lg border border-slate-700 bg-slate-900 px-4 text-left text-[15px] text-slate-400 transition-colors hover:border-indigo-500/70 hover:text-slate-200">
+        <svg class="h-[18px] w-[18px] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5" stroke-linecap="round"/></svg>
+        <span class="flex-1">Find a tool, like "jwt" or "json to ts"</span>
+        <kbd class="hidden rounded border border-slate-700 bg-slate-800 px-1.5 py-px font-mono text-xs sm:inline">⌘K</kbd>
+      </button>
 
-        <p class="text-lg text-slate-300 mb-8 leading-relaxed max-w-lg mx-auto lg:mx-0">
-          Convert JSON to Zod, generate mock APIs, and build Tailwind v4 gradients in seconds. <strong>No servers. No tracking. Available instantly in your browser.</strong>
-        </p>
-
-        {/* NEW: Extension-First CTAs */}
-        <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 mb-8">
-          <a href="https://chromewebstore.google.com/detail/YOUR_EXTENSION_ID_HERE" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold transition-all shadow-[0_0_20px_rgba(37,99,235,0.3)] hover:shadow-[0_0_30px_rgba(37,99,235,0.5)]">
-            <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 0C8.07 0 4.58 1.88 2.37 4.81L7.09 13C7.75 11.83 9.02 11 10.5 11H20.08C18.66 4.75 15.65 0 12 0ZM12 16C10.62 16 9.38 15.35 8.59 14.31L3.92 6.22C1.49 8.05 0 10.96 0 14C0 20.63 5.37 26 12 26C12.83 26 13.63 25.9 14.4 25.74L9.68 17.58C10.3 17.85 11.12 18 12 18C13.5 18 14.83 17.15 15.5 15.86L20.15 23.95C22.48 22.12 24 19.22 24 16C24 14.9 23.85 13.85 23.57 12.86L18.85 21C18.23 22.17 16.96 23 15.5 23H12V16Z"/></svg>
-            Add to Chrome (Free)
-          </a>
-          <a href="#all-tools" class="flex items-center gap-2 px-6 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-medium border border-slate-700 transition-all">
-            Use Web Version
-          </a>
-        </div>
-
-        {/* The "Use Case Hooks" */}
-        <div class="pt-4 border-t border-slate-800/60 max-w-lg mx-auto lg:mx-0">
-          <p class="text-xs text-slate-500 uppercase tracking-wider font-semibold mb-3">Built specifically for:</p>
-          <div class="flex flex-wrap items-center justify-center lg:justify-start gap-3 text-sm text-slate-300 font-medium">
-            <span class="flex items-center gap-1.5 bg-slate-900/50 px-3 py-1.5 rounded-lg border border-slate-800"><CheckCircle2 class="w-4 h-4 text-indigo-400" /> TypeScript Engineers</span>
-            <span class="flex items-center gap-1.5 bg-slate-900/50 px-3 py-1.5 rounded-lg border border-slate-800"><CheckCircle2 class="w-4 h-4 text-cyan-400" /> API Developers</span>
-            <span class="flex items-center gap-1.5 bg-slate-900/50 px-3 py-1.5 rounded-lg border border-slate-800"><CheckCircle2 class="w-4 h-4 text-emerald-400" /> Frontend Teams</span>
-          </div>
-        </div>
+      <div class="mt-4 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm">
+        <a href="/tools/openapi-to-zod" class="font-medium text-indigo-400 hover:text-indigo-300">OpenAPI to Zod</a>
+        <a href="/tools/aurora-gradient" class="font-medium text-indigo-400 hover:text-indigo-300">Aurora gradient generator</a>
+        <a href="/tools/sql-to-prisma" class="font-medium text-indigo-400 hover:text-indigo-300">SQL to Prisma</a>
       </div>
+    </div>
 
-      {/* Right Column: The "Aha!" Moment Visual */}
-      <div class="flex-1 w-full max-w-2xl relative group perspective mt-8 lg:mt-0">
-        <div class="absolute -inset-1 bg-gradient-to-r from-indigo-500 to-cyan-500 rounded-2xl blur opacity-20 group-hover:opacity-40 transition duration-1000 group-hover:duration-200"></div>
-        <div class="relative rounded-xl bg-slate-900 border border-slate-800 shadow-2xl overflow-hidden transform transition-transform duration-500 group-hover:scale-[1.02]">
-          
-          {/* Mock Browser Header */}
-          <div class="flex items-center px-4 py-3 border-b border-slate-800 bg-slate-950">
-            <div class="flex space-x-2">
-              <div class="w-3 h-3 rounded-full bg-red-500/80"></div>
-              <div class="w-3 h-3 rounded-full bg-yellow-500/80"></div>
-              <div class="w-3 h-3 rounded-full bg-green-500/80"></div>
-            </div>
-            <div class="mx-auto text-xs text-slate-500 font-mono flex items-center gap-2">
-              <ShieldCheck class="w-3 h-3 text-emerald-500" /> local-environment
-            </div>
-          </div>
+    <HeroDemo client:load />
+  </section>
 
-          {/* Mock Editor Content */}
-          <div class="grid grid-cols-2 divide-x divide-slate-800 bg-[#0d1117] font-mono text-xs sm:text-sm">
-            {/* Input Side */}
-            <div class="p-4 h-64 overflow-hidden">
-              <div class="text-slate-500 mb-2 text-xs uppercase tracking-wider">Input: JSON</div>
-              <pre class="text-cyan-300"><code>{`{
-  "user": {
-    "id": 1,
-    "name": "Alice",
-    "email": "alice@example.com",
-    "isActive": true
-  }
-}`}</code></pre>
-            </div>
-            {/* Output Side */}
-            <div class="p-4 h-64 overflow-hidden bg-[#0a0d12]">
-              <div class="text-indigo-400 mb-2 text-xs uppercase tracking-wider flex items-center justify-between">
-                <span>Output: Zod Schema</span>
-                <span class="flex h-2 w-2 relative">
-                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
-                  <span class="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
-                </span>
-              </div>
-              <pre class="text-emerald-300"><code>{`const userSchema = z.object({
-  user: z.object({
-    id: z.number(),
-    name: z.string(),
-    email: z.string().email(),
-    isActive: z.boolean()
-  })
-});`}</code></pre>
-            </div>
-          </div>
-          
-          {/* Mock Footer Action */}
-          <div class="p-3 bg-slate-950 border-t border-slate-800 text-center">
-             <a href="/tools/json-schema-to-zod" class="text-sm text-indigo-400 hover:text-indigo-300 font-medium inline-flex items-center gap-1 transition-colors">
-               Run this generator live <ArrowRight class="w-4 h-4" />
-             </a>
-          </div>
+  <section aria-labelledby="start" class="border-t border-slate-800 py-12">
+    <div class="mb-6 flex flex-wrap items-baseline justify-between gap-2">
+      <h2 id="start" class="text-2xl font-semibold tracking-tight text-white">Most used</h2>
+      <a href="/tools" class="text-sm text-indigo-400 hover:text-indigo-300">Browse all {TOOLS.length} tools</a>
+    </div>
+    <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+      {featured.map((t) => <ToolCard tool={t!} />)}
+    </div>
+  </section>
 
+  <section aria-labelledby="all-tools-h" id="all-tools" class="border-t border-slate-800 py-12">
+    <h2 id="all-tools-h" class="mb-8 text-2xl font-semibold tracking-tight text-white">Every tool, by what you are working on</h2>
+    <div class="grid gap-x-10 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
+      {CATEGORY_NAV.map(({ key, label }) => (
+        <div>
+          <h3 class="mb-3 flex items-baseline justify-between border-b border-slate-800 pb-2">
+            <a href={`/tools/category/${key}`} class="text-[15px] font-medium text-slate-100 hover:text-indigo-300">{label}</a>
+            <span class="text-xs tabular-nums text-slate-500">{toolsIn(key).length}</span>
+          </h3>
+          <ul class="space-y-0.5">
+            {toolsIn(key).map((t) => {
+              const Icon = t.icon;
+              return (
+                <li>
+                  <a href={t.href} class="-mx-2 flex items-center gap-2.5 rounded px-2 py-1.5 text-sm text-slate-400 hover:bg-slate-900 hover:text-slate-100">
+                    <Icon class={`h-4 w-4 shrink-0 ${t.color}`} aria-hidden="true" />
+                    <span class="truncate">{shortName(t)}</span>
+                    {t.status === 'New' && <span class="text-[11px] text-indigo-400">new</span>}
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
         </div>
-      </div>
-
-    </div>
-  </div>
-  <div class="max-w-6xl mx-auto px-4 mt-8 mb-16">
-  <p class="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-4">🔥 Trending Tools Today</p>
-  <div class="flex flex-wrap gap-4">
-    <a href="/tools/aurora-gradient" class="bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-300 border border-indigo-500/20 px-4 py-2 rounded-full text-sm font-medium transition-colors">
-      Aurora Gradient Generator
-    </a>
-    <a href="/tools/env-to-zod" class="bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 border border-emerald-500/20 px-4 py-2 rounded-full text-sm font-medium transition-colors">
-      Env to Zod Converter
-    </a>
-    <a href="/tools/dockerfile-generator" class="bg-blue-500/10 hover:bg-blue-500/20 text-blue-300 border border-blue-500/20 px-4 py-2 rounded-full text-sm font-medium transition-colors">
-      Multi-Stage Dockerfile Generator
-    </a>
-  </div>
-</div>
-
-  <div class="w-full h-px bg-gradient-to-r from-transparent via-slate-800 to-transparent my-12"></div>
-
-  {/* SEO Content Block (Moved UP for Better Crawling) */}
-  <article class="max-w-4xl mx-auto px-4 text-center mb-16">
-    <h2 class="text-3xl font-bold text-white mb-4">A Complete Suite of Local Developer Utilities</h2>
-    <p class="text-slate-400 text-lg leading-relaxed">
-      Stop pasting sensitive production data into random online formatters. SyntaxSnap provides a robust collection of utilities that run entirely in your browser's JavaScript engine. From <strong>TypeScript interface generation</strong> to <strong>JWT debugging</strong> and <strong>Tailwind CSS tools</strong>, your code stays strictly on your machine.
-    </p>
-  </article>
-
-  {/* Tools Grid */}
-  <div id="all-tools" class="max-w-6xl mx-auto px-4 pb-12">
-    <div class="flex items-center justify-between mb-8 border-b border-slate-800 pb-4">
-      <h2 class="text-2xl font-bold text-white flex items-center gap-2"><Code2 class="w-6 h-6 text-indigo-400" /> All Available Tools</h2>
-      <span class="hidden sm:inline-block px-3 py-1 rounded-full bg-slate-900 border border-slate-800 text-sm text-slate-400 font-medium">{TOOLS.length} tools available locally</span>
-    </div>
-    
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-      {TOOLS.map((tool) => (
-        <ToolCard tool={tool} />
       ))}
     </div>
-  </div>
+  </section>
 
-  <div class="w-full h-px bg-gradient-to-r from-transparent via-slate-800 to-transparent my-8"></div>
-
-  {/* Bottom Info / Tool Categories */}
-  <article class="max-w-6xl mx-auto px-4 py-12">
-    <h2 class="text-2xl font-bold text-white mb-6">Explore by Category</h2>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      <div class="p-5 rounded-xl bg-slate-900/30 border border-slate-800 hover:bg-slate-900/50 transition-colors">
-        <h3 class="font-semibold mb-2"><a href="/tools/category/json" class="text-indigo-400 hover:text-indigo-300 transition-colors flex items-center gap-2">JSON & Schema <ArrowRight class="w-4 h-4" /></a></h3>
-        <p class="text-slate-400 text-sm leading-relaxed">Convert between JSON, Zod, TypeScript interfaces, JSON Schema, and OpenAPI specs. Perfect for building type-safe API integrations.</p>
+  <section aria-labelledby="privacy-h" class="border-t border-slate-800 py-12">
+    <h2 id="privacy-h" class="max-w-[24ch] text-2xl font-semibold tracking-tight text-white">Safe to paste production data</h2>
+    <div class="mt-6 grid gap-8 md:grid-cols-3">
+      <div>
+        <h3 class="text-[15px] font-medium text-slate-100">The work happens in your tab</h3>
+        <p class="mt-2 text-sm leading-relaxed text-slate-400">{localCount} of {TOOLS.length} tools are plain JavaScript running on your device. There is no server receiving your JSON, tokens or schemas.</p>
       </div>
-      <div class="p-5 rounded-xl bg-slate-900/30 border border-slate-800 hover:bg-slate-900/50 transition-colors">
-        <h3 class="font-semibold mb-2"><a href="/tools/category/css" class="text-indigo-400 hover:text-indigo-300 transition-colors flex items-center gap-2">CSS & Design <ArrowRight class="w-4 h-4" /></a></h3>
-        <p class="text-slate-400 text-sm leading-relaxed">Generate aurora gradients, glassmorphism effects, mesh gradients, and Tailwind shadows — then copy production-ready CSS in one click.</p>
+      <div>
+        <h3 class="text-[15px] font-medium text-slate-100">You can check it yourself</h3>
+        <p class="mt-2 text-sm leading-relaxed text-slate-400">Open your browser's network tab and use any tool. Converting and generating make no requests to a server.</p>
       </div>
-      <div class="p-5 rounded-xl bg-slate-900/30 border border-slate-800 hover:bg-slate-900/50 transition-colors">
-        <h3 class="font-semibold mb-2"><a href="/tools/category/dev" class="text-indigo-400 hover:text-indigo-300 transition-colors flex items-center gap-2">Developer Utilities <ArrowRight class="w-4 h-4" /></a></h3>
-        <p class="text-slate-400 text-sm leading-relaxed">Debug JWTs, compare diffs, test regex, describe cron schedules, convert SVG to JSX, and generate Dockerfiles — all offline.</p>
+      <div>
+        <h3 class="text-[15px] font-medium text-slate-100">The one exception is labelled</h3>
+        <p class="mt-2 text-sm leading-relaxed text-slate-400">The AI Mock Generator sends your prompt to OpenAI to write the data. Its status bar says so, and it never sees anything else you paste.</p>
       </div>
     </div>
-  </article>
+  </section>
+
+  <section class="grid gap-4 border-t border-slate-800 py-12 md:grid-cols-2">
+    <div class="rounded-lg border border-slate-800 bg-ws-panel p-6">
+      <h2 class="text-lg font-semibold text-white">Design tools you can see</h2>
+      <p class="mt-2 text-sm leading-relaxed text-slate-400">Tune aurora and mesh gradients, glass panels and layered shadows with a live preview, then copy plain CSS or Tailwind classes.</p>
+      <div class="mt-5 flex flex-wrap gap-3">
+        <a href="/tools/aurora-gradient" class="inline-flex rounded-md bg-indigo-500 px-4 py-2 text-sm font-medium text-slate-950 hover:bg-indigo-400">Open Aurora Gradient</a>
+        <a href="/tools/category/css" class="inline-flex rounded-md px-2 py-2 text-sm font-medium text-indigo-400 hover:text-indigo-300">All CSS tools</a>
+      </div>
+    </div>
+    <div class="rounded-lg border border-slate-800 bg-ws-panel p-6">
+      <h2 class="text-lg font-semibold text-white">Building for developers?</h2>
+      <p class="mt-2 text-sm leading-relaxed text-slate-400">Have the SyntaxSnap team build a custom code generator or internal tool for your stack, or sponsor a tool your audience already uses.</p>
+      <div class="mt-5 flex flex-wrap gap-3">
+        <a href={HIRE_URL} target="_blank" rel="noopener" class="inline-flex rounded-md border border-slate-700 px-4 py-2 text-sm font-medium text-slate-200 hover:border-slate-500 hover:text-white">Hire Digitek Lab</a>
+        <a href="/sponsor" class="inline-flex rounded-md px-2 py-2 text-sm font-medium text-indigo-400 hover:text-indigo-300">Sponsor SyntaxSnap</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="border-t border-slate-800 py-12">
+    <div class="prose-ws">
+      <h2 class="!mt-0">Free online developer tools without the upload</h2>
+      <p>Most online formatters and converters send what you paste to a server. SyntaxSnap is a collection of {TOOLS.length} free developer utilities that run in your browser instead: a <a href="/tools/json-formatter">JSON formatter and validator</a>, <a href="/tools/json-to-typescript">JSON to TypeScript</a> and <a href="/tools/json-to-zod">JSON to Zod</a> converters, a <a href="/tools/jwt-debugger">JWT decoder</a>, <a href="/tools/regex-tester">regex tester</a>, <a href="/tools/base64">Base64</a> and <a href="/tools/url-encoder">URL encoders</a>, schema converters for OpenAPI, GraphQL, Prisma and SQL, and CSS generators for gradients, shadows and glassmorphism.</p>
+    </div>
+  </section>
 </Layout>

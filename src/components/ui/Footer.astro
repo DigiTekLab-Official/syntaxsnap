@@ -1,119 +1,53 @@
 ---
 // src/components/ui/Footer.astro
-import { ShieldCheck } from 'lucide-astro';
-import { TOOLS } from '../../config/tools';
+import { CATEGORY_NAV, FEATURED_TOOL_IDS, toolById, shortName, TOOLS } from '../../config/tools';
+import { EXTENSION_URL, HIRE_URL } from '../../config/site';
 
-const devTools = TOOLS.filter(t => t.category === 'dev').sort((a,b) => a.title.localeCompare(b.title));
-const cssTools = TOOLS.filter(t => t.category === 'css').sort((a,b) => a.title.localeCompare(b.title));
-const jsonTools = TOOLS.filter(t => t.category === 'json').sort((a,b) => a.title.localeCompare(b.title));
-const dataTools = TOOLS.filter(t => t.category === 'data').sort((a,b) => a.title.localeCompare(b.title));
-const aiTools = TOOLS.filter(t => t.category === 'ai').sort((a,b) => a.title.localeCompare(b.title));
-
-const devHalf = Math.ceil(devTools.length / 2);
-const devPart1 = devTools.slice(0, devHalf);
-const devPart2 = devTools.slice(devHalf);
-
-const categories = [
-  { name: 'JSON & Schema', href: '/tools/category/json' },
-  { name: 'Design & CSS', href: '/tools/category/css' },
-  { name: 'Development', href: '/tools/category/dev' },
-  { name: 'AI Powered', href: '/tools/category/ai' },
-  { name: 'Data Conversion', href: '/tools/category/data' }
-];
+const featured = FEATURED_TOOL_IDS.map((id) => toolById(id)).filter(Boolean);
 ---
 
-<footer class="border-t border-slate-800 bg-[#020617] mt-auto">
-  <div class="max-w-7xl mx-auto px-4 py-12 lg:py-16">
-    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-10 mb-16">
-
-      <div class="col-span-2 md:col-span-3 lg:col-span-1">
-        <a href="/" class="flex items-center gap-2 mb-4 group w-fit no-underline">
-          <span class="text-xl font-bold text-white tracking-tight">Syntax<span class="text-blue-500">Snap</span></span>
-        </a>
-        <p class="text-[13px] text-slate-400 leading-relaxed mb-6">
-          Privacy-first developer utilities.<br />
-          No data ever leaves your browser.
-        </p>
-        
-        <h3 class="text-[11px] font-bold text-slate-500 uppercase tracking-[0.2em] mb-4">Platform</h3>
-        <nav class="flex flex-col gap-3 text-[13px] font-medium text-slate-400">
-           <a href="/about" class="hover:text-blue-400 transition-colors">Our Story</a>
-           <a href="/contact" class="hover:text-blue-400 transition-colors">Contact Support</a>
-           <a href="/offline" class="hover:text-blue-400 transition-colors flex items-center gap-2">
-             CLI <span class="text-[12px] bg-blue-500/10 text-blue-400 border border-blue-500/20 px-1.5 py-0.5 rounded font-bold">NEW</span>
-           </a>
-        </nav>
-      </div>
-
-      <div>
-        <h3 class="text-[11px] font-bold text-slate-200 uppercase tracking-[0.2em] mb-5">Dev Tools (A-M)</h3>
-        <ul class="space-y-3 text-[13px] text-slate-400">
-          {devPart1.map(t => <li><a href={t.href} class="hover:text-white transition-colors block truncate">{t.title}</a></li>)}
-        </ul>
-      </div>
-
-      <div>
-        <h3 class="text-[11px] font-bold text-slate-200 uppercase tracking-[0.2em] mb-5">Dev Tools (N-Z)</h3>
-        <ul class="space-y-3 text-[13px] text-slate-400">
-          {devPart2.map(t => <li><a href={t.href} class="hover:text-white transition-colors block truncate">{t.title}</a></li>)}
-        </ul>
-      </div>
-
-      <div>
-        <h3 class="text-[11px] font-bold text-slate-200 uppercase tracking-[0.2em] mb-5">Design & CSS</h3>
-        <ul class="space-y-3 text-[13px] text-slate-400">
-          {cssTools.map(t => <li><a href={t.href} class="hover:text-white transition-colors block truncate">{t.title}</a></li>)}
-        </ul>
-        
-        <h3 class="text-[11px] font-bold text-emerald-500 uppercase tracking-[0.2em] mb-5 mt-10">AI Powered</h3>
-        <ul class="space-y-3 text-[13px] text-emerald-400/70 font-medium">
-          {aiTools.map(t => <li><a href={t.href} class="hover:text-emerald-300 transition-colors block truncate">{t.title}</a></li>)}
-        </ul>
-      </div>
-
-      <div>
-        <h3 class="text-[11px] font-bold text-slate-200 uppercase tracking-[0.2em] mb-5">JSON & Data</h3>
-        <ul class="space-y-3 text-[13px] text-slate-400">
-          {[...jsonTools, ...dataTools].map(t => <li><a href={t.href} class="hover:text-white transition-colors block truncate">{t.title}</a></li>)}
-        </ul>
-
-        <h3 class="text-[11px] font-bold text-blue-500 uppercase tracking-[0.2em] mb-5 mt-10">Browse Categories</h3>
-        <ul class="space-y-3 text-[13px] text-slate-400">
-          {categories.map(cat => <li><a href={cat.href} class="hover:text-blue-300 transition-colors font-medium border-b border-transparent hover:border-blue-500/30 w-fit">{cat.name}</a></li>)}
-        </ul>
-      </div>
-    </div>
-    
-    {/* Bottom Bar — only this block changed */}
-    <div class="border-t border-slate-800/60 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-[12px] text-slate-500">
-      <div class="flex flex-wrap items-center justify-center gap-6">
-        <span class="flex items-center gap-2 text-slate-400">
-          <ShieldCheck class="w-4 h-4 text-emerald-500" />
-          &copy; {new Date().getFullYear()} SyntaxSnap
-        </span>
-        <div class="flex gap-6">
-          <a href="/privacy" class="hover:text-slate-300 transition-colors">Privacy</a>
-          <a href="/terms" class="hover:text-slate-300 transition-colors">Terms</a>
-        </div>
-      </div>
-
-      <p class="flex items-center gap-1.5 opacity-80 italic">
-        Built with ❤️ in <span class="text-slate-300 font-semibold not-italic">Cuddalore</span>
-      </p>
-
-      <p class="text-slate-600 text-[11px]">
-        Engineered by{" "}
-        <a
-          href="https://digiteklab.com"
-          target="_blank"
-          rel="noopener"
-          class="text-slate-500 hover:text-blue-400 transition-colors"
-        >
-          Digitek Lab
-        </a>
+<footer class="border-t border-slate-800 bg-ws-rail">
+  <div class="mx-auto grid max-w-6xl grid-cols-2 gap-x-8 gap-y-10 px-4 py-12 md:grid-cols-4">
+    <div class="col-span-2 md:col-span-1">
+      <a href="/" class="text-[17px] font-semibold tracking-tight text-white no-underline">Syntax<span class="text-indigo-500">Snap</span></a>
+      <p class="mt-3 max-w-[28ch] text-sm leading-relaxed text-slate-400">
+        {TOOLS.length} developer tools that run in your browser. Paste production data without sending it anywhere.
       </p>
     </div>
-    {/* End Bottom Bar */}
 
+    <div>
+      <h2 class="mb-3 text-sm font-medium text-slate-200">Popular</h2>
+      <ul class="space-y-2 text-sm text-slate-400">
+        {featured.map((t) => <li><a href={t!.href} class="hover:text-white">{shortName(t!)}</a></li>)}
+      </ul>
+    </div>
+
+    <div>
+      <h2 class="mb-3 text-sm font-medium text-slate-200">Categories</h2>
+      <ul class="space-y-2 text-sm text-slate-400">
+        <li><a href="/tools" class="hover:text-white">All tools</a></li>
+        {CATEGORY_NAV.map((c) => <li><a href={`/tools/category/${c.key}`} class="hover:text-white">{c.label}</a></li>)}
+        <li><a href="/cheatsheets/regex" class="hover:text-white">Regex cheatsheet</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <h2 class="mb-3 text-sm font-medium text-slate-200">SyntaxSnap</h2>
+      <ul class="space-y-2 text-sm text-slate-400">
+        <li><a href={EXTENSION_URL} target="_blank" rel="noopener noreferrer" class="hover:text-white">Chrome extension</a></li>
+        <li><a href="/offline" class="hover:text-white">Self-hosting for teams</a></li>
+        <li><a href="/sponsor" class="hover:text-white">Sponsor</a></li>
+        <li><a href={HIRE_URL} target="_blank" rel="noopener" class="hover:text-white">Hire us for custom tools</a></li>
+        <li><a href="/about" class="hover:text-white">About</a></li>
+        <li><a href="/contact" class="hover:text-white">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="border-t border-slate-800">
+    <div class="mx-auto flex max-w-6xl flex-col gap-2 px-4 py-5 pb-12 text-xs text-slate-500 sm:flex-row sm:items-center sm:justify-between">
+      <p>© {new Date().getFullYear()} SyntaxSnap. Built in Cuddalore by <a href="https://digiteklab.com" target="_blank" rel="noopener" class="text-slate-400 hover:text-white">Digitek Lab</a>.</p>
+      <p class="flex gap-5"><a href="/privacy" class="hover:text-slate-300">Privacy</a><a href="/terms" class="hover:text-slate-300">Terms</a></p>
+    </div>
   </div>
 </footer>

@@ -5,6 +5,10 @@ import Header from '../components/ui/Header.astro';
 import Footer from '../components/ui/Footer.astro';
 import JsonLd from '../components/seo/JsonLd.astro'; 
 import CommandPalette from '../components/ui/CommandPalette.tsx';
+import Explorer from '../components/workspace/Explorer.astro';
+import StatusBar from '../components/workspace/StatusBar.astro';
+import ExtensionStrip from '../components/workspace/ExtensionStrip.astro';
+import { toolById, CATEGORY_NAV } from '../config/tools';
 
 interface Props {
   title?: string;
@@ -38,6 +42,14 @@ if (pathname !== '/' && pathname.endsWith('/')) {
 if (pathname.endsWith('.html')) {
   pathname = pathname.slice(0, -5);
 }
+// build.format 'file' renders the homepage as /index; its canonical is the root.
+if (pathname === '/index' || pathname === '') {
+  pathname = '/';
+}
+
+// ── Workspace context for tool pages ──────────────────────────────
+const tool = isTool && slug ? toolById(slug) : undefined;
+const toolCategory = tool ? CATEGORY_NAV.find((c) => c.key === tool.category) : undefined;
 
 const canonicalURL = new URL(pathname, siteUrl).toString();
 
@@ -65,7 +77,8 @@ const socialImageURL = new URL(ogImagePath, siteUrl).toString();
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
     
-    <meta name="theme-color" content="#0f172a" />
+    <meta name="theme-color" content="#0c121d" />
+    <link rel="preload" href="/fonts/plex-sans-var.woff2" as="font" type="font/woff2" crossorigin />
 
     <link rel="sitemap" href="/sitemap-index.xml" />
     <meta name="generator" content={Astro.generator} />
@@ -102,67 +115,40 @@ const socialImageURL = new URL(ogImagePath, siteUrl).toString();
     />
   </head>
   
-  <body class="bg-slate-950 text-slate-200 min-h-screen font-sans antialiased flex flex-col selection:bg-indigo-500/30">
+  <body class="flex min-h-screen flex-col bg-ws-bg font-sans text-slate-200 antialiased">
+    <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:left-3 focus:top-3 focus:z-[60] focus:rounded focus:bg-indigo-500 focus:px-3 focus:py-2 focus:text-slate-950">Skip to content</a>
     <Header />
-    
-    <main class="w-full max-w-6xl mx-auto px-4 py-8 md:py-12 flex-1 animate-in fade-in duration-700">
-      
-      {/* ── BREADCRUMB HOOK ──────────────────────────────────── */}
-      {Astro.slots.has('breadcrumb') && (
-        <nav class="text-sm text-slate-400 mb-6 flex items-center gap-2">
-          <slot name="breadcrumb" />
-        </nav>
-      )}
 
-      {/* Main Page Content */}
-      <slot />
+    {tool ? (
+      <div class="flex flex-1">
+        <aside class="sticky top-14 hidden h-[calc(100vh-3.5rem-1.75rem)] w-[264px] shrink-0 border-r border-slate-800 bg-ws-rail lg:block">
+          <Explorer current={tool} />
+        </aside>
 
-    </main>
+        <main id="main" class="min-w-0 flex-1 px-4 pb-16 pt-5 md:px-8">
+          <nav aria-label="Breadcrumb" class="mb-5 flex flex-wrap items-center gap-1.5 text-[13px] text-slate-500">
+            <a href="/" class="hover:text-slate-200">Home</a>
+            <span aria-hidden="true">/</span>
+            <a href={`/tools/category/${tool.category}`} class="hover:text-slate-200">{toolCategory?.label}</a>
+            <span aria-hidden="true">/</span>
+            <span class="text-slate-300" aria-current="page">{tool.short ?? tool.title}</span>
+          </nav>
 
-    {/* ── GLOBAL TOOL CLUSTERS (Passes PageRank across site) ─ */}
-    <div class="w-full border-t border-slate-800 bg-slate-900/30">
-      <div class="max-w-6xl mx-auto px-4 py-10">
-        <h2 class="text-lg font-semibold text-slate-100 mb-6">Popular Developer Tools</h2>
-        
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-sm">
-          <div>
-            <p class="font-medium text-slate-300 mb-3">JSON & Zod</p>
-            <ul class="space-y-2 text-slate-400">
-              <li><a href="/tools/json-to-zod" class="hover:text-indigo-400 transition-colors">JSON to Zod</a></li>
-              <li><a href="/tools/json-schema-to-zod" class="hover:text-indigo-400 transition-colors">JSON Schema to Zod</a></li>
-              <li><a href="/tools/zod-to-prompt" class="hover:text-indigo-400 transition-colors">Zod to Prompt</a></li>
-            </ul>
-          </div>
+          <slot />
 
-          <div>
-            <p class="font-medium text-slate-300 mb-3">API Tools</p>
-            <ul class="space-y-2 text-slate-400">
-              <li><a href="/tools/openapi-to-zod" class="hover:text-indigo-400 transition-colors">OpenAPI to Zod</a></li>
-              <li><a href="/tools/graphql-to-trpc" class="hover:text-indigo-400 transition-colors">GraphQL to tRPC</a></li>
-              <li><a href="/tools/trpc-to-openapi" class="hover:text-indigo-400 transition-colors">tRPC to OpenAPI</a></li>
-            </ul>
-          </div>
-
-          <div>
-            <p class="font-medium text-slate-300 mb-3">Format & Conversion</p>
-            <ul class="space-y-2 text-slate-400">
-              <li><a href="/tools/sql-to-json" class="hover:text-indigo-400 transition-colors">SQL to JSON</a></li>
-              <li><a href="/tools/sql-to-prisma" class="hover:text-indigo-400 transition-colors">SQL to Prisma</a></li>
-              <li><a href="/tools/ts-to-json-schema" class="hover:text-indigo-400 transition-colors">TS to JSON Schema</a></li>
-            </ul>
-          </div>
-
-          <div>
-            <p class="font-medium text-slate-300 mb-3">Utilities</p>
-            <ul class="space-y-2 text-slate-400">
-              <li><a href="/tools/regex-tester" class="hover:text-indigo-400 transition-colors">Regex Tester</a></li>
-              <li><a href="/tools/jwt-debugger" class="hover:text-indigo-400 transition-colors">JWT Debugger</a></li>
-              <li><a href="/tools/meta-tag-generator" class="hover:text-indigo-400 transition-colors">Meta Tag Generator</a></li>
-            </ul>
-          </div>
-        </div>
+          <ExtensionStrip tool={tool} />
+        </main>
       </div>
-    </div>
+    ) : (
+      <main id="main" class="mx-auto w-full max-w-6xl flex-1 px-4 pb-16 pt-8 md:pt-12">
+        {Astro.slots.has('breadcrumb') && (
+          <nav aria-label="Breadcrumb" class="mb-6 flex items-center gap-2 text-sm text-slate-500">
+            <slot name="breadcrumb" />
+          </nav>
+        )}
+        <slot />
+      </main>
+    )}
 
     <Footer />
 
@@ -182,6 +168,7 @@ const socialImageURL = new URL(ogImagePath, siteUrl).toString();
             y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
         })(window, document, "clarity", "script", "viplajyvf3");
     </script>
-    <CommandPalette client:load />
+    <StatusBar tool={tool} />
+    <CommandPalette client:idle />
   </body>
 </html>

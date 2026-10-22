@@ -1,0 +1,41 @@
+---
+// src/components/workspace/ExtensionStrip.astro
+// End of every tool page: the next step in the workflow, then one quiet
+// agency CTA. (Extension is a text link only: ~5 weekly users, Oct 2026.)
+import { nextTools, type Tool } from '../../config/tools';
+import { EXTENSION_URL, HIRE_URL } from '../../config/site';
+import AdSlot from './AdSlot.astro';
+
+interface Props { tool: Tool }
+const { tool } = Astro.props;
+const next = nextTools(tool.id);
+---
+
+{next.length > 0 && (
+  <section class="mt-10" aria-labelledby="next-step">
+    <h2 id="next-step" class="mb-3 text-[15px] font-medium text-slate-300">Next step</h2>
+    <div class="flex flex-wrap gap-2">
+      {next.map((t) => {
+        const Icon = t.icon;
+        return (
+          <a href={t.href} class="inline-flex items-center gap-2 rounded-md border border-slate-800 bg-ws-panel px-3 py-2 text-sm text-slate-200 hover:border-indigo-500/60 hover:text-white">
+            <Icon class={`h-4 w-4 ${t.color}`} aria-hidden="true" />
+            {t.short ?? t.title}
+          </a>
+        );
+      })}
+    </div>
+  </section>
+)}
+
+<section class="mt-12 grid gap-4 border-t border-slate-800 pt-8 md:grid-cols-[minmax(0,1fr)_auto] md:items-center" aria-label="More from SyntaxSnap">
+  <div>
+    <h2 class="text-[15px] font-semibold text-white">Need this built into your stack?</h2>
+    <p class="mt-1 max-w-[60ch] text-sm leading-relaxed text-slate-400">The team behind SyntaxSnap builds custom code generators, internal developer tools and API integrations.</p>
+  </div>
+  <div class="flex flex-wrap items-center gap-4">
+    <a href={HIRE_URL} target="_blank" rel="noopener" class="inline-flex items-center rounded-md border border-slate-700 px-3.5 py-2 text-sm font-medium text-slate-200 hover:border-slate-500 hover:text-white">Talk to Digitek Lab</a>
+    <a href={`${EXTENSION_URL}?utm_source=syntaxsnap&utm_medium=tool&utm_campaign=${tool.id}`} target="_blank" rel="noopener noreferrer" class="text-sm text-slate-400 hover:text-white">Chrome extension</a>
+  </div>
+  <AdSlot class="md:col-span-2 lg:hidden" toolId={tool.id} category={tool.category} />
+</section>

@@ -1,0 +1,40 @@
+---
+// src/pages/tools/timestamp-converter.astro
+import Layout from '../../layouts/Layout.astro';
+import Tool from '../../components/tools/TimestampConverter';
+import RelatedTools from '../../components/ui/RelatedTools.astro';
+import FaqSection from '../../components/ui/FaqSection.astro';
+import HowToSection from '../../components/ui/HowToSection.astro';
+import { toolSeoData } from '../../data/seo';
+
+const slug = "timestamp-converter";
+const title = "Unix Timestamp Converter (Epoch to Date & Back) | SyntaxSnap";
+const description = "Convert Unix epoch time in seconds or milliseconds to a readable date in UTC and your local time zone, or turn a date into a timestamp. Live current epoch.";
+const features = ["Seconds, milliseconds, microseconds and nanoseconds detected automatically", "Date strings to epoch", "UTC, local time and ISO 8601", "Relative time", "Live current Unix time"];
+const seo = toolSeoData[slug];
+---
+
+<Layout title={title} description={description} isTool={true} slug={slug} features={features} howTo={seo?.howTo} faqs={seo?.faqs}>
+  <header class="mb-5 max-w-3xl">
+    <h1 class="text-[28px] font-semibold tracking-tight text-white md:text-[32px]">Unix Timestamp Converter</h1>
+    <p class="mt-2 text-[15px] leading-relaxed text-slate-400">Paste an epoch timestamp in seconds, milliseconds, microseconds or nanoseconds, or a date string, and see it in UTC, your local time zone, ISO 8601 and relative time.</p>
+  </header>
+
+  <Tool client:load />
+
+  <HowToSection howTo={seo?.howTo} />
+
+  <section class="mt-14 border-t border-slate-800 pt-2">
+    <div class="prose-ws">
+      <h2>Seconds or milliseconds</h2>
+      <p>Unix time counts from 1 January 1970 UTC. Most backends and JWTs use seconds (10 digits today), while JavaScript's <code>Date.now()</code> and many logs use milliseconds (13 digits). The converter detects the unit from the number of digits, including 16-digit microseconds and 19-digit nanoseconds.</p>
+      <h2>Time zones</h2>
+      <p>A Unix timestamp has no time zone; it is the same moment everywhere. The table shows it in UTC and in the time zone your browser reports, so you can compare log times with what users saw.</p>
+      <h2>Dates to timestamps</h2>
+      <p>Type a date such as <code>2026-01-01</code> or <code>2026-01-01T09:30:00+05:30</code> to get its epoch value. Dates without a time zone are read as local time by the browser, so include an offset or Z when it matters.</p>
+    </div>
+  </section>
+
+  <FaqSection faqs={seo?.faqs} />
+  <RelatedTools currentTool={slug} />
+</Layout>

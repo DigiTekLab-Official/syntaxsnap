@@ -77,7 +77,11 @@ const DEFAULT_INPUT = `{
 
 export default function JsonToZod() {
   const [input, setInput] = useState(DEFAULT_INPUT);
-  const [output, setOutput] = useState('');
+  // Pre-render the sample's schema so the page shows a result before hydration (and to crawlers).
+  const [output, setOutput] = useState(() => {
+    const { typeString } = inferZodType(JSON.parse(DEFAULT_INPUT));
+    return `import { z } from "zod";\n\nconst Schema = ${typeString};\n\ntype Schema = z.infer<typeof Schema>;`;
+  });
   const [error, setError] = useState<string | null>(null);
   const [warning, setWarning] = useState<string | null>(null);
 
@@ -86,6 +90,16 @@ export default function JsonToZod() {
 
   // ─── Chrome Extension Integration ──────────────────────────────────────────
   useEffect(() => {
+    // Text handed over by another SyntaxSnap tool (via sessionStorage, never the URL)
+    try {
+      const raw = sessionStorage.getItem('syntaxsnap:handoff');
+      if (raw) {
+        sessionStorage.removeItem('syntaxsnap:handoff');
+        const h = JSON.parse(raw) as { to: string; text: string };
+        if (h.to === window.location.pathname && h.text) { setInput(h.text); return; }
+      }
+    } catch { /* storage blocked */ }
+
     const params = new URLSearchParams(window.location.search);
     const incomingText = params.get('input');
     

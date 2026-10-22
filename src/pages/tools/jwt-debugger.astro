@@ -5,12 +5,11 @@ import JwtTool from '../../components/tools/JwtDebugger';
 import RelatedTools from '../../components/ui/RelatedTools.astro';
 import FaqSection from '../../components/ui/FaqSection.astro'; 
 import HowToSection from '../../components/ui/HowToSection.astro';
-import ExtensionPromo from '../../components/ui/ExtensionPromo.astro';
 
 // 1. Import the new central SEO data
 import { toolSeoData } from '../../data/seo'; 
 
-const title = "Local JWT Debugger & Decoder (Private) | SyntaxSnap";
+const title = "JWT Debugger & Decoder: Decode Tokens Locally | SyntaxSnap";
 const description = "Decode and debug JSON Web Tokens (JWT) locally in your browser. Inspect expiration, claims, and detect alg:none vulnerabilities instantly.";
 const slug = "jwt-debugger";
 
@@ -36,15 +35,6 @@ const pageSeoData = toolSeoData["jwt-debugger"];
 >
 
   <div class="max-w-6xl mx-auto px-4">
-    
-    {/* ── BREADCRUMBS ── */}
-    <Fragment slot="breadcrumb">
-      <a href="/" class="hover:text-indigo-400 transition-colors">Home</a> 
-      <span class="text-slate-600">/</span>
-      <a href="/tools/category/dev" class="hover:text-indigo-400 transition-colors">Dev Tools</a> 
-      <span class="text-slate-600">/</span>
-      <span class="text-slate-200">JWT Debugger</span>
-    </Fragment>
 
     <div class="mb-10">
       <h1 class="text-4xl font-extrabold text-white mb-4 tracking-tight">JWT Debugger</h1>
@@ -52,9 +42,6 @@ const pageSeoData = toolSeoData["jwt-debugger"];
         Securely inspect tokens. Decodes <span class="text-indigo-400 font-semibold">entirely in your browser</span> memory.
       </p>
     </div>
-
-    {/* ── CONTEXTUAL UPSELL ── */}
-    <ExtensionPromo context="the JWT Debugger" />
 
     <JwtTool client:idle />
 
