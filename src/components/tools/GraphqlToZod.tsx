@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect, useRef, useCallback } from 'react';
+import { readIncomingInput } from '../../utils/incomingInput';
 import { CopyButton } from '../ui/CopyButton';
 import { useDebounce } from '../../hooks/useDebounce';
 
@@ -260,6 +261,12 @@ function generateZodSchemas(input: string): {
 
 export default function GraphqlToZod() {
   const [input, setInput] = useState(DEFAULT_INPUT);
+
+  // Text from another tool, the Chrome extension (#input=) or ?input=
+  useEffect(() => {
+    const incoming = readIncomingInput();
+    if (incoming) setInput(incoming);
+  }, []);
   const [error, setError] = useState<string | null>(null);
   const debouncedInput = useDebounce(input, DEBOUNCE_MS);
 

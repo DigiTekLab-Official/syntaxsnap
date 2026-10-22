@@ -1,49 +1,48 @@
-// ─── CONSTANTS ──────────────────────────────────────────────────────────────
+// extension/background.js — right-click menu on selected text.
+/* global importScripts, SYNTAXSNAP, chrome */
+importScripts('tools.js');
 
-const MAX_SELECTION_CHARS = 10_000;
+// Fragments are not limited by server URL caps; this only guards against
+// accidentally sending a whole page.
+const MAX_SELECTION_CHARS = 200_000;
+const MENU_PREFIX = 'syntaxsnap:';
 
-const TOOLS = [
-  { id: 'tool-ts-zod',      title: 'Convert TS to Zod',      path: '/tools/ts-to-zod' },
-  { id: 'tool-openapi-zod', title: 'Convert OpenAPI to Zod', path: '/tools/openapi-to-zod' },
-  { id: 'tool-json',        title: 'Convert JSON to Zod',    path: '/tools/json-to-zod' },
-  { id: 'tool-graphql-zod', title: 'Convert GraphQL to Zod', path: '/tools/graphql-to-zod' },
-  { id: 'tool-regex',       title: 'Test Regex Pattern',     path: '/tools/regex-tester' },
-  { id: 'tool-diff',        title: 'Compare Text (Diff)',    path: '/tools/diff-viewer' },
-];
-
-// ─── SERVICE WORKER LIFECYCLE ───────────────────────────────────────────────
-// Both listeners are registered synchronously at the top level to guarantee
-// the service worker wakes reliably after being spun down (MV3 requirement).
-
+// Listeners are registered synchronously at the top level (MV3 requirement).
 chrome.runtime.onInstalled.addListener(() => {
-  // removeAll prevents duplicate-ID errors when the extension updates
   chrome.contextMenus.removeAll(() => {
-    chrome.contextMenus.create({
-      id: 'syntaxsnap-root',
-      title: 'SyntaxSnap Tools',
-      contexts: ['selection'],
-    });
-
-    for (const tool of TOOLS) {
+    chrome.contextMenus.create({ id: 'syntaxsnap-root', title: 'SyntaxSnap', contexts: ['selection'] });
+    for (const item of SYNTAXSNAP.MENU) {
       chrome.contextMenus.create({
-        id: tool.id,
+        id: MENU_PREFIX + item.id,
         parentId: 'syntaxsnap-root',
-        title: tool.title,
+        title: item.title,
         contexts: ['selection'],
       });
     }
   });
 });
 
-chrome.contextMenus.onClicked.addListener((info) => {
-  const raw = info.selectionText;
-  if (!raw) return;
+// info.selectionText collapses line breaks, which breaks SQL, YAML and regex
+// input. activeTab (granted by the menu click) lets us read the real selection.
+async function readSelection(tabId, frameId, fallback) {
+  try {
+    const [res] = await chrome.scripting.executeScript({
+      target: { tabId, frameIds: [frameId ?? 0] },
+      func: () => String(window.getSelection?.() ?? ''),
+    });
+    const text = res?.result;
+    return text && text.trim() ? text : fallback;
+  } catch {
+    return fallback; // pages scripts can't run on (chrome://, the Web Store, PDFs)
+  }
+}
 
-  const tool = TOOLS.find(t => t.id === info.menuItemId);
-  if (!tool) return;
-
-  // Truncate to prevent URL-length overflow (browsers cap at ~2 MB but
-  // servers and Cloudflare Workers may reject much earlier).
-  const text = encodeURIComponent(raw.slice(0, MAX_SELECTION_CHARS));
-  chrome.tabs.create({ url: `https://syntaxsnap.com${tool.path}?input=${text}` });
+chrome.contextMenus.onClicked.addListener(async (info, tab) => {
+  const id = String(info.menuItemId);
+  if (!id.startsWith(MENU_PREFIX) || !info.selectionText) return;
+  const toolId = id.slice(MENU_PREFIX.length);
+  if (!SYNTAXSNAP.MENU.some((m) => m.id === toolId)) return;
+  const raw = tab?.id != null ? await readSelection(tab.id, info.frameId, info.selectionText) : info.selectionText;
+  const text = raw.slice(0, MAX_SELECTION_CHARS);
+  chrome.tabs.create({ url: SYNTAXSNAP.toolUrl(toolId, text, 'context_menu') });
 });

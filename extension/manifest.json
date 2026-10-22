@@ -1,11 +1,11 @@
 {
   "manifest_version": 3,
-  "name": "SyntaxSnap - Developer Tools",
-  "version": "1.2.2",
-  "description": "Privacy-first developer tools: GraphQL/TypeScript/JSON to Zod, OpenAPI converters, Regex Tester, and SVG Extractor. 100% private.",
+  "name": "SyntaxSnap: JSON Formatter, Zod & Dev Tools",
+  "version": "1.3.0",
+  "description": "Format and view JSON, decode JWTs, and convert JSON, TypeScript and OpenAPI to Zod. Runs on syntaxsnap.com; nothing is uploaded.",
   "permissions": [
-    "contextMenus", 
-    "activeTab", 
+    "contextMenus",
+    "activeTab",
     "scripting"
   ],
   "background": {
@@ -13,7 +13,7 @@
   },
   "action": {
     "default_popup": "popup.html",
-    "default_title": "Open SyntaxSnap",
+    "default_title": "SyntaxSnap developer tools",
     "default_icon": {
       "16": "icon-16.png",
       "48": "icon-48.png",
@@ -33,7 +33,9 @@
       "id": "extension@syntaxsnap.com",
       "strict_min_version": "142.0",
       "data_collection_permissions": {
-        "required": ["none"]
+        "required": [
+          "none"
+        ]
       }
     }
   }

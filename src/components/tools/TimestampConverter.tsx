@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { readIncomingInput } from '../../utils/incomingInput';
 import { Panel, Btn, CopyBtn } from '../ui/ws';
 
 function parseEpoch(raw: string): Date | null {
@@ -31,7 +32,7 @@ export default function TimestampConverter() {
   const rootRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     setNow(Date.now());
-    setInput(String(Math.floor(Date.now() / 1000)));
+    setInput(readIncomingInput()?.trim() || String(Math.floor(Date.now() / 1000)));
     rootRef.current?.setAttribute('data-hydrated', 'true');
     const t = setInterval(() => setNow(Date.now()), 1000);
     return () => clearInterval(t);

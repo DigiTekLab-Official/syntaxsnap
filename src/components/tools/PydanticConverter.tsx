@@ -1,5 +1,6 @@
 'use client';
 import React, { useState, useEffect } from 'react';
+import { readIncomingInput } from '../../utils/incomingInput';
 import { useDebounce } from '../../hooks/useDebounce';
 import { Braces, FileJson, Trash2, AlertCircle, AlertTriangle } from 'lucide-react';
 import CopyButton from '../ui/CopyButton';
@@ -44,11 +45,9 @@ export default function PydanticConverter() {
 
   // ── Chrome Extension / URL param integration ─────────────────────────────
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const incoming = params.get('input');
+    const incoming = readIncomingInput();
     if (incoming) {
       setInput(incoming);
-      window.history.replaceState({}, '', window.location.pathname);
     }
   }, []);
 

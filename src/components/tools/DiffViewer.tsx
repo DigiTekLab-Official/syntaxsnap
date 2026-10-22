@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
+import { readIncomingInput } from '../../utils/incomingInput';
 import * as Diff from 'diff';
 import {
   Split,
@@ -82,14 +83,11 @@ export default function DiffViewer() {
   // ─── CHROME EXTENSION LISTENER ──────────────────────────────────────────
   // Listens for ?input=... in the URL (sent by the extension)
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const incomingText = params.get('input');
+    const incomingText = readIncomingInput();
     
     if (incomingText) {
       setOldText(incomingText);
       setNewText(''); // Clear "New" so user can paste comparison
-      // Clean up URL to remove the query param after loading
-      window.history.replaceState({}, '', window.location.pathname);
     }
   }, []);
   // ────────────────────────────────────────────────────────────────────────

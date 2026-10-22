@@ -1,24 +1,42 @@
 document.addEventListener('DOMContentLoaded', () => {
-  // ─── QUICK SEARCH LOGIC ─────────────────────────────────────────────────
+  // ─── TOOL LIST + SEARCH ─────────────────────────────────────────────────
+  const { TOOLS } = self.SYNTAXSNAP;
   const searchInput = document.getElementById('search-input');
-  const toolCards = document.querySelectorAll('.tool-card');
+  const list = document.getElementById('tool-list');
+  const heading = document.getElementById('list-heading');
+  const empty = document.getElementById('empty');
 
-  if (searchInput) {
-    searchInput.addEventListener('input', (e) => {
-      const query = e.target.value.toLowerCase();
-      toolCards.forEach(card => {
-        const text = card.textContent.toLowerCase();
-        // Toggle display based on search match
-        if (text.includes(query)) {
-          card.style.display = 'flex';
-        } else {
-          card.style.display = 'none';
-        }
-      });
-    });
-    // Auto-focus the search bar when popup opens for instant typing
-    setTimeout(() => searchInput.focus(), 10);
+  function render(query) {
+    const q = query.trim().toLowerCase();
+    const items = q
+      ? TOOLS.filter((t) => `${t.name} ${t.desc} ${t.id}`.toLowerCase().includes(q))
+      : TOOLS.filter((t) => t.popular);
+    heading.textContent = q ? `${items.length} result${items.length === 1 ? '' : 's'}` : 'Popular';
+    empty.hidden = items.length > 0;
+    list.replaceChildren(...items.map((t) => {
+      const li = document.createElement('li');
+      const a = document.createElement('a');
+      a.href = self.SYNTAXSNAP.toolUrl(t.id, '', 'popup');
+      a.target = '_blank';
+      a.rel = 'noopener noreferrer';
+      const name = document.createElement('span');
+      name.className = 'name';
+      name.textContent = t.name;
+      const desc = document.createElement('span');
+      desc.className = 'desc';
+      desc.textContent = t.desc;
+      a.append(name, desc);
+      li.append(a);
+      return li;
+    }));
   }
+
+  render('');
+  searchInput.addEventListener('input', (e) => render(e.target.value));
+  searchInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') list.querySelector('a')?.click();
+  });
+  setTimeout(() => searchInput.focus(), 10);
 
   // ─── SVG EXTRACTOR LOGIC ────────────────────────────────────────────────
   const extractBtn = document.getElementById('extract-svg-btn');
@@ -30,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function setStatus(message, isError) {
     const div = document.createElement('div');
-    div.className = `status-message ${isError ? 'error' : 'info'}`;
+    div.className = `status ${isError ? 'error' : ''}`;
     div.textContent = message;
     resultsDiv.replaceChildren(div);
   }
@@ -91,11 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
       svgs.forEach(svg => {
         // 1. The Container
         const item = document.createElement('div');
-        item.style.cssText = 'display:flex;justify-content:space-between;align-items:center;background:#0f172a;padding:8px 12px;border-radius:6px;border:1px solid #334155;margin-bottom:8px;cursor:pointer;transition:border-color 0.2s ease;';
-        
-        // Add a hover effect to the popup item itself
-        item.onmouseover = () => item.style.borderColor = '#8b5cf6';
-        item.onmouseout = () => item.style.borderColor = '#334155';
+        item.className = 'svg-row';
 
         // ─── INJECT SVG HIGHLIGHT ON HOVER ──────────────────────────
         item.addEventListener('mouseenter', async () => {
@@ -108,10 +122,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 style.id = 'syntaxsnap-highlight-style';
                 style.textContent = `
                   .syntaxsnap-svg-highlight {
-                    outline: 3px dashed #8b5cf6 !important;
+                    outline: 3px dashed #27b4f2 !important;
                     outline-offset: 4px !important;
-                    background-color: rgba(139, 92, 246, 0.15) !important;
-                    box-shadow: 0 0 20px rgba(139, 92, 246, 0.5) !important;
+                    background-color: rgba(39, 180, 242, 0.12) !important;
+                    box-shadow: 0 0 20px rgba(39, 180, 242, 0.45) !important;
                     transition: all 0.2s ease !important;
                     border-radius: 4px !important;
                     z-index: 999999 !important;
@@ -150,11 +164,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // 2. The Left Side (Preview + Text)
         const leftWrapper = document.createElement('div');
-        leftWrapper.style.cssText = 'display:flex;align-items:center;gap:10px;overflow:hidden;';
+        leftWrapper.className = 'meta';
 
         // 3. The Visual Preview (The Magic)
         const previewImg = document.createElement('img');
-        previewImg.style.cssText = 'width:24px;height:24px;object-fit:contain;background:#1e293b;border-radius:4px;padding:4px;';
         
         // Force 'currentColor' to be visible on dark background
         let visibleSvgCode = svg.code.replace(/currentColor/gi, '#e2e8f0');
@@ -171,7 +184,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // 4. The Label Text
         const label = document.createElement('span');
-        label.style.cssText = 'font-size:11px;color:#94a3b8;font-family:monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:90px;';
         label.textContent = `SVG (${svg.info})`;
 
         // Assemble left side
@@ -180,12 +192,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // 5. The Button
         const sendBtn = document.createElement('button');
-        sendBtn.textContent = 'Send to JSX';
-        sendBtn.style.cssText = 'background:#6366f1;color:white;border:none;padding:4px 8px;border-radius:4px;font-size:10px;cursor:pointer;font-weight:bold;';
+        sendBtn.type = 'button';
+        sendBtn.textContent = 'To JSX';
 
         sendBtn.addEventListener('click', () => {
-          const encoded = encodeURIComponent(svg.code); // We send the ORIGINAL code, not the altered preview one
-          chrome.tabs.create({ url: `https://syntaxsnap.com/tools/svg-to-jsx?input=${encoded}` });
+          // The original SVG goes in the URL fragment, which is never sent to the server
+          chrome.tabs.create({ url: self.SYNTAXSNAP.toolUrl('svg-to-jsx', svg.code, 'popup_svg') });
         });
 
         // Assemble final row

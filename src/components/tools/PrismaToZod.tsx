@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
+import { readIncomingInput } from '../../utils/incomingInput';
 import { Database, FileCode2, AlertTriangle, AlertCircle, Trash2, Braces } from 'lucide-react';
 import CopyButton from '../ui/CopyButton';
 import { useDebounce } from '../../hooks/useDebounce';
@@ -451,11 +452,9 @@ export default function PrismaToZod() {
 
   // ─── Chrome Extension Integration ──────────────────────────────────────
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const incoming = params.get('input');
+    const incoming = readIncomingInput();
     if (incoming) {
       setInput(incoming);
-      window.history.replaceState({}, '', window.location.pathname);
     }
   }, []);
 
