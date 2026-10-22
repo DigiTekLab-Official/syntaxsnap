@@ -1,7 +1,7 @@
 // e2e/json-engine.spec.ts — unit-style checks of the JSON engine (no browser page needed).
 import { test, expect } from '@playwright/test';
 import { repairJson, extractJsonBlock } from '../src/utils/json/repair';
-import { parseJson, lintJson } from '../src/utils/json/parse';
+import { parseJson, lintJson, normalizeSpaces } from '../src/utils/json/parse';
 import { diffJson } from '../src/utils/json/compare';
 import { toJsonPath } from '../src/utils/json/tree';
 
@@ -71,5 +71,29 @@ test.describe('diffJson and paths', () => {
 
   test('bracket notation for unusual keys', () => {
     expect(toJsonPath(['headers', 'content-type', 0, "it's"])).toBe("$.headers['content-type'][0]['it\\'s']");
+  });
+});
+
+test.describe('copy-paste whitespace', () => {
+  // w3schools and many docs sites indent code with non-breaking spaces (U+00A0).
+  const nbsp = '{\n\u00a0 "name": "John",\n\u00a0 "age": 30,\n\u00a0 "city": "New\u00a0York"\n}';
+
+  test('parses JSON indented with non-breaking spaces', () => {
+    expect(parsed(nbsp)).toEqual({ name: 'John', age: 30, city: 'New\u00a0York' });
+  });
+
+  test('keeps non-breaking spaces inside strings and positions unchanged', () => {
+    const out = normalizeSpaces(nbsp);
+    expect(out.length).toBe(nbsp.length);
+    expect(out).toContain('"New\u00a0York"');
+    expect(out).not.toMatch(/^\u00a0/m);
+  });
+
+  test('ignores a byte-order mark and zero-width spaces between tokens', () => {
+    expect(parsed('\ufeff{"a":\u200b1}')).toEqual({ a: 1 });
+  });
+
+  test('the validator reports no errors for them', () => {
+    expect(lintJson(nbsp).filter((i) => i.severity === 'error')).toEqual([]);
   });
 });
