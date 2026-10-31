@@ -2,7 +2,7 @@
 
 Offline-first developer tools built with Astro, React, and Tailwind v4.
 
-SyntaxSnap is a collection of **48 small, fast browser tools** for everyday developer tasks: converting schemas and types, working with JSON, generating config and boilerplate, and debugging common formats. Tools run in your browser, so your code and data stay on your device.
+SyntaxSnap is a collection of **48 small, fast browser tools** for everyday developer tasks: converting schemas and types, working with JSON, generating config and boilerplate, and debugging common formats. 47 of the 48 tools run entirely in your browser, so your code and data stay on your device. The one exception, the AI Mock Generator, sends your prompt to OpenAI and says so in its interface.
 
 **Live site:** https://syntaxsnap.com
 
@@ -59,11 +59,11 @@ SyntaxSnap is a collection of **48 small, fast browser tools** for everyday deve
 - **Dockerfile Generator**
 - **SVG to JSX**
 - **Meta Tag Generator**
-- **AI Mock Generator**: generate realistic mock data
+- **AI Mock Generator**: generate realistic mock data (the only tool that makes a network call; it sends the prompt to OpenAI)
 
 Related tools are cross-linked, so you can move from one conversion to the next without starting over.
 
-There is also a **browser extension** (see `extension/`) that hands content from any page to the matching tool via a URL fragment.
+There is also a **browser extension** that hands content from any page to the matching tool via a URL fragment. Install it from the [Chrome Web Store](https://chromewebstore.google.com/detail/syntaxsnap-developer-tool/klglanlaodgndhpcaldmoeenjepiocfi), or see `extension/` for the source.
 
 ## Tech stack
 
@@ -130,7 +130,7 @@ Contributions are welcome.
 3. Make your change and add or update tests where it makes sense.
 4. Open a pull request describing what changed and why.
 
-Please keep tools offline-first: user input should not be sent to a server.
+Please keep tools client-side: user input should not be sent to a server. The AI Mock Generator is the one labelled exception.
 
 ## License
 
