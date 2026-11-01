@@ -1,0 +1,29 @@
+name: Weekly Firefox Tests
+on:
+  schedule:
+    - cron: '0 3 * * 1'
+  workflow_dispatch:
+jobs:
+  firefox:
+    timeout-minutes: 60
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: 'pnpm'
+      - name: Install dependencies
+        run: pnpm install
+      - name: Install Firefox
+        run: pnpm exec playwright install --with-deps firefox
+      - name: Run Firefox tests
+        run: pnpm exec playwright test --project=firefox
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report-firefox
+          path: playwright-report/
+          retention-days: 30

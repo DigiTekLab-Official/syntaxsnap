@@ -1,5 +1,5 @@
 // src/components/tools/AuroraGenerator.tsx
-import React, { useState, useMemo, useEffect, useRef } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 
 const BLOB_CONFIGS = [
   { id: 'blob-1', label: 'Top Left',     css: "top-[-10%] left-[-10%] w-1/2 h-1/2 rounded-full",           delay: "0s"  },
@@ -29,12 +29,11 @@ export default function AuroraGenerator() {
   const [copiedTailwind,setCopiedTailwind]= useState(false);
   // FIX: track hydration so we can show a loading skeleton before React mounts
   const [hydrated,      setHydrated]      = useState(false);
-  const rootRef = useRef<HTMLDivElement>(null);
+ 
 
   useEffect(() => {
-    setHydrated(true);
-    rootRef.current?.setAttribute('data-hydrated', 'true');
-  }, []);
+  setHydrated(true);
+}, []);
 
   const sanitizeHex = (value: string) => {
     let s = value.replace(/[^#0-9a-fA-F]/g, '');
@@ -128,7 +127,7 @@ export default function AuroraGenerator() {
   }
 
   return (
-    <div ref={rootRef} className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+    <div data-hydrated="true" className="grid grid-cols-1 lg:grid-cols-12 gap-8">
       {/* FIX: inject keyframes for the live preview animation */}
       <style dangerouslySetInnerHTML={{ __html: AURORA_KEYFRAMES }} />
 

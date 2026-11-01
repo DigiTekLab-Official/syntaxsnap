@@ -4,10 +4,11 @@ import { test, expect } from '@playwright/test';
 test.describe('Aurora Gradient Generator E2E', () => {
   test.beforeEach(async ({ page }) => {
     // Navigate to the tool page
-    await page.goto('/tools/aurora-gradient');
+    await page.goto('/tools/aurora-gradient', { waitUntil: 'domcontentloaded' });
     
     // Crucial: Wait for React to finish hydrating the component before testing interactions
     await page.waitForSelector('[data-hydrated="true"]');
+    await expect(page.getByRole('img', { name: 'Interactive aurora gradient preview' })).toBeVisible();
   });
 
   test('should render all critical UI elements', async ({ page }) => {
@@ -35,9 +36,9 @@ test.describe('Aurora Gradient Generator E2E', () => {
     const opacitySlider = page.getByLabel('Opacity');
     const tailwindOutput = page.locator('pre code').nth(1);
 
-    await expect(tailwindOutput).toContainText('opacity-50');
+    await expect(tailwindOutput).toContainText('opacity:0.5');
     await opacitySlider.fill('80');
-    await expect(tailwindOutput).toContainText('opacity-80');
+    await expect(tailwindOutput).toContainText('opacity:0.8');
   });
 
   // Skip the clipboard test on Firefox as it doesn't support the 'clipboard-read' permission
@@ -61,14 +62,14 @@ test.describe('Aurora Gradient Generator E2E', () => {
   });
 
   test('color hex inputs should validate and update background values', async ({ page }) => {
-    const firstHexInput = page.getByLabel('Top Left blob hex value');
+    const firstHexInput = page.getByLabel('Top Left hex value');
     const tailwindOutput = page.locator('pre code').nth(1);
 
     // Fix: Assert against lowercase hex to match component state
     await expect(tailwindOutput).toContainText('bg-[#8b5cf6]');
 
     await firstHexInput.fill('');
-    await firstHexInput.type('#FF0000');
+    await firstHexInput.pressSequentially('#FF0000');
     // The component preserves the casing as typed by the user
     await expect(tailwindOutput).toContainText('bg-[#FF0000]');
   });

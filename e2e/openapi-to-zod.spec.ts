@@ -127,7 +127,7 @@ test.describe('OpenAPI to Zod E2E', () => {
   });
 
   test('copy button should be visible', async ({ page }) => {
-    const copyBtn = page.getByRole('button', { name: /copy/i });
+    const copyBtn = page.getByRole('button', { name: 'Copy clean code', exact: true });
     await expect(copyBtn).toBeVisible();
   });
 });

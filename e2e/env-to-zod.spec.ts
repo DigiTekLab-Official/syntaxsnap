@@ -48,12 +48,15 @@ test.describe('Env to Zod Converter', () => {
     // Boolean inference: IS_PROD
     await expect(output).toContainText("z.enum(['true', 'false'])");
 
-    // Email inference: ADMIN_EMAIL
-    await expect(output).toContainText('ADMIN_EMAIL: z.string().email()');
-
     // Plain string: NODE_ENV, LOG_LEVEL
     await expect(output).toContainText('NODE_ENV: z.string().min(1)');
     await expect(output).toContainText('LOG_LEVEL: z.string().min(1)');
+
+    // Monaco only renders visible lines; reveal Notifications near the end.
+    await output.locator('.monaco-scrollable-element').evaluate((editor) => {
+      editor.scrollTop = editor.scrollHeight;
+    });
+    await expect(output).toContainText('ADMIN_EMAIL: z.string().email()');
 
     // Variable count badge
     await expect(page.locator('text=/11 variables parsed/i')).toBeVisible();
@@ -235,7 +238,7 @@ EMPTY_VAR=`);
   // ── FAQ / SEO Content ────────────────────────────────────────────────────
 
   test('displays FAQ content below the tool', async ({ page }) => {
-    await expect(page.locator('text=Why validate environment variables?')).toBeVisible();
-    await expect(page.locator('text=How does this handle Booleans?')).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Why validate Environment Variables with Zod?', exact: true })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'How does this handle Booleans?', exact: true })).toBeVisible();
   });
 });
