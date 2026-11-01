@@ -230,7 +230,7 @@ export default function JsonWorkbench({ tool, defaultView = 'code', defaultActio
               )}
             </div>
           ) : view === 'tree' ? (
-            treeValue ? <JsonTree value={treeValue.value} initialDepth={treeDepth} onCopyPath={() => track('copy')} /> : <p className="p-4 text-[13px] text-slate-500">{busy || result ? 'Building tree…' : 'Paste JSON to see its tree.'}</p>
+            treeValue ? <JsonTree value={treeValue.value} initialDepth={treeDepth} onCopyPath={() => track('copy')} /> : <p className="p-4 text-[13px] text-slate-400">{busy || result ? 'Building tree…' : 'Paste JSON to see its tree.'}</p>
           ) : (
             <CodeView text={result?.output ?? ''} label="Formatted JSON" />
           )}

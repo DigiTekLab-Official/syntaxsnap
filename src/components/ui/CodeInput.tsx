@@ -87,7 +87,7 @@ export function CodeInput({ id, label, value, onChange, placeholder, errorLine, 
     <div className="absolute inset-0 flex">
       <div
         aria-hidden="true"
-        className="relative shrink-0 select-none overflow-hidden border-r border-slate-800/80 bg-ws-rail/60 font-mono text-[12px] leading-[20px] text-slate-600"
+        className="relative shrink-0 select-none overflow-hidden border-r border-slate-800/80 bg-ws-rail/60 font-mono text-[12px] leading-[20px] text-slate-400"
         style={{ width: gutter }}
       >
         <div style={{ transform: `translateY(${PAD + first * LINE - scrollTop}px)` }}>

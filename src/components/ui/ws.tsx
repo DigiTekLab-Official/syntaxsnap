@@ -12,7 +12,7 @@ export function Panel({
         <div className="flex items-center gap-1">{actions}</div>
       </header>
       <div className="relative min-h-0 flex-1">{children}</div>
-      {footer && <div className="shrink-0 border-t border-slate-800 px-3 py-1.5 font-mono text-[11.5px] text-slate-500">{footer}</div>}
+      {footer && <div className="shrink-0 border-t border-slate-800 px-3 py-1.5 font-mono text-[11.5px] text-slate-400">{footer}</div>}
     </section>
   );
 }
