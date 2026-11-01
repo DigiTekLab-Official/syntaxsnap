@@ -2,8 +2,6 @@
 // src/components/workspace/Explorer.astro
 // IDE-style tool tree. Categories are folders, tools are files.
 import { CATEGORY_NAV, toolsIn, shortName, type Tool } from '../../config/tools';
-import { HIRE_URL } from '../../config/site';
-import AdSlot from './AdSlot.astro';
 
 interface Props { current?: Tool }
 const { current } = Astro.props;
@@ -48,13 +46,5 @@ const { current } = Astro.props;
         </details>
       );
     })}
-  </div>
-
-  <div class="space-y-3 border-t border-slate-800 p-3">
-    <AdSlot toolId={current?.id} category={current?.category} />
-    <a href={HIRE_URL} target="_blank" rel="noopener" class="block rounded-lg bg-slate-900 p-3 text-xs leading-relaxed text-slate-400 hover:text-slate-300">
-      <span class="block text-[13px] font-medium text-slate-200">Need a custom converter?</span>
-      Digitek Lab builds internal tools and API integrations.
-    </a>
   </div>
 </nav>
