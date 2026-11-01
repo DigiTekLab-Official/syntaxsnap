@@ -1,7 +1,7 @@
 ---
 // src/components/ui/Footer.astro
 import { CATEGORY_NAV, FEATURED_TOOL_IDS, toolById, shortName, TOOLS } from '../../config/tools';
-import { EXTENSION_URL, HIRE_URL } from '../../config/site';
+import { EXTENSION_URL } from '../../config/site';
 
 const featured = FEATURED_TOOL_IDS.map((id) => toolById(id)).filter(Boolean);
 ---
@@ -36,9 +36,7 @@ const featured = FEATURED_TOOL_IDS.map((id) => toolById(id)).filter(Boolean);
       <h2 class="mb-3 text-sm font-medium text-slate-200">SyntaxSnap</h2>
       <ul class="space-y-2 text-sm text-slate-400">
         <li><a href={EXTENSION_URL} target="_blank" rel="noopener noreferrer" class="hover:text-white">Chrome extension</a></li>
-        <li><a href="/offline" class="hover:text-white">Self-hosting for teams</a></li>
-        <li><a href="/sponsor" class="hover:text-white">Sponsor</a></li>
-        <li><a href={HIRE_URL} target="_blank" rel="noopener" class="hover:text-white">Hire us for custom tools</a></li>
+        <li><a href="/offline" class="hover:text-white">Self-hosting for teams</a></li>    
         <li><a href="/about" class="hover:text-white">About</a></li>
         <li><a href="/contact" class="hover:text-white">Contact</a></li>
       </ul>

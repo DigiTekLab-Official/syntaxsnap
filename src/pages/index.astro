@@ -4,7 +4,7 @@ import Layout from '../layouts/Layout.astro';
 import ToolCard from '../components/ui/ToolCard.astro';
 import HeroDemo from '../components/tools/HeroDemo';
 import { TOOLS, CATEGORY_NAV, FEATURED_TOOL_IDS, toolsIn, toolById, shortName } from '../config/tools';
-import { HIRE_URL } from '../config/site';
+
 
 const featured = FEATURED_TOOL_IDS.map((id) => toolById(id)).filter((t) => t !== undefined);
 const localCount = TOOLS.filter((t) => !t.network).length;
@@ -142,19 +142,12 @@ const organizationSchema = {
         <a href="/tools/category/css" class="inline-flex rounded-md px-2 py-2 text-sm font-medium text-indigo-400 hover:text-indigo-300">All CSS tools</a>
       </div>
     </div>
-    <div class="rounded-lg border border-slate-800 bg-ws-panel p-6">
-      <h2 class="text-lg font-semibold text-white">Building for developers?</h2>
-      <p class="mt-2 text-sm leading-relaxed text-slate-400">Have the SyntaxSnap team build a custom code generator or internal tool for your stack, or sponsor a tool your audience already uses.</p>
-      <div class="mt-5 flex flex-wrap gap-3">
-        <a href={HIRE_URL} target="_blank" rel="noopener" class="inline-flex rounded-md border border-slate-700 px-4 py-2 text-sm font-medium text-slate-200 hover:border-slate-500 hover:text-white">Hire Digitek Lab</a>
-        <a href="/sponsor" class="inline-flex rounded-md px-2 py-2 text-sm font-medium text-indigo-400 hover:text-indigo-300">Sponsor SyntaxSnap</a>
-      </div>
-    </div>
+    
   </section>
 
   <section class="border-t border-slate-800 py-12">
     <div class="prose-ws">
-      <h2 class="!mt-0">Free online developer tools without the upload</h2>
+      <h2 class="mt-0!">Free online developer tools without the upload</h2>
       <p>Most online formatters and converters send what you paste to a server. SyntaxSnap is a collection of {TOOLS.length} free developer utilities that run in your browser instead: a <a href="/tools/json-formatter">JSON formatter and validator</a>, <a href="/tools/json-to-typescript">JSON to TypeScript</a> and <a href="/tools/json-to-zod">JSON to Zod</a> converters, a <a href="/tools/jwt-debugger">JWT decoder</a>, <a href="/tools/regex-tester">regex tester</a>, <a href="/tools/base64">Base64</a> and <a href="/tools/url-encoder">URL encoders</a>, schema converters for OpenAPI, GraphQL, Prisma and SQL, and CSS generators for gradients, shadows and glassmorphism.</p>
     </div>
   </section>
