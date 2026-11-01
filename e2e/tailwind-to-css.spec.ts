@@ -6,6 +6,7 @@ test.describe('Tool #25: Tailwind to Vanilla CSS Converter', () => {
     // Navigate to the tool before each test
     // Note: Ensure your local dev server port matches (usually 4321 for Astro or 3000 for Next)
     await page.goto('/tools/tailwind-to-css');
+    await page.waitForSelector('[data-hydrated="true"]');
   });
 
   test('should render default state and initial parsing correctly', async ({ page }) => {

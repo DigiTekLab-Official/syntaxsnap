@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 
 // ─── PARSER CONFIGURATION ────────────────────────────────────────────────
 const BREAKPOINTS: Record<string, string> = {
@@ -129,6 +129,10 @@ export default function TailwindToCss() {
   const [debouncedInput, setDebouncedInput] = useState(input);
   const [selector, setSelector] = useState('custom-card');
   const [copied, setCopied] = useState(false);
+  const rootRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    rootRef.current?.setAttribute('data-hydrated', 'true');
+  }, []);
 
   // Debounce input to prevent UI lag on massive pastes
   useEffect(() => {
@@ -145,7 +149,7 @@ export default function TailwindToCss() {
   };
 
   return (
-    <div className="flex flex-col gap-6 w-full max-w-5xl mx-auto text-slate-200">
+    <div ref={rootRef} className="flex flex-col gap-6 w-full max-w-5xl mx-auto text-slate-200">
       
       {/* Configuration Row */}
       <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">

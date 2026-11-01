@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useMemo, useCallback, useId } from 'react';
+import React, { useState, useMemo, useCallback, useId, useEffect, useRef } from 'react';
 import cronstrue from 'cronstrue';
 import cronParser from 'cron-parser';
 import { Clock, CalendarDays, AlertTriangle, Copy, Check, Trash2 } from 'lucide-react';
@@ -63,6 +63,10 @@ export default function CronDescriptor() {
   const [cron, setCron] = useState('0 12 * * 1-5'); // Mon-Fri at 12:00 PM
   const [nextRunCount, setNextRunCount] = useState(5);
   const [copyState, setCopyState] = useState<'idle' | 'success' | 'error'>('idle');
+  const rootRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    rootRef.current?.setAttribute('data-hydrated', 'true');
+  }, []);
 
   const inputId = useId();
 
@@ -153,7 +157,7 @@ export default function CronDescriptor() {
   }, [translation]);
 
   return (
-    <div className="space-y-8 max-w-5xl mx-auto">
+    <div ref={rootRef} className="space-y-8 max-w-5xl mx-auto">
       
       {/* Input Section */}
       <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 md:p-8 shadow-xl">

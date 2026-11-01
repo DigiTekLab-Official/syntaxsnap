@@ -3,6 +3,7 @@ import { test, expect } from '@playwright/test';
 test.describe('Cron Descriptor', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/tools/cron-descriptor');
+    await page.waitForSelector('[data-hydrated="true"]');
     
     // THE FIX: Added .first() to avoid clashing with the SEO text at the bottom of the page
     await expect(page.locator('text=/Monday through Friday/i').first()).toBeVisible({ timeout: 15000 });
