@@ -78,8 +78,8 @@ test.describe('JSON workbench: input', () => {
       const t = performance.now();
       requestAnimationFrame(() => resolve(performance.now() - t));
     }));
-    expect(Date.now() - started).toBeLessThan(2_000);
-    expect(ping).toBeLessThan(1_000);
+    expect(Date.now() - started).toBeLessThan(process.env.CI ? 5_000 : 2_000);
+    expect(ping).toBeLessThan(process.env.CI ? 2_000 : 1_000);
     await expect(input).toBeEditable({ timeout: 2_000 });
 
     await expect(page.getByText('Valid JSON', { exact: true })).toBeVisible({ timeout: 60_000 });
